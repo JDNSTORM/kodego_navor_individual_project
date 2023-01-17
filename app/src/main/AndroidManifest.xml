@@ -12,6 +12,18 @@
         android:theme="@style/Theme.MyDigitalProfile"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CreateAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
