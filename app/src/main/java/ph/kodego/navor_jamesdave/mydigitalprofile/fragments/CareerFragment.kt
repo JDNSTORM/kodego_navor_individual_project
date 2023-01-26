@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentHomeBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentCareerBinding
 
-class HomeFragment : Fragment() {
-    private var _binding: FragmentHomeBinding? = null
+class CareerFragment : Fragment() {
+    private var _binding: FragmentCareerBinding? = null
     private val binding get() = _binding!!
+
     companion object{
-        val fragmentName = "Home"
+        val fragmentName = "Career"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +25,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentCareerBinding.inflate(inflater, container, false)
         return binding.root
     }
 }

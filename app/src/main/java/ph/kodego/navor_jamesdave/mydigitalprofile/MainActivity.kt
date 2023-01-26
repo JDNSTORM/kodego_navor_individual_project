@@ -7,6 +7,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.HomeFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.LoginFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ZoomOutPageTransformer
 
 class MainActivity : AppCompatActivity() {
@@ -18,13 +19,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
-        fragmentAdapter.addFragment(HomeFragment())
+        val tabs: ArrayList<String> = ArrayList()
 
-        val tabs: ArrayList<String> = arrayListOf("Home", "Private View", "Chats", "Account")
+        fragmentAdapter.addFragment(HomeFragment())
+        tabs.add(HomeFragment.fragmentName)
+        fragmentAdapter.addFragment(LoginFragment())
+        tabs.add(LoginFragment.fragmentName)
+
+//        val tabs: ArrayList<String> = arrayListOf("Home", "Private View", "Chats", "Account")
+//        val tabs: ArrayList<String> = arrayListOf("Home", "Account")
 
         with(binding.viewPager2){
-            this.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            setPageTransformer(ZoomOutPageTransformer())
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
             adapter = fragmentAdapter
         }
 

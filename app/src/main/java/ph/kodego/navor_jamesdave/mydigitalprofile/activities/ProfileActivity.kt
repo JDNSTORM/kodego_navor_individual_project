@@ -6,8 +6,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityProfileBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.HomeFragment
-import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.ProfileFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.*
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ZoomOutPageTransformer
 
 class ProfileActivity : AppCompatActivity() {
@@ -19,13 +18,22 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
-        fragmentAdapter.addFragment(ProfileFragment())
+        val tabs: ArrayList<String> = ArrayList()
 
-        val tabs: ArrayList<String> = arrayListOf("Profile", "Career", "Skills", "Education", "More")
+        fragmentAdapter.addFragment(ProfileFragment())
+        tabs.add(ProfileFragment.fragmentName)
+        fragmentAdapter.addFragment(CareerFragment())
+        tabs.add(CareerFragment.fragmentName)
+        fragmentAdapter.addFragment(SkillsFragment())
+        tabs.add(SkillsFragment.fragmentName)
+        fragmentAdapter.addFragment(EducationFragment())
+        tabs.add(EducationFragment.fragmentName)
+
+//        val tabs: ArrayList<String> = arrayListOf("Profile", "Career", "Skills", "Education", "More")
+//        val tabs: ArrayList<String> = arrayListOf("Profile", "Career", "Skills", "Education")
 
         with(binding.viewPager2){
-            this.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            setPageTransformer(ZoomOutPageTransformer())
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
             adapter = fragmentAdapter
         }
 

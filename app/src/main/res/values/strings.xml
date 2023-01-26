@@ -2,4 +2,13 @@
     <string name="app_name">My Digital Profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_contact">Add Contact Number</string>
+    <string name="search">Search</string>
+    <string name="update_contact">Update Contact Number</string>
+    <string name="create_account">Create Account</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="account_info">Account Information</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="logout">Logout</string>
 </resources>
