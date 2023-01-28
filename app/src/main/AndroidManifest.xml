@@ -12,10 +12,10 @@
         android:theme="@style/Theme.MyDigitalProfile"
         tools:targetApi="31">
         <activity
-            android:name=".AccountSettingsActivity"
+            android:name=".activities.AccountSettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".AccountInformationActivity"
+            android:name=".activities.AccountInformationActivity"
             android:exported="false" />
         <activity
             android:name=".activities.ProfileActivity"
