@@ -13,12 +13,19 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
+    init {
+        if(this.arguments == null) {
+            getTabInfo()
+        }
+    }
+    private fun getTabInfo(){
+        this.arguments = Bundle().apply {
+            putString("TabName", "Profile")
+            putInt("TabIcon", R.drawable.ic_account_circle_24)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    companion object{
-        val fragmentName = "Profile"
     }
 
     override fun onCreateView(

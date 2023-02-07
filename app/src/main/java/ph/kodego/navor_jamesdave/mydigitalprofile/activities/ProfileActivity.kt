@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.*
@@ -16,30 +17,39 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.tbTop)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.tbTop.setNavigationOnClickListener {
+//            onBackPressedDispatcher
+            onBackPressed()
+        }
+
 
         val fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
-        val tabs: ArrayList<String> = ArrayList()
 
         fragmentAdapter.addFragment(ProfileFragment())
-        tabs.add(ProfileFragment.fragmentName)
         fragmentAdapter.addFragment(CareerFragment())
-        tabs.add(CareerFragment.fragmentName)
         fragmentAdapter.addFragment(SkillsFragment())
-        tabs.add(SkillsFragment.fragmentName)
         fragmentAdapter.addFragment(EducationFragment())
-        tabs.add(EducationFragment.fragmentName)
 
 //        val tabs: ArrayList<String> = arrayListOf("Profile", "Career", "Skills", "Education", "More")
 //        val tabs: ArrayList<String> = arrayListOf("Profile", "Career", "Skills", "Education")
 
-        with(binding.viewPager2){
+        with(binding.viewpager2){
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             adapter = fragmentAdapter
         }
 
-        TabLayoutMediator(binding.tlNavBottom, binding.viewPager2){
+        TabLayoutMediator(binding.tlNavBottom, binding.viewpager2){
                 tab, position ->
-            tab.text = tabs[position]
+            var text: String = "Unknown"
+            var icon: Int = R.drawable.ic_unknown_24
+            fragmentAdapter.fragmentList[position].arguments?.let {
+                text = it.getString("TabName").toString()
+                icon = it.getInt("TabIcon")
+            }
+            tab.setText(text)
+            tab.setIcon(icon)
         }.attach()
     }
 }

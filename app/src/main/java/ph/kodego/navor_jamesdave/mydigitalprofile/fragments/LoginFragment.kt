@@ -12,8 +12,16 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    companion object{
-        val fragmentName = "Account"
+    init {
+        if(this.arguments == null) {
+            getTabInfo()
+        }
+    }
+    private fun getTabInfo(){
+        this.arguments = Bundle().apply {
+            putString("TabName", "Login")
+            putInt("TabIcon", R.drawable.ic_switch_account_24)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

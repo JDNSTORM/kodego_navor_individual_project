@@ -12,8 +12,16 @@ class EducationFragment : Fragment() {
     private var _binding: FragmentEducationBinding? = null
     private val binding get() = _binding!!
 
-    companion object{
-        val fragmentName = "Education"
+    init {
+        if(this.arguments == null) {
+            getTabInfo()
+        }
+    }
+    private fun getTabInfo(){
+        this.arguments = Bundle().apply {
+            putString("TabName", "Education")
+            putInt("TabIcon", R.drawable.ic_education_24)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

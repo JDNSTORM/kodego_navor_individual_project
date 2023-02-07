@@ -12,8 +12,16 @@ class CareerFragment : Fragment() {
     private var _binding: FragmentCareerBinding? = null
     private val binding get() = _binding!!
 
-    companion object{
-        val fragmentName = "Career"
+    init {
+        if(this.arguments == null) {
+            getTabInfo()
+        }
+    }
+    private fun getTabInfo(){
+        this.arguments = Bundle().apply {
+            putString("TabName", "Career")
+            putInt("TabIcon", R.drawable.ic_work_history_24)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
