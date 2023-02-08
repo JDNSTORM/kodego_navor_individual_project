@@ -10,28 +10,25 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMa
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 
 class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): RecyclerView.Adapter<RVSkillsMainAdapter.ViewHolder>() {
-    inner class ViewHolder(private val binding: ViewholderSkillsMainBinding):
-        RecyclerView.ViewHolder(binding.root),
-        View.OnClickListener
-    {
+    var clickCounter = 0
+    inner class ViewHolder(private val binding: ViewholderSkillsMainBinding): RecyclerView.ViewHolder(binding.root) {
         //TODO: SetOnClickListener when clicking on ViewHolder
-        fun bindViewHolder(skillMain: SkillMainCategory, position: Int){
+        fun bindViewHolder(skillMain: SkillMainCategory){
             binding.skillMain.setText(skillMain.categoryMain)
             val skillSubAdapter = RVSkillSubAdapter(skillMain.subCategories)
             binding.listSkillSub.layoutManager = LinearLayoutManager(itemView.context)
             binding.listSkillSub.adapter = skillSubAdapter
 
 //            binding.root.setOnClickListener {
-//                Toast.makeText(itemView.context, "Main Category Clicked", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(itemView.context, "Main Category Clicked: ${++clickCounter}", Toast.LENGTH_SHORT).show()
 //            }
-//            itemView.setOnClickListener {
-//                Toast.makeText(itemView.context, "ItemView Clicked", Toast.LENGTH_SHORT).show()
-//            }
+            itemView.setOnClickListener {
+                Toast.makeText(itemView.context, "ItemView Clicked: ${++clickCounter}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(itemView.context, "Layout Position: $layoutPosition", Toast.LENGTH_SHORT).show()
+                Toast.makeText(itemView.context, "Adapter Position: $adapterPosition", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        override fun onClick(v: View?) {
-            Toast.makeText(itemView.context, "View Clicked", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,6 +42,6 @@ class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): Rec
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindViewHolder(skills[position], position)
+        holder.bindViewHolder(skills[position])
     }
 }
