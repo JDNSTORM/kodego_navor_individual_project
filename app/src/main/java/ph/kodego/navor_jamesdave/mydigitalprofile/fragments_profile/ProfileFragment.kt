@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.fragments
+package ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

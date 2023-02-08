@@ -47,7 +47,7 @@
             android:hint="Skill Sub Category Name"
             />
     </com.google.android.material.textfield.TextInputLayout>
-
+<!-- TODO: Check if Padding is correctly applied -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_skill"
         android:layout_width="match_parent"

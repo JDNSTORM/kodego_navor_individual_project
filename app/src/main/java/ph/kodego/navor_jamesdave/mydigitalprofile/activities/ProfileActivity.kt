@@ -7,8 +7,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityProfileBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.*
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ZoomOutPageTransformer
+import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.CareerFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.EducationFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding

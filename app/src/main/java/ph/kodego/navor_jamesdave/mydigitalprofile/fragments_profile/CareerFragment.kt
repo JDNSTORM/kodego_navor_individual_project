@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.fragments
+package ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentEducationBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentCareerBinding
 
-class EducationFragment : Fragment() {
-    private var _binding: FragmentEducationBinding? = null
+class CareerFragment : Fragment() {
+    private var _binding: FragmentCareerBinding? = null
     private val binding get() = _binding!!
 
     init {
@@ -19,14 +19,13 @@ class EducationFragment : Fragment() {
     }
     private fun getTabInfo(){
         this.arguments = Bundle().apply {
-            putString("TabName", "Education")
-            putInt("TabIcon", R.drawable.ic_education_24)
+            putString("TabName", "Career")
+            putInt("TabIcon", R.drawable.ic_work_history_24)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -34,7 +33,7 @@ class EducationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentEducationBinding.inflate(inflater, container, false)
+        _binding = FragmentCareerBinding.inflate(inflater, container, false)
         return binding.root
     }
 }
