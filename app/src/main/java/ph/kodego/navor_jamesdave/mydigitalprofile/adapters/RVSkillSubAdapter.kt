@@ -3,6 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,10 @@ class RVSkillSubAdapter(private val subCategories: ArrayList<SkillSubCategory>):
 //            binding.listSkill.layoutManager = LinearLayoutManager(itemView.context)
             binding.listSkill.layoutManager = GridLayoutManager(itemView.context, 2)
             binding.listSkill.adapter = skillsAdapter
+
+//            binding.root.setOnClickListener {
+//                Toast.makeText(itemView.context, "Sub Category Clicked", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 

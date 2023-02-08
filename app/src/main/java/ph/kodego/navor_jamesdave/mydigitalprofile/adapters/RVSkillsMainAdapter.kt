@@ -1,6 +1,7 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,16 +10,27 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMa
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 
 class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): RecyclerView.Adapter<RVSkillsMainAdapter.ViewHolder>() {
-    inner class ViewHolder(private val binding: ViewholderSkillsMainBinding): RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding: ViewholderSkillsMainBinding):
+        RecyclerView.ViewHolder(binding.root),
+        View.OnClickListener
+    {
+        //TODO: SetOnClickListener when clicking on ViewHolder
         fun bindViewHolder(skillMain: SkillMainCategory, position: Int){
             binding.skillMain.setText(skillMain.categoryMain)
             val skillSubAdapter = RVSkillSubAdapter(skillMain.subCategories)
             binding.listSkillSub.layoutManager = LinearLayoutManager(itemView.context)
             binding.listSkillSub.adapter = skillSubAdapter
 
-            binding.root.setOnClickListener {
-                Toast.makeText(itemView.context, "Main Category Clicked", Toast.LENGTH_SHORT).show()
-            }
+//            binding.root.setOnClickListener {
+//                Toast.makeText(itemView.context, "Main Category Clicked", Toast.LENGTH_SHORT).show()
+//            }
+//            itemView.setOnClickListener {
+//                Toast.makeText(itemView.context, "ItemView Clicked", Toast.LENGTH_SHORT).show()
+//            }
+        }
+
+        override fun onClick(v: View?) {
+            Toast.makeText(itemView.context, "View Clicked", Toast.LENGTH_SHORT).show()
         }
     }
 

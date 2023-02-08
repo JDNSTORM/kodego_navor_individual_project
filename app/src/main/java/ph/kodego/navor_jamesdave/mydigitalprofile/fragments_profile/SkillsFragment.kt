@@ -22,6 +22,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
  *      )
  *  For User:
  *  TODO: Upon clicking on Category ViewHolder, Invoke Category to Activity
+ *
+ *  TODO: Review CustomView clicked
  */
 class SkillsFragment : Fragment() {
     private var _binding: FragmentSkillsBinding? = null
