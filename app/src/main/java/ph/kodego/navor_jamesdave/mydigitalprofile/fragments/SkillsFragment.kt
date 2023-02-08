@@ -8,6 +8,16 @@ import android.view.ViewGroup
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
 
+/**
+ *  TODO: Skills Editing Structure
+ *      If Main Category has no SubCategory but has Skills, do not Add SubCategory. *Main Category must have SubCategory to organize Skills.
+ *  Main Category
+ *      ArrayList(SubCategory
+ *          ArrayList(Skills)
+ *      )
+ *  For User:
+ *  TODO: Upon clicking on Category ViewHolder, Invoke Category to Activity
+ */
 class SkillsFragment : Fragment() {
     private var _binding: FragmentSkillsBinding? = null
     private val binding get() = _binding!!
