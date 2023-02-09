@@ -9,11 +9,10 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBindin
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.AccountFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.HomeFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.LoginFragment
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ZoomOutPageTransformer
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val loggedIn = true
+    private val loggedIn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         if (loggedIn) {
             fragmentAdapter.addFragment(AccountFragment())
         }else{
-            fragmentAdapter.addFragment(LoginFragment())
+            fragmentAdapter.addFragment(LoginFragment(fragmentAdapter, binding.viewPager2))
         }
 //        val tabs: ArrayList<String> = arrayListOf("Home", "Private View", "Chats", "Account")
 //        val tabs: ArrayList<String> = arrayListOf("Home", "Account")
