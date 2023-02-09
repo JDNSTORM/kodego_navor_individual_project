@@ -42,7 +42,8 @@
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/search_category"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
             android:hint="Category"
             android:text="Name"
             android:textAlignment="center" />

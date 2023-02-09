@@ -6,13 +6,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMainBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
-
+// TODO: Setting ClickListener inside ViewHolder is inefficient because it is redundant but same
 class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): RecyclerView.Adapter<RVSkillsMainAdapter.ViewHolder>() {
-    var clickCounter = 0
+    private var clickCounter = 0
     inner class ViewHolder(private val binding: ViewholderSkillsMainBinding): RecyclerView.ViewHolder(binding.root) {
         //TODO: SetOnClickListener when clicking on ViewHolder
+        init {
+            itemView.setOnClickListener {
+                Snackbar.make(itemView, "ItemView Clicked: ${++clickCounter}, Layout Position: $layoutPosition, Adapter Position: $adapterPosition", Snackbar.LENGTH_SHORT).show()
+            }
+        }
         fun bindViewHolder(skillMain: SkillMainCategory){
             binding.skillMain.setText(skillMain.categoryMain)
             val skillSubAdapter = RVSkillSubAdapter(skillMain.subCategories)
@@ -22,11 +28,6 @@ class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): Rec
 //            binding.root.setOnClickListener {
 //                Toast.makeText(itemView.context, "Main Category Clicked: ${++clickCounter}", Toast.LENGTH_SHORT).show()
 //            }
-            itemView.setOnClickListener {
-                Toast.makeText(itemView.context, "ItemView Clicked: ${++clickCounter}", Toast.LENGTH_SHORT).show()
-                Toast.makeText(itemView.context, "Layout Position: $layoutPosition", Toast.LENGTH_SHORT).show()
-                Toast.makeText(itemView.context, "Adapter Position: $adapterPosition", Toast.LENGTH_SHORT).show()
-            }
         }
 
     }

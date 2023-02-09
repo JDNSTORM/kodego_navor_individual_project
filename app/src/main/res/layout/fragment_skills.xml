@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="5dp"
+        android:paddingBottom="50dp"
+        android:clipToPadding="false"
         />
 
 </LinearLayout>
