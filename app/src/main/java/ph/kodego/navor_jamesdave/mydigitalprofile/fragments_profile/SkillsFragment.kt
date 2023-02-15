@@ -101,7 +101,7 @@ class SkillsFragment : Fragment() {
             }
         }
         binding.btnAddMainCategory.setOnClickListener {
-            editMainCategoryDialogue()
+            editMainCategoryDialogue(skills, null)
         }
     }
 
@@ -120,6 +120,29 @@ class SkillsFragment : Fragment() {
             }
             skills.add(skill)
         }
+        skills.add(
+            SkillMainCategory(
+                4,
+                "Main 4",
+                arrayListOf(
+                    SkillSubCategory(
+                        0,
+                        4,
+                        "",
+                        arrayListOf(
+                            Skill(0,0,"asdkaj")
+                        )
+                    )
+                )
+            )
+        )
+        skills.add(
+            SkillMainCategory(
+                5,
+                "Main 5"
+            )
+        )
+
         return skills
     }
 
@@ -164,7 +187,7 @@ class SkillsFragment : Fragment() {
             editMainCategoryDialogue(mainCategories, mainCategoryPosition)
         }
         binding.btnAddSubCategory.setOnClickListener {
-//            editSubCategoryDialogue(skillMain,null, skillSubAdapter!!)
+            editSubCategoryDialogue(mainCategories[mainCategoryPosition],null, skillSubAdapter!!)
         }
         binding.btnEditSubCategory.setOnClickListener {
 //            editSubCategoryDialogue(skillMain, subCategoryPosition, skillSubAdapter!!)
@@ -187,14 +210,13 @@ class SkillsFragment : Fragment() {
             btnCancel.setOnClickListener {
                 dialog.dismiss()
             }
-            btnSave.setOnClickListener {// TODO: Adding into RecyclerView
+            btnSave.setOnClickListener {
                 val skillMain = SkillMainCategory(
                     categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
                 )
                 Toast.makeText(context, "Save: ${skillMain.categoryMain}", Toast.LENGTH_SHORT).show()
                 mainCategories.add(skillMain)
-//                rvAdapter.notifyItemInserted(mainCategories.size-1)
-                rvAdapter.notifyDataSetChanged()
+                rvAdapter.notifyItemInserted(mainCategories.size-1)
                 minimizeFabs()
                 dialog.dismiss()
             }
@@ -223,7 +245,7 @@ class SkillsFragment : Fragment() {
             btnCancel.setOnClickListener {
                 dialog.dismiss()
             }
-            btnSave.setOnClickListener {
+            btnSave.setOnClickListener {// TODO: Add SubCategory
                 /**
                  *
                  *
@@ -236,9 +258,15 @@ class SkillsFragment : Fragment() {
                 Toast.makeText(context, "Save: ${subCategory.categorySub}", Toast.LENGTH_SHORT).show()
                 subCategories.add(subCategory)
                 skillSubAdapter.notifyDataSetChanged()
-                rvAdapter.notifyDataSetChanged()
+//                rvAdapter.notifyDataSetChanged()
 //                skillSubAdapter.notifyItemInserted(subCategories.size)
                 Log.i("SubCategories Size", "${subCategories.size}")
+                for(subCategory in subCategories){
+                    Log.i("SubCategories Received", "${subCategory.categorySub}")
+                }
+                for(subCategory in skills[0].subCategories){
+                    Log.i("SubCategories from List", "${subCategory.categorySub}")
+                }
                 minimizeFabs()
                 dialog.dismiss()
             }
