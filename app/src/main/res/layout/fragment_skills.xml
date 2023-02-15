@@ -28,5 +28,87 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/efab_skills_options"
+        android:theme="@style/EFabTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Options"
+        android:backgroundTint="@color/colorAccent"
+        app:icon="@drawable/ic_commands_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        />
+    <TextView
+        android:id="@+id/label_main_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:text="Main Category"
+        app:layout_constraintTop_toTopOf="@id/btn_add_main_category"
+        app:layout_constraintBottom_toBottomOf="@id/btn_add_main_category"
+        app:layout_constraintEnd_toStartOf="@id/btn_add_main_category"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_main_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_add_24"
+        app:layout_constraintTop_toTopOf="@id/btn_edit_main_category"
+        app:layout_constraintEnd_toStartOf="@id/btn_edit_main_category"
+        app:layout_constraintBottom_toBottomOf="@id/btn_edit_main_category"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_edit_main_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_edit_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/efab_skills_options"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    <TextView
+        android:id="@+id/label_sub_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:text="Sub Category &amp; Skills"
+        app:layout_constraintTop_toTopOf="@id/btn_add_sub_category"
+        app:layout_constraintBottom_toBottomOf="@id/btn_add_sub_category"
+        app:layout_constraintEnd_toStartOf="@id/btn_add_sub_category"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_sub_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_add_subcategory_24"
+        app:layout_constraintTop_toTopOf="@id/btn_edit_sub_category"
+        app:layout_constraintEnd_toStartOf="@id/btn_edit_sub_category"
+        app:layout_constraintBottom_toBottomOf="@id/btn_edit_sub_category"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_edit_sub_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_edit_skills_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_edit_main_category"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

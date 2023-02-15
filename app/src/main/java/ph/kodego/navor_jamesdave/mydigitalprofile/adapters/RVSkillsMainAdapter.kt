@@ -18,6 +18,8 @@ class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): Rec
 
     interface AdapterActions{
         fun holderClickNotify(position: Int)
+        fun mainCategoryClick(mainCategory: SkillMainCategory, position: Int, skillSubAdapter: RVSkillSubAdapter)
+        fun subCategoryClick(mainCategory: SkillMainCategory, mainCategoryPosition: Int, subCategoryPosition: Int)
     }
     private var adapterActions: AdapterActions? = null
     fun setAdapterActions(adapterActions: AdapterActions){
@@ -39,17 +41,19 @@ class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): Rec
         val binding = holder.binding as ViewholderSkillsMainBinding
 
         with(binding){
-            root.setOnClickListener {
-//                Snackbar.make(binding.root, "ItemView Clicked: ${++clickCounter}, Layout Position: ${holder.layoutPosition}, Adapter Position: ${holder.adapterPosition}", Snackbar.LENGTH_SHORT).show()
-                adapterActions?.holderClickNotify(position) ?: Log.e("AdapterError", "adapterActions not set")
-            }
-
             skillMain.setText(skillMainCategory.categoryMain)
-            val skillSubAdapter = RVSkillSubAdapter(skillMainCategory.subCategories)
+            val skillSubAdapter = RVSkillSubAdapter(skillMainCategory)
             skillSubAdapter.setAdapterActions(adapterActions!!)
+            skillSubAdapter.setCategoryPosition(position)
 
             listSkillSub.layoutManager = LinearLayoutManager(root.context)
             listSkillSub.adapter = skillSubAdapter
+
+            root.setOnClickListener {
+//                Snackbar.make(binding.root, "ItemView Clicked: ${++clickCounter}, Layout Position: ${holder.layoutPosition}, Adapter Position: ${holder.adapterPosition}", Snackbar.LENGTH_SHORT).show()
+                adapterActions?.holderClickNotify(position) ?: Log.e("AdapterError", "adapterActions not set")
+                adapterActions?.mainCategoryClick(skillMainCategory, position, skillSubAdapter)
+            }
         }
     }
 }

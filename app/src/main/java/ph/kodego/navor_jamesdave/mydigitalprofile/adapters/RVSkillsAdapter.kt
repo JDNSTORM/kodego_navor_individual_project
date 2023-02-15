@@ -1,5 +1,6 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -10,8 +11,12 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillSub
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 
 class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Adapter<ViewHolder>() {
-
+    private var categoryPosition: Int? = null
     private var adapterActions: RVSkillsMainAdapter.AdapterActions? = null
+
+    fun setCategoryPosition(position: Int){
+        this.categoryPosition = position
+    }
     fun setAdapterActions(adapterActions: RVSkillsMainAdapter.AdapterActions){
         this.adapterActions = adapterActions
     }
@@ -32,7 +37,7 @@ class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Ada
         binding.skill.setText(skill.skill)
         binding.root.setOnClickListener{
 //            Snackbar.make(binding.root, "Skill Clicked", Snackbar.LENGTH_SHORT).show()
-            adapterActions?.holderClickNotify(position)
+            adapterActions?.holderClickNotify(categoryPosition!!)
         }
     }
 }

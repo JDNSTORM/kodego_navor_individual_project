@@ -9,11 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillSubBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
-class RVSkillSubAdapter(private val subCategories: ArrayList<SkillSubCategory>): RecyclerView.Adapter<ViewHolder>() {
-
+class RVSkillSubAdapter(private val skillMainCategory: SkillMainCategory): RecyclerView.Adapter<ViewHolder>() {
+    private var categoryPosition: Int? = null
     private var adapterActions: RVSkillsMainAdapter.AdapterActions? = null
+
+    fun setCategoryPosition(position: Int){
+        this.categoryPosition = position
+    }
     fun setAdapterActions(adapterActions: RVSkillsMainAdapter.AdapterActions){
         this.adapterActions = adapterActions
     }
@@ -24,11 +29,11 @@ class RVSkillSubAdapter(private val subCategories: ArrayList<SkillSubCategory>):
     }
 
     override fun getItemCount(): Int {
-        return subCategories.size
+        return skillMainCategory.subCategories.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val skillSubCategory = subCategories[position]
+        val skillSubCategory = skillMainCategory.subCategories[position]
         val binding = holder.binding as ViewholderSkillSubBinding
         val context = binding.root.context
 
@@ -39,13 +44,16 @@ class RVSkillSubAdapter(private val subCategories: ArrayList<SkillSubCategory>):
             }
             val skillsAdapter = RVSkillsAdapter(skillSubCategory.skills)
             skillsAdapter.setAdapterActions(adapterActions!!)
+            skillsAdapter.setCategoryPosition(categoryPosition!!)
 
             listSkill.layoutManager = GridLayoutManager(context, 2)
             listSkill.adapter = skillsAdapter
 
             root.setOnClickListener {
 //                Snackbar.make(root, "Sub Category Clicked", Snackbar.LENGTH_SHORT).show()
-                adapterActions?.holderClickNotify(position)
+                adapterActions?.holderClickNotify(categoryPosition!!)
+                //TODO: Possibly pass adapter to listener
+                adapterActions?.subCategoryClick(skillMainCategory, categoryPosition!!, position)
             }
         }
 

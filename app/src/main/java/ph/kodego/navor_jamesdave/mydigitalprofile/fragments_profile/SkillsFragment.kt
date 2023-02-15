@@ -1,14 +1,19 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillSubAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsMainAdapter
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillMainEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillSubEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
@@ -59,6 +64,7 @@ class SkillsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        minimizeFabs()
         skills.addAll(getSkills())
 
         rvAdapter = RVSkillsMainAdapter(skills)
@@ -68,10 +74,33 @@ class SkillsFragment : Fragment() {
                 Snackbar.make(view, "Adapter Clicked at $position", Snackbar.LENGTH_SHORT).show()
             }
 
+            override fun mainCategoryClick(mainCategory: SkillMainCategory, position: Int, skillSubAdapter: RVSkillSubAdapter) {
+                expandFabs(mainCategory, position, null, skillSubAdapter!!)
+            }
+
+            override fun subCategoryClick(
+                mainCategory: SkillMainCategory,
+                mainCategoryPosition: Int,
+                subCategoryPosition: Int
+            ) {
+                expandFabs(mainCategory, mainCategoryPosition, subCategoryPosition)
+            }
+
         })
 
         binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
         binding.listSkills.adapter = rvAdapter
+
+        binding.efabSkillsOptions.setOnClickListener {
+            if (binding.efabSkillsOptions.isExtended){
+                minimizeFabs()
+            }else{
+                expandFabs()
+            }
+        }
+        binding.btnAddMainCategory.setOnClickListener {
+            editMainCategoryDialogue()
+        }
     }
 
     private fun getSkills(): ArrayList<SkillMainCategory>{
@@ -90,5 +119,120 @@ class SkillsFragment : Fragment() {
             skills.add(skill)
         }
         return skills
+    }
+
+    private fun minimizeFabs(){
+        binding.efabSkillsOptions.shrink()
+        binding.btnAddMainCategory.hide()
+        binding.btnEditMainCategory.hide()
+        binding.btnEditMainCategory.isEnabled = false
+        binding.labelMainCategory.visibility = View.GONE
+        binding.btnAddSubCategory.hide()
+        binding.btnAddSubCategory.isEnabled = false
+        binding.btnEditSubCategory.hide()
+        binding.btnEditSubCategory.isEnabled = false
+        binding.labelSubCategory.visibility = View.GONE
+    }
+    private fun expandFabs(){
+        binding.efabSkillsOptions.extend()
+        binding.btnAddMainCategory.show()
+        binding.btnEditMainCategory.show()
+        binding.btnEditMainCategory.isEnabled = false
+        binding.labelMainCategory.visibility = View.VISIBLE
+        binding.btnAddSubCategory.show()
+        binding.btnAddSubCategory.isEnabled = false
+        binding.btnEditSubCategory.show()
+        binding.btnEditSubCategory.isEnabled = false
+        binding.labelSubCategory.visibility = View.VISIBLE
+    }
+    private fun expandFabs(
+        skillMain: SkillMainCategory,
+        mainCategoryPosition: Int,
+        subCategoryPosition: Int? = null,
+        skillSubAdapter: RVSkillSubAdapter? = null
+    ){
+        expandFabs()
+        binding.btnEditMainCategory.isEnabled = true
+        binding.btnAddSubCategory.isEnabled = true
+        if(subCategoryPosition != null){
+            binding.btnEditSubCategory.isEnabled = true
+        }
+
+        binding.btnEditMainCategory.setOnClickListener {
+            editMainCategoryDialogue(skillMain, mainCategoryPosition)
+        }
+        binding.btnAddSubCategory.setOnClickListener {
+            editSubCategoryDialogue(skillMain,null, skillSubAdapter!!)
+        }
+        binding.btnEditSubCategory.setOnClickListener {
+            editSubCategoryDialogue(skillMain, subCategoryPosition, skillSubAdapter!!)
+        }
+    }
+    private fun editMainCategoryDialogue(skillMain: SkillMainCategory? = null, mainCategoryPosition: Int? = null){
+        val dialogueSkillMainEditBinding = DialogueSkillMainEditBinding.inflate(layoutInflater)
+        val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)
+        val dialog = builder.create()
+
+        if (skillMain != null){
+            dialogueSkillMainEditBinding.skillMain.setText(skillMain.categoryMain)
+            dialogueSkillMainEditBinding.editButtons.btnSave.visibility = View.GONE
+            dialogueSkillMainEditBinding.editButtons.btnUpdate.visibility = View.VISIBLE
+        }
+
+        with(dialogueSkillMainEditBinding.editButtons){
+            btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            btnSave.setOnClickListener {
+                val skillMain = SkillMainCategory(
+                    categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
+                )
+                Toast.makeText(context, "Save: ${skillMain.categoryMain}", Toast.LENGTH_SHORT).show()
+                minimizeFabs()
+                dialog.dismiss()
+            }
+            btnUpdate.setOnClickListener {
+                skillMain!!.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
+                rvAdapter.notifyItemChanged(mainCategoryPosition!!)
+                Toast.makeText(context, "Update: ${skillMain.categoryMain}", Toast.LENGTH_SHORT).show()
+                minimizeFabs()
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
+    }
+    private fun editSubCategoryDialogue(
+        skillMain: SkillMainCategory,
+        subCategoryPosition: Int? = null,
+        skillSubAdapter: RVSkillSubAdapter
+    ){
+        val subCategories = skillMain.subCategories
+        val dialogueSkillSubEditBinding = DialogueSkillSubEditBinding.inflate(layoutInflater)
+        val builder = AlertDialog.Builder(context).setView(dialogueSkillSubEditBinding.root)
+        val dialog = builder.create()
+
+        with(dialogueSkillSubEditBinding.editButtons){
+            btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            btnSave.setOnClickListener {
+                val subCategory = SkillSubCategory(
+                    categoryMainID = skillMain.id,
+                    categorySub = dialogueSkillSubEditBinding.skillSub.text.toString().trim(),
+                    skills = ArrayList()
+                )
+                Toast.makeText(context, "Save: ${subCategory.categorySub}", Toast.LENGTH_SHORT).show()
+                subCategories.add(subCategory)
+                skillSubAdapter.notifyItemInserted(subCategories.size)
+                minimizeFabs()
+                dialog.dismiss()
+            }
+            btnUpdate.setOnClickListener {
+                Toast.makeText(context, "Update: Clicked", Toast.LENGTH_SHORT).show()
+                minimizeFabs()
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
     }
 }
