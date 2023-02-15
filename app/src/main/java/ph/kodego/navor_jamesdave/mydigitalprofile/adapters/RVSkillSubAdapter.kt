@@ -12,9 +12,10 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillSub
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
-class RVSkillSubAdapter(private val skillMainCategory: SkillMainCategory): RecyclerView.Adapter<ViewHolder>() {
+class RVSkillSubAdapter(private val mainCategories: ArrayList<SkillMainCategory>): RecyclerView.Adapter<ViewHolder>() {
     private var categoryPosition: Int? = null
     private var adapterActions: RVSkillsMainAdapter.AdapterActions? = null
+    var skillSubAdapter: RVSkillSubAdapter? = null
 
     fun setCategoryPosition(position: Int){
         this.categoryPosition = position
@@ -29,11 +30,11 @@ class RVSkillSubAdapter(private val skillMainCategory: SkillMainCategory): Recyc
     }
 
     override fun getItemCount(): Int {
-        return skillMainCategory.subCategories.size
+        return mainCategories[categoryPosition!!].subCategories.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val skillSubCategory = skillMainCategory.subCategories[position]
+        val skillSubCategory = mainCategories[categoryPosition!!].subCategories[position]
         val binding = holder.binding as ViewholderSkillSubBinding
         val context = binding.root.context
 
@@ -53,7 +54,7 @@ class RVSkillSubAdapter(private val skillMainCategory: SkillMainCategory): Recyc
 //                Snackbar.make(root, "Sub Category Clicked", Snackbar.LENGTH_SHORT).show()
                 adapterActions?.holderClickNotify(categoryPosition!!)
                 //TODO: Possibly pass adapter to listener
-                adapterActions?.subCategoryClick(skillMainCategory, categoryPosition!!, position)
+                adapterActions?.subCategoryClick(mainCategories, categoryPosition!!, position, skillSubAdapter!!)
             }
         }
 

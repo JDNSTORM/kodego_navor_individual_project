@@ -18,8 +18,8 @@ class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): Rec
 
     interface AdapterActions{
         fun holderClickNotify(position: Int)
-        fun mainCategoryClick(mainCategory: SkillMainCategory, position: Int, skillSubAdapter: RVSkillSubAdapter)
-        fun subCategoryClick(mainCategory: SkillMainCategory, mainCategoryPosition: Int, subCategoryPosition: Int)
+        fun mainCategoryClick(mainCategories: ArrayList<SkillMainCategory>, position: Int, skillSubAdapter: RVSkillSubAdapter)
+        fun subCategoryClick(mainCategories: ArrayList<SkillMainCategory>, mainCategoryPosition: Int, subCategoryPosition: Int, skillSubAdapter: RVSkillSubAdapter)
     }
     private var adapterActions: AdapterActions? = null
     fun setAdapterActions(adapterActions: AdapterActions){
@@ -42,17 +42,20 @@ class RVSkillsMainAdapter(private val skills: ArrayList<SkillMainCategory>): Rec
 
         with(binding){
             skillMain.setText(skillMainCategory.categoryMain)
-            val skillSubAdapter = RVSkillSubAdapter(skillMainCategory)
+            val skillSubAdapter = RVSkillSubAdapter(skills)
             skillSubAdapter.setAdapterActions(adapterActions!!)
             skillSubAdapter.setCategoryPosition(position)
 
             listSkillSub.layoutManager = LinearLayoutManager(root.context)
             listSkillSub.adapter = skillSubAdapter
 
+            skillSubAdapter.skillSubAdapter = skillSubAdapter
+
             root.setOnClickListener {
 //                Snackbar.make(binding.root, "ItemView Clicked: ${++clickCounter}, Layout Position: ${holder.layoutPosition}, Adapter Position: ${holder.adapterPosition}", Snackbar.LENGTH_SHORT).show()
                 adapterActions?.holderClickNotify(position) ?: Log.e("AdapterError", "adapterActions not set")
-                adapterActions?.mainCategoryClick(skillMainCategory, position, skillSubAdapter)
+                //TODO: Update Dataset when adding into Subcategories
+                adapterActions?.mainCategoryClick(skills, position, skillSubAdapter)
             }
         }
     }
