@@ -4,20 +4,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillSubBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 
-class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Adapter<RVSkillsAdapter.ViewHolder>() {
-    inner class ViewHolder(private val binding: ViewholderSkillBinding): RecyclerView.ViewHolder(binding.root){
-        fun bindViewHolder(skill: Skill, position: Int){
-            binding.skill.setText(skill.skill)
+class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Adapter<ViewHolder>() {
 
-//            binding.root.setOnClickListener {
-//                Toast.makeText(itemView.context, "Skill Clicked", Toast.LENGTH_SHORT).show()
-//            }
-        }
+    private var adapterActions: RVSkillsMainAdapter.AdapterActions? = null
+    fun setAdapterActions(adapterActions: RVSkillsMainAdapter.AdapterActions){
+        this.adapterActions = adapterActions
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ViewholderSkillBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,6 +26,13 @@ class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindViewHolder(skillList[position], position)
+        val skill = skillList[position]
+        val binding = holder.binding as ViewholderSkillBinding
+
+        binding.skill.setText(skill.skill)
+        binding.root.setOnClickListener{
+//            Snackbar.make(binding.root, "Skill Clicked", Snackbar.LENGTH_SHORT).show()
+            adapterActions?.holderClickNotify(position)
+        }
     }
 }

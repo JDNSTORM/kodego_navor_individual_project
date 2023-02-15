@@ -7,27 +7,16 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillSubBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
-class RVSkillSubAdapter(private val subCategories: ArrayList<SkillSubCategory>): RecyclerView.Adapter<RVSkillSubAdapter.ViewHolder>() {
-    inner class ViewHolder(private val binding: ViewholderSkillSubBinding): RecyclerView.ViewHolder(binding.root){
-        fun bindViewHolder(skillSub: SkillSubCategory, position: Int){
-            if (skillSub.skills.isNotEmpty()) {
-                binding.skillSub.setText(skillSub.categorySub)
-                binding.skillSub.visibility = View.VISIBLE
-            }
-            val skillsAdapter = RVSkillsAdapter(skillSub.skills)
-//            binding.listSkill.layoutManager = LinearLayoutManager(itemView.context)
-            binding.listSkill.layoutManager = GridLayoutManager(itemView.context, 2)
-            binding.listSkill.adapter = skillsAdapter
+class RVSkillSubAdapter(private val subCategories: ArrayList<SkillSubCategory>): RecyclerView.Adapter<ViewHolder>() {
 
-//            binding.root.setOnClickListener {
-//                Toast.makeText(itemView.context, "Sub Category Clicked", Toast.LENGTH_SHORT).show()
-//            }
-        }
+    private var adapterActions: RVSkillsMainAdapter.AdapterActions? = null
+    fun setAdapterActions(adapterActions: RVSkillsMainAdapter.AdapterActions){
+        this.adapterActions = adapterActions
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ViewholderSkillSubBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -39,6 +28,26 @@ class RVSkillSubAdapter(private val subCategories: ArrayList<SkillSubCategory>):
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindViewHolder(subCategories[position], position)
+        val skillSubCategory = subCategories[position]
+        val binding = holder.binding as ViewholderSkillSubBinding
+        val context = binding.root.context
+
+        with(binding){
+            if (skillSubCategory.skills.isNotEmpty()) {
+                skillSub.setText(skillSubCategory.categorySub)
+                skillSub.visibility = View.VISIBLE
+            }
+            val skillsAdapter = RVSkillsAdapter(skillSubCategory.skills)
+            skillsAdapter.setAdapterActions(adapterActions!!)
+
+            listSkill.layoutManager = GridLayoutManager(context, 2)
+            listSkill.adapter = skillsAdapter
+
+            root.setOnClickListener {
+//                Snackbar.make(root, "Sub Category Clicked", Snackbar.LENGTH_SHORT).show()
+                adapterActions?.holderClickNotify(position)
+            }
+        }
+
     }
 }

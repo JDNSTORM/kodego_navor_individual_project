@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsMainAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
@@ -61,6 +62,14 @@ class SkillsFragment : Fragment() {
         skills.addAll(getSkills())
 
         rvAdapter = RVSkillsMainAdapter(skills)
+
+        rvAdapter.setAdapterActions(object: RVSkillsMainAdapter.AdapterActions{
+            override fun holderClickNotify(position: Int) {
+                Snackbar.make(view, "Adapter Clicked at $position", Snackbar.LENGTH_SHORT).show()
+            }
+
+        })
+
         binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
         binding.listSkills.adapter = rvAdapter
     }
