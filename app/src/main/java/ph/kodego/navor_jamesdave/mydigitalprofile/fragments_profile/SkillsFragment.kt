@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillSubAdapter
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsEditAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsMainAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillMainEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillSubEditBinding
@@ -70,7 +71,7 @@ class SkillsFragment : Fragment() {
 
         rvAdapter = RVSkillsMainAdapter(skills)
 
-        rvAdapter.setAdapterActions(object: RVSkillsMainAdapter.AdapterActions{
+        rvAdapter.setAdapterActions(object: RVSkillsMainAdapter.AdapterEvents{ //TODO: Possible error due to using position. Might need to use AdapterPosition
             override fun holderClickNotify(position: Int) {
                 Snackbar.make(view, "Adapter Clicked at $position", Snackbar.LENGTH_SHORT).show()
             }
@@ -174,7 +175,7 @@ class SkillsFragment : Fragment() {
         mainCategories: ArrayList<SkillMainCategory>,
         mainCategoryPosition: Int,
         subCategoryPosition: Int? = null,
-        skillSubAdapter: RVSkillSubAdapter? = null
+        skillSubAdapter: RVSkillSubAdapter
     ){
         expandFabs()
         binding.btnEditMainCategory.isEnabled = true
@@ -187,10 +188,10 @@ class SkillsFragment : Fragment() {
             editMainCategoryDialogue(mainCategories, mainCategoryPosition)
         }
         binding.btnAddSubCategory.setOnClickListener {
-            editSubCategoryDialogue(mainCategories[mainCategoryPosition],null, skillSubAdapter!!)
+            editSubCategoryDialogue(mainCategories[mainCategoryPosition], null, skillSubAdapter)
         }
         binding.btnEditSubCategory.setOnClickListener {
-//            editSubCategoryDialogue(skillMain, subCategoryPosition, skillSubAdapter!!)
+            editSubCategoryDialogue(mainCategories[mainCategoryPosition], subCategoryPosition, skillSubAdapter)
         }
     }
     private fun editMainCategoryDialogue(mainCategories: ArrayList<SkillMainCategory> = ArrayList(), mainCategoryPosition: Int? = null){
@@ -200,7 +201,7 @@ class SkillsFragment : Fragment() {
         var skillMain: SkillMainCategory? = null
 
         if (mainCategories.isNotEmpty() && mainCategoryPosition != null){
-            skillMain = mainCategories[mainCategoryPosition!!]
+            skillMain = mainCategories[mainCategoryPosition]
             dialogueSkillMainEditBinding.skillMain.setText(skillMain.categoryMain)
             dialogueSkillMainEditBinding.editButtons.btnSave.visibility = View.GONE
             dialogueSkillMainEditBinding.editButtons.btnUpdate.visibility = View.VISIBLE
@@ -239,38 +240,58 @@ class SkillsFragment : Fragment() {
         val dialogueSkillSubEditBinding = DialogueSkillSubEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillSubEditBinding.root)
         val dialog = builder.create()
+        val subCategory: SkillSubCategory = if(subCategoryPosition != null){
+            subCategories[subCategoryPosition]
+        } else {
+            SkillSubCategory(categoryMainID = skillMain.id)
+        }
+        val skillAdapter = RVSkillsEditAdapter(subCategory.skills)
+        if (skillAdapter.itemCount > 0){
+            dialogueSkillSubEditBinding.listSkill.visibility = View.VISIBLE
+            dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
+            dialogueSkillSubEditBinding.listSkill.layoutManager =  LinearLayoutManager(context)
+            dialogueSkillSubEditBinding.listSkill.adapter =  skillAdapter
+        }
+
+        dialogueSkillSubEditBinding.labelSkillMain.setText(skillMain.categoryMain)
 
         Log.i("SubCategories Size", "${subCategories.size}")
         with(dialogueSkillSubEditBinding.editButtons){
+            if(subCategoryPosition != null){
+                dialogueSkillSubEditBinding.skillSub.setText(subCategories[subCategoryPosition].categorySub)
+                btnSave.visibility = View.GONE
+                btnUpdate.visibility = View.VISIBLE
+                dialog.setOnDismissListener {
+                    skillSubAdapter.notifyItemChanged(subCategoryPosition)
+                }
+            }
+
             btnCancel.setOnClickListener {
                 dialog.dismiss()
             }
-            btnSave.setOnClickListener {// TODO: Add SubCategory
+            btnSave.setOnClickListener {// TODO: Add Skill without Subcategory
                 /**
                  *
                  *
                  */
-                val subCategory = SkillSubCategory(
-                    categoryMainID = skillMain.id,
-                    categorySub = dialogueSkillSubEditBinding.skillSub.text.toString().trim(),
-                    skills = ArrayList()
-                )
+                subCategory.categorySub = dialogueSkillSubEditBinding.skillSub.text.toString().trim()
                 Toast.makeText(context, "Save: ${subCategory.categorySub}", Toast.LENGTH_SHORT).show()
                 subCategories.add(subCategory)
-                skillSubAdapter.notifyDataSetChanged()
-//                rvAdapter.notifyDataSetChanged()
-//                skillSubAdapter.notifyItemInserted(subCategories.size)
+                skillSubAdapter.notifyItemInserted(skillSubAdapter.itemCount-1)
                 Log.i("SubCategories Size", "${subCategories.size}")
                 for(subCategory in subCategories){
-                    Log.i("SubCategories Received", "${subCategory.categorySub}")
+                    Log.i("SubCategories Received", subCategory.categorySub)
                 }
                 for(subCategory in skills[0].subCategories){
-                    Log.i("SubCategories from List", "${subCategory.categorySub}")
+                    Log.i("SubCategories from List", subCategory.categorySub)
                 }
                 minimizeFabs()
                 dialog.dismiss()
             }
             btnUpdate.setOnClickListener {
+                val subCategory = subCategories[subCategoryPosition!!]
+                subCategory.categorySub = dialogueSkillSubEditBinding.skillSub.text.toString().trim()
+                skillSubAdapter.notifyItemChanged(subCategoryPosition)
                 Toast.makeText(context, "Update: Clicked", Toast.LENGTH_SHORT).show()
                 minimizeFabs()
                 dialog.dismiss()

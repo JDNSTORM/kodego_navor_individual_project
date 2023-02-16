@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/skill"
+        android:enabled="false"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:layout_weight="1"
+        tools:text="Skill" />
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_edit_skill"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="Edit"
+        android:src="@drawable/ic_edit_24" />
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_save_skill"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="Edit"
+        android:src="@drawable/ic_save_24"
+        android:visibility="gone"
+        />
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_delete_skill"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="Delete"
+        android:src="@drawable/ic_delete_24" />
+
+</LinearLayout>
