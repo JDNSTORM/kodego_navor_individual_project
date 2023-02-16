@@ -246,16 +246,16 @@ class SkillsFragment : Fragment() {
             SkillSubCategory(categoryMainID = skillMain.id)
         }
         val skillAdapter = RVSkillsEditAdapter(subCategory.skills)
+        dialogueSkillSubEditBinding.listSkill.layoutManager =  LinearLayoutManager(context)
+        dialogueSkillSubEditBinding.listSkill.adapter =  skillAdapter
+
         if (skillAdapter.itemCount > 0){
-            dialogueSkillSubEditBinding.listSkill.visibility = View.VISIBLE
+            dialogueSkillSubEditBinding.svListSkill.visibility = View.VISIBLE
             dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
-            dialogueSkillSubEditBinding.listSkill.layoutManager =  LinearLayoutManager(context)
-            dialogueSkillSubEditBinding.listSkill.adapter =  skillAdapter
         }
 
         dialogueSkillSubEditBinding.labelSkillMain.setText(skillMain.categoryMain)
 
-        Log.i("SubCategories Size", "${subCategories.size}")
         with(dialogueSkillSubEditBinding.editButtons){
             if(subCategoryPosition != null){
                 dialogueSkillSubEditBinding.skillSub.setText(subCategories[subCategoryPosition].categorySub)
@@ -278,13 +278,6 @@ class SkillsFragment : Fragment() {
                 Toast.makeText(context, "Save: ${subCategory.categorySub}", Toast.LENGTH_SHORT).show()
                 subCategories.add(subCategory)
                 skillSubAdapter.notifyItemInserted(skillSubAdapter.itemCount-1)
-                Log.i("SubCategories Size", "${subCategories.size}")
-                for(subCategory in subCategories){
-                    Log.i("SubCategories Received", subCategory.categorySub)
-                }
-                for(subCategory in skills[0].subCategories){
-                    Log.i("SubCategories from List", subCategory.categorySub)
-                }
                 minimizeFabs()
                 dialog.dismiss()
             }
@@ -297,6 +290,23 @@ class SkillsFragment : Fragment() {
                 dialog.dismiss()
             }
         }
+        /**
+         * Adding Skills
+         */
+        dialogueSkillSubEditBinding.btnAddSkill.setOnClickListener {
+            val skill = Skill(
+                categorySubID = subCategory.id,
+                skill = dialogueSkillSubEditBinding.skill.text.toString().trim()
+            )
+            subCategory.skills.add(skill)
+            skillAdapter.notifyItemInserted(skillAdapter.itemCount-1)
+            if (skillAdapter.itemCount > 0){
+                dialogueSkillSubEditBinding.svListSkill.visibility = View.VISIBLE
+                dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
+            }
+//            dialogueSkillSubEditBinding.svListSkill.scrollY = dialogueSkillSubEditBinding.svListSkill.bottom
+        }
+
         dialog.show()
     }
 }
