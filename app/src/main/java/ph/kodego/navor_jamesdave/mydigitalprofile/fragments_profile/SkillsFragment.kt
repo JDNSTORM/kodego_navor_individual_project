@@ -147,11 +147,15 @@ class SkillsFragment : Fragment() {
         binding.btnAddMainCategory.hide()
         binding.btnEditMainCategory.hide()
         binding.btnEditMainCategory.isEnabled = false
+        binding.btnDeleteMainCategory.hide()
+        binding.btnDeleteMainCategory.isEnabled = false
         binding.labelMainCategoryFab.visibility = View.GONE
         binding.btnAddSubCategory.hide()
         binding.btnAddSubCategory.isEnabled = false
         binding.btnEditSubCategory.hide()
         binding.btnEditSubCategory.isEnabled = false
+        binding.btnDeleteSubCategory.hide()
+        binding.btnDeleteSubCategory.isEnabled = false
         binding.labelSubCategoryFab.visibility = View.GONE
 
         binding.skillMain.visibility = View.GONE
@@ -162,12 +166,19 @@ class SkillsFragment : Fragment() {
         binding.btnAddMainCategory.show()
         binding.btnEditMainCategory.show()
         binding.btnEditMainCategory.isEnabled = false
+        binding.btnDeleteMainCategory.show()
+        binding.btnDeleteMainCategory.isEnabled = false
         binding.labelMainCategoryFab.visibility = View.VISIBLE
         binding.btnAddSubCategory.show()
         binding.btnAddSubCategory.isEnabled = false
         binding.btnEditSubCategory.show()
         binding.btnEditSubCategory.isEnabled = false
+        binding.btnDeleteSubCategory.show()
+        binding.btnDeleteSubCategory.isEnabled = false
         binding.labelSubCategoryFab.visibility = View.VISIBLE
+
+        binding.skillMain.visibility = View.GONE
+        binding.skillSub.visibility = View.GONE
     }
 
     /**
@@ -176,16 +187,21 @@ class SkillsFragment : Fragment() {
      *  Has: MainCategory
      *      Add MainCategory
      *      Edit MainCategory
+     *      Delete MainCategory
      *      Add SubCategory
      *  Has: SubCategory
      *      Add MainCategory
      *      Edit MainCategory
+     *      Delete MainCategory
      *      Add SubCategory
      *      Edit SubCategory
+     *      Delete SubCategory
      *  Has: Skill but no SubCategory
      *      Add MainCategory
      *      Edit MainCategory
+     *      Delete MainCategory
      *      Edit SubCategory
+     *      Delete SubCategory
      */
     private fun expandFabs(
         mainCategory: SkillMainCategory,
@@ -195,12 +211,14 @@ class SkillsFragment : Fragment() {
         expandFabs()
         binding.btnEditMainCategory.isEnabled = true
         binding.btnAddSubCategory.isEnabled = true
+        binding.btnDeleteMainCategory.isEnabled = true
         binding.skillMain.text = mainCategory.categoryMain
         binding.skillMain.visibility = View.VISIBLE
 
         if(subCategory != null){
             binding.btnEditSubCategory.isEnabled = true
-            binding.skillSub.text = subCategory.categorySub
+            binding.btnDeleteSubCategory.isEnabled = true
+            binding.skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
             binding.skillSub.visibility = View.VISIBLE
             if (subCategory.categorySub.isEmpty()){
                 binding.btnAddSubCategory.isEnabled = false
@@ -213,12 +231,18 @@ class SkillsFragment : Fragment() {
         binding.btnEditMainCategory.setOnClickListener {
             editMainCategoryDialogue(mainCategory, holder)
         }
+        binding.btnDeleteMainCategory.setOnClickListener {
+//            deleteMainCategoryDialogue(mainCategory, holder) //TODO
+        }
         binding.btnAddSubCategory.setOnClickListener {
             editSubCategoryDialogue(mainCategory, SkillSubCategory(categoryMainID = mainCategory.id))
         }
         if(mainCategory.subCategories.size > 0 && mainCategory.subCategories[0].categorySub.isEmpty() && subCategory == null){ //TODO: Revise conditions
+            val subCategory = mainCategory.subCategories[0]
             binding.btnAddSubCategory.isEnabled = false
             binding.btnEditSubCategory.isEnabled = true
+            binding.skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
+            binding.skillSub.visibility = View.VISIBLE
             val mainCategoryBinding = holder.binding as ViewholderSkillsMainBinding
             val subCategoryHolder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(0) as ViewHolder
             binding.btnEditSubCategory.setOnClickListener {
@@ -228,6 +252,9 @@ class SkillsFragment : Fragment() {
             binding.btnEditSubCategory.setOnClickListener {
                 editSubCategoryDialogue(mainCategory, subCategory!!, holder)
             }
+        }
+        binding.btnDeleteSubCategory.setOnClickListener {
+//            deleteSubCategoryDialogue(mainCategory, SkillSubCategory(categoryMainID = mainCategory.id)) //TODO
         }
     }
 
@@ -242,6 +269,7 @@ class SkillsFragment : Fragment() {
         val dialogueSkillMainEditBinding = DialogueSkillMainEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)
         val dialog = builder.create()
+        dialog.setCancelable(false)
         if (holder != null){
             dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
             dialogueSkillMainEditBinding.editButtons.btnSave.visibility = View.GONE
@@ -252,7 +280,7 @@ class SkillsFragment : Fragment() {
             btnCancel.setOnClickListener {
                 dialog.dismiss()
             }
-            btnSave.setOnClickListener {
+            btnSave.setOnClickListener {//TODO: Add SubCategory after saving
                 mainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
                 Toast.makeText(context, "Save: ${mainCategory.categoryMain}", Toast.LENGTH_SHORT).show()
                 skills.add(mainCategory)
@@ -272,10 +300,11 @@ class SkillsFragment : Fragment() {
     }
     /**
      *  Add SubCategory if a SubCategory doesn't exist
-     *      TODO: Adding Skill will automatically add SubCategory upon saving
+     *      Adding Skill will automatically add SubCategory upon saving
      *  Update SubCategory if SubCategory exists
      *
      *  TODO: Disable Blank SubCategoryName if SubCategories is greater than 1
+     *  TODO: MinimizeFabs if clicked elsewhere
      */
     private fun editSubCategoryDialogue(
         mainCategory: SkillMainCategory,
@@ -286,6 +315,7 @@ class SkillsFragment : Fragment() {
         val dialogueSkillSubEditBinding = DialogueSkillSubEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillSubEditBinding.root)
         val dialog = builder.create()
+        dialog.setCancelable(false)
 
         val mainViewHolder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as ViewHolder
         val mainCategoryBinding = mainViewHolder.binding as ViewholderSkillsMainBinding
@@ -296,7 +326,7 @@ class SkillsFragment : Fragment() {
         dialogueSkillSubEditBinding.listSkill.adapter =  skillAdapter
 
         if (skillAdapter.itemCount > 0){
-            dialogueSkillSubEditBinding.svListSkill.visibility = View.VISIBLE
+            dialogueSkillSubEditBinding.listSkill.visibility = View.VISIBLE
             dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
         }
 
@@ -342,11 +372,11 @@ class SkillsFragment : Fragment() {
             )
             subCategory.skills.add(skill)
             skillAdapter.notifyItemInserted(skillAdapter.itemCount-1)
+            dialogueSkillSubEditBinding.listSkill.scrollToPosition(skillAdapter.itemCount-1)
             if (skillAdapter.itemCount > 0){
-                dialogueSkillSubEditBinding.svListSkill.visibility = View.VISIBLE
+                dialogueSkillSubEditBinding.listSkill.visibility = View.VISIBLE
                 dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
             }
-//            dialogueSkillSubEditBinding.svListSkill.scrollY = dialogueSkillSubEditBinding.svListSkill.bottom
         }
         dialog.show()
     }

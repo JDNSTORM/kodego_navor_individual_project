@@ -18,7 +18,7 @@ class RVSkillsEditAdapter(private val skillList: ArrayList<Skill>): RecyclerView
         return skillList.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {//TODO: Add color stripes per row
         val skill = skillList[position]
         val binding = holder.binding as ViewholderSkillEditBinding
 

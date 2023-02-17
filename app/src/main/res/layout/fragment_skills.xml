@@ -28,6 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+<!--    TODO: Possibly move to another layout with full height and width and with cancellable background-->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/efab_skills_options"
         android:theme="@style/EFabTheme"
@@ -72,6 +73,18 @@
         android:layout_margin="10dp"
         android:contentDescription="Edit Main Category"
         android:src="@drawable/ic_edit_24"
+        app:layout_constraintEnd_toStartOf="@id/btn_delete_main_category"
+        app:layout_constraintBottom_toTopOf="@id/efab_skills_options"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_delete_main_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:contentDescription="Delete Main Category"
+        android:src="@drawable/ic_delete_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/efab_skills_options"
         android:visibility="gone"
@@ -108,7 +121,19 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:contentDescription="Edit Sub Category"
-        android:src="@drawable/ic_edit_skills_24"
+        android:src="@drawable/ic_edit_subcategory_24"
+        app:layout_constraintEnd_toStartOf="@id/btn_delete_sub_category"
+        app:layout_constraintBottom_toTopOf="@id/btn_edit_main_category"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_delete_sub_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:contentDescription="Delete Sub Category"
+        android:src="@drawable/ic_delete_subcategory_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_edit_main_category"
         android:visibility="gone"
