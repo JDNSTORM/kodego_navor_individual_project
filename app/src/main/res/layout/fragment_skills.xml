@@ -28,8 +28,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
-    <include layout="@layout/layout_skill_events"
-        android:id="@+id/layout_skill_events"
-        />
+<!--    <include layout="@layout/layout_skill_events"-->
+<!--        android:id="@+id/layout_skill_events"-->
+<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

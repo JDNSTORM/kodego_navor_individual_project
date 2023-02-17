@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -17,6 +18,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewHolder
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillMainEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillSubEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMainBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
@@ -36,6 +38,7 @@ class SkillsFragment : Fragment() {
     private val binding get() = _binding!!
     private val skills: ArrayList<SkillMainCategory> = ArrayList()
     private lateinit var rvAdapter: RVSkillsMainAdapter
+    private lateinit var layoutSkillEventsBinding: LayoutSkillEventsBinding
 
     init {
         if(this.arguments == null) {
@@ -64,6 +67,9 @@ class SkillsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        layoutSkillEventsBinding = LayoutSkillEventsBinding.inflate(layoutInflater)
+        binding.root.addView(layoutSkillEventsBinding.root, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+
         minimizeFabs()
         skills.addAll(getSkills())
 
@@ -91,8 +97,8 @@ class SkillsFragment : Fragment() {
         binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
         binding.listSkills.adapter = rvAdapter
 
-        binding.layoutSkillEvents.efabSkillsOptions.setOnClickListener {
-            if (binding.layoutSkillEvents.efabSkillsOptions.isExtended){
+        layoutSkillEventsBinding.efabSkillsOptions.setOnClickListener {
+            if (layoutSkillEventsBinding.efabSkillsOptions.isExtended){
                 minimizeFabs()
             }else{
                 expandFabs()
@@ -143,7 +149,7 @@ class SkillsFragment : Fragment() {
 
     // TODO: Add function to notify user that a section needs to be selected
     private fun minimizeFabs(){
-        with(binding.layoutSkillEvents) {
+        with(layoutSkillEventsBinding) {
             layoutBackground.visibility = View.GONE
             efabSkillsOptions.shrink()
             btnAddMainCategory.hide()
@@ -165,7 +171,7 @@ class SkillsFragment : Fragment() {
         }
     }
     private fun expandFabs(){
-        with(binding.layoutSkillEvents) {
+        with(layoutSkillEventsBinding) {
             layoutBackground.visibility = View.VISIBLE
             efabSkillsOptions.extend()
             btnAddMainCategory.show()
@@ -215,7 +221,7 @@ class SkillsFragment : Fragment() {
         holder: ViewHolder
     ){
         expandFabs()
-        with(binding.layoutSkillEvents) {
+        with(layoutSkillEventsBinding) {
             btnEditMainCategory.isEnabled = true
             btnAddSubCategory.isEnabled = true
             btnDeleteMainCategory.isEnabled = true
