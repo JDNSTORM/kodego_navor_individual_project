@@ -47,7 +47,7 @@ class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>):
             listSkillSub.adapter = skillSubAdapter
 
             root.setOnClickListener {
-                adapterEvents?.holderClickNotify(position) ?: Log.e("AdapterError", "adapterActions not set")
+//                adapterEvents?.holderClickNotify(position) ?: Log.e("AdapterError", "adapterActions not set")
                 adapterEvents?.mainCategoryClick(skillMainCategory, holder)
             }
         }

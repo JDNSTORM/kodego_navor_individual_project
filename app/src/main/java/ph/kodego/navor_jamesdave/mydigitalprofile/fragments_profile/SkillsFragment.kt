@@ -141,29 +141,33 @@ class SkillsFragment : Fragment() {
         return skills
     }
 
+    // TODO: Add function to notify user that a section needs to be selected
     private fun minimizeFabs(){
         binding.efabSkillsOptions.shrink()
         binding.btnAddMainCategory.hide()
         binding.btnEditMainCategory.hide()
         binding.btnEditMainCategory.isEnabled = false
-        binding.labelMainCategory.visibility = View.GONE
+        binding.labelMainCategoryFab.visibility = View.GONE
         binding.btnAddSubCategory.hide()
         binding.btnAddSubCategory.isEnabled = false
         binding.btnEditSubCategory.hide()
         binding.btnEditSubCategory.isEnabled = false
-        binding.labelSubCategory.visibility = View.GONE
+        binding.labelSubCategoryFab.visibility = View.GONE
+
+        binding.skillMain.visibility = View.GONE
+        binding.skillSub.visibility = View.GONE
     }
     private fun expandFabs(){
         binding.efabSkillsOptions.extend()
         binding.btnAddMainCategory.show()
         binding.btnEditMainCategory.show()
         binding.btnEditMainCategory.isEnabled = false
-        binding.labelMainCategory.visibility = View.VISIBLE
+        binding.labelMainCategoryFab.visibility = View.VISIBLE
         binding.btnAddSubCategory.show()
         binding.btnAddSubCategory.isEnabled = false
         binding.btnEditSubCategory.show()
         binding.btnEditSubCategory.isEnabled = false
-        binding.labelSubCategory.visibility = View.VISIBLE
+        binding.labelSubCategoryFab.visibility = View.VISIBLE
     }
 
     /**
@@ -191,8 +195,13 @@ class SkillsFragment : Fragment() {
         expandFabs()
         binding.btnEditMainCategory.isEnabled = true
         binding.btnAddSubCategory.isEnabled = true
+        binding.skillMain.text = mainCategory.categoryMain
+        binding.skillMain.visibility = View.VISIBLE
+
         if(subCategory != null){
             binding.btnEditSubCategory.isEnabled = true
+            binding.skillSub.text = subCategory.categorySub
+            binding.skillSub.visibility = View.VISIBLE
             if (subCategory.categorySub.isEmpty()){
                 binding.btnAddSubCategory.isEnabled = false
             }
@@ -207,7 +216,7 @@ class SkillsFragment : Fragment() {
         binding.btnAddSubCategory.setOnClickListener {
             editSubCategoryDialogue(mainCategory, SkillSubCategory(categoryMainID = mainCategory.id))
         }
-        if(mainCategory.subCategories.size > 0 && mainCategory.subCategories[0].categorySub.isEmpty()){
+        if(mainCategory.subCategories.size > 0 && mainCategory.subCategories[0].categorySub.isEmpty() && subCategory == null){ //TODO: Revise conditions
             binding.btnAddSubCategory.isEnabled = false
             binding.btnEditSubCategory.isEnabled = true
             val mainCategoryBinding = holder.binding as ViewholderSkillsMainBinding
@@ -262,10 +271,11 @@ class SkillsFragment : Fragment() {
         dialog.show()
     }
     /**
-     *
      *  Add SubCategory if a SubCategory doesn't exist
-     *      TODO: Adding Skill will automatically add SubCategory
+     *      TODO: Adding Skill will automatically add SubCategory upon saving
      *  Update SubCategory if SubCategory exists
+     *
+     *  TODO: Disable Blank SubCategoryName if SubCategories is greater than 1
      */
     private fun editSubCategoryDialogue(
         mainCategory: SkillMainCategory,
