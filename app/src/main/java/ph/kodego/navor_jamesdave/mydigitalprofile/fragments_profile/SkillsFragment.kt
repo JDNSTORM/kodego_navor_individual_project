@@ -30,9 +30,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
  *          ArrayList(Skills)
  *      )
  *  For User:
- *  TODO: Upon clicking on Category ViewHolder, Invoke Category to Activity
- *
- *  TODO: Review CustomView clicked
  */
 class SkillsFragment : Fragment() {
     private var _binding: FragmentSkillsBinding? = null
@@ -76,7 +73,7 @@ class SkillsFragment : Fragment() {
          *  If Main Category is Clicked:
          *
          */
-        rvAdapter.setAdapterEvents(object: RVSkillsMainAdapter.AdapterEvents{ //TODO: Possible error due to using position. Might need to use AdapterPosition
+        rvAdapter.setAdapterEvents(object: RVSkillsMainAdapter.AdapterEvents{
             override fun holderClickNotify(position: Int) {
                 Snackbar.make(view, "Adapter Clicked at $position", Snackbar.LENGTH_SHORT).show()
             }
@@ -197,8 +194,14 @@ class SkillsFragment : Fragment() {
         expandFabs()
         binding.btnEditMainCategory.isEnabled = true
         binding.btnAddSubCategory.isEnabled = true
+        if(mainCategory.subCategories[0].categorySub.isEmpty()){
+            binding.btnAddSubCategory.isEnabled = false
+        }
         if(subCategory != null){
             binding.btnEditSubCategory.isEnabled = true
+            if (subCategory.categorySub.isEmpty()){
+                binding.btnAddSubCategory.isEnabled = false
+            }
         }
 
         binding.btnEditMainCategory.setOnClickListener {

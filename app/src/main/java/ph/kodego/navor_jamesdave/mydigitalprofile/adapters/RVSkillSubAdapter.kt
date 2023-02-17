@@ -46,7 +46,7 @@ class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): RecyclerVi
                 listEmpty.visibility = View.GONE
             }
 
-            root.setOnClickListener {//TODO: Possibly pass Adapter with public list to lessen data passed
+            root.setOnClickListener {
                 adapterEvents?.subCategoryClick(mainCategory, subCategory, holder)
             }
         }

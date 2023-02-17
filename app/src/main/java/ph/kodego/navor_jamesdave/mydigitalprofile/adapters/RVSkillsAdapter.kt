@@ -7,12 +7,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillBin
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 
 class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Adapter<ViewHolder>() {
-    private var categoryPosition: Int? = null
     private var adapterEvents: RVSkillsMainAdapter.AdapterEvents? = null
 
-    fun setCategoryPosition(position: Int){
-        this.categoryPosition = position
-    }
     fun setAdapterEvents(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
         this.adapterEvents = adapterEvents
     }
@@ -33,7 +29,6 @@ class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Ada
         binding.skill.setText(skill.skill)
         binding.root.setOnClickListener{
 //            Snackbar.make(binding.root, "Skill Clicked", Snackbar.LENGTH_SHORT).show()
-            adapterEvents?.holderClickNotify(categoryPosition!!)
         }
     }
 }
