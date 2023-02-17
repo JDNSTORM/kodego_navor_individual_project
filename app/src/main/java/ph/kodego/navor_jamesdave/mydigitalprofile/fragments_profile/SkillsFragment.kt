@@ -2,7 +2,6 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +13,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillSubAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsEditAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsMainAdapter
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewHolder
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillMainEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillSubEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMainBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
@@ -75,22 +76,17 @@ class SkillsFragment : Fragment() {
          *  If Main Category is Clicked:
          *
          */
-        rvAdapter.setAdapterActions(object: RVSkillsMainAdapter.AdapterEvents{ //TODO: Possible error due to using position. Might need to use AdapterPosition
+        rvAdapter.setAdapterEvents(object: RVSkillsMainAdapter.AdapterEvents{ //TODO: Possible error due to using position. Might need to use AdapterPosition
             override fun holderClickNotify(position: Int) {
                 Snackbar.make(view, "Adapter Clicked at $position", Snackbar.LENGTH_SHORT).show()
             }
 
-            override fun mainCategoryClick(mainCategories: ArrayList<SkillMainCategory>, position: Int, skillSubAdapter: RVSkillSubAdapter) {
-                expandFabs(mainCategories, position, null, skillSubAdapter)
+            override fun mainCategoryClick(mainCategory: SkillMainCategory, holder: ViewHolder) {
+                expandFabs(mainCategory, null, holder)
             }
 
-            override fun subCategoryClick(
-                mainCategories: ArrayList<SkillMainCategory>,
-                mainCategoryPosition: Int,
-                subCategoryPosition: Int,
-                skillSubAdapter: RVSkillSubAdapter
-            ) {
-                expandFabs(mainCategories, mainCategoryPosition, subCategoryPosition, skillSubAdapter)
+            override fun subCategoryClick(mainCategory: SkillMainCategory, subCategory: SkillSubCategory, holder: ViewHolder) {
+                expandFabs(mainCategory, subCategory, holder)
             }
 
         })
@@ -106,7 +102,7 @@ class SkillsFragment : Fragment() {
             }
         }
         binding.btnAddMainCategory.setOnClickListener {
-            editMainCategoryDialogue(skills, null)
+            editMainCategoryDialogue()
         }
     }
 
@@ -114,16 +110,16 @@ class SkillsFragment : Fragment() {
         val skills: ArrayList<SkillMainCategory> = ArrayList()
 
         for (num in 0..2){
-            val skill = SkillMainCategory(num, "Main $num")
+            val mainCategory = SkillMainCategory(num, "Main $num")
             for (num2 in 0..2){
                 val skillSub = SkillSubCategory(num2, num, "Sub $num2")
                 for (num3 in 0..3){
                     val skill = Skill(num3, num2, "Skill $num3")
                     skillSub.skills.add(skill)
                 }
-                skill.subCategories.add(skillSub)
+                mainCategory.subCategories.add(skillSub)
             }
-            skills.add(skill)
+            skills.add(mainCategory)
         }
         skills.add(
             SkillMainCategory(
@@ -194,26 +190,25 @@ class SkillsFragment : Fragment() {
      *      Edit SubCategory
      */
     private fun expandFabs(
-        mainCategories: ArrayList<SkillMainCategory>,
-        mainCategoryPosition: Int,
-        subCategoryPosition: Int? = null,
-        skillSubAdapter: RVSkillSubAdapter
+        mainCategory: SkillMainCategory,
+        subCategory: SkillSubCategory? = null,
+        holder: ViewHolder
     ){
         expandFabs()
         binding.btnEditMainCategory.isEnabled = true
         binding.btnAddSubCategory.isEnabled = true
-        if(subCategoryPosition != null){
+        if(subCategory != null){
             binding.btnEditSubCategory.isEnabled = true
         }
 
         binding.btnEditMainCategory.setOnClickListener {
-            editMainCategoryDialogue(mainCategories, mainCategoryPosition)
+            editMainCategoryDialogue(mainCategory, holder)
         }
         binding.btnAddSubCategory.setOnClickListener {
-            editSubCategoryDialogue(mainCategories[mainCategoryPosition], null, skillSubAdapter)
+            editSubCategoryDialogue(mainCategory, SkillSubCategory(categoryMainID = mainCategory.id))
         }
         binding.btnEditSubCategory.setOnClickListener {
-            editSubCategoryDialogue(mainCategories[mainCategoryPosition], subCategoryPosition, skillSubAdapter)
+            editSubCategoryDialogue(mainCategory, subCategory!!, holder)
         }
     }
 
@@ -221,15 +216,15 @@ class SkillsFragment : Fragment() {
      *  Add MainCategory if a MainCategory doesn't exist
      *  Update MainCategory if MainCategory exists
      */
-    private fun editMainCategoryDialogue(mainCategories: ArrayList<SkillMainCategory> = ArrayList(), mainCategoryPosition: Int? = null){
+    private fun editMainCategoryDialogue(
+        mainCategory: SkillMainCategory = SkillMainCategory(),
+        holder: ViewHolder? = null
+    ){
         val dialogueSkillMainEditBinding = DialogueSkillMainEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)
         val dialog = builder.create()
-        var skillMain: SkillMainCategory? = null
-
-        if (mainCategories.isNotEmpty() && mainCategoryPosition != null){
-            skillMain = mainCategories[mainCategoryPosition]
-            dialogueSkillMainEditBinding.skillMain.setText(skillMain.categoryMain)
+        if (holder != null){
+            dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
             dialogueSkillMainEditBinding.editButtons.btnSave.visibility = View.GONE
             dialogueSkillMainEditBinding.editButtons.btnUpdate.visibility = View.VISIBLE
         }
@@ -239,19 +234,17 @@ class SkillsFragment : Fragment() {
                 dialog.dismiss()
             }
             btnSave.setOnClickListener {
-                val skillMain = SkillMainCategory(
-                    categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
-                )
-                Toast.makeText(context, "Save: ${skillMain.categoryMain}", Toast.LENGTH_SHORT).show()
-                mainCategories.add(skillMain)
-                rvAdapter.notifyItemInserted(mainCategories.size-1)
+                mainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
+                Toast.makeText(context, "Save: ${mainCategory.categoryMain}", Toast.LENGTH_SHORT).show()
+                skills.add(mainCategory)
+                rvAdapter.notifyItemInserted(skills.size-1)
                 minimizeFabs()
                 dialog.dismiss()
             }
             btnUpdate.setOnClickListener {
-                skillMain!!.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
-                rvAdapter.notifyItemChanged(mainCategoryPosition!!)
-                Toast.makeText(context, "Update: ${skillMain.categoryMain}", Toast.LENGTH_SHORT).show()
+                mainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
+                rvAdapter.notifyItemChanged(holder!!.layoutPosition)
+                Toast.makeText(context, "Update: ${mainCategory.categoryMain}", Toast.LENGTH_SHORT).show()
                 minimizeFabs()
                 dialog.dismiss()
             }
@@ -265,19 +258,19 @@ class SkillsFragment : Fragment() {
      *  Update SubCategory if SubCategory exists
      */
     private fun editSubCategoryDialogue(
-        skillMain: SkillMainCategory,
-        subCategoryPosition: Int? = null,
-        skillSubAdapter: RVSkillSubAdapter
+        mainCategory: SkillMainCategory,
+        subCategory: SkillSubCategory,
+        holder: ViewHolder? = null
     ){
-        val subCategories = skillMain.subCategories
+        val subCategories = mainCategory.subCategories
         val dialogueSkillSubEditBinding = DialogueSkillSubEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillSubEditBinding.root)
         val dialog = builder.create()
-        val subCategory: SkillSubCategory = if(subCategoryPosition != null){
-            subCategories[subCategoryPosition]
-        } else {
-            SkillSubCategory(categoryMainID = skillMain.id)
-        }
+
+        val mainViewHolder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as ViewHolder
+        val mainCategoryBinding = mainViewHolder.binding as ViewholderSkillsMainBinding
+        val skillSubAdapter = mainCategoryBinding.listSkillSub.adapter as RVSkillSubAdapter
+
         val skillAdapter = RVSkillsEditAdapter(subCategory.skills)
         dialogueSkillSubEditBinding.listSkill.layoutManager =  LinearLayoutManager(context)
         dialogueSkillSubEditBinding.listSkill.adapter =  skillAdapter
@@ -287,15 +280,17 @@ class SkillsFragment : Fragment() {
             dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
         }
 
-        dialogueSkillSubEditBinding.labelSkillMain.setText(skillMain.categoryMain)
+        dialogueSkillSubEditBinding.labelSkillMain.setText(mainCategory.categoryMain)
 
         with(dialogueSkillSubEditBinding.editButtons){
-            if(subCategoryPosition != null){
-                dialogueSkillSubEditBinding.skillSub.setText(subCategories[subCategoryPosition].categorySub)
+            if(holder != null){
+                dialogueSkillSubEditBinding.skillSub.setText(subCategory.categorySub)
                 btnSave.visibility = View.GONE
                 btnUpdate.visibility = View.VISIBLE
-                dialog.setOnDismissListener {
-                    skillSubAdapter.notifyItemChanged(subCategoryPosition)
+                dialog.setOnDismissListener {//TODO: Debug - Update List then cancel Dialog then Update again ->
+//                    skillSubAdapter.notifyItemChanged(holder.layoutPosition)
+                    skillSubAdapter.notifyDataSetChanged()
+//                    minimizeFabs() //TODO: Needs to get a new Event again in order to update contents properly
                 }
             }
 
@@ -303,10 +298,6 @@ class SkillsFragment : Fragment() {
                 dialog.dismiss()
             }
             btnSave.setOnClickListener {// TODO: Add Skill without Subcategory
-                /**
-                 *
-                 *
-                 */
                 subCategory.categorySub = dialogueSkillSubEditBinding.skillSub.text.toString().trim()
                 Toast.makeText(context, "Save: ${subCategory.categorySub}", Toast.LENGTH_SHORT).show()
                 subCategories.add(subCategory)
@@ -315,9 +306,7 @@ class SkillsFragment : Fragment() {
                 dialog.dismiss()
             }
             btnUpdate.setOnClickListener {
-                val subCategory = subCategories[subCategoryPosition!!]
                 subCategory.categorySub = dialogueSkillSubEditBinding.skillSub.text.toString().trim()
-                skillSubAdapter.notifyItemChanged(subCategoryPosition)
                 Toast.makeText(context, "Update: Clicked", Toast.LENGTH_SHORT).show()
                 minimizeFabs()
                 dialog.dismiss()
@@ -339,7 +328,6 @@ class SkillsFragment : Fragment() {
             }
 //            dialogueSkillSubEditBinding.svListSkill.scrollY = dialogueSkillSubEditBinding.svListSkill.bottom
         }
-
         dialog.show()
     }
 }

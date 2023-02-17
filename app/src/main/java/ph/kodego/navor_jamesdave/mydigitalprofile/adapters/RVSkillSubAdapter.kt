@@ -8,14 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillSubBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 
-class RVSkillSubAdapter(private val mainCategories: ArrayList<SkillMainCategory>): RecyclerView.Adapter<ViewHolder>() {
-    private var categoryPosition: Int? = null
+class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): RecyclerView.Adapter<ViewHolder>() {
     private var adapterEvents: RVSkillsMainAdapter.AdapterEvents? = null
 
-    fun setCategoryPosition(position: Int){
-        this.categoryPosition = position
-    }
-    fun setAdapterActions(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
+    fun setAdapterEvents(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
         this.adapterEvents = adapterEvents
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,23 +21,22 @@ class RVSkillSubAdapter(private val mainCategories: ArrayList<SkillMainCategory>
     }
 
     override fun getItemCount(): Int {
-        return mainCategories[categoryPosition!!].subCategories.size
+        return mainCategory.subCategories.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val skillSubCategory = mainCategories[categoryPosition!!].subCategories[position]
+        val subCategory = mainCategory.subCategories[position]
         val binding = holder.binding as ViewholderSkillSubBinding
         val context = binding.root.context
 
         with(binding){
-            if (skillSubCategory.categorySub.isNotEmpty()) {
-                skillSub.setText(skillSubCategory.categorySub)
+            if (subCategory.categorySub.isNotEmpty()) {
+                skillSub.setText(subCategory.categorySub)
                 skillSub.visibility = View.VISIBLE
             }
-            val skillsAdapter = RVSkillsAdapter(skillSubCategory.skills)
-            if(skillSubCategory.skills.isNotEmpty()) {
-                skillsAdapter.setAdapterActions(adapterEvents)
-                skillsAdapter.setCategoryPosition(categoryPosition!!)
+            val skillsAdapter = RVSkillsAdapter(subCategory.skills)
+            if(subCategory.skills.isNotEmpty()) {
+                skillsAdapter.setAdapterEvents(adapterEvents)
                 listSkill.visibility = View.VISIBLE
                 listEmpty.visibility = View.GONE
                 listSkill.layoutManager = GridLayoutManager(context, 2)
@@ -52,8 +47,7 @@ class RVSkillSubAdapter(private val mainCategories: ArrayList<SkillMainCategory>
             }
 
             root.setOnClickListener {//TODO: Possibly pass Adapter with public list to lessen data passed
-                adapterEvents?.holderClickNotify(categoryPosition!!)
-                adapterEvents?.subCategoryClick(mainCategories, categoryPosition!!, position, this@RVSkillSubAdapter)
+                adapterEvents?.subCategoryClick(mainCategory, subCategory, holder)
             }
         }
 

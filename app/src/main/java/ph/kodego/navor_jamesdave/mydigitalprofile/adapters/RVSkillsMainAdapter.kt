@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMainBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
 /**
  * TODO: Setting ClickListener inside ViewHolder is inefficient because it is redundant but same
@@ -15,11 +16,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>): RecyclerView.Adapter<ViewHolder>() {
     interface AdapterEvents{//TODO: Open clickEvent when clicking Skill
         fun holderClickNotify(position: Int)
-        fun mainCategoryClick(mainCategories: ArrayList<SkillMainCategory>, position: Int, skillSubAdapter: RVSkillSubAdapter)
-        fun subCategoryClick(mainCategories: ArrayList<SkillMainCategory>, mainCategoryPosition: Int, subCategoryPosition: Int, skillSubAdapter: RVSkillSubAdapter)
+        fun mainCategoryClick(mainCategory: SkillMainCategory, holder: ViewHolder)
+        fun subCategoryClick(mainCategory: SkillMainCategory, subCategory: SkillSubCategory, holder: ViewHolder)
     }
     private var adapterEvents: AdapterEvents? = null
-    fun setAdapterActions(adapterEvents: AdapterEvents){
+    fun setAdapterEvents(adapterEvents: AdapterEvents){
         this.adapterEvents = adapterEvents
     }
 
@@ -39,16 +40,15 @@ class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>):
 
         with(binding){
             skillMain.setText(skillMainCategory.categoryMain)
-            val skillSubAdapter = RVSkillSubAdapter(skillsMain)
-            skillSubAdapter.setAdapterActions(adapterEvents)
-            skillSubAdapter.setCategoryPosition(position)
+            val skillSubAdapter = RVSkillSubAdapter(skillMainCategory)
+            skillSubAdapter.setAdapterEvents(adapterEvents)
 
             listSkillSub.layoutManager = LinearLayoutManager(root.context)
             listSkillSub.adapter = skillSubAdapter
 
             root.setOnClickListener {
                 adapterEvents?.holderClickNotify(position) ?: Log.e("AdapterError", "adapterActions not set")
-                adapterEvents?.mainCategoryClick(skillsMain, position, skillSubAdapter) //TODO: Possibly pass holder instead of adapter
+                adapterEvents?.mainCategoryClick(skillMainCategory, holder)
             }
         }
     }

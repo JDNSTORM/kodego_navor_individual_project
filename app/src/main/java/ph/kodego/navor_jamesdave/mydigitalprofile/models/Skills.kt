@@ -2,7 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 
 data class SkillMainCategory(
     var id: Int = 0,
-    var categoryMain: String,
+    var categoryMain: String = "",
     val subCategories: ArrayList<SkillSubCategory> = ArrayList()
 )
 
