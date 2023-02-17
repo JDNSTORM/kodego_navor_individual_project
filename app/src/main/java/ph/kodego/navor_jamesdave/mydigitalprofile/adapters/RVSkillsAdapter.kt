@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
-class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Adapter<ViewHolder>() {
+class RVSkillsAdapter(private val mainCategory: SkillMainCategory, private val subCategory: SkillSubCategory, parentViewHolder: ViewHolder): RecyclerView.Adapter<ViewHolder>() {
     private var adapterEvents: RVSkillsMainAdapter.AdapterEvents? = null
 
     fun setAdapterEvents(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
@@ -19,16 +21,16 @@ class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Ada
     }
 
     override fun getItemCount(): Int {
-        return skillList.size
+        return subCategory.skills.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val skill = skillList[position]
+        val skill = subCategory.skills[position]
         val binding = holder.binding as ViewholderSkillBinding
 
         binding.skill.setText(skill.skill)
         binding.root.setOnClickListener{
-//            Snackbar.make(binding.root, "Skill Clicked", Snackbar.LENGTH_SHORT).show()
+            adapterEvents?.subCategoryClick(mainCategory, subCategory, holder)
         }
     }
 }

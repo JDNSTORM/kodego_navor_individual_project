@@ -98,9 +98,6 @@ class SkillsFragment : Fragment() {
                 expandFabs()
             }
         }
-        binding.btnAddMainCategory.setOnClickListener {
-            editMainCategoryDialogue()
-        }
     }
 
     private fun getSkills(): ArrayList<SkillMainCategory>{
@@ -194,9 +191,6 @@ class SkillsFragment : Fragment() {
         expandFabs()
         binding.btnEditMainCategory.isEnabled = true
         binding.btnAddSubCategory.isEnabled = true
-        if(mainCategory.subCategories[0].categorySub.isEmpty()){
-            binding.btnAddSubCategory.isEnabled = false
-        }
         if(subCategory != null){
             binding.btnEditSubCategory.isEnabled = true
             if (subCategory.categorySub.isEmpty()){
@@ -204,14 +198,27 @@ class SkillsFragment : Fragment() {
             }
         }
 
+        binding.btnAddMainCategory.setOnClickListener {
+            editMainCategoryDialogue()
+        }
         binding.btnEditMainCategory.setOnClickListener {
             editMainCategoryDialogue(mainCategory, holder)
         }
         binding.btnAddSubCategory.setOnClickListener {
             editSubCategoryDialogue(mainCategory, SkillSubCategory(categoryMainID = mainCategory.id))
         }
-        binding.btnEditSubCategory.setOnClickListener {
-            editSubCategoryDialogue(mainCategory, subCategory!!, holder)
+        if(mainCategory.subCategories.size > 0 && mainCategory.subCategories[0].categorySub.isEmpty()){
+            binding.btnAddSubCategory.isEnabled = false
+            binding.btnEditSubCategory.isEnabled = true
+            val mainCategoryBinding = holder.binding as ViewholderSkillsMainBinding
+            val subCategoryHolder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(0) as ViewHolder
+            binding.btnEditSubCategory.setOnClickListener {
+                editSubCategoryDialogue(mainCategory, mainCategory.subCategories[0], subCategoryHolder)
+            }
+        }else {
+            binding.btnEditSubCategory.setOnClickListener {
+                editSubCategoryDialogue(mainCategory, subCategory!!, holder)
+            }
         }
     }
 

@@ -34,7 +34,7 @@ class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): RecyclerVi
                 skillSub.setText(subCategory.categorySub)
                 skillSub.visibility = View.VISIBLE
             }
-            val skillsAdapter = RVSkillsAdapter(subCategory.skills)
+            val skillsAdapter = RVSkillsAdapter(mainCategory, subCategory, holder)
             if(subCategory.skills.isNotEmpty()) {
                 skillsAdapter.setAdapterEvents(adapterEvents)
                 listSkill.visibility = View.VISIBLE
