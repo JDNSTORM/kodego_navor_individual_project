@@ -13,7 +13,7 @@ class RVSkillsAdapter(private val skillList: ArrayList<Skill>): RecyclerView.Ada
     fun setCategoryPosition(position: Int){
         this.categoryPosition = position
     }
-    fun setAdapterActions(adapterEvents: RVSkillsMainAdapter.AdapterEvents){
+    fun setAdapterActions(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
         this.adapterEvents = adapterEvents
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

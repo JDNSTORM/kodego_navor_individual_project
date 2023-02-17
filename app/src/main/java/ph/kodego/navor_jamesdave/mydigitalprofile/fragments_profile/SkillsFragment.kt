@@ -71,6 +71,10 @@ class SkillsFragment : Fragment() {
 
         rvAdapter = RVSkillsMainAdapter(skills)
 
+        /**
+         *  If Main Category is Clicked:
+         *
+         */
         rvAdapter.setAdapterActions(object: RVSkillsMainAdapter.AdapterEvents{ //TODO: Possible error due to using position. Might need to use AdapterPosition
             override fun holderClickNotify(position: Int) {
                 Snackbar.make(view, "Adapter Clicked at $position", Snackbar.LENGTH_SHORT).show()
@@ -171,6 +175,24 @@ class SkillsFragment : Fragment() {
         binding.btnEditSubCategory.isEnabled = false
         binding.labelSubCategory.visibility = View.VISIBLE
     }
+
+    /**
+     *  Has: Nothing
+     *      Add MainCategory
+     *  Has: MainCategory
+     *      Add MainCategory
+     *      Edit MainCategory
+     *      Add SubCategory
+     *  Has: SubCategory
+     *      Add MainCategory
+     *      Edit MainCategory
+     *      Add SubCategory
+     *      Edit SubCategory
+     *  Has: Skill but no SubCategory
+     *      Add MainCategory
+     *      Edit MainCategory
+     *      Edit SubCategory
+     */
     private fun expandFabs(
         mainCategories: ArrayList<SkillMainCategory>,
         mainCategoryPosition: Int,
@@ -194,6 +216,11 @@ class SkillsFragment : Fragment() {
             editSubCategoryDialogue(mainCategories[mainCategoryPosition], subCategoryPosition, skillSubAdapter)
         }
     }
+
+    /**
+     *  Add MainCategory if a MainCategory doesn't exist
+     *  Update MainCategory if MainCategory exists
+     */
     private fun editMainCategoryDialogue(mainCategories: ArrayList<SkillMainCategory> = ArrayList(), mainCategoryPosition: Int? = null){
         val dialogueSkillMainEditBinding = DialogueSkillMainEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)
@@ -231,6 +258,12 @@ class SkillsFragment : Fragment() {
         }
         dialog.show()
     }
+    /**
+     *
+     *  Add SubCategory if a SubCategory doesn't exist
+     *      TODO: Adding Skill will automatically add SubCategory
+     *  Update SubCategory if SubCategory exists
+     */
     private fun editSubCategoryDialogue(
         skillMain: SkillMainCategory,
         subCategoryPosition: Int? = null,

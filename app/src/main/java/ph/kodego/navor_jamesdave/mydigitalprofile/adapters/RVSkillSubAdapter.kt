@@ -15,7 +15,7 @@ class RVSkillSubAdapter(private val mainCategories: ArrayList<SkillMainCategory>
     fun setCategoryPosition(position: Int){
         this.categoryPosition = position
     }
-    fun setAdapterActions(adapterEvents: RVSkillsMainAdapter.AdapterEvents){
+    fun setAdapterActions(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
         this.adapterEvents = adapterEvents
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,7 +40,7 @@ class RVSkillSubAdapter(private val mainCategories: ArrayList<SkillMainCategory>
             }
             val skillsAdapter = RVSkillsAdapter(skillSubCategory.skills)
             if(skillSubCategory.skills.isNotEmpty()) {
-                skillsAdapter.setAdapterActions(adapterEvents!!)
+                skillsAdapter.setAdapterActions(adapterEvents)
                 skillsAdapter.setCategoryPosition(categoryPosition!!)
                 listSkill.visibility = View.VISIBLE
                 listEmpty.visibility = View.GONE
