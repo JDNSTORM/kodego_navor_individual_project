@@ -91,8 +91,8 @@ class SkillsFragment : Fragment() {
         binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
         binding.listSkills.adapter = rvAdapter
 
-        binding.efabSkillsOptions.setOnClickListener {
-            if (binding.efabSkillsOptions.isExtended){
+        binding.layoutSkillEvents.efabSkillsOptions.setOnClickListener {
+            if (binding.layoutSkillEvents.efabSkillsOptions.isExtended){
                 minimizeFabs()
             }else{
                 expandFabs()
@@ -143,42 +143,48 @@ class SkillsFragment : Fragment() {
 
     // TODO: Add function to notify user that a section needs to be selected
     private fun minimizeFabs(){
-        binding.efabSkillsOptions.shrink()
-        binding.btnAddMainCategory.hide()
-        binding.btnEditMainCategory.hide()
-        binding.btnEditMainCategory.isEnabled = false
-        binding.btnDeleteMainCategory.hide()
-        binding.btnDeleteMainCategory.isEnabled = false
-        binding.labelMainCategoryFab.visibility = View.GONE
-        binding.btnAddSubCategory.hide()
-        binding.btnAddSubCategory.isEnabled = false
-        binding.btnEditSubCategory.hide()
-        binding.btnEditSubCategory.isEnabled = false
-        binding.btnDeleteSubCategory.hide()
-        binding.btnDeleteSubCategory.isEnabled = false
-        binding.labelSubCategoryFab.visibility = View.GONE
+        with(binding.layoutSkillEvents) {
+            layoutBackground.visibility = View.GONE
+            efabSkillsOptions.shrink()
+            btnAddMainCategory.hide()
+            btnEditMainCategory.hide()
+            btnEditMainCategory.isEnabled = false
+            btnDeleteMainCategory.hide()
+            btnDeleteMainCategory.isEnabled = false
+            labelMainCategoryFab.visibility = View.GONE
+            btnAddSubCategory.hide()
+            btnAddSubCategory.isEnabled = false
+            btnEditSubCategory.hide()
+            btnEditSubCategory.isEnabled = false
+            btnDeleteSubCategory.hide()
+            btnDeleteSubCategory.isEnabled = false
+            labelSubCategoryFab.visibility = View.GONE
 
-        binding.skillMain.visibility = View.GONE
-        binding.skillSub.visibility = View.GONE
+            skillMain.visibility = View.GONE
+            skillSub.visibility = View.GONE
+        }
     }
     private fun expandFabs(){
-        binding.efabSkillsOptions.extend()
-        binding.btnAddMainCategory.show()
-        binding.btnEditMainCategory.show()
-        binding.btnEditMainCategory.isEnabled = false
-        binding.btnDeleteMainCategory.show()
-        binding.btnDeleteMainCategory.isEnabled = false
-        binding.labelMainCategoryFab.visibility = View.VISIBLE
-        binding.btnAddSubCategory.show()
-        binding.btnAddSubCategory.isEnabled = false
-        binding.btnEditSubCategory.show()
-        binding.btnEditSubCategory.isEnabled = false
-        binding.btnDeleteSubCategory.show()
-        binding.btnDeleteSubCategory.isEnabled = false
-        binding.labelSubCategoryFab.visibility = View.VISIBLE
+        with(binding.layoutSkillEvents) {
+            layoutBackground.visibility = View.VISIBLE
+            efabSkillsOptions.extend()
+            btnAddMainCategory.show()
+            btnEditMainCategory.show()
+            btnEditMainCategory.isEnabled = false
+            btnDeleteMainCategory.show()
+            btnDeleteMainCategory.isEnabled = false
+            labelMainCategoryFab.visibility = View.VISIBLE
+            btnAddSubCategory.show()
+            btnAddSubCategory.isEnabled = false
+            btnEditSubCategory.show()
+            btnEditSubCategory.isEnabled = false
+            btnDeleteSubCategory.show()
+            btnDeleteSubCategory.isEnabled = false
+            labelSubCategoryFab.visibility = View.VISIBLE
 
-        binding.skillMain.visibility = View.GONE
-        binding.skillSub.visibility = View.GONE
+            skillMain.visibility = View.GONE
+            skillSub.visibility = View.GONE
+        }
     }
 
     /**
@@ -209,52 +215,65 @@ class SkillsFragment : Fragment() {
         holder: ViewHolder
     ){
         expandFabs()
-        binding.btnEditMainCategory.isEnabled = true
-        binding.btnAddSubCategory.isEnabled = true
-        binding.btnDeleteMainCategory.isEnabled = true
-        binding.skillMain.text = mainCategory.categoryMain
-        binding.skillMain.visibility = View.VISIBLE
+        with(binding.layoutSkillEvents) {
+            btnEditMainCategory.isEnabled = true
+            btnAddSubCategory.isEnabled = true
+            btnDeleteMainCategory.isEnabled = true
+            skillMain.text = mainCategory.categoryMain
+            skillMain.visibility = View.VISIBLE
 
-        if(subCategory != null){
-            binding.btnEditSubCategory.isEnabled = true
-            binding.btnDeleteSubCategory.isEnabled = true
-            binding.skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
-            binding.skillSub.visibility = View.VISIBLE
-            if (subCategory.categorySub.isEmpty()){
-                binding.btnAddSubCategory.isEnabled = false
+            if (subCategory != null) {
+                btnEditSubCategory.isEnabled = true
+                btnDeleteSubCategory.isEnabled = true
+                skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
+                skillSub.visibility = View.VISIBLE
+                if (subCategory.categorySub.isEmpty()) {
+                    btnAddSubCategory.isEnabled = false
+                }
             }
-        }
 
-        binding.btnAddMainCategory.setOnClickListener {
-            editMainCategoryDialogue()
-        }
-        binding.btnEditMainCategory.setOnClickListener {
-            editMainCategoryDialogue(mainCategory, holder)
-        }
-        binding.btnDeleteMainCategory.setOnClickListener {
+            btnAddMainCategory.setOnClickListener {
+                editMainCategoryDialogue()
+            }
+            btnEditMainCategory.setOnClickListener {
+                editMainCategoryDialogue(mainCategory, holder)
+            }
+            btnDeleteMainCategory.setOnClickListener {
 //            deleteMainCategoryDialogue(mainCategory, holder) //TODO
-        }
-        binding.btnAddSubCategory.setOnClickListener {
-            editSubCategoryDialogue(mainCategory, SkillSubCategory(categoryMainID = mainCategory.id))
-        }
-        if(mainCategory.subCategories.size > 0 && mainCategory.subCategories[0].categorySub.isEmpty() && subCategory == null){ //TODO: Revise conditions
-            val subCategory = mainCategory.subCategories[0]
-            binding.btnAddSubCategory.isEnabled = false
-            binding.btnEditSubCategory.isEnabled = true
-            binding.skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
-            binding.skillSub.visibility = View.VISIBLE
-            val mainCategoryBinding = holder.binding as ViewholderSkillsMainBinding
-            val subCategoryHolder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(0) as ViewHolder
-            binding.btnEditSubCategory.setOnClickListener {
-                editSubCategoryDialogue(mainCategory, mainCategory.subCategories[0], subCategoryHolder)
             }
-        }else {
-            binding.btnEditSubCategory.setOnClickListener {
-                editSubCategoryDialogue(mainCategory, subCategory!!, holder)
+            btnAddSubCategory.setOnClickListener {
+                editSubCategoryDialogue(
+                    mainCategory,
+                    SkillSubCategory(categoryMainID = mainCategory.id)
+                )
             }
-        }
-        binding.btnDeleteSubCategory.setOnClickListener {
+            if (mainCategory.subCategories.size > 0 && mainCategory.subCategories[0].categorySub.isEmpty() && subCategory == null) { //TODO: Revise conditions
+                val subCategory = mainCategory.subCategories[0]
+                btnAddSubCategory.isEnabled = false
+                btnEditSubCategory.isEnabled = true
+                skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
+                skillSub.visibility = View.VISIBLE
+                val mainCategoryBinding = holder.binding as ViewholderSkillsMainBinding
+                val subCategoryHolder =
+                    mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(0) as ViewHolder
+                btnEditSubCategory.setOnClickListener {
+                    editSubCategoryDialogue(
+                        mainCategory,
+                        mainCategory.subCategories[0],
+                        subCategoryHolder
+                    )
+                }
+            } else {
+                btnEditSubCategory.setOnClickListener {
+                    editSubCategoryDialogue(mainCategory, subCategory!!, holder)
+                }
+            }
+            btnDeleteSubCategory.setOnClickListener {
 //            deleteSubCategoryDialogue(mainCategory, SkillSubCategory(categoryMainID = mainCategory.id)) //TODO
+            }
+            layoutBackground.setOnClickListener {
+                minimizeFabs()
+            }
         }
     }
 
