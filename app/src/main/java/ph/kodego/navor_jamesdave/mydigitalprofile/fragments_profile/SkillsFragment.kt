@@ -239,26 +239,14 @@ class SkillsFragment : Fragment() {
                     btnAddSubCategory.isEnabled = false
                 }
             }
-
-            if(subCategory == null){
-                btnEditMainCategory.setOnClickListener {
-                    editMainCategoryDialogue(mainCategory)
-                }
-                btnDeleteMainCategory.setOnClickListener {
-                    deleteCategoryDialogue(mainCategory, null) //TODO
-                }
-            }else{
-                btnEditMainCategory.setOnClickListener {
-                    editMainCategoryDialogue(mainCategory)
-                }
-                btnDeleteMainCategory.setOnClickListener {
-                    deleteCategoryDialogue(mainCategory, null) //TODO
-                }
+            btnEditMainCategory.setOnClickListener {
+                editMainCategoryDialogue(mainCategory)
+            }
+            btnDeleteMainCategory.setOnClickListener {
+                deleteCategoryDialogue(mainCategory)
             }
             btnAddSubCategory.setOnClickListener {
-                editSubCategoryDialogue(
-                    mainCategory
-                )
+                editSubCategoryDialogue(mainCategory)
             }
             if (mainCategory.subCategories.size > 0 && mainCategory.subCategories[0].categorySub.isEmpty() && subCategory == null) { //TODO: Revise conditions
                 val subCategory = mainCategory.subCategories[0]
@@ -268,27 +256,18 @@ class SkillsFragment : Fragment() {
                 skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
                 skillSub.visibility = View.VISIBLE
 
-                val mainViewHolder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as ViewHolder
-                val mainCategoryBinding = mainViewHolder.binding as ViewholderSkillsMainBinding
-                val subCategoryHolder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(0) as ViewHolder
                 btnEditSubCategory.setOnClickListener {
-                    editSubCategoryDialogue(
-                        mainCategory,
-                        mainCategory.subCategories[0]
-                    )
+                    editSubCategoryDialogue(mainCategory, mainCategory.subCategories[0])
                 }
                 btnDeleteSubCategory.setOnClickListener {
-                    deleteCategoryDialogue(
-                        mainCategory,
-                        mainCategory.subCategories[0]
-                    )
+                    deleteCategoryDialogue(mainCategory, mainCategory.subCategories[0])
                 }
             } else {
                 btnEditSubCategory.setOnClickListener {
                     editSubCategoryDialogue(mainCategory, subCategory!!)
                 }
                 btnDeleteSubCategory.setOnClickListener {
-                    deleteCategoryDialogue(mainCategory, subCategory!!) //TODO
+                    deleteCategoryDialogue(mainCategory, subCategory!!)
                 }
             }
             layoutBackground.setOnClickListener {
@@ -381,9 +360,17 @@ class SkillsFragment : Fragment() {
                 dialogueSkillSubEditBinding.skillSub.setText(subCategory.categorySub)
                 btnSave.visibility = View.GONE
                 btnUpdate.visibility = View.VISIBLE
-                val holder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(mainCategory.subCategories.indexOf(subCategory)) as ViewHolder
-                dialog.setOnDismissListener {//TODO: Debug - Update List then cancel Dialog then Update again ->
-                    skillSubAdapter.notifyItemChanged(holder.layoutPosition)
+                val holder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(
+                    mainCategory.subCategories.indexOf(subCategory)
+                ) as ViewHolder
+                dialog.setOnDismissListener {
+                    if (subCategory.categorySub.isEmpty() && subCategory.skills.isEmpty()){
+                        mainCategory.subCategories.remove(subCategory)
+                        skillSubAdapter.notifyItemRemoved(holder.layoutPosition)
+                        expandFabs(mainCategory)
+                    }else {
+                        skillSubAdapter.notifyItemChanged(holder.layoutPosition)
+                    }
                 }
             }
 
@@ -418,6 +405,7 @@ class SkillsFragment : Fragment() {
                 dialogueSkillSubEditBinding.listSkill.visibility = View.VISIBLE
                 dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
             }
+            dialogueSkillSubEditBinding.skill.text?.clear()
         }
         dialog.show()
     }
@@ -430,7 +418,9 @@ class SkillsFragment : Fragment() {
         val mainCategoryBinding = mainViewHolder.binding as ViewholderSkillsMainBinding
         if (subCategory != null){
             val skillSubAdapter = mainCategoryBinding.listSkillSub.adapter as RVSkillSubAdapter
-            val holder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(mainCategory.subCategories.indexOf(subCategory)) as ViewHolder
+            val holder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(
+                mainCategory.subCategories.indexOf(subCategory)
+            ) as ViewHolder
 
             val title = if(subCategory.categorySub.isEmpty()) "Skills List" else "Sub Category"
             val message = subCategory.categorySub.ifEmpty { "Skills List" }
@@ -438,11 +428,9 @@ class SkillsFragment : Fragment() {
             builder.apply {
                 setTitle("Delete $title?")
                 setMessage("Are you sure to delete $message and all of its components?")
-                setPositiveButton("Yes"){ dialog, _ -> //TODO: Deleting Sub 0 then Sub 2 removes Sub 1 instead
+                setPositiveButton("Yes"){ dialog, _ ->
                     mainCategory.subCategories.remove(subCategory)
                     skillSubAdapter.notifyItemRemoved(holder.layoutPosition)
-                    Log.i("Delete Position", holder.layoutPosition.toString())
-//                    skillSubAdapter.notifyDataSetChanged()
                     minimizeFabs()
                     dialog.dismiss()
                 }
