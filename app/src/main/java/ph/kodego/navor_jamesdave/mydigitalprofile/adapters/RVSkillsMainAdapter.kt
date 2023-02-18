@@ -14,8 +14,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
  * TODO: Nested RecyclerViews are not affected by ViewHolder.OnClickListener
  */
 class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>): RecyclerView.Adapter<ViewHolder>() {
-    interface AdapterEvents{//TODO: Open clickEvent when clicking Skill
-        fun holderClickNotify(position: Int)
+    interface AdapterEvents{
         fun mainCategoryClick(mainCategory: SkillMainCategory, holder: ViewHolder)
         fun subCategoryClick(mainCategory: SkillMainCategory, subCategory: SkillSubCategory, holder: ViewHolder)
     }
