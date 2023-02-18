@@ -8,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillSubAdapter
@@ -27,8 +25,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
 /**
- *  TODO: Skills Editing Structure
- *      If Main Category has no SubCategory but has Skills, do not Add SubCategory. *Main Category must have SubCategory to organize Skills.
  *  Main Category
  *      ArrayList(SubCategory
  *          ArrayList(Skills)
@@ -76,16 +72,10 @@ class SkillsFragment : Fragment() {
         skills.addAll(getSkills())
 
         rvAdapter = RVSkillsMainAdapter(skills)
-
-        /**
-         *  If Main Category is Clicked:
-         *
-         */
         rvAdapter.setAdapterEvents(object: RVSkillsMainAdapter.AdapterEvents{
             override fun mainCategoryClick(mainCategory: SkillMainCategory) {
-                expandFabs(mainCategory, null)
+                expandFabs(mainCategory)
             }
-
             override fun subCategoryClick(mainCategory: SkillMainCategory, subCategory: SkillSubCategory) {
                 expandFabs(mainCategory, subCategory)
             }
@@ -148,23 +138,17 @@ class SkillsFragment : Fragment() {
         return skills
     }
 
-    // TODO: Add function to notify user that a section needs to be selected
     private fun minimizeFabs(){
         with(layoutSkillEventsBinding) {
             layoutBackground.visibility = View.GONE
             efabSkillsOptions.shrink()
             btnAddMainCategory.hide()
             btnEditMainCategory.hide()
-            btnEditMainCategory.isEnabled = false
             btnDeleteMainCategory.hide()
-            btnDeleteMainCategory.isEnabled = false
             labelMainCategoryFab.visibility = View.GONE
             btnAddSubCategory.hide()
-            btnAddSubCategory.isEnabled = false
             btnEditSubCategory.hide()
-            btnEditSubCategory.isEnabled = false
             btnDeleteSubCategory.hide()
-            btnDeleteSubCategory.isEnabled = false
             labelSubCategoryFab.visibility = View.GONE
 
             skillMain.visibility = View.GONE
@@ -177,20 +161,30 @@ class SkillsFragment : Fragment() {
             efabSkillsOptions.extend()
             btnAddMainCategory.show()
             btnEditMainCategory.show()
-            btnEditMainCategory.isEnabled = false
             btnDeleteMainCategory.show()
-            btnDeleteMainCategory.isEnabled = false
             labelMainCategoryFab.visibility = View.VISIBLE
             btnAddSubCategory.show()
-            btnAddSubCategory.isEnabled = false
             btnEditSubCategory.show()
-            btnEditSubCategory.isEnabled = false
             btnDeleteSubCategory.show()
-            btnDeleteSubCategory.isEnabled = false
             labelSubCategoryFab.visibility = View.VISIBLE
 
             skillMain.visibility = View.GONE
             skillSub.visibility = View.GONE
+            btnEditMainCategory.setOnClickListener {
+                Snackbar.make(requireView(), "A Main Category must be selected in order to edit.", Snackbar.LENGTH_SHORT).show()
+            }
+            btnDeleteMainCategory.setOnClickListener {
+                Snackbar.make(requireView(), "A Main Category must be selected in order to delete.", Snackbar.LENGTH_SHORT).show()
+            }
+            btnAddSubCategory.setOnClickListener {
+                Snackbar.make(requireView(), "A Sub Category must be selected in order to add.", Snackbar.LENGTH_SHORT).show()
+            }
+            btnEditSubCategory.setOnClickListener {
+                Snackbar.make(requireView(), "A Sub Category must be selected in order to edit.", Snackbar.LENGTH_SHORT).show()
+            }
+            btnDeleteSubCategory.setOnClickListener {
+                Snackbar.make(requireView(), "A Sub Category must be selected in order to delete.", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -216,7 +210,7 @@ class SkillsFragment : Fragment() {
      *      Edit SubCategory
      *      Delete SubCategory
      *
-     *      TODO: Review holders being passed for editing
+     *  TODO: Add function to notify user that a section needs to be selected
      */
     private fun expandFabs(
         mainCategory: SkillMainCategory,
@@ -224,20 +218,12 @@ class SkillsFragment : Fragment() {
     ){
         expandFabs()
         with(layoutSkillEventsBinding) {
-            btnEditMainCategory.isEnabled = true
-            btnAddSubCategory.isEnabled = true
-            btnDeleteMainCategory.isEnabled = true
             skillMain.text = mainCategory.categoryMain
             skillMain.visibility = View.VISIBLE
 
             if (subCategory != null) {
-                btnEditSubCategory.isEnabled = true
-                btnDeleteSubCategory.isEnabled = true
                 skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
                 skillSub.visibility = View.VISIBLE
-                if (subCategory.categorySub.isEmpty()) {
-                    btnAddSubCategory.isEnabled = false
-                }
             }
             btnEditMainCategory.setOnClickListener {
                 editMainCategoryDialogue(mainCategory)
@@ -248,26 +234,33 @@ class SkillsFragment : Fragment() {
             btnAddSubCategory.setOnClickListener {
                 editSubCategoryDialogue(mainCategory)
             }
+            btnEditSubCategory.setOnClickListener {
+                if (subCategory != null) {
+                    editSubCategoryDialogue(mainCategory, subCategory)
+                }else{
+                    Snackbar.make(requireView(), "A Sub Category must be selected in order to edit.", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            btnDeleteSubCategory.setOnClickListener {
+                if (subCategory != null) {
+                    deleteCategoryDialogue(mainCategory, subCategory)
+                }else{
+                    Snackbar.make(requireView(), "A Sub Category must be selected in order to delete.", Snackbar.LENGTH_SHORT).show()
+                }
+            }
             if (mainCategory.subCategories.size > 0 && mainCategory.subCategories[0].categorySub.isEmpty() && subCategory == null) { //TODO: Revise conditions
                 val subCategory = mainCategory.subCategories[0]
-                btnAddSubCategory.isEnabled = false
-                btnEditSubCategory.isEnabled = true
-                btnDeleteSubCategory.isEnabled = true
                 skillSub.text = subCategory.categorySub.ifEmpty { "Skills" }
                 skillSub.visibility = View.VISIBLE
 
+                btnAddSubCategory.setOnClickListener {
+                    Snackbar.make(requireView(), "First SubCategory must have a Name in order to add more SubCategories", Snackbar.LENGTH_SHORT).show()
+                }
                 btnEditSubCategory.setOnClickListener {
                     editSubCategoryDialogue(mainCategory, mainCategory.subCategories[0])
                 }
                 btnDeleteSubCategory.setOnClickListener {
                     deleteCategoryDialogue(mainCategory, mainCategory.subCategories[0])
-                }
-            } else {
-                btnEditSubCategory.setOnClickListener {
-                    editSubCategoryDialogue(mainCategory, subCategory!!)
-                }
-                btnDeleteSubCategory.setOnClickListener {
-                    deleteCategoryDialogue(mainCategory, subCategory!!)
                 }
             }
             layoutBackground.setOnClickListener {
