@@ -34,7 +34,7 @@ class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): RecyclerVi
                 skillSub.setText(subCategory.categorySub)
                 skillSub.visibility = View.VISIBLE
             }
-            val skillsAdapter = RVSkillsAdapter(mainCategory, subCategory, holder)
+            val skillsAdapter = RVSkillsAdapter(mainCategory, subCategory)
             if(subCategory.skills.isNotEmpty()) {
                 skillsAdapter.setAdapterEvents(adapterEvents)
                 listSkill.visibility = View.VISIBLE
@@ -47,7 +47,7 @@ class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): RecyclerVi
             }
 
             root.setOnClickListener {
-                adapterEvents?.subCategoryClick(mainCategory, subCategory, holder)
+                adapterEvents?.subCategoryClick(mainCategory, subCategory)
             }
         }
 

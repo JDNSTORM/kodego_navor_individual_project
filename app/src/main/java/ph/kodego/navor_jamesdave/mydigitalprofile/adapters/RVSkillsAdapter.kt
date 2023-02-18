@@ -8,7 +8,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
-class RVSkillsAdapter(private val mainCategory: SkillMainCategory, private val subCategory: SkillSubCategory, private val parentViewHolder: ViewHolder): RecyclerView.Adapter<ViewHolder>() {
+class RVSkillsAdapter(private val mainCategory: SkillMainCategory, private val subCategory: SkillSubCategory): RecyclerView.Adapter<ViewHolder>() {
     private var adapterEvents: RVSkillsMainAdapter.AdapterEvents? = null
 
     fun setAdapterEvents(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
@@ -30,7 +30,7 @@ class RVSkillsAdapter(private val mainCategory: SkillMainCategory, private val s
 
         binding.skill.setText(skill.skill)
         binding.root.setOnClickListener{
-            adapterEvents?.subCategoryClick(mainCategory, subCategory, parentViewHolder)
+            adapterEvents?.subCategoryClick(mainCategory, subCategory)
         }
     }
 }

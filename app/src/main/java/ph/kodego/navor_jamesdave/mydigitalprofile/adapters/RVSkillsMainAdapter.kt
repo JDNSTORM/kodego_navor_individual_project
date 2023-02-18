@@ -15,8 +15,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
  */
 class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>): RecyclerView.Adapter<ViewHolder>() {
     interface AdapterEvents{
-        fun mainCategoryClick(mainCategory: SkillMainCategory, holder: ViewHolder)
-        fun subCategoryClick(mainCategory: SkillMainCategory, subCategory: SkillSubCategory, holder: ViewHolder)
+        fun mainCategoryClick(mainCategory: SkillMainCategory)
+        fun subCategoryClick(mainCategory: SkillMainCategory, subCategory: SkillSubCategory)
     }
     private var adapterEvents: AdapterEvents? = null
     fun setAdapterEvents(adapterEvents: AdapterEvents){
@@ -47,7 +47,7 @@ class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>):
 
             root.setOnClickListener {
 //                adapterEvents?.holderClickNotify(position) ?: Log.e("AdapterError", "adapterActions not set")
-                adapterEvents?.mainCategoryClick(skillMainCategory, holder)
+                adapterEvents?.mainCategoryClick(skillMainCategory)
             }
         }
     }
