@@ -11,9 +11,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.CareerFragme
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.EducationFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.UsersProfile
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
+    private var userProfile: UsersProfile? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,16 @@ class ProfileActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        if(intent.hasExtra("User")){
+            userProfile = intent.getSerializableExtra("User") as UsersProfile
+        }
+        if(userProfile != null){
+            with(binding.viewholderProfile) {
+                profilePicture.setImageResource(userProfile!!.profilePicture)
+                profileUserName.text = "${userProfile!!.firstName} ${userProfile!!.lastName}"
+                profession.text = userProfile!!.profession
+            }
+        }
 
         val fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
 
@@ -33,9 +45,6 @@ class ProfileActivity : AppCompatActivity() {
         fragmentAdapter.addFragment(CareerFragment())
         fragmentAdapter.addFragment(SkillsFragment())
         fragmentAdapter.addFragment(EducationFragment())
-
-//        val tabs: ArrayList<String> = arrayListOf("Profile", "Career", "Skills", "Education", "More")
-//        val tabs: ArrayList<String> = arrayListOf("Profile", "Career", "Skills", "Education")
 
         with(binding.viewpager2){
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
