@@ -145,43 +145,156 @@ class SkillsFragment : Fragment() {
             skills.addAll(arrayListOf(
                 SkillMainCategory(
                     0,
-                    "Web Design and Development",
-                    arrayListOf(
-                        SkillSubCategory(
-                            0,
-                            0,
-                            "Front End",
-                            arrayListOf(
-                                Skill(0, 0, "HTML"),
-                                Skill(1, 0, "CSS"),
-                                Skill(2, 0, "jQuery"),
-                                Skill(3, 0, "Bootstrap"),
-                            )
-                        ),
-                        SkillSubCategory(
-                            0,
-                            0,
-                            "Back End",
-                            arrayListOf(
-                                Skill(0, 0, "PHP"),
-                                Skill(1, 0, "SQL"),
-                                Skill(2, 0, "jQuery"),
-                            )
-                        ),
-                    )
-                ),
-                SkillMainCategory(
-                    0,
-                    "Network Management",
+                    "Computer Maintenance and Troubleshooting",
                     arrayListOf(
                         SkillSubCategory(
                             0,
                             0,
                             "Hardware",
                             arrayListOf(
-                                Skill(0, 0, "asdkaj"),
-                                Skill(1, 0, "asdkaj"),
-                                Skill(2, 0, "asdkaj"),
+                                Skill(0, 0, "Hardware Installation and Setup"),
+                                Skill(1, 0, "Hardware Troubleshooting and Repair"),
+                                Skill(2, 0, "System Upgrade/Downgrade"),
+                                Skill(3, 0, "Hardware Maintenance"),
+                                Skill(4, 0, "Peripheral Installation and Setup"),
+                            )
+                        ),
+                        SkillSubCategory(
+                            1,
+                            0,
+                            "Software",
+                            arrayListOf(
+                                Skill(0, 0, "Software Troubleshooting and Repair"),
+                                Skill(1, 0, "Malware/Virus Removal"),
+                                Skill(2, 0, "Software/System Update"),
+                                Skill(3, 0, "Formatting"),
+                                Skill(4, 0, "Operating System/Application Installation"),
+                                Skill(5, 0, "File Recovery"),
+                            )
+                        ),
+                    )
+                ),
+                SkillMainCategory(
+                    1,
+                    "Network Management",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            1,
+                            "",
+                            arrayListOf(
+                                Skill(0, 0, "Network Setup and Configuration"),
+                                Skill(1, 0, "File and Printer Sharing"),
+                                Skill(2, 0, "Network Sharing"),
+                                Skill(3, 0, "Remote Desktop Configuration"),
+                            )
+                        ),
+                    )
+                ),
+                SkillMainCategory(
+                    2,
+                    "Android App Development",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            2,
+                            "",
+                            arrayListOf(
+                                Skill(0, 0, "Kotlin"),
+                                Skill(1, 0, "Android Studio"),
+                                Skill(2, 0, "Object-Oriented Programming"),
+                                Skill(3, 0, "ViewBinding"),
+                                Skill(4, 0, "RecyclerView Manipulation"),
+                                Skill(5, 0, "WireFraming"),
+                            )
+                        ),
+                    )
+                ),
+                SkillMainCategory(
+                    3,
+                    "Web Development (Obsolete)",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            3,
+                            "",
+                            arrayListOf(
+                                Skill(0, 0, "HTML5"),
+                                Skill(1, 0, "CSS3"),
+                                Skill(2, 0, "Bootstrap 4"),
+                                Skill(3, 0, "Javascript"),
+                                Skill(4, 0, "jQuery"),
+                                Skill(5, 0, "PHP"),
+                                Skill(6, 0, "MySQL"),
+                            )
+                        ),
+                    )
+                ),
+                SkillMainCategory(
+                    4,
+                    "Java Programming (Obsolete)",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            4,
+                            "",
+                            arrayListOf(
+                                Skill(0, 0, "Netbeans IDE"),
+                                Skill(1, 0, "GUI Applications"),
+                                Skill(2, 0, "Console Applications"),
+                            )
+                        ),
+                    )
+                ),
+                SkillMainCategory(
+                    5,
+                    "Java Development (Obsolete)",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            5,
+                            "",
+                            arrayListOf(
+                                Skill(0, 0, "Netbeans IDE"),
+                                Skill(1, 0, "GUI Applications"),
+                                Skill(2, 0, "Console Applications"),
+                                Skill(3, 0, "Javascript"),
+                                Skill(4, 0, "jQuery"),
+                                Skill(5, 0, "PHP"),
+                                Skill(6, 0, "MySQL"),
+                            )
+                        ),
+                    )
+                ),
+                SkillMainCategory(
+                    6,
+                    "C# Development (Obsolete)",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            6,
+                            "",
+                            arrayListOf(
+                                Skill(0, 0, "Visual Studio 2017"),
+                                Skill(1, 0, "Windows Applications"),
+                                Skill(2, 0, "Console Applications"),
+                                Skill(3, 0, "MySQL Connection"),
+                            )
+                        ),
+                    )
+                ),
+                SkillMainCategory(
+                    7,
+                    "Adobe Photoshop",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            7,
+                            "",
+                            arrayListOf(
+                                Skill(0, 0, "Basic Photo Editing"),
+                                Skill(1, 0, "Basic Photo Manipulation"),
+                                Skill(2, 0, "Basic Retouching"),
                             )
                         ),
                     )
