@@ -14,7 +14,7 @@
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/school_name"
+        app:layout_constraintEnd_toStartOf="@id/divider"
         app:layout_constraintBottom_toBottomOf="parent"
         >
         <TextView
@@ -43,18 +43,58 @@
             />
     </LinearLayout>
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="5dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toEndOf="@id/ll_enrollment_period"
+        app:layout_constraintEnd_toStartOf="@id/degree"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
     <TextView
-        android:id="@+id/school_name"
+        android:id="@+id/degree"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintHorizontal_weight="0.8"
         android:padding="5dp"
         android:textAlignment="center"
-        tools:text="Saint Louis University"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/ll_enrollment_period"
+        tools:text="Bachelor of Science"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/field_of_study"
+        />
+    <TextView
+        android:id="@+id/field_of_study"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="1"
+        android:padding="5dp"
+        android:textAlignment="center"
+        tools:text="Information Technology"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/degree"
+        app:layout_constraintStart_toStartOf="@id/school_name"
+        app:layout_constraintEnd_toEndOf="@id/school_name"
+        />
+    <TextView
+        android:id="@+id/school_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textAlignment="center"
+        tools:text="Saint Louis University"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/field_of_study"
+        app:layout_constraintStart_toStartOf="@id/degree"
+        app:layout_constraintEnd_toEndOf="@id/degree"
         />
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ic_address"
@@ -74,7 +114,6 @@
         android:padding="5dp"
         android:textAlignment="center"
         tools:text="Upper Bonifacio St, Baguio, Benguet"
-        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/school_name"
         app:layout_constraintStart_toEndOf="@id/ic_address"
         app:layout_constraintEnd_toEndOf="@id/school_name"
@@ -97,7 +136,6 @@
         android:padding="5dp"
         android:textAlignment="center"
         tools:text="https://www.slu.edu.ph/"
-        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/school_address"
         app:layout_constraintStart_toEndOf="@id/ic_website"
         app:layout_constraintEnd_toEndOf="@id/school_name"
@@ -120,35 +158,9 @@
         android:padding="5dp"
         android:textAlignment="center"
         tools:text="(074) 442 2793"
-        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/school_website"
         app:layout_constraintStart_toEndOf="@id/ic_phone"
         app:layout_constraintEnd_toEndOf="@id/school_name"
         />
-    <TextView
-        android:id="@+id/degree"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_weight="1"
-        android:padding="5dp"
-        android:textAlignment="center"
-        tools:text="Bachelor of Science"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/school_telephone"
-        app:layout_constraintStart_toStartOf="@id/school_name"
-        app:layout_constraintEnd_toEndOf="@id/school_name"
-        />
-    <TextView
-        android:id="@+id/field_of_study"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_weight="1"
-        android:padding="5dp"
-        android:textAlignment="center"
-        tools:text="Information Technology"
-        android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@id/degree"
-        app:layout_constraintStart_toStartOf="@id/school_name"
-        app:layout_constraintEnd_toEndOf="@id/school_name"
-        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

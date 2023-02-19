@@ -23,6 +23,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMa
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.UsersProfile
 
 /**
  *  Main Category
@@ -34,17 +35,18 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 class SkillsFragment : Fragment() {
     private var _binding: FragmentSkillsBinding? = null
     private val binding get() = _binding!!
+    private lateinit var userProfile: UsersProfile //TODO: Proper Data Handling
     private val skills: ArrayList<SkillMainCategory> = ArrayList()
     private lateinit var rvAdapter: RVSkillsMainAdapter
     private lateinit var layoutSkillEventsBinding: LayoutSkillEventsBinding
 
     init {
-        if(this.arguments == null) {
+        if(arguments == null) {
             getTabInfo()
         }
     }
     private fun getTabInfo(){
-        this.arguments = Bundle().apply {
+        arguments = Bundle().apply {
             putString("TabName", "Skills")
             putInt("TabIcon", R.drawable.ic_skills_24)
         }
@@ -52,6 +54,10 @@ class SkillsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (requireArguments().containsKey("User")){
+            userProfile = requireArguments().getSerializable("User") as UsersProfile
+        }
     }
 
     override fun onCreateView(
@@ -100,40 +106,88 @@ class SkillsFragment : Fragment() {
     private fun getSkills(): ArrayList<SkillMainCategory>{
         val skills: ArrayList<SkillMainCategory> = ArrayList()
 
-        for (num in 0..2){
-            val mainCategory = SkillMainCategory(num, "Main $num")
-            for (num2 in 0..2){
-                val skillSub = SkillSubCategory(num2, num, "Sub $num2")
-                for (num3 in 0..3){
-                    val skill = Skill(num3, num2, "Skill $num3")
-                    skillSub.skills.add(skill)
+        if(userProfile.id != 22) {
+            for (num in 0..2) {
+                val mainCategory = SkillMainCategory(num, "Main $num")
+                for (num2 in 0..2) {
+                    val skillSub = SkillSubCategory(num2, num, "Sub $num2")
+                    for (num3 in 0..3) {
+                        val skill = Skill(num3, num2, "Skill $num3")
+                        skillSub.skills.add(skill)
+                    }
+                    mainCategory.subCategories.add(skillSub)
                 }
-                mainCategory.subCategories.add(skillSub)
+                skills.add(mainCategory)
             }
-            skills.add(mainCategory)
-        }
-        skills.add(
-            SkillMainCategory(
-                4,
-                "Main 4",
-                arrayListOf(
-                    SkillSubCategory(
-                        0,
-                        4,
-                        "",
-                        arrayListOf(
-                            Skill(0,0,"asdkaj")
+            skills.add(
+                SkillMainCategory(
+                    4,
+                    "Main 4",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            4,
+                            "",
+                            arrayListOf(
+                                Skill(0, 0, "asdkaj")
+                            )
                         )
                     )
                 )
             )
-        )
-        skills.add(
-            SkillMainCategory(
-                5,
-                "Main 5"
+            skills.add(
+                SkillMainCategory(
+                    5,
+                    "Main 5"
+                )
             )
-        )
+        }else{
+            skills.addAll(arrayListOf(
+                SkillMainCategory(
+                    0,
+                    "Web Design and Development",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            0,
+                            "Front End",
+                            arrayListOf(
+                                Skill(0, 0, "HTML"),
+                                Skill(1, 0, "CSS"),
+                                Skill(2, 0, "jQuery"),
+                                Skill(3, 0, "Bootstrap"),
+                            )
+                        ),
+                        SkillSubCategory(
+                            0,
+                            0,
+                            "Back End",
+                            arrayListOf(
+                                Skill(0, 0, "PHP"),
+                                Skill(1, 0, "SQL"),
+                                Skill(2, 0, "jQuery"),
+                            )
+                        ),
+                    )
+                ),
+                SkillMainCategory(
+                    0,
+                    "Network Management",
+                    arrayListOf(
+                        SkillSubCategory(
+                            0,
+                            0,
+                            "Hardware",
+                            arrayListOf(
+                                Skill(0, 0, "asdkaj"),
+                                Skill(1, 0, "asdkaj"),
+                                Skill(2, 0, "asdkaj"),
+                            )
+                        ),
+                    )
+                ),
+            ))
+        }
 
         return skills
     }

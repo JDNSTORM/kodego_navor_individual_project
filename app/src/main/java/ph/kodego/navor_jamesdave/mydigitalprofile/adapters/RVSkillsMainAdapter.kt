@@ -38,7 +38,7 @@ class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>):
         val binding = holder.binding as ViewholderSkillsMainBinding
 
         with(binding){
-            skillMain.setText(skillMainCategory.categoryMain)
+            skillMain.text = skillMainCategory.categoryMain
             val skillSubAdapter = RVSkillSubAdapter(skillMainCategory)
             skillSubAdapter.setAdapterEvents(adapterEvents)
 

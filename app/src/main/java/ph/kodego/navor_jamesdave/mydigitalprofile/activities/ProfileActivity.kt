@@ -28,8 +28,10 @@ class ProfileActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        if(intent.hasExtra("User")){
+        val userData = Bundle()
+        if(intent.hasExtra("User")){//TODO: Proper Data Handling
             userProfile = intent.getSerializableExtra("User") as UsersProfile
+            userData.putSerializable("User", userProfile)
         }
         if(userProfile != null){
             with(binding.viewholderProfile) {
@@ -59,6 +61,7 @@ class ProfileActivity : AppCompatActivity() {
                 text = it.getString("TabName").toString()
                 icon = it.getInt("TabIcon")
             }
+            fragmentAdapter.fragmentList[position].arguments = userData
             tab.setText(text)
             tab.setIcon(icon)
         }.attach()
