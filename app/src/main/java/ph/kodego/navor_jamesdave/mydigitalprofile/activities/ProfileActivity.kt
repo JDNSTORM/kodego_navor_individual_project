@@ -37,8 +37,8 @@ class ProfileActivity : AppCompatActivity() {
         }
         if(profile != null){
             with(binding.viewholderProfile) {
-                profilePicture.setImageResource(profile!!.profilePicture)
-                profileUserName.text = "${profile!!.firstName} ${profile!!.lastName}"
+                profilePicture.setImageResource(profile!!.user.profilePicture)
+                profileUserName.text = "${profile!!.user.firstName} ${profile!!.user.lastName}"
                 profession.text = profile!!.profession
             }
         }

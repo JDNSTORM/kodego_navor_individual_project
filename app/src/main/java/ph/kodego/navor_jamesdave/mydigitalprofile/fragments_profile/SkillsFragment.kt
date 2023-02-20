@@ -19,10 +19,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillSubEd
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMainBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.User
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 
 /**
  *  Main Category
@@ -34,7 +31,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.User
 class SkillsFragment : Fragment() {
     private var _binding: FragmentSkillsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userProfile: User //TODO: Proper Data Handling
+    private lateinit var profile: ProfileData //TODO: Proper Data Handling
     private val skills: ArrayList<SkillMainCategory> = ArrayList()
     private lateinit var rvAdapter: RVSkillsMainAdapter
     private lateinit var layoutSkillEventsBinding: LayoutSkillEventsBinding
@@ -55,7 +52,7 @@ class SkillsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (requireArguments().containsKey("User")){
-            userProfile = requireArguments().getSerializable("User") as User
+            profile = requireArguments().getSerializable("Profile") as ProfileData
         }
     }
 
@@ -105,7 +102,7 @@ class SkillsFragment : Fragment() {
     private fun getSkills(): ArrayList<SkillMainCategory>{
         val skills: ArrayList<SkillMainCategory> = ArrayList()
 
-        if(userProfile.id != 22) {
+        if(profile.id != 22) {
             for (num in 0..2) {
                 val mainCategory = SkillMainCategory(num, "Main $num")
                 for (num2 in 0..2) {

@@ -12,12 +12,13 @@ data class User( //TODO: Use Parcelable?
     val contactInformationID: Int
 ): java.io.Serializable
 
-data class Profile(
+data class Profile( //TODO: ProfileData is used for Data instead, keep track
     var id: Int = 0,
     val userID: Int,
     var profession: String,
     val profileSummary: String
-): java.io.Serializable
+)
+
 data class UserData( //TODO: For Data Purposes
     var id: Int = 0,
     val accountID: Int,
@@ -32,7 +33,7 @@ data class ProfileData(
     val user: User,
     var profession: String,
     val profileSummary: String
-)
+): java.io.Serializable
 
 data class ProfileCareer(
     val profile: Profile,
