@@ -442,8 +442,7 @@ class SkillsFragment : Fragment() {
         val dialogueSkillMainEditBinding = DialogueSkillMainEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)
         val dialog = builder.create()
-        //TODO: Bug -> Cannot Find ViewHolder when clicking on MainCategory or changing ViewHolder
-        val holder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as? ViewHolder
+        val holder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as? ViewHolder //TODO: Optimize
         dialog.setCancelable(false)
         if (skills.contains(mainCategory)){
             dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
@@ -500,9 +499,6 @@ class SkillsFragment : Fragment() {
         val mainViewHolder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as ViewHolder
         val mainCategoryBinding = mainViewHolder.binding as ViewholderSkillsMainBinding
         val skillSubAdapter = mainCategoryBinding.listSkillSub.adapter as RVSkillSubAdapter
-        val holder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(
-            mainCategory.subCategories.indexOf(subCategory)
-        ) as? ViewHolder
 
         val skillAdapter = RVSkillsEditAdapter(subCategory.skills)
         dialogueSkillSubEditBinding.listSkill.layoutManager =  LinearLayoutManager(context)
@@ -516,17 +512,20 @@ class SkillsFragment : Fragment() {
         dialogueSkillSubEditBinding.labelSkillMain.setText(mainCategory.categoryMain)
 
         with(dialogueSkillSubEditBinding.editButtons){
-            if(mainCategory.subCategories.contains(subCategory)){
+            if(subCategories.contains(subCategory)){
+                val holder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(
+                    subCategories.indexOf(subCategory)
+                ) as ViewHolder
                 dialogueSkillSubEditBinding.skillSub.setText(subCategory.categorySub)
                 btnSave.visibility = View.GONE
                 btnUpdate.visibility = View.VISIBLE
                 dialog.setOnDismissListener {
                     if (subCategory.categorySub.isEmpty() && subCategory.skills.isEmpty()){
-                        mainCategory.subCategories.remove(subCategory)
-                        skillSubAdapter.notifyItemRemoved(holder!!.layoutPosition)
+                        subCategories.remove(subCategory)
+                        skillSubAdapter.notifyItemRemoved(holder.layoutPosition)
                         expandFabs(mainCategory)
                     }else {
-                        skillSubAdapter.notifyItemChanged(holder!!.layoutPosition)
+                        skillSubAdapter.notifyItemChanged(holder.layoutPosition)
                     }
                 }
             }
