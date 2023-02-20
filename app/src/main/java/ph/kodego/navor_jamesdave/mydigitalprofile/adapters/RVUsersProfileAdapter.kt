@@ -29,7 +29,7 @@ class RVUsersProfileAdapter(private val profileDatas: ArrayList<ProfileData>): R
 
         binding.root.setOnClickListener {
             val intent = Intent(it.context, ProfileActivity::class.java)
-            intent.putExtra("User", profile)
+            intent.putExtra("Profile", profile)
             startActivity(it.context, intent, null)
         }
     }

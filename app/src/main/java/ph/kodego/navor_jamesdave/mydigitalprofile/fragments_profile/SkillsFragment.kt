@@ -51,7 +51,7 @@ class SkillsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (requireArguments().containsKey("User")){
+        if (requireArguments().containsKey("Profile")){
             profile = requireArguments().getSerializable("Profile") as ProfileData
         }
     }

@@ -11,8 +11,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVUsersProfileAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentHomeBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.User
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -27,7 +26,7 @@ class HomeFragment : Fragment() {
     }
     private fun getTabInfo(){
         this.arguments = Bundle().apply {
-            putString("TabName", "Home")
+            putString("TabName", "Home") //TODO: Set as String Resource as it is passed around
             putInt("TabIcon", R.drawable.ic_home_24)
         }
     }
@@ -66,14 +65,20 @@ class HomeFragment : Fragment() {
         val profileDatas = ArrayList<ProfileData>()
         profileDatas.add(
             ProfileData(
-                user = User(
+                id = 22,
+                user = UserData(
                     id = 22,
                     accountID = 22,
                     profilePicture = R.drawable.navor_james,
                     firstName = "James Dave",
                     lastName = "Navor",
-                    email = "esteban.dave999@gmail.com",
-                    contactInformationID = 0
+                    contactInformation = ContactInformation(
+                        emailAddress = EmailAddress(
+                            contactInformationID = 22,
+                            username = "esteban.dave999",
+                            domain = "gmail.com"
+                        )
+                    )
                 ),
                 profession = "Mobile App Developer",
                 profileSummary = ""
@@ -82,13 +87,19 @@ class HomeFragment : Fragment() {
         for (num in 0 until 10){
             profileDatas.add(
                 ProfileData(
-                    user = User(
+                    id = num,
+                    user = UserData(
                         id = num,
                         accountID = num,
                         firstName = "User",
                         lastName = "$num",
-                        email = "user$num@email.com",
-                        contactInformationID = 0
+                        contactInformation = ContactInformation(
+                            emailAddress = EmailAddress(
+                                contactInformationID = 22,
+                                username = "user$num",
+                                domain = "email.email"
+                            )
+                        )
                     ),
                     profession = "Profession $num",
                     profileSummary = ""

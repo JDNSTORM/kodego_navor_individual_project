@@ -8,7 +8,6 @@ data class User( //TODO: Use Parcelable?
     var profilePicture: Int = R.drawable.placeholder,
     var firstName: String,
     var lastName: String,
-    val email: String, //TODO:
     val contactInformationID: Int
 ): java.io.Serializable
 
@@ -18,22 +17,6 @@ data class Profile( //TODO: ProfileData is used for Data instead, keep track
     var profession: String,
     val profileSummary: String
 )
-
-data class UserData( //TODO: For Data Purposes
-    var id: Int = 0,
-    val accountID: Int,
-    var profilePicture: Int = R.drawable.placeholder,
-    var firstName: String,
-    var lastName: String,
-    val email: String, //TODO:
-    val contactInformation: ContactInformationData
-)
-data class ProfileData(
-    var id: Int = 0,
-    val user: User,
-    var profession: String,
-    val profileSummary: String
-): java.io.Serializable
 
 data class ProfileCareer(
     val profile: Profile,
@@ -51,14 +34,14 @@ data class ContactInformation( //TODO: Many-to-One - User, Career, School
     var address: Address? = null,
     var contactNumber: ContactNumber? = null,
     var website: Website? = null,
-)
+): java.io.Serializable
 
 data class EmailAddress( //TODO: Insert into User?
     var id: Int = 0,
     val contactInformationID: Int,
     var username: String,
     var domain: String
-)
+): java.io.Serializable
 
 data class Address(
     var id: Int = 0,

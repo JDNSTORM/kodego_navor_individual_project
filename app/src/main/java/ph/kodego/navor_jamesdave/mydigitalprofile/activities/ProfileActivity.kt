@@ -31,7 +31,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val userData = Bundle()
-        if(intent.hasExtra("User")){//TODO: Proper Data Handling
+        if(intent.hasExtra("Profile")){//TODO: Proper Data Handling
             profile = intent.getSerializableExtra("Profile") as ProfileData
             userData.putSerializable("Profile", profile)
         }
