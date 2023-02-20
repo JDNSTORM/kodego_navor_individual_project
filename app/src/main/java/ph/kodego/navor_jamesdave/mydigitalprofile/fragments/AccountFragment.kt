@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountSettingsActivity
@@ -48,6 +49,15 @@ class AccountFragment : Fragment() {
         }
         binding.btnAccountSettings.setOnClickListener {
             goToAccountSettings()
+        }
+        binding.btnLogout.setOnClickListener {
+            val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
+            val viewPager = (requireActivity() as MainActivity).getViewPager()
+            fragmentAdapter.fragmentList.remove(this)
+//            fragmentAdapter.notifyItemRemoved(fragmentAdapter.fragmentList.indexOf(this))
+            fragmentAdapter.addFragment(LoginFragment())
+            fragmentAdapter.notifyItemInserted(fragmentAdapter.fragmentList.indexOf(LoginFragment()))
+            viewPager.adapter = fragmentAdapter
         }
     }
 

@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
+import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentLoginBinding
 
-class LoginFragment(private val fragmentAdapter: FragmentAdapter, private val viewPager: ViewPager2) : Fragment() {
+class LoginFragment() : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
@@ -42,10 +43,12 @@ class LoginFragment(private val fragmentAdapter: FragmentAdapter, private val vi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnLogin.setOnClickListener {
+            val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
+            val viewPager = (requireActivity() as MainActivity).getViewPager()
             fragmentAdapter.fragmentList.remove(this)
-            fragmentAdapter.notifyItemRemoved(fragmentAdapter.itemCount)
+//            fragmentAdapter.notifyItemRemoved(fragmentAdapter.fragmentList.indexOf(this))
             fragmentAdapter.addFragment(AccountFragment())
-            fragmentAdapter.notifyItemInserted(fragmentAdapter.itemCount)
+            fragmentAdapter.notifyItemInserted(fragmentAdapter.fragmentList.indexOf(AccountFragment()))
             viewPager.adapter = fragmentAdapter
         }
     }

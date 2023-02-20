@@ -11,11 +11,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.CareerFragme
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.EducationFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.UsersProfile
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.User
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
-    private var userProfile: UsersProfile? = null
+    private var profile: ProfileData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,14 +32,14 @@ class ProfileActivity : AppCompatActivity() {
 
         val userData = Bundle()
         if(intent.hasExtra("User")){//TODO: Proper Data Handling
-            userProfile = intent.getSerializableExtra("User") as UsersProfile
-            userData.putSerializable("User", userProfile)
+            profile = intent.getSerializableExtra("Profile") as ProfileData
+            userData.putSerializable("Profile", profile)
         }
-        if(userProfile != null){
+        if(profile != null){
             with(binding.viewholderProfile) {
-                profilePicture.setImageResource(userProfile!!.profilePicture)
-                profileUserName.text = "${userProfile!!.firstName} ${userProfile!!.lastName}"
-                profession.text = userProfile!!.profession
+                profilePicture.setImageResource(profile!!.profilePicture)
+                profileUserName.text = "${profile!!.firstName} ${profile!!.lastName}"
+                profession.text = profile!!.profession
             }
         }
 

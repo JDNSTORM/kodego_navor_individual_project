@@ -11,13 +11,14 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVUsersProfileAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentHomeBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.UsersProfile
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.User
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var rvUsersProfileAdapter: RVUsersProfileAdapter
-    private val usersProfiles: ArrayList<UsersProfile> = ArrayList()
+    private val profileDatas: ArrayList<ProfileData> = ArrayList()
 
     init {
         if(this.arguments == null) {
@@ -46,8 +47,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        usersProfiles.addAll(getProfiles())
-        rvUsersProfileAdapter = RVUsersProfileAdapter(usersProfiles)
+        profileDatas.addAll(getProfiles())
+        rvUsersProfileAdapter = RVUsersProfileAdapter(profileDatas)
         binding.listProfiles.layoutManager = LinearLayoutManager(context)
         binding.listProfiles.adapter = rvUsersProfileAdapter
 
@@ -61,26 +62,39 @@ class HomeFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun getProfiles(): ArrayList<UsersProfile>{
-        val usersProfiles = ArrayList<UsersProfile>()
-        usersProfiles.add(
-            UsersProfile(
-                id = 22,
-                profilePicture = R.drawable.navor_james,
-                firstName = "James Dave",
-                lastName = "Navor",
-                profession = "Mobile App Developer"
+    private fun getProfiles(): ArrayList<ProfileData>{
+        val profileDatas = ArrayList<ProfileData>()
+        profileDatas.add(
+            ProfileData(
+                user = User(
+                    id = 22,
+                    accountID = 22,
+                    profilePicture = R.drawable.navor_james,
+                    firstName = "James Dave",
+                    lastName = "Navor",
+                    email = "esteban.dave999@gmail.com",
+                    contactInformationID = 0
+                ),
+                profession = "Mobile App Developer",
+                profileSummary = ""
             )
         )
         for (num in 0 until 10){
-            usersProfiles.add(
-                UsersProfile(
-                    firstName = "User",
-                    lastName = "$num",
-                    profession = "Profession $num"
+            profileDatas.add(
+                ProfileData(
+                    user = User(
+                        id = num,
+                        accountID = num,
+                        firstName = "User",
+                        lastName = "$num",
+                        email = "user$num@email.com",
+                        contactInformationID = 0
+                    ),
+                    profession = "Profession $num",
+                    profileSummary = ""
                 )
             )
         }
-        return usersProfiles
+        return profileDatas
     }
 }
