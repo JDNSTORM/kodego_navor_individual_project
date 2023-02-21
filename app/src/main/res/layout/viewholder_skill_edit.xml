@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     >
+<!--  TODO: Layout is somewhat   -->
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/skill"
         android:enabled="false"

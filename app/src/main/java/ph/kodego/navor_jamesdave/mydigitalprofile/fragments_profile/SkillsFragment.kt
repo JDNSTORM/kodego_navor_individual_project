@@ -102,7 +102,7 @@ class SkillsFragment : Fragment() {
     private fun getSkills(): ArrayList<SkillMainCategory>{
         val skills: ArrayList<SkillMainCategory> = ArrayList()
 
-        if(profile.id != 22) {
+        if(profile.id != 22L) {
             for (num in 0..2) {
                 val mainCategory = SkillMainCategory(num, "Main $num")
                 for (num2 in 0..2) {
@@ -479,6 +479,7 @@ class SkillsFragment : Fragment() {
             }
         }
         dialog.show()
+        dialogueSkillMainEditBinding.skillMain.requestFocus()
     }
     /**
      *  Add SubCategory if a SubCategory doesn't exist
@@ -565,6 +566,7 @@ class SkillsFragment : Fragment() {
             dialogueSkillSubEditBinding.skill.text?.clear()
         }
         dialog.show()
+        dialogueSkillSubEditBinding.skillSub.requestFocus()
     }
     private fun deleteCategoryDialogue(
         mainCategory: SkillMainCategory,

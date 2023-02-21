@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
                 profileSummary = ""
             )
         )
-        for (num in 0 until 10){
+        for (num in 0L until 10L){
             profileDatas.add(
                 ProfileData(
                     id = num,

@@ -3,17 +3,17 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 
 data class User( //TODO: Use Parcelable?
-    var id: Int = 0,
-    val accountID: Int,
+    var id: Long = 0,
+    val accountID: Long,
     var profilePicture: Int = R.drawable.placeholder,
     var firstName: String,
     var lastName: String,
-    val contactInformationID: Int
+    val contactInformationID: Long
 ): java.io.Serializable
 
 data class Profile( //TODO: ProfileData is used for Data instead, keep track
-    var id: Int = 0,
-    val userID: Int,
+    var id: Long = 0,
+    val userID: Long,
     var profession: String,
     val profileSummary: String
 )
@@ -29,7 +29,7 @@ data class UserSkills(
 )
 
 data class ContactInformation( //TODO: Many-to-One - User, Career, School
-    var id: Int = 0,
+    var id: Long = 0,
     var emailAddress: EmailAddress?,
     var address: Address? = null,
     var contactNumber: ContactNumber? = null,
@@ -37,15 +37,15 @@ data class ContactInformation( //TODO: Many-to-One - User, Career, School
 ): java.io.Serializable
 
 data class EmailAddress( //TODO: Insert into User?
-    var id: Int = 0,
-    val contactInformationID: Int,
+    var id: Long = 0,
+    val contactInformationID: Long,
     var username: String,
     var domain: String
 ): java.io.Serializable
 
 data class Address(
-    var id: Int = 0,
-    val contactInformationID: Int,
+    var id: Long = 0,
+    val contactInformationID: Long,
     var streetAddress: String = "",
     var subdivision: String = "",
     var cityOrMunicipality: String,
@@ -55,14 +55,14 @@ data class Address(
 )
 
 data class ContactNumber(
-    var id: Int = 0,
+    var id: Long = 0,
     val contactInformationID: Int,
     var areaCode: Int,
     var contact: Int
 )
 
 data class Website(
-    var id: Int = 0,
-    val contactInformationID: Int,
+    var id: Long = 0,
+    val contactInformationID: Long,
     var domain: String
 )
