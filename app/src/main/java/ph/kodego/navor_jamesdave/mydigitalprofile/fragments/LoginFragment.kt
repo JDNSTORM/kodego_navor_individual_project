@@ -102,6 +102,7 @@ class LoginFragment() : Fragment() {
         override fun showProgressDialog() {
             progressDialog = Dialog(requireContext())
             val progressBinding = DialogueProgressBinding.inflate(layoutInflater)
+            progressBinding.progressText.setText(R.string.signing_in)
             progressDialog.setContentView(progressBinding.root)
             progressDialog.setCancelable(false)
             progressDialog.show()

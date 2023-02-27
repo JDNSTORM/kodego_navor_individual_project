@@ -106,6 +106,7 @@ class AccountFragment : Fragment() {
         override fun showProgressDialog() {
             progressDialog = Dialog(requireContext())
             val progressBinding = DialogueProgressBinding.inflate(layoutInflater)
+            progressBinding.progressText.setText(R.string.loading_account)
             progressDialog.setContentView(progressBinding.root)
             progressDialog.setCancelable(false)
             progressDialog.show()

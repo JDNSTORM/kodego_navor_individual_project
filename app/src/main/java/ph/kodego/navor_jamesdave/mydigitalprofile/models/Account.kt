@@ -4,10 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Account (
-    val uID: String,
-    var firstName: String,
-    var lastName: String,
-    var email: String,
+    val uID: String = "",
+    var firstName: String = "",
+    var lastName: String = "",
+    var email: String = "",
     var image: String = "",
     var contactInformationID: Long? = null,
     val fcmToken: String = ""
@@ -35,12 +35,7 @@ data class Account (
     override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<Account> {
-        override fun createFromParcel(parcel: Parcel): Account {
-            return Account(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Account?> {
-            return arrayOfNulls(size)
-        }
+        override fun createFromParcel(parcel: Parcel): Account = Account(parcel)
+        override fun newArray(size: Int): Array<Account?> = arrayOfNulls(size)
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityCreateAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
@@ -59,6 +60,7 @@ class CreateAccountActivity : AppCompatActivity() {
         override fun showProgressDialog() {
             progressDialog = Dialog(binding.root.context)
             val progressBinding = DialogueProgressBinding.inflate(layoutInflater)
+            progressBinding.progressText.setText(R.string.signing_up)
             progressDialog.setContentView(progressBinding.root)
             progressDialog.setCancelable(false)
             progressDialog.show()

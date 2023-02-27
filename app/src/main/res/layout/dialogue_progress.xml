@@ -11,10 +11,11 @@
         android:layout_width="50dp"
         android:layout_height="50dp"/>
     <TextView
+        android:id="@+id/progress_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Please Wait&#8230;"
+        android:text="@string/please_wait"
         />
 
 </LinearLayout>

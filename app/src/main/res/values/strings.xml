@@ -13,4 +13,8 @@
     <string name="password">Password</string>
     <string name="email">Email Address</string>
     <string name="sign_out">Sign Out</string>
+    <string name="please_wait">Please Wait…</string>
+    <string name="signing_in">Signing In…</string>
+    <string name="signing_up">Signing Up…</string>
+    <string name="loading_account">Loading Account…</string>
 </resources>

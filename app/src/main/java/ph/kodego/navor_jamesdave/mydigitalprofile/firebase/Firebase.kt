@@ -69,17 +69,20 @@ class Firebase(private val firebaseInterface: FirebaseInterface? = null) {
 
     fun getAccount(){
         firebaseInterface as FirebaseAccountInterface
+        firebaseInterface.showProgressDialog()
         fireStore
             .collection(Constants.CollectionAccounts)
             .document(getCurrentUserID())
             .get()
             .addOnSuccessListener { document ->
                 Log.i("Account Document Retrieved", document.toString())
-//                val account = document.toObject(Account::class.java)!! //TODO: Could not deserialize object :: Probably due to arrangement of fields
-//                firebaseInterface.getAccountSuccess(account)
+                val account = document.toObject(Account::class.java)!!
+                firebaseInterface.hideProgressDialog()
+                firebaseInterface.getAccountSuccess(account)
             }
             .addOnFailureListener {  e ->
                 Log.e("Account Error", e.message.toString())
+                firebaseInterface.hideProgressDialog()
                 firebaseInterface.getAccountFailed()
             }
     }
