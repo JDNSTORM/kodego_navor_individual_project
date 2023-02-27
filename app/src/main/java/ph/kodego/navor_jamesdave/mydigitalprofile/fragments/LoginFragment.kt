@@ -1,5 +1,6 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.CreateAccountActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentLoginBinding
 
@@ -42,7 +44,7 @@ class LoginFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnLogin.setOnClickListener {
+        binding.btnSignIn.setOnClickListener {
             val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
             val viewPager = (requireActivity() as MainActivity).getViewPager()
             fragmentAdapter.fragmentList.remove(this)
@@ -50,6 +52,11 @@ class LoginFragment() : Fragment() {
             fragmentAdapter.addFragment(AccountFragment())
             fragmentAdapter.notifyItemInserted(fragmentAdapter.fragmentList.indexOf(AccountFragment()))
             viewPager.adapter = fragmentAdapter
+        }
+
+        binding.btnSignUp.setOnClickListener {
+            val intent = Intent(context, CreateAccountActivity::class.java)
+            startActivity(intent)
         }
     }
 }
