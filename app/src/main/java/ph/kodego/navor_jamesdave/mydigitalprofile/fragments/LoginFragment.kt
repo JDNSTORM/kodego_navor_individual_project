@@ -18,11 +18,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentLoginBindi
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseLoginInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 
 class LoginFragment() : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private lateinit var progressDialog: Dialog
+    private lateinit var formControls: FormControls
 
     init {
         if(this.arguments == null) {
@@ -51,6 +53,8 @@ class LoginFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        formControls = FormControls() //TODO: Validate Fields upon losing focus
         binding.btnSignIn.setOnClickListener {
 //            val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
 //            val viewPager = (requireActivity() as MainActivity).getViewPager()
@@ -69,20 +73,15 @@ class LoginFragment() : Fragment() {
         }
     }
 
-    private fun validateText(text: String): Boolean{
-        return text.isNotEmpty()
-    }
-    private fun validateEmail(email: String): Boolean{
-        val emailRegex: Regex = Regex("^[A-Za-z](.*)(@+)(.+)(\\.)(.+)")
-        return email.matches(emailRegex)
-    }
     private fun validateForm(){
         val email = binding.email.text.toString().trim()
         val password = binding.password.text.toString()
-        when(false){
-            validateEmail(email) -> binding.email.requestFocus()
-            validateText(password) -> binding.password.requestFocus()
-            else -> Firebase(firebaseInterface).signInUser(email, password)
+        with(formControls) {
+            when (false) {
+                validateEmail(email) -> binding.email.requestFocus()
+                validateText(password) -> binding.password.requestFocus()
+                else -> Firebase(firebaseInterface).signInUser(email, password)
+            }
         }
     }
 
@@ -91,6 +90,7 @@ class LoginFragment() : Fragment() {
             Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
             val activity = requireActivity()
             val intent = activity.intent
+            progressDialog.cancel()
             activity.finish()
             activity.startActivity(intent)
         }

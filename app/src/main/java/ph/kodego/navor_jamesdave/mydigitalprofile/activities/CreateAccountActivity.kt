@@ -10,10 +10,12 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBi
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseRegisterInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 
 class CreateAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateAccountBinding
     private lateinit var progressDialog: Dialog
+    private lateinit var formControls: FormControls
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +23,7 @@ class CreateAccountActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupActionBar()
 
+        formControls = FormControls() //TODO: Validate Fields upon losing focus
         binding.btnSignUp.setOnClickListener {
             validateForm()
         }
@@ -32,17 +35,6 @@ class CreateAccountActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
-    private fun validateText(text: String): Boolean{
-        return text.isNotEmpty()
-    }
-    private fun validateEmail(email: String): Boolean{
-        val emailRegex: Regex = Regex("^[A-Za-z](.*)(@+)(.+)(\\.)(.+)")
-        return email.matches(emailRegex)
-    }
-    private fun validatePassword(password: String, confirmPassword: String): Boolean{
-        return password == confirmPassword
-    }
-
     private fun validateForm(){
         val firstName = binding.firstName.text.toString().trim()
         val lastName = binding.lastName.text.toString().trim()
@@ -50,14 +42,16 @@ class CreateAccountActivity : AppCompatActivity() {
         val password = binding.password.text.toString()
         val confirmPassword = binding.confirmPassword.text.toString()
 
-        when(false){
-            validateText(firstName) -> binding.firstName.requestFocus()
-            validateText(lastName) -> binding.lastName.requestFocus()
-            validateEmail(email) -> binding.email.requestFocus()
-            validateText(password) -> binding.password.requestFocus()
-            validateText(confirmPassword) -> binding.confirmPassword.requestFocus()
-            validatePassword(password, confirmPassword) -> binding.password.requestFocus()
-            else -> Firebase(firebaseInterface).registerUser(firstName, lastName, email, password)
+        with(formControls){
+            when(false){
+                validateText(firstName) -> binding.firstName.requestFocus()
+                validateText(lastName) -> binding.lastName.requestFocus()
+                validateEmail(email) -> binding.email.requestFocus()
+                validateText(password) -> binding.password.requestFocus()
+                validateText(confirmPassword) -> binding.confirmPassword.requestFocus()
+                validatePassword(password, confirmPassword) -> binding.password.requestFocus()
+                else -> Firebase(firebaseInterface).registerUser(firstName, lastName, email, password)
+            }
         }
     }
 
@@ -88,6 +82,5 @@ class CreateAccountActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Account Registration Fail", Toast.LENGTH_LONG)
                 .show()
         }
-
     }
 }

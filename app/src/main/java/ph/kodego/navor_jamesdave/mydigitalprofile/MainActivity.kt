@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
@@ -25,8 +26,10 @@ class MainActivity : AppCompatActivity() {
 
         fragmentAdapter.addFragment(HomeFragment())
         val currentUserId = Firebase().getCurrentUserID()
+        var accountFragment: AccountFragment? = null
         if (currentUserId.isNotEmpty()) {
-            fragmentAdapter.addFragment(AccountFragment())
+            accountFragment = AccountFragment()
+            fragmentAdapter.addFragment(accountFragment)
         }else{
             fragmentAdapter.addFragment(LoginFragment())
         }
@@ -47,6 +50,10 @@ class MainActivity : AppCompatActivity() {
             tab.setText(text)
             tab.setIcon(icon)
         }.attach()
+
+        if(currentUserId.isNotEmpty()){
+            binding.viewPager2.currentItem = fragmentAdapter.fragmentList.indexOf(accountFragment!!)
+        }
     }
 
     fun getViewPager(): ViewPager2{

@@ -46,19 +46,7 @@
                 />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/user_username"
-                android:textSize="18sp"
-                android:layout_gravity="center"
-                android:textAlignment="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Username"
-                android:textColor="@android:color/black"
-                android:padding="2dp"
-                />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/profession"
+                android:id="@+id/email"
                 android:textSize="18sp"
                 android:layout_gravity="center"
                 android:textAlignment="center"
@@ -123,10 +111,10 @@
         app:layout_constraintTop_toBottomOf="@id/heading_profiles"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_logout"
+        app:layout_constraintBottom_toTopOf="@id/btn_sign_out"
         />
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_logout"
+        android:id="@+id/btn_sign_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
@@ -134,7 +122,7 @@
         android:layout_marginLeft="70dp"
         android:layout_marginRight="70dp"
         android:layout_marginBottom="20dp"
-        android:text="@string/logout"
+        android:text="@string/sign_out"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

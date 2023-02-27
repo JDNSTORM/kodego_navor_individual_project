@@ -6,10 +6,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseInterface
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseLoginInterface
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseRegisterInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.*
 
 class Firebase(private val firebaseInterface: FirebaseInterface? = null) {
     private val auth = FirebaseAuth.getInstance()
@@ -37,8 +34,8 @@ class Firebase(private val firebaseInterface: FirebaseInterface? = null) {
 
     fun registerUser(firstName: String, lastName: String, email: String, password: String){
         firebaseInterface as FirebaseRegisterInterface
-
         firebaseInterface.showProgressDialog()
+
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if(task.isSuccessful){
                 val firebaseUser: FirebaseUser = task.result!!.user!!
@@ -54,14 +51,36 @@ class Firebase(private val firebaseInterface: FirebaseInterface? = null) {
 
     fun signInUser(email: String, password: String){
         firebaseInterface as FirebaseLoginInterface
+        firebaseInterface.showProgressDialog()
 
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    firebaseInterface.signInSuccessful()
-                }else{
-                    firebaseInterface.signInFailed(task.exception!!.message!!)
-                }
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if(task.isSuccessful){
+                firebaseInterface.signInSuccessful()
+            }else{
+                firebaseInterface.hideProgressDialog()
+                firebaseInterface.signInFailed(task.exception!!.message!!)
+            }
+        }
+    }
+
+    fun signOutUser(){
+        FirebaseAuth.getInstance().signOut()
+    }
+
+    fun getAccount(){
+        firebaseInterface as FirebaseAccountInterface
+        fireStore
+            .collection(Constants.CollectionAccounts)
+            .document(getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.i("Account Document Retrieved", document.toString())
+//                val account = document.toObject(Account::class.java)!! //TODO: Could not deserialize object :: Probably due to arrangement of fields
+//                firebaseInterface.getAccountSuccess(account)
+            }
+            .addOnFailureListener {  e ->
+                Log.e("Account Error", e.message.toString())
+                firebaseInterface.getAccountFailed()
             }
     }
 
