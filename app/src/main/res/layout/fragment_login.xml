@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         >
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_search_keyword"
+            android:id="@+id/til_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
@@ -24,17 +24,18 @@
             app:endIconMode="clear_text"
             >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/search_keyword"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:hint="Username"
+                android:inputType="textWebEmailAddress"
+                android:hint="@string/email"
                 android:textAlignment="center"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_search_category"
+            android:id="@+id/til_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
@@ -42,11 +43,11 @@
             android:layout_marginHorizontal="10dp"
             >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/search_category"
+                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textPassword"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:textAlignment="center"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -57,7 +58,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:layout_marginHorizontal="10dp"
-            android:text="@string/login"
+            android:text="@string/sign_in"
             />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -78,7 +79,7 @@
         android:padding="5dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="20dp"
-        android:text="@string/create_account"
+        android:text="@string/sign_up"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
