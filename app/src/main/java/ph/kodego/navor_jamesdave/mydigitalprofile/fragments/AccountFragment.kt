@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.auth.FirebaseAuth
 import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
@@ -51,13 +52,18 @@ class AccountFragment : Fragment() {
             goToAccountSettings()
         }
         binding.btnLogout.setOnClickListener {
-            val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
-            val viewPager = (requireActivity() as MainActivity).getViewPager()
-            fragmentAdapter.fragmentList.remove(this)
-//            fragmentAdapter.notifyItemRemoved(fragmentAdapter.fragmentList.indexOf(this))
-            fragmentAdapter.addFragment(LoginFragment())
-            fragmentAdapter.notifyItemInserted(fragmentAdapter.fragmentList.indexOf(LoginFragment()))
-            viewPager.adapter = fragmentAdapter
+//            val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
+//            val viewPager = (requireActivity() as MainActivity).getViewPager()
+//            fragmentAdapter.fragmentList.remove(this)
+////            fragmentAdapter.notifyItemRemoved(fragmentAdapter.fragmentList.indexOf(this))
+//            fragmentAdapter.addFragment(LoginFragment())
+//            fragmentAdapter.notifyItemInserted(fragmentAdapter.fragmentList.indexOf(LoginFragment()))
+//            viewPager.adapter = fragmentAdapter
+            FirebaseAuth.getInstance().signOut()
+            val activity = requireActivity()
+            val intent = activity.intent
+            activity.finish()
+            activity.startActivity(intent)
         }
     }
 

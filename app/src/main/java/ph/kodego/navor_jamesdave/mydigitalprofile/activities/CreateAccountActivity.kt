@@ -4,13 +4,12 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityCreateAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FireStore
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseRegisterInterface
 
 class CreateAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateAccountBinding
@@ -37,7 +36,7 @@ class CreateAccountActivity : AppCompatActivity() {
         return text.isNotEmpty()
     }
     private fun validateEmail(email: String): Boolean{
-        val emailRegex: Regex = Regex("^[A-Za-z](.*)([@]{1})(.+)(\\.)(.+)")
+        val emailRegex: Regex = Regex("^[A-Za-z](.*)(@+)(.+)(\\.)(.+)")
         return email.matches(emailRegex)
     }
     private fun validatePassword(password: String, confirmPassword: String): Boolean{
@@ -58,36 +57,37 @@ class CreateAccountActivity : AppCompatActivity() {
             validateText(password) -> binding.password.requestFocus()
             validateText(confirmPassword) -> binding.confirmPassword.requestFocus()
             validatePassword(password, confirmPassword) -> binding.password.requestFocus()
-            else -> registerUser(firstName, lastName, email, password)
+            else -> Firebase(firebaseInterface).registerUser(firstName, lastName, email, password)
         }
     }
 
-    private fun registerUser(firstName: String, lastName: String, email: String, password: String){
-        showProgressDialog()
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if(task.isSuccessful){
-                val firebaseUser: FirebaseUser = task.result!!.user!!
-                val registeredEmail = firebaseUser.email!!
-                val account = Account(firebaseUser.uid, firstName, lastName, email)
-                if (FireStore().registerAccount(account)) { //TODO: Get After Task is Completed
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext, "Registration Successful", Toast.LENGTH_SHORT).show()
-                }else{
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext, "Registration Failed", Toast.LENGTH_SHORT).show()
-                }
-            }else{
-                progressDialog.dismiss()
-                Toast.makeText(applicationContext, task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
-            }
+    private val firebaseInterface = object: FirebaseRegisterInterface{
+        override fun showProgressDialog() {
+            progressDialog = Dialog(binding.root.context)
+            val progressBinding = DialogueProgressBinding.inflate(layoutInflater)
+            progressDialog.setContentView(progressBinding.root)
+            progressDialog.setCancelable(false)
+            progressDialog.show()
         }
-    }
 
-    private fun showProgressDialog(){
-        progressDialog = Dialog(binding.root.context)
-        val progressBinding = DialogueProgressBinding.inflate(layoutInflater)
-        progressDialog.setContentView(progressBinding.root)
-        progressDialog.setCancelable(false)
-        progressDialog.show()
+        override fun hideProgressDialog() {
+            progressDialog.dismiss()
+        }
+
+        override fun userRegistrationFail(message: String) {
+            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+        }
+
+        override fun accountRegistrationSuccess() {
+            Toast.makeText(applicationContext, "Account Registration Successful", Toast.LENGTH_SHORT).show()
+            FirebaseAuth.getInstance().signOut()
+            finish()
+        }
+
+        override fun accountRegistrationFail() {
+            Toast.makeText(applicationContext, "Account Registration Fail", Toast.LENGTH_LONG)
+                .show()
+        }
+
     }
 }
