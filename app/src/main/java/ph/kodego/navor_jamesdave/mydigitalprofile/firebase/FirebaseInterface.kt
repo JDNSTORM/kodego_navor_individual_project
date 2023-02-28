@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.utils
+package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 
@@ -7,18 +7,18 @@ interface FirebaseInterface {
     fun hideProgressDialog()
 }
 
-interface FirebaseRegisterInterface: FirebaseInterface{
+interface FirebaseRegisterInterface: FirebaseInterface {
     fun userRegistrationFail(message: String)
     fun accountRegistrationSuccess()
     fun accountRegistrationFail()
 }
 
-interface FirebaseLoginInterface: FirebaseInterface{
+interface FirebaseLoginInterface: FirebaseInterface {
     fun signInSuccessful()
     fun signInFailed(message: String)
 }
 
-interface FirebaseAccountInterface: FirebaseInterface{
+interface FirebaseAccountInterface: FirebaseInterface {
     fun getAccountSuccess(account: Account)
     fun getAccountFailed()
 }

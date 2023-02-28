@@ -40,6 +40,9 @@
             android:padding="5dp"
             android:layout_marginHorizontal="10dp"
             app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:helperText="@string/field_required"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/first_name"

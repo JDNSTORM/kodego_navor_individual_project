@@ -4,13 +4,14 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import com.google.firebase.auth.FirebaseAuth
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityCreateAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseInterface
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseRegisterInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseRegisterInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 
 class CreateAccountActivity : AppCompatActivity() {
@@ -25,6 +26,26 @@ class CreateAccountActivity : AppCompatActivity() {
         setupActionBar()
 
         formControls = FormControls() //TODO: Validate Fields upon losing focus
+        binding.firstName.setOnFocusChangeListener { view, b -> //TODO: Different approach
+            with(binding.firstName){
+                if(isFocused){
+                    binding.tilFirstName.error = null
+                }else{
+                    if(formControls.validateText(text.toString().trim())){
+                        binding.tilFirstName.error = null
+                    }else{
+                        binding.tilFirstName.error = getString(R.string.error_empty_field)
+                    }
+                }
+            }
+        }
+//        binding.firstName.doAfterTextChanged { text ->
+//            if(formControls.validateText(text.toString().trim())){
+//                binding.tilFirstName.error = null
+//            }else{
+//                binding.tilFirstName.error = getString(R.string.error_empty_field)
+//            }
+//        }
         binding.btnSignUp.setOnClickListener {
             validateForm()
         }
@@ -56,7 +77,7 @@ class CreateAccountActivity : AppCompatActivity() {
         }
     }
 
-    private val firebaseInterface = object: FirebaseRegisterInterface{
+    private val firebaseInterface = object: FirebaseRegisterInterface {
         override fun showProgressDialog() {
             progressDialog = Dialog(binding.root.context)
             val progressBinding = DialogueProgressBinding.inflate(layoutInflater)

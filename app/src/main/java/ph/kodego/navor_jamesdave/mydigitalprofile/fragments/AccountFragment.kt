@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
-import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountSettingsActivity
@@ -17,7 +15,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBi
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseAccountInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountInterface
 
 class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
@@ -89,7 +87,7 @@ class AccountFragment : Fragment() {
         activity.startActivity(intent)
     }
 
-    private val firebaseInterface = object: FirebaseAccountInterface{
+    private val firebaseInterface = object: FirebaseAccountInterface {
         override fun getAccountSuccess(account: Account) {
             val fullName = "${account.firstName} ${account.lastName}"
             with(binding){

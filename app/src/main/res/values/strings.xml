@@ -17,4 +17,8 @@
     <string name="signing_in">Signing In…</string>
     <string name="signing_up">Signing Up…</string>
     <string name="loading_account">Loading Account…</string>
+
+    <!--  Form Controls  -->
+    <string name="field_required">Required</string>
+    <string name="error_empty_field">Cannot be empty</string>
 </resources>

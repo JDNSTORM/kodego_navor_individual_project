@@ -8,16 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.viewpager2.widget.ViewPager2
-import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.CreateAccountActivity
-import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentLoginBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseInterface
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FirebaseLoginInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseLoginInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 
 class LoginFragment() : Fragment() {
@@ -85,7 +81,7 @@ class LoginFragment() : Fragment() {
         }
     }
 
-    private val firebaseInterface = object: FirebaseLoginInterface{
+    private val firebaseInterface = object: FirebaseLoginInterface {
         override fun signInSuccessful() {
             Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
             val activity = requireActivity()
