@@ -3,9 +3,13 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityCreateAccountBinding
@@ -26,26 +30,12 @@ class CreateAccountActivity : AppCompatActivity() {
         setupActionBar()
 
         formControls = FormControls() //TODO: Validate Fields upon losing focus
-        binding.firstName.setOnFocusChangeListener { view, b -> //TODO: Different approach
-            with(binding.firstName){
-                if(isFocused){
-                    binding.tilFirstName.error = null
-                }else{
-                    if(formControls.validateText(text.toString().trim())){
-                        binding.tilFirstName.error = null
-                    }else{
-                        binding.tilFirstName.error = getString(R.string.error_empty_field)
-                    }
-                }
-            }
+        with(formControls){
+            setTextValidationListener(binding.firstName, binding.tilFirstName)
+            setTextValidationListener(binding.lastName, binding.tilLastName)
+            setTextValidationListener(binding.password, binding.tilPassword)
+            setTextValidationListener(binding.confirmPassword, binding.tilConfirmPassword)
         }
-//        binding.firstName.doAfterTextChanged { text ->
-//            if(formControls.validateText(text.toString().trim())){
-//                binding.tilFirstName.error = null
-//            }else{
-//                binding.tilFirstName.error = getString(R.string.error_empty_field)
-//            }
-//        }
         binding.btnSignUp.setOnClickListener {
             validateForm()
         }
