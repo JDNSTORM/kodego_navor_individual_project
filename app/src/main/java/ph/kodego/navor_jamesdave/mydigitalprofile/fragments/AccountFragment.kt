@@ -11,6 +11,7 @@ import android.widget.Toast
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountSettingsActivity
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
@@ -50,24 +51,12 @@ class AccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         Firebase(firebaseInterface).getAccount()
-        binding.btnAccountInformation.setOnClickListener {
-            goToAccountInformation()
-        }
-        binding.btnAccountSettings.setOnClickListener {
-            goToAccountSettings()
-        }
-        binding.btnSignOut.setOnClickListener {
-//            val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
-//            val viewPager = (requireActivity() as MainActivity).getViewPager()
-//            fragmentAdapter.fragmentList.remove(this)
-////            fragmentAdapter.notifyItemRemoved(fragmentAdapter.fragmentList.indexOf(this))
-//            fragmentAdapter.addFragment(LoginFragment())
-//            fragmentAdapter.notifyItemInserted(fragmentAdapter.fragmentList.indexOf(LoginFragment()))
-//            viewPager.adapter = fragmentAdapter
-            signOut()
-        }
+
+        binding.btnAccountInformation.setOnClickListener { goToAccountInformation() }
+        binding.btnAccountSettings.setOnClickListener { goToAccountSettings() }
+        binding.btnViewProfile.setOnClickListener { goToProfile() }
+        binding.btnSignOut.setOnClickListener { signOut() }
     }
 
     private fun goToAccountInformation(){
@@ -76,6 +65,11 @@ class AccountFragment : Fragment() {
     }
     private fun goToAccountSettings(){
         val intent = Intent(context, AccountSettingsActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goToProfile(){
+        val intent = Intent(context, ProfileActivity::class.java)
         startActivity(intent)
     }
 

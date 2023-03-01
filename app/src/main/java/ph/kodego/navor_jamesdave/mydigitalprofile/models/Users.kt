@@ -4,18 +4,23 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 
 data class User( //TODO: Use Parcelable?
     var id: Long = 0,
-    val accountID: Long,
+    val accountID: String,
     var profilePicture: Int = R.drawable.placeholder,
     var firstName: String,
     var lastName: String,
-    val contactInformationID: Long
+    val contactInformationID: String
 ): java.io.Serializable
 
 data class Profile( //TODO: ProfileData is used for Data instead, keep track
     var id: Long = 0,
     val userID: Long,
-    var profession: String,
-    val profileSummary: String
+    var profession: String
+): java.io.Serializable
+
+data class ProfileSummary(
+    var id: Long = 0,
+    val profileID: Long,
+    var profileSummary: String
 )
 
 data class ProfileCareer(
@@ -29,7 +34,7 @@ data class UserSkills(
 )
 
 data class ContactInformation( //TODO: Many-to-One - User, Career, School
-    var id: Long = 0,
+    var id: String = "",
     var emailAddress: EmailAddress?,
     var address: Address? = null,
     var contactNumber: ContactNumber? = null,

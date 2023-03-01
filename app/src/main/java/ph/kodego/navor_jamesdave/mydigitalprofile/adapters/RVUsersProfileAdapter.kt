@@ -22,14 +22,14 @@ class RVUsersProfileAdapter(private val profileDatas: ArrayList<ProfileData>): R
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ViewholderProfileBinding
-        val profile = profileDatas[position]
-        binding.profilePicture.setImageResource(profile.user.profilePicture)
-        binding.profileUserName.text = "${profile.user.firstName} ${profile.user.lastName}"
-        binding.profession.text = profile.profession
+        val profileData = profileDatas[position]
+        binding.profilePicture.setImageResource(profileData.user.profilePicture)
+        binding.profileUserName.text = "${profileData.user.firstName} ${profileData.user.lastName}"
+        binding.profession.text = profileData.profile.profession
 
         binding.root.setOnClickListener {
             val intent = Intent(it.context, ProfileActivity::class.java)
-            intent.putExtra("Profile", profile)
+            intent.putExtra("ProfileData", profileData)
             startActivity(it.context, intent, null)
         }
     }

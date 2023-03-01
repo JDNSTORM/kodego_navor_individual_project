@@ -65,44 +65,36 @@ class HomeFragment : Fragment() {
         val profileDatas = ArrayList<ProfileData>()
         profileDatas.add(
             ProfileData(
-                id = 22,
-                user = UserData(
+                user = User(
                     id = 22,
-                    accountID = 22,
+                    accountID = "22",
                     profilePicture = R.drawable.navor_james,
                     firstName = "James Dave",
                     lastName = "Navor",
-                    contactInformation = ContactInformation(
-                        emailAddress = EmailAddress(
-                            contactInformationID = 22,
-                            username = "esteban.dave999",
-                            domain = "gmail.com"
-                        )
-                    )
+                    contactInformationID = ""
                 ),
-                profession = "Mobile App Developer",
-                profileSummary = ""
+                profile = Profile(
+                    id = 22,
+                    userID = 22,
+                    profession = "Mobile App Developer"
+                )
             )
         )
         for (num in 0L until 10L){
             profileDatas.add(
                 ProfileData(
-                    id = num,
-                    user = UserData(
+                    user = User(
                         id = num,
-                        accountID = num,
+                        accountID = "$num",
                         firstName = "User",
                         lastName = "$num",
-                        contactInformation = ContactInformation(
-                            emailAddress = EmailAddress(
-                                contactInformationID = 22,
-                                username = "user$num",
-                                domain = "email.email"
-                            )
-                        )
+                        contactInformationID = ""
                     ),
-                    profession = "Profession $num",
-                    profileSummary = ""
+                    profile = Profile(
+                        id = num,
+                        userID = num,
+                        profession = "Profession $num"
+                    )
                 )
             )
         }

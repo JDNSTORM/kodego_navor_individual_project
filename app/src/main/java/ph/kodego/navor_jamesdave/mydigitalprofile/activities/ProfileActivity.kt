@@ -11,13 +11,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.CareerFragme
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.EducationFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.User
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
-    private var profile: ProfileData? = null
+    private var profileData: ProfileData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,16 +28,16 @@ class ProfileActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        val userData = Bundle()
-        if(intent.hasExtra("Profile")){//TODO: Proper Data Handling
-            profile = intent.getSerializableExtra("Profile") as ProfileData
-            userData.putSerializable("Profile", profile)
+        val profile = Bundle()
+        if(intent.hasExtra("ProfileData")){//TODO: Proper Data Handling
+            profileData = intent.getSerializableExtra("ProfileData") as ProfileData
+            profile.putSerializable("Profile", profileData!!.profile)
         }
-        if(profile != null){
+        if(profileData != null){
             with(binding.viewholderProfile) {
-                profilePicture.setImageResource(profile!!.user.profilePicture)
-                profileUserName.text = "${profile!!.user.firstName} ${profile!!.user.lastName}"
-                profession.text = profile!!.profession
+                profilePicture.setImageResource(profileData!!.user.profilePicture)
+                profileUserName.text = "${profileData!!.user.firstName} ${profileData!!.user.lastName}"
+                profession.text = profileData!!.profile.profession
             }
         }
 
@@ -63,7 +61,7 @@ class ProfileActivity : AppCompatActivity() {
                 text = it.getString("TabName").toString()
                 icon = it.getInt("TabIcon")
             }
-            fragmentAdapter.fragmentList[position].arguments = userData
+            fragmentAdapter.fragmentList[position].arguments = profile
             tab.setText(text)
             tab.setIcon(icon)
         }.attach()
