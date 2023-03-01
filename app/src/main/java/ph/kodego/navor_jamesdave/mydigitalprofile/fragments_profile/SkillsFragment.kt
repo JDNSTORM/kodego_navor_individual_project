@@ -71,7 +71,7 @@ class SkillsFragment : Fragment() {
         binding.root.addView(layoutSkillEventsBinding.root, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 
         minimizeFabs()
-        skills.addAll(getSkills())
+        skills.addAll(getSkillsSample())
 
         rvAdapter = RVSkillsMainAdapter(skills)
         rvAdapter.setAdapterEvents(object: RVSkillsMainAdapter.AdapterEvents{
@@ -99,7 +99,7 @@ class SkillsFragment : Fragment() {
         }
     }
 
-    private fun getSkills(): ArrayList<SkillMainCategory>{
+    private fun getSkillsSample(): ArrayList<SkillMainCategory>{
         val skills: ArrayList<SkillMainCategory> = ArrayList()
 
         if(profile.id != 22L) {

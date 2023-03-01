@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        profileDatas.addAll(getProfiles())
+        profileDatas.addAll(getProfilesSample())
         rvUsersProfileAdapter = RVUsersProfileAdapter(profileDatas)
         binding.listProfiles.layoutManager = LinearLayoutManager(context)
         binding.listProfiles.adapter = rvUsersProfileAdapter
@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun getProfiles(): ArrayList<ProfileData>{
+    private fun getProfilesSample(): ArrayList<ProfileData>{
         val profileDatas = ArrayList<ProfileData>()
         profileDatas.add(
             ProfileData(
