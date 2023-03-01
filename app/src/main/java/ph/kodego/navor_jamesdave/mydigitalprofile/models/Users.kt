@@ -2,6 +2,14 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 
+/**
+ * Data Flow
+ *  Home = ProfileDatas
+ *      -> ProfileActivity = ProfileData
+ *          -> Fragments = Profile
+ *
+ */
+
 data class User( //TODO: Use Parcelable?
     var id: Long = 0,
     val accountID: String,

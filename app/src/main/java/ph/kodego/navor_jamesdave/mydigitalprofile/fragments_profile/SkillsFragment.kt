@@ -103,12 +103,12 @@ class SkillsFragment : Fragment() {
         val skills: ArrayList<SkillMainCategory> = ArrayList()
 
         if(profile.id != 22L) {
-            for (num in 0..2) {
-                val mainCategory = SkillMainCategory(num, num.toLong(), "Main $num")
-                for (num2 in 0..2) {
-                    val skillSub = SkillSubCategory(num2, num, "Sub $num2")
-                    for (num3 in 0..3) {
-                        val skill = Skill(num3, num2, "Skill $num3")
+            for (categoryMainID in 0..2) {
+                val mainCategory = SkillMainCategory(categoryMainID, profile.id, "Main $categoryMainID")
+                for (categorySubID in 0..2) {
+                    val skillSub = SkillSubCategory(categorySubID, categoryMainID, "Sub $categorySubID")
+                    for (skillID in 0..3) {
+                        val skill = Skill(skillID, categorySubID, "Skill $skillID")
                         skillSub.skills.add(skill)
                     }
                     mainCategory.subCategories.add(skillSub)
@@ -118,7 +118,7 @@ class SkillsFragment : Fragment() {
             skills.add(
                 SkillMainCategory(
                     4,
-                    0,
+                    profile.id,
                     "Main 4",
                     arrayListOf(
                         SkillSubCategory(
@@ -135,7 +135,7 @@ class SkillsFragment : Fragment() {
             skills.add(
                 SkillMainCategory(
                     5,
-                    22,
+                    profile.id,
                     "Main 5"
                 )
             )
@@ -143,7 +143,7 @@ class SkillsFragment : Fragment() {
             skills.addAll(arrayListOf(
                 SkillMainCategory(
                     0,
-                    22,
+                    profile.id,
                     "Computer Maintenance and Troubleshooting",
                     arrayListOf(
                         SkillSubCategory(
@@ -175,7 +175,7 @@ class SkillsFragment : Fragment() {
                 ),
                 SkillMainCategory(
                     1,
-                    22,
+                    profile.id,
                     "Network Management",
                     arrayListOf(
                         SkillSubCategory(
@@ -193,7 +193,7 @@ class SkillsFragment : Fragment() {
                 ),
                 SkillMainCategory(
                     2,
-                    22,
+                    profile.id,
                     "Android App Development",
                     arrayListOf(
                         SkillSubCategory(
@@ -213,7 +213,7 @@ class SkillsFragment : Fragment() {
                 ),
                 SkillMainCategory(
                     3,
-                    22,
+                    profile.id,
                     "Web Development (Obsolete)",
                     arrayListOf(
                         SkillSubCategory(
@@ -234,7 +234,7 @@ class SkillsFragment : Fragment() {
                 ),
                 SkillMainCategory(
                     4,
-                    22,
+                    profile.id,
                     "Java Programming (Obsolete)",
                     arrayListOf(
                         SkillSubCategory(
@@ -251,7 +251,7 @@ class SkillsFragment : Fragment() {
                 ),
                 SkillMainCategory(
                     5,
-                    22,
+                    profile.id,
                     "Java Development (Obsolete)",
                     arrayListOf(
                         SkillSubCategory(
@@ -272,7 +272,7 @@ class SkillsFragment : Fragment() {
                 ),
                 SkillMainCategory(
                     6,
-                    22,
+                    profile.id,
                     "C# Development (Obsolete)",
                     arrayListOf(
                         SkillSubCategory(
@@ -290,7 +290,7 @@ class SkillsFragment : Fragment() {
                 ),
                 SkillMainCategory(
                     7,
-                    22,
+                    profile.id,
                     "Adobe Photoshop",
                     arrayListOf(
                         SkillSubCategory(
