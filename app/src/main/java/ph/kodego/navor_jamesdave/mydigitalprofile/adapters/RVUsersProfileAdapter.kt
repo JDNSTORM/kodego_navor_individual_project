@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 class RVUsersProfileAdapter(private val profileDatas: ArrayList<ProfileData>): RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,7 +30,7 @@ class RVUsersProfileAdapter(private val profileDatas: ArrayList<ProfileData>): R
 
         binding.root.setOnClickListener {
             val intent = Intent(it.context, ProfileActivity::class.java)
-            intent.putExtra("ProfileData", profileData)
+            intent.putExtra(Constants.BundleProfileData, profileData)
             startActivity(it.context, intent, null)
         }
     }

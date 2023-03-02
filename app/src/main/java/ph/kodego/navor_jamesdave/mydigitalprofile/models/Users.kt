@@ -52,8 +52,7 @@ data class ContactInformation( //TODO: Many-to-One - User, Career, School
 data class EmailAddress( //TODO: Insert into User?
     var id: Long = 0,
     val contactInformationID: Long,
-    var username: String,
-    var domain: String
+    var email: String
 ): java.io.Serializable
 
 data class Address(

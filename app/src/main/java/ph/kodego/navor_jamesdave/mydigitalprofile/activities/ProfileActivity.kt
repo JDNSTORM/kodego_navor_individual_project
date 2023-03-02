@@ -12,6 +12,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.EducationFra
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
@@ -29,9 +30,9 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val profile = Bundle()
-        if(intent.hasExtra("ProfileData")){//TODO: Proper Data Handling
+        if(intent.hasExtra(Constants.BundleProfileData)){//TODO: Proper Data Handling
             profileData = intent.getSerializableExtra("ProfileData") as ProfileData
-            profile.putSerializable("Profile", profileData!!.profile)
+            profile.putSerializable(Constants.BundleProfile, profileData!!.profile)
         }
         if(profileData != null){
             with(binding.viewholderProfile) {

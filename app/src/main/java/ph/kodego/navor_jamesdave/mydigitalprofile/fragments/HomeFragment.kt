@@ -52,13 +52,8 @@ class HomeFragment : Fragment() {
         binding.listProfiles.adapter = rvUsersProfileAdapter
 
         binding.btnSearch.setOnClickListener {
-//            goToProfile()
-        }
-    }
 
-    private fun goToProfile(){
-        val intent = Intent(context, ProfileActivity::class.java)
-        startActivity(intent)
+        }
     }
 
     private fun getProfilesSample(): ArrayList<ProfileData>{
