@@ -41,7 +41,7 @@ data class UserSkills(
     val skills: ArrayList<SkillMainCategory> = ArrayList()
 )
 
-data class ContactInformation( //TODO: Many-to-One - User, Career, School
+data class ContactInformation( //TODO: Many-to-One - User, Profile, Career, School
     var id: String = "",
     var emailAddress: EmailAddress?,
     var address: Address? = null,

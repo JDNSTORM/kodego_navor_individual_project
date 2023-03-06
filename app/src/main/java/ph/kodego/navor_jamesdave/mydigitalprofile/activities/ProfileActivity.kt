@@ -32,7 +32,7 @@ class ProfileActivity : AppCompatActivity() {
         val profile = Bundle()
         if(intent.hasExtra(Constants.BundleProfileData)){//TODO: Proper Data Handling
             profileData = intent.getSerializableExtra("ProfileData") as ProfileData
-            profile.putSerializable(Constants.BundleProfile, profileData!!.profile)
+            profile.putSerializable(Constants.BundleProfileData, profileData) //TODO: Change Serializable
         }
         if(profileData != null){
             with(binding.viewholderProfile) {
@@ -58,12 +58,14 @@ class ProfileActivity : AppCompatActivity() {
                 tab, position ->
             var text: String = "Unknown"
             var icon: Int = R.drawable.ic_unknown_24
-            fragmentAdapter.fragmentList[position].arguments?.let {
-                text = it.getString("TabName").toString()
-                icon = it.getInt("TabIcon")
+            with(fragmentAdapter.fragmentList[position]) {
+                arguments?.let {
+                    text = it.getString("TabName") ?: "Unknown"
+                    icon = if (it.getInt("TabIcon") != 0) it.getInt("TabIcon") else R.drawable.ic_unknown_24
+                }
+                arguments = profile
             }
-            fragmentAdapter.fragmentList[position].arguments = profile
-            tab.setText(text)
+            tab.text = text
             tab.setIcon(icon)
         }.attach()
     }

@@ -7,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentProfileBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private lateinit var profileData: ProfileData
 
     init {
         if(this.arguments == null) {
@@ -35,5 +39,17 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if(requireArguments().containsKey(Constants.BundleProfileData)){
+            profileData = requireArguments().getSerializable(Constants.BundleProfileData) as ProfileData
+            setProfileDetails()
+        }
+    }
+
+    private fun setProfileDetails(){
+        binding.email.text = profileData!!.profile.profession
     }
 }
