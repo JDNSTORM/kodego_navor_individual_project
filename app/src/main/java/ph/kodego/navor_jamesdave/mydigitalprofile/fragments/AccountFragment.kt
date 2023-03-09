@@ -14,7 +14,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountSettingsActi
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountInterface
 
@@ -51,7 +51,7 @@ class AccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Firebase(firebaseInterface).getAccount()
+        FirebaseClient(firebaseInterface).getAccount()
 
         binding.btnAccountInformation.setOnClickListener { goToAccountInformation() }
         binding.btnAccountSettings.setOnClickListener { goToAccountSettings() }
@@ -74,7 +74,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun signOut(){
-        Firebase().signOutUser()
+        FirebaseClient().signOutUser()
         val activity = requireActivity()
         val intent = activity.intent
         activity.finish()

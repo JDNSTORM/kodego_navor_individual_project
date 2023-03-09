@@ -12,7 +12,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.CreateAccountActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentLoginBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseLoginInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 
@@ -76,7 +76,7 @@ class LoginFragment() : Fragment() {
             when (false) {
                 validateEmail(email) -> binding.email.requestFocus()
                 validateText(password) -> binding.password.requestFocus()
-                else -> Firebase(firebaseInterface).signInUser(email, password)
+                else -> FirebaseClient(firebaseInterface).signInUser(email, password)
             }
         }
     }

@@ -50,6 +50,6 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setProfileDetails(){
-        binding.email.text = profileData!!.profile.profession
+        binding.email.text = profileData!!.profile.profession //TODO: Set Email
     }
 }

@@ -8,7 +8,7 @@ import com.google.firebase.firestore.SetOptions
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.*
 
-class Firebase(private val firebaseInterface: FirebaseInterface? = null) {
+class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     private val auth = FirebaseAuth.getInstance()
     private val fireStore = FirebaseFirestore.getInstance()
 
@@ -64,7 +64,7 @@ class Firebase(private val firebaseInterface: FirebaseInterface? = null) {
     }
 
     fun signOutUser(){
-        FirebaseAuth.getInstance().signOut()
+        auth.signOut()
     }
 
     fun getAccount(){

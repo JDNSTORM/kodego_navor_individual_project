@@ -19,14 +19,12 @@
             android:exported="false" />
         <activity
             android:name=".activities.ProfileActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".activities.CreateAccountActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activities.AccountActivity"

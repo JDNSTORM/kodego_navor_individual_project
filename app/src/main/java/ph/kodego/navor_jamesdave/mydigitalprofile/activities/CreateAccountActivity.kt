@@ -1,20 +1,18 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityCreateAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseRegisterInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 
@@ -62,7 +60,7 @@ class CreateAccountActivity : AppCompatActivity() {
                 validateText(password) -> binding.password.requestFocus()
                 validateText(confirmPassword) -> binding.confirmPassword.requestFocus()
                 validatePassword(password, confirmPassword) -> binding.password.requestFocus()
-                else -> Firebase(firebaseInterface).registerUser(firstName, lastName, email, password)
+                else -> FirebaseClient(firebaseInterface).registerUser(firstName, lastName, email, password)
             }
         }
     }
@@ -94,6 +92,18 @@ class CreateAccountActivity : AppCompatActivity() {
         override fun accountRegistrationFail() {
             Toast.makeText(applicationContext, "Account Registration Fail", Toast.LENGTH_LONG)
                 .show()
+        }
+    }
+
+    override fun onStart() { //TODO: Try
+        super.onStart()
+        // Check if user is signed in.
+        if (Firebase.auth.currentUser != null) {
+            // Not signed in, launch the Sign In activity
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            Toast.makeText(applicationContext, "A user is signed in", Toast.LENGTH_SHORT).show()
+            return
         }
     }
 }

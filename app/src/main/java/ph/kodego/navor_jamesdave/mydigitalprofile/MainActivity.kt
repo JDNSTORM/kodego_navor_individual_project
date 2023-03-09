@@ -2,12 +2,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.Firebase
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.AccountFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.HomeFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.LoginFragment
@@ -20,12 +19,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.hide()
 
         fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
 
         fragmentAdapter.addFragment(HomeFragment())
-        val currentUserId = Firebase().getCurrentUserID()
+        val currentUserId = FirebaseClient().getCurrentUserID()
         var accountFragment: AccountFragment? = null
         if (currentUserId.isNotEmpty()) {
             accountFragment = AccountFragment()
