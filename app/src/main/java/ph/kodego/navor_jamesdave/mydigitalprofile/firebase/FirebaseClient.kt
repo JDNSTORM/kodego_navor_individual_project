@@ -63,7 +63,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
         }
     }
 
-    fun signOutUser(){
+    fun signOutUser(){ //TODO: Possibly use AuthUI to Sign Out
         auth.signOut()
     }
 
