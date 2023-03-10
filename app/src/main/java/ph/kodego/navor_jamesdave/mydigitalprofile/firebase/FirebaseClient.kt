@@ -40,7 +40,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
             if(task.isSuccessful){
                 val firebaseUser: FirebaseUser = task.result!!.user!!
                 val registeredEmail = firebaseUser.email!!
-                val account = Account(firebaseUser.uid, firstName, lastName, email)
+                val account = Account(firebaseUser.uid, firstName, lastName, registeredEmail)
                 registerAccount(account)
             }else{
                 firebaseInterface.hideProgressDialog()
