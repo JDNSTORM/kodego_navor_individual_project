@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:padding="5dp"
     android:layout_height="wrap_content">
 <!--  Show if SubCategoryName Exists  -->
     <TextView
@@ -15,6 +16,7 @@
         android:textStyle="bold"
         android:textColor="@android:color/black"
         android:visibility="gone"
+        tools:visibility="visible"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_skill"
