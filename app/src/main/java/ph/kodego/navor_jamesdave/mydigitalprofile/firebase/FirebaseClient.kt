@@ -88,7 +88,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     }
 
     fun getCurrentUserID(): String{
-        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUser = auth.currentUser
         return currentUser?.uid ?: ""
     }
 }
