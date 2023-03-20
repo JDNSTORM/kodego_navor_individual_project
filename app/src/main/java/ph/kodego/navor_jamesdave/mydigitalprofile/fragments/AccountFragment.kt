@@ -86,7 +86,7 @@ class AccountFragment : Fragment() {
             val fullName = "${account.firstName} ${account.lastName}"
             with(binding){
                 profileUserName.text = fullName
-                email.text = account.email
+                email.text = account.contactInformation!!.emailAddress!!.email
             }
         }
 

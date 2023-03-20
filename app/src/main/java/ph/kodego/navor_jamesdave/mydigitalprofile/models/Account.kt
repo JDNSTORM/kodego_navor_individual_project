@@ -2,23 +2,31 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.firebase.firestore.Exclude
 
 data class Account (
     val uID: String = "",
     var firstName: String = "",
     var lastName: String = "",
-    var email: String = "",
     var image: String = "",
-    var contactInformationID: Long? = null,
+    var contactInformationID: String? = null,
     val fcmToken: String = ""
 ): Parcelable {
+    @get:Exclude
+    var contactInformation: ContactInformation? = null
+//        private set
+
+    fun getContactInformation(){
+
+    }
+
+    /** Parcelable Constructor */
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readValue(Long::class.java.classLoader) as? Long,
         parcel.readString()!!
     )
 
@@ -26,7 +34,6 @@ data class Account (
         parcel.writeString(uID)
         parcel.writeString(firstName)
         parcel.writeString(lastName)
-        parcel.writeString(email)
         parcel.writeString(image)
         parcel.writeValue(contactInformationID)
         parcel.writeString(fcmToken)
