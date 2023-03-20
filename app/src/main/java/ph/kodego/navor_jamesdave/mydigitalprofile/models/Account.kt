@@ -8,22 +8,17 @@ data class Account (
     val uID: String = "",
     var firstName: String = "",
     var lastName: String = "",
-    var image: String = "",
-    var contactInformationID: String? = null,
-    val fcmToken: String = ""
+    var contactInformationID: String = "",
 ): Parcelable {
+    var image: String = ""
+    val fcmToken: String = ""
+
     @get:Exclude
     var contactInformation: ContactInformation? = null
 //        private set
 
-    fun getContactInformation(){
-
-    }
-
     /** Parcelable Constructor */
     constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -34,9 +29,7 @@ data class Account (
         parcel.writeString(uID)
         parcel.writeString(firstName)
         parcel.writeString(lastName)
-        parcel.writeString(image)
-        parcel.writeValue(contactInformationID)
-        parcel.writeString(fcmToken)
+        parcel.writeString(contactInformationID)
     }
 
     override fun describeContents(): Int = 0

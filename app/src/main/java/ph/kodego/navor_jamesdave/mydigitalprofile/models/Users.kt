@@ -60,13 +60,18 @@ data class ContactInformation( //TODO: Many-to-One - User, Profile, Career, Scho
     @get:Exclude
     var website: Website? = null
 
-    constructor(parcel: Parcel) : this(parcel.readString()!!)
+    constructor(parcel: Parcel) : this(parcel.readString()!!) {
+        emailAddress = parcel.readParcelable(EmailAddress::class.java.classLoader)
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
+        parcel.writeParcelable(emailAddress, flags)
     }
 
-    override fun describeContents(): Int = 0
+    override fun describeContents(): Int {
+        return 0
+    }
 
     companion object CREATOR : Parcelable.Creator<ContactInformation> {
         override fun createFromParcel(parcel: Parcel): ContactInformation {
@@ -77,6 +82,7 @@ data class ContactInformation( //TODO: Many-to-One - User, Profile, Career, Scho
             return arrayOfNulls(size)
         }
     }
+
 
 }
 
