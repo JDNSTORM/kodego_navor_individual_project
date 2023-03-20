@@ -77,7 +77,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
                 val emailAddress = EmailAddress(emailDocument.id, contactInformationReference.id, registeredEmail)
                 val contactInformation = ContactInformation(contactInformationReference.id)
                 contactInformation.emailAddress = emailAddress
-                val account = Account(firebaseUser.uid, firstName, lastName, registeredEmail, contactInformationID = contactInformation.id)
+                val account = Account(firebaseUser.uid, firstName, lastName, contactInformation.id)
                 account.contactInformation = contactInformation
 
                 registerContactInformation(contactInformation)
