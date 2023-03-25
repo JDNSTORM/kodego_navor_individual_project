@@ -43,10 +43,12 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(requireArguments().containsKey(Constants.BundleProfile)){
-            profile = requireArguments().getParcelable<Profile>(Constants.BundleProfile)!!
-            setProfileDetails()
+        profile = if(requireArguments().containsKey(Constants.BundleProfile)){
+            requireArguments().getParcelable(Constants.BundleProfile)!!
+        }else{
+            Profile()
         }
+        setProfileDetails()
     }
 
     private fun setProfileDetails(){

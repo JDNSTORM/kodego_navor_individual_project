@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
@@ -12,7 +13,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.EducationFra
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 class ProfileActivity : AppCompatActivity() {
@@ -30,17 +30,18 @@ class ProfileActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        val profile = Bundle()
-        if(intent.hasExtra(Constants.BundleProfile)){//TODO: Proper Data Handling
-            this.profile = intent.getParcelableExtra<Profile>(Constants.BundleProfile)!!
-            profile.putParcelable(Constants.BundleProfile, this.profile) //TODO: Change Serializable
+        val profileBundle = Bundle()
+        profile = if(intent.hasExtra(Constants.BundleProfile)){//TODO: Proper Data Handling
+            intent.getParcelableExtra(Constants.BundleProfile)!! //TODO: Parcelable only transfers data of the Class itself
         }else{
-            this.profile = Profile()
+            Profile()
         }
+        profileBundle.putParcelable(Constants.BundleProfile, profile)
+
         with(binding.viewholderProfile) {
-            profilePicture.setImageResource(this@ProfileActivity.profile.profilePicture)
-            profileUserName.text = "${this@ProfileActivity.profile.firstName} ${this@ProfileActivity.profile.lastName}"
-            profession.text = this@ProfileActivity.profile.profession
+            profilePicture.setImageResource(profile.profilePicture)
+            profileUserName.text = "${profile.firstName} ${profile.lastName}"
+            profession.text = profile.profession
         }
 
         val fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
@@ -64,7 +65,7 @@ class ProfileActivity : AppCompatActivity() {
                     text = it.getString("TabName") ?: "Unknown"
                     icon = if (it.getInt("TabIcon") != 0) it.getInt("TabIcon") else R.drawable.ic_unknown_24
                 }
-                arguments = profile
+                arguments = profileBundle
             }
             tab.text = text
             tab.setIcon(icon)

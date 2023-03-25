@@ -1,6 +1,7 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -59,8 +60,13 @@ class HomeFragment : Fragment() {
         val jden = Profile(22, "Mobile App Developer")
         val jdenUser = User(22, R.drawable.navor_james)
         val jdenAccount = Account("22", "James Dave", "Navor", "22")
-        jdenUser.setAccount(jdenAccount)
-        jden.setUser(jdenUser)
+//        jdenUser.setAccount(jdenAccount)
+//        jden.setUser(jdenUser)
+        jden.userID = 22
+        jden.profilePicture = R.drawable.navor_james
+        jden.uID = "22"
+        jden.firstName = "James Dave"
+        jden.lastName = "Navor"
         profiles.add(jden)
 //        profileDatas.add(
 //            ProfileData(

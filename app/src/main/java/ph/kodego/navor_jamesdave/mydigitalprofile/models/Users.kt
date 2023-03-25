@@ -36,7 +36,7 @@ open class User( //TODO: Use Parcelable?
         userID = parcel.readLong()
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(parcel: Parcel, flags: Int) { //TODO: Extend for Inherited Data
         super.writeToParcel(parcel, flags)
         parcel.writeInt(profilePicture)
         parcel.writeLong(userID)
@@ -63,18 +63,50 @@ data class Profile( //TODO: ProfileData is used for Data instead, keep track
 ): User(), Parcelable{
     var profileID: Long = 0
 
-    constructor(parcel: Parcel) : this(parcel.readString()!!) {
+    constructor(parcel: Parcel) : this() {
+        uID = parcel.readString()!!
+        firstName = parcel.readString()!!
+        lastName = parcel.readString()!!
+        contactInformationID = parcel.readString()!!
+        profilePicture = parcel.readInt()
+        userID = parcel.readLong()
+//        Log.d("Parcel", parcel.readString()?:"NULL")
+//        Log.d("Parcel", parcel.readString()?:"NULL")
+//        Log.d("Parcel", parcel.readString()?:"NULL")
+        profession = parcel.readString()!!
         profileID = parcel.readLong()
+
+        //User
+//        profilePicture = parcel.readInt()
+//        Log.d("Parcel Picture", profilePicture.toString())
+//        userID = parcel.readLong()
+
+        //Account
+//        uID = parcel.readString()!!
+//        firstName = parcel.readString()!!
+//        lastName = parcel.readString()!!
+//        contactInformationID = parcel.readString()!!
     }
 
     constructor(profileID: Long, profession: String = ""): this(profession){
         this.profileID = profileID
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(parcel: Parcel, flags: Int) { //TODO: Extend for Inherited Data
         super.writeToParcel(parcel, flags)
         parcel.writeString(profession)
         parcel.writeLong(profileID)
+
+        //User
+//        parcel.writeInt(profilePicture)
+//        Log.d("Profile Picture", profilePicture.toString())
+//        parcel.writeLong(userID)
+
+        //Account
+//        parcel.writeString(uID)
+//        parcel.writeString(firstName)
+//        parcel.writeString(lastName)
+//        parcel.writeString(contactInformationID)
     }
 
     override fun describeContents(): Int {
