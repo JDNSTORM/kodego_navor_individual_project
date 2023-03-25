@@ -11,12 +11,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.CareerFragme
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.EducationFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
-    private var profileData: ProfileData? = null
+    private lateinit var profile: Profile
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,16 +31,16 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val profile = Bundle()
-        if(intent.hasExtra(Constants.BundleProfileData)){//TODO: Proper Data Handling
-            profileData = intent.getSerializableExtra("ProfileData") as ProfileData
-            profile.putSerializable(Constants.BundleProfileData, profileData) //TODO: Change Serializable
+        if(intent.hasExtra(Constants.BundleProfile)){//TODO: Proper Data Handling
+            this.profile = intent.getParcelableExtra<Profile>(Constants.BundleProfile)!!
+            profile.putParcelable(Constants.BundleProfile, this.profile) //TODO: Change Serializable
+        }else{
+            this.profile = Profile()
         }
-        if(profileData != null){
-            with(binding.viewholderProfile) {
-                profilePicture.setImageResource(profileData!!.user.profilePicture)
-                profileUserName.text = "${profileData!!.user.firstName} ${profileData!!.user.lastName}"
-                profession.text = profileData!!.profile.profession
-            }
+        with(binding.viewholderProfile) {
+            profilePicture.setImageResource(this@ProfileActivity.profile.profilePicture)
+            profileUserName.text = "${this@ProfileActivity.profile.firstName} ${this@ProfileActivity.profile.lastName}"
+            profession.text = this@ProfileActivity.profile.profession
         }
 
         val fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)

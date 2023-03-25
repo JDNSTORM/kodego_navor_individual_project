@@ -10,7 +10,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderProfileB
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
-class RVUsersProfileAdapter(private val profiles: ArrayList<Profile>): RecyclerView.Adapter<ViewHolder>() {
+class RVProfilesAdapter(private val profiles: ArrayList<Profile>): RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ViewholderProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)

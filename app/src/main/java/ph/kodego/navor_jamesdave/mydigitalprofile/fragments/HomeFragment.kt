@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVUsersProfileAdapter
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVProfilesAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentHomeBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var rvUsersProfileAdapter: RVUsersProfileAdapter
+    private lateinit var rvUsersProfileAdapter: RVProfilesAdapter
     private val profiles: ArrayList<Profile> = ArrayList()
 
     init {
@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         profiles.addAll(getProfilesSample())
-        rvUsersProfileAdapter = RVUsersProfileAdapter(profiles)
+        rvUsersProfileAdapter = RVProfilesAdapter(profiles)
         binding.listProfiles.layoutManager = LinearLayoutManager(context)
         binding.listProfiles.adapter = rvUsersProfileAdapter
 
