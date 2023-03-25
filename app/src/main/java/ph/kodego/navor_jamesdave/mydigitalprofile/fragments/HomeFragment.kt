@@ -1,6 +1,5 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVUsersProfileAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentHomeBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
@@ -17,7 +15,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var rvUsersProfileAdapter: RVUsersProfileAdapter
-    private val profileDatas: ArrayList<ProfileData> = ArrayList()
+    private val profiles: ArrayList<Profile> = ArrayList()
 
     init {
         if(this.arguments == null) {
@@ -46,8 +44,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        profileDatas.addAll(getProfilesSample())
-        rvUsersProfileAdapter = RVUsersProfileAdapter(profileDatas)
+        profiles.addAll(getProfilesSample())
+        rvUsersProfileAdapter = RVUsersProfileAdapter(profiles)
         binding.listProfiles.layoutManager = LinearLayoutManager(context)
         binding.listProfiles.adapter = rvUsersProfileAdapter
 
@@ -56,43 +54,49 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getProfilesSample(): ArrayList<ProfileData>{
-        val profileDatas = ArrayList<ProfileData>()
-        profileDatas.add(
-            ProfileData(
-                user = User(
-                    id = 22,
-                    accountID = "22",
-                    profilePicture = R.drawable.navor_james,
-                    firstName = "James Dave",
-                    lastName = "Navor",
-                    contactInformationID = ""
-                ),
-                profile = Profile(
-                    id = 22,
-                    userID = 22,
-                    profession = "Mobile App Developer"
-                )
-            )
-        )
-        for (num in 0L until 10L){
-            profileDatas.add(
-                ProfileData(
-                    user = User(
-                        id = num,
-                        accountID = "$num",
-                        firstName = "User",
-                        lastName = "$num",
-                        contactInformationID = ""
-                    ),
-                    profile = Profile(
-                        id = num,
-                        userID = num,
-                        profession = "Profession $num"
-                    )
-                )
-            )
-        }
-        return profileDatas
+    private fun getProfilesSample(): ArrayList<Profile>{
+        val profiles = ArrayList<Profile>()
+        val jden = Profile(22, "Mobile App Developer")
+        val jdenUser = User(22, R.drawable.navor_james)
+        val jdenAccount = Account("22", "James Dave", "Navor", "22")
+        jdenUser.setAccount(jdenAccount)
+        jden.setUser(jdenUser)
+        profiles.add(jden)
+//        profileDatas.add(
+//            ProfileData(
+//                user = User(
+//                    id = 22,
+//                    accountID = "22",
+//                    profilePicture = R.drawable.navor_james,
+//                    firstName = "James Dave",
+//                    lastName = "Navor",
+//                    contactInformationID = ""
+//                ),
+//                profile = Profile(
+//                    id = 22,
+//                    userID = 22,
+//                    profession = "Mobile App Developer"
+//                )
+//            )
+//        )
+//        for (num in 0L until 10L){
+//            profileDatas.add(
+//                ProfileData(
+//                    user = User(
+//                        id = num,
+//                        accountID = "$num",
+//                        firstName = "User",
+//                        lastName = "$num",
+//                        contactInformationID = ""
+//                    ),
+//                    profile = Profile(
+//                        id = num,
+//                        userID = num,
+//                        profession = "Profession $num"
+//                    )
+//                )
+//            )
+//        }
+        return profiles
     }
 }

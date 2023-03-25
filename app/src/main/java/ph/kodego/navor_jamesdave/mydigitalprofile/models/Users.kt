@@ -17,20 +17,80 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
  *
  */
 
-data class User( //TODO: Use Parcelable?
-    var id: Long = 0,
-    val accountID: String,
+open class User( //TODO: Use Parcelable?
     var profilePicture: Int = R.drawable.placeholder,
-    var firstName: String,
-    var lastName: String,
-    val contactInformationID: String
-): java.io.Serializable
+): Account(), Parcelable{
+    var userID: Long = 0
+
+    fun setUser(user: User){
+        userID = user.userID
+        profilePicture = user.profilePicture
+
+        setAccount(user)
+    }
+    constructor(userID: Long = 0, profilePicture: Int = R.drawable.placeholder): this(profilePicture){
+        this.userID = userID
+    }
+
+    constructor(parcel: Parcel) : this(parcel.readInt()) {
+        userID = parcel.readLong()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        super.writeToParcel(parcel, flags)
+        parcel.writeInt(profilePicture)
+        parcel.writeLong(userID)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<User> {
+        override fun createFromParcel(parcel: Parcel): User {
+            return User(parcel)
+        }
+
+        override fun newArray(size: Int): Array<User?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+}
 
 data class Profile( //TODO: ProfileData is used for Data instead, keep track
-    var id: Long = 0,
-    val userID: Long,
-    var profession: String
-): java.io.Serializable
+    var profession: String = ""
+): User(), Parcelable{
+    var profileID: Long = 0
+
+    constructor(parcel: Parcel) : this(parcel.readString()!!) {
+        profileID = parcel.readLong()
+    }
+
+    constructor(profileID: Long, profession: String = ""): this(profession){
+        this.profileID = profileID
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        super.writeToParcel(parcel, flags)
+        parcel.writeString(profession)
+        parcel.writeLong(profileID)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Profile> {
+        override fun createFromParcel(parcel: Parcel): Profile {
+            return Profile(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Profile?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
 data class ProfileSummary(
     var id: Long = 0,

@@ -15,7 +15,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private lateinit var profileData: ProfileData
+    private lateinit var profile: Profile
 
     init {
         if(this.arguments == null) {
@@ -43,13 +43,13 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(requireArguments().containsKey(Constants.BundleProfileData)){
-            profileData = requireArguments().getSerializable(Constants.BundleProfileData) as ProfileData
+        if(requireArguments().containsKey(Constants.BundleProfile)){
+            profile = requireArguments().getParcelable<Profile>(Constants.BundleProfile)!!
             setProfileDetails()
         }
     }
 
     private fun setProfileDetails(){
-        binding.email.text = profileData!!.profile.profession //TODO: Set Email
+        binding.email.text = profile.profession //TODO: Set Email
     }
 }

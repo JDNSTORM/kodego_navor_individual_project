@@ -32,7 +32,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 class SkillsFragment : Fragment() {
     private var _binding: FragmentSkillsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var profileData: ProfileData //TODO: Proper Data Handling
+    private lateinit var profile: Profile //TODO: Proper Data Handling
     private val skills: ArrayList<SkillMainCategory> = ArrayList()
     private lateinit var rvAdapter: RVSkillsMainAdapter
     private lateinit var layoutSkillEventsBinding: LayoutSkillEventsBinding
@@ -52,8 +52,8 @@ class SkillsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (requireArguments().containsKey(Constants.BundleProfileData)){
-            profileData = requireArguments().getSerializable(Constants.BundleProfileData) as ProfileData
+        if (requireArguments().containsKey(Constants.BundleProfile)){
+            profile = requireArguments().getSerializable(Constants.BundleProfile) as Profile
         }
     }
 
@@ -102,11 +102,11 @@ class SkillsFragment : Fragment() {
 
     private fun getSkillsSample(): ArrayList<SkillMainCategory>{
         val skills: ArrayList<SkillMainCategory> = ArrayList()
-        with(profileData) {
-            if (profile.id != 22L) {
+        with(profile) {
+            if (profile.profileID != 22L) {
                 for (categoryMainID in 0..2) {
                     val mainCategory =
-                        SkillMainCategory(categoryMainID, profile.id, "Main $categoryMainID")
+                        SkillMainCategory(categoryMainID, profile.profileID, "Main $categoryMainID")
                     for (categorySubID in 0..2) {
                         val skillSub =
                             SkillSubCategory(categorySubID, categoryMainID, "Sub $categorySubID")
@@ -121,7 +121,7 @@ class SkillsFragment : Fragment() {
                 skills.add(
                     SkillMainCategory(
                         4,
-                        profile.id,
+                        profile.profileID,
                         "Main 4",
                         arrayListOf(
                             SkillSubCategory(
@@ -138,7 +138,7 @@ class SkillsFragment : Fragment() {
                 skills.add(
                     SkillMainCategory(
                         5,
-                        profile.id,
+                        profile.profileID,
                         "Main 5"
                     )
                 )
@@ -147,7 +147,7 @@ class SkillsFragment : Fragment() {
                     arrayListOf(
                         SkillMainCategory(
                             0,
-                            profile.id,
+                            profile.profileID,
                             "Computer Maintenance and Troubleshooting",
                             arrayListOf(
                                 SkillSubCategory(
@@ -179,7 +179,7 @@ class SkillsFragment : Fragment() {
                         ),
                         SkillMainCategory(
                             1,
-                            profile.id,
+                            profile.profileID,
                             "Network Management",
                             arrayListOf(
                                 SkillSubCategory(
@@ -197,7 +197,7 @@ class SkillsFragment : Fragment() {
                         ),
                         SkillMainCategory(
                             2,
-                            profile.id,
+                            profile.profileID,
                             "Android App Development",
                             arrayListOf(
                                 SkillSubCategory(
@@ -217,7 +217,7 @@ class SkillsFragment : Fragment() {
                         ),
                         SkillMainCategory(
                             3,
-                            profile.id,
+                            profile.profileID,
                             "Web Development (Obsolete)",
                             arrayListOf(
                                 SkillSubCategory(
@@ -238,7 +238,7 @@ class SkillsFragment : Fragment() {
                         ),
                         SkillMainCategory(
                             4,
-                            profile.id,
+                            profile.profileID,
                             "Java Programming (Obsolete)",
                             arrayListOf(
                                 SkillSubCategory(
@@ -255,7 +255,7 @@ class SkillsFragment : Fragment() {
                         ),
                         SkillMainCategory(
                             5,
-                            profile.id,
+                            profile.profileID,
                             "Java Development (Obsolete)",
                             arrayListOf(
                                 SkillSubCategory(
@@ -276,7 +276,7 @@ class SkillsFragment : Fragment() {
                         ),
                         SkillMainCategory(
                             6,
-                            profile.id,
+                            profile.profileID,
                             "C# Development (Obsolete)",
                             arrayListOf(
                                 SkillSubCategory(
@@ -294,7 +294,7 @@ class SkillsFragment : Fragment() {
                         ),
                         SkillMainCategory(
                             7,
-                            profile.id,
+                            profile.profileID,
                             "Adobe Photoshop",
                             arrayListOf(
                                 SkillSubCategory(
@@ -453,7 +453,7 @@ class SkillsFragment : Fragment() {
      *  Update MainCategory if MainCategory exists
      */
     private fun editMainCategoryDialogue(
-        mainCategory: SkillMainCategory = SkillMainCategory(profileID = profileData.profile.id)
+        mainCategory: SkillMainCategory = SkillMainCategory(profileID = profile.profileID)
     ){
         val dialogueSkillMainEditBinding = DialogueSkillMainEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)

@@ -4,14 +4,14 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 
-data class Account (
-    val uID: String = "",
+open class Account (
+    var uID: String = "",
     var firstName: String = "",
     var lastName: String = "",
     var contactInformationID: String = "",
 ): Parcelable {
     var image: String = ""
-    val fcmToken: String = ""
+    var fcmToken: String = ""
 
     @get:Exclude
     var contactInformation: ContactInformation? = null
@@ -37,5 +37,17 @@ data class Account (
     companion object CREATOR : Parcelable.Creator<Account> {
         override fun createFromParcel(parcel: Parcel): Account = Account(parcel)
         override fun newArray(size: Int): Array<Account?> = arrayOfNulls(size)
+    }
+
+    fun setAccount(account: Account){
+        uID = account.uID
+        firstName = account.firstName
+        lastName = account.lastName
+        contactInformationID = account.contactInformationID
+        image = account.image
+        fcmToken = account.fcmToken
+    }
+    constructor(account: Account) : this(){
+        setAccount(account)
     }
 }
