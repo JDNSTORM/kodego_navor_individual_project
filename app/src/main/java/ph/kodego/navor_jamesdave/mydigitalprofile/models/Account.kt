@@ -18,18 +18,17 @@ open class Account (
 //        private set
 
     /** Parcelable Constructor */
-    constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!
-    )
+    constructor(parcel: Parcel) : this(){
+        setParcel(parcel)
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(uID)
         parcel.writeString(firstName)
         parcel.writeString(lastName)
         parcel.writeString(contactInformationID)
+        parcel.writeString(image)
+        parcel.writeString(fcmToken)
     }
 
     override fun describeContents(): Int = 0
@@ -39,13 +38,22 @@ open class Account (
         override fun newArray(size: Int): Array<Account?> = arrayOfNulls(size)
     }
 
-    fun setAccount(account: Account){
+    open fun setAccount(account: Account){
         uID = account.uID
         firstName = account.firstName
         lastName = account.lastName
         contactInformationID = account.contactInformationID
         image = account.image
         fcmToken = account.fcmToken
+    }
+
+    open fun setParcel(parcel: Parcel){
+        uID = parcel.readString()!!
+        firstName = parcel.readString()!!
+        lastName = parcel.readString()!!
+        contactInformationID = parcel.readString()!!
+        image = parcel.readString()!!
+        fcmToken = parcel.readString()!!
     }
     constructor(account: Account) : this(){
         setAccount(account)

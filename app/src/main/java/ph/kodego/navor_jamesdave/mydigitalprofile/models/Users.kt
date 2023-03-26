@@ -2,12 +2,8 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.Log
 import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 /**
  * Data Flow
@@ -28,12 +24,20 @@ open class User( //TODO: Use Parcelable?
 
         setAccount(user)
     }
+
+    override fun setParcel(parcel: Parcel) {
+        super.setParcel(parcel)
+        profilePicture = parcel.readInt()
+        userID = parcel.readLong()
+    }
     constructor(userID: Long = 0, profilePicture: Int = R.drawable.placeholder): this(profilePicture){
         this.userID = userID
     }
 
-    constructor(parcel: Parcel) : this(parcel.readInt()) {
-        userID = parcel.readLong()
+    constructor(parcel: Parcel) : this() {
+        setParcel(parcel)
+//        profilePicture = parcel.readInt()
+//        userID = parcel.readLong()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) { //TODO: Extend for Inherited Data
@@ -63,29 +67,14 @@ data class Profile( //TODO: ProfileData is used for Data instead, keep track
 ): User(), Parcelable{
     var profileID: Long = 0
 
-    constructor(parcel: Parcel) : this() {
-        uID = parcel.readString()!!
-        firstName = parcel.readString()!!
-        lastName = parcel.readString()!!
-        contactInformationID = parcel.readString()!!
-        profilePicture = parcel.readInt()
-        userID = parcel.readLong()
-//        Log.d("Parcel", parcel.readString()?:"NULL")
-//        Log.d("Parcel", parcel.readString()?:"NULL")
-//        Log.d("Parcel", parcel.readString()?:"NULL")
+
+    override fun setParcel(parcel: Parcel) {
+        super.setParcel(parcel)
         profession = parcel.readString()!!
         profileID = parcel.readLong()
-
-        //User
-//        profilePicture = parcel.readInt()
-//        Log.d("Parcel Picture", profilePicture.toString())
-//        userID = parcel.readLong()
-
-        //Account
-//        uID = parcel.readString()!!
-//        firstName = parcel.readString()!!
-//        lastName = parcel.readString()!!
-//        contactInformationID = parcel.readString()!!
+    }
+    constructor(parcel: Parcel) : this() {
+        setParcel(parcel)
     }
 
     constructor(profileID: Long, profession: String = ""): this(profession){
@@ -96,17 +85,6 @@ data class Profile( //TODO: ProfileData is used for Data instead, keep track
         super.writeToParcel(parcel, flags)
         parcel.writeString(profession)
         parcel.writeLong(profileID)
-
-        //User
-//        parcel.writeInt(profilePicture)
-//        Log.d("Profile Picture", profilePicture.toString())
-//        parcel.writeLong(userID)
-
-        //Account
-//        parcel.writeString(uID)
-//        parcel.writeString(firstName)
-//        parcel.writeString(lastName)
-//        parcel.writeString(contactInformationID)
     }
 
     override fun describeContents(): Int {
