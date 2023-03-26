@@ -4,12 +4,12 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-
+//TODO: Try Parcelize
 open class Account (
     var uID: String = "",
     var firstName: String = "",
     var lastName: String = "",
-    var contactInformationID: String = "",
+    var contactInformationID: String = "", //TODO: Move inside class instead of constructor
 ): Parcelable {
     var image: String = ""
     var fcmToken: String = ""

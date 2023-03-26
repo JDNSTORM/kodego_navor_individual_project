@@ -6,15 +6,17 @@ import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 interface FirebaseAccountDAO {
-    fun registerAccount(account: Account): Boolean
+    fun addAccount(account: Account): Boolean
+    fun registerAccount(firstName: String, lastName: String, email: String, password: String)
     fun getAccount(uID: String): Account?
 }
 
 open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context), FirebaseAccountDAO{
-    override fun registerAccount(account: Account): Boolean {
+    override fun addAccount(account: Account): Boolean {
         val task = fireStore
             .collection(Constants.CollectionAccounts)
             .document(account.uID)
@@ -26,6 +28,14 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
         }else{
             Log.e("Account Registration", task.exception!!.message.toString())
             false
+        }
+    }
+
+    override fun registerAccount(firstName: String, lastName: String, email: String, password: String) {
+        val user = registerUser(email, password)
+        if (user != null){
+            val account = Account(user.uid, firstName, lastName)
+            val contactInformation = ContactInformation()
         }
     }
 

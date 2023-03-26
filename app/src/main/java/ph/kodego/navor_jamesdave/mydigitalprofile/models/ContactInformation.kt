@@ -40,9 +40,9 @@ open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, Scho
     }
 }
 
-data class EmailAddress( //TODO: Insert into User?
+data class EmailAddress( //TODO: Inherit ContactInformation?
     var id: String = "",
-    val contactInformationID: String = "",
+    var contactInformationID: String = "",
     var email: String = ""
 ): Parcelable {
     constructor(): this("", "", "")
