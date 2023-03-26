@@ -52,6 +52,6 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setProfileDetails(){
-        binding.email.text = profile.profession //TODO: Set Email
+        binding.email.text = profile.contactInformation?.emailAddress?.email ?: "No Email" //TODO: Set Email
     }
 }

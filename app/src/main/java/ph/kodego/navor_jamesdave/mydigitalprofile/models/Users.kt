@@ -13,36 +13,29 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
  *
  */
 
-open class User( //TODO: Use Parcelable?
-    var profilePicture: Int = R.drawable.placeholder,
-): Account(), Parcelable{
+open class User(): Account(), Parcelable{ //TODO: Not Used
     var userID: Long = 0
 
     fun setUser(user: User){
         userID = user.userID
-        profilePicture = user.profilePicture
 
         setAccount(user)
     }
 
-    override fun setParcel(parcel: Parcel) {
+    override fun setParcel(parcel: Parcel) { //TODO: Update this for updates with data
         super.setParcel(parcel)
-        profilePicture = parcel.readInt()
         userID = parcel.readLong()
     }
-    constructor(userID: Long = 0, profilePicture: Int = R.drawable.placeholder): this(profilePicture){
+    constructor(userID: Long = 0, profilePicture: Int = R.drawable.placeholder): this(){
         this.userID = userID
     }
 
     constructor(parcel: Parcel) : this() {
         setParcel(parcel)
-//        profilePicture = parcel.readInt()
-//        userID = parcel.readLong()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) { //TODO: Extend for Inherited Data
         super.writeToParcel(parcel, flags)
-        parcel.writeInt(profilePicture)
         parcel.writeLong(userID)
     }
 
@@ -62,29 +55,29 @@ open class User( //TODO: Use Parcelable?
 
 }
 
-data class Profile( //TODO: ProfileData is used for Data instead, keep track
+data class Profile(
     var profession: String = ""
-): User(), Parcelable{
-    var profileID: Long = 0
+): Account(), Parcelable{
+    var profileID: String = ""
 
 
     override fun setParcel(parcel: Parcel) {
         super.setParcel(parcel)
         profession = parcel.readString()!!
-        profileID = parcel.readLong()
+        profileID = parcel.readString()!!
     }
     constructor(parcel: Parcel) : this() {
         setParcel(parcel)
     }
 
-    constructor(profileID: Long, profession: String = ""): this(profession){
+    constructor(profileID: String, profession: String = ""): this(profession){
         this.profileID = profileID
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) { //TODO: Extend for Inherited Data
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
         parcel.writeString(profession)
-        parcel.writeLong(profileID)
+        parcel.writeString(profileID)
     }
 
     override fun describeContents(): Int {
@@ -109,108 +102,35 @@ data class ProfileSummary(
 )
 
 data class ProfileCareer(
-    val profile: Profile,
+    val profile: Profile?,
     val careers: ArrayList<Career>
-)
-
-data class UserSkills(
-    val profile: Profile,
-    val skills: ArrayList<SkillMainCategory> = ArrayList()
-)
-
-data class ContactInformation( //TODO: Many-to-One - User, Profile, Career, School
-    var id: String = ""
-): Parcelable{
-    @get:Exclude
-    var emailAddress: EmailAddress? = null
-    @get:Exclude
-    var address: Address? = null
-    @get:Exclude
-    var contactNumber: ContactNumber? = null
-    @get:Exclude
-    var website: Website? = null
-
-    constructor(parcel: Parcel) : this(parcel.readString()!!) {
-        emailAddress = parcel.readParcelable(EmailAddress::class.java.classLoader)
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
-        parcel.writeParcelable(emailAddress, flags)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<ContactInformation> {
-        override fun createFromParcel(parcel: Parcel): ContactInformation {
-            return ContactInformation(parcel)
-        }
-
-        override fun newArray(size: Int): Array<ContactInformation?> {
-            return arrayOfNulls(size)
-        }
-    }
-
-
-}
-
-data class EmailAddress( //TODO: Insert into User?
-    var id: String = "",
-    val contactInformationID: String,
-    var email: String
-): Parcelable{
-    constructor(): this("", "", "")
+):Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!
+        parcel.readParcelable(Profile::class.java.classLoader),
+        TODO("careers")
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
-        parcel.writeString(contactInformationID)
-        parcel.writeString(email)
+        parcel.writeParcelable(profile, flags)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<EmailAddress> {
-        override fun createFromParcel(parcel: Parcel): EmailAddress {
-            return EmailAddress(parcel)
+    companion object CREATOR : Parcelable.Creator<ProfileCareer> {
+        override fun createFromParcel(parcel: Parcel): ProfileCareer {
+            return ProfileCareer(parcel)
         }
 
-        override fun newArray(size: Int): Array<EmailAddress?> {
+        override fun newArray(size: Int): Array<ProfileCareer?> {
             return arrayOfNulls(size)
         }
     }
-
 }
 
-data class Address(
-    var id: Long = 0,
-    val contactInformationID: Long,
-    var streetAddress: String = "",
-    var subdivision: String = "",
-    var cityOrMunicipality: String,
-    var province: String,
-    var zipCode: Int,
-    var country: String
-)
-
-data class ContactNumber(
-    var id: Long = 0,
-    val contactInformationID: Int,
-    var areaCode: Int,
-    var contact: Int
-)
-
-data class Website(
-    var id: Long = 0,
-    val contactInformationID: Long,
-    var domain: String
+data class UserSkills(
+    val profile: Profile,
+    val skills: ArrayList<SkillMainCategory> = ArrayList()
 )

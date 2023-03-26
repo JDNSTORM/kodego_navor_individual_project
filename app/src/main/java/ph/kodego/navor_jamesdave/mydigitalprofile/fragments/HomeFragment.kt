@@ -57,17 +57,18 @@ class HomeFragment : Fragment() {
 
     private fun getProfilesSample(): ArrayList<Profile>{
         val profiles = ArrayList<Profile>()
-        val jden = Profile(22, "Mobile App Developer")
-        val jdenUser = User(22, R.drawable.navor_james)
+        val jden = Profile("22", "Mobile App Developer")
         val jdenAccount = Account("22", "James Dave", "Navor", "22")
-//        jdenUser.setAccount(jdenAccount)
 //        jden.setUser(jdenUser)
-        jden.userID = 22
         jden.profilePicture = R.drawable.navor_james
         jden.uID = "22"
         jden.firstName = "James Dave"
         jden.lastName = "Navor"
+        jden.contactInformation = ContactInformation("22")
+        jden.contactInformation
+        jden.contactInformation!!.emailAddress = EmailAddress("22", "22", "esteban.dave999@gmail.com")
         profiles.add(jden)
+        profiles.add(Profile())
 //        profileDatas.add(
 //            ProfileData(
 //                user = User(

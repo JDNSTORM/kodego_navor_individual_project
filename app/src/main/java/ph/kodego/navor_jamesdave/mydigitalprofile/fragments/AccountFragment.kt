@@ -17,11 +17,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBin
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
     private lateinit var progressDialog: Dialog
+    private lateinit var account: Account
 
     init {
         if(this.arguments == null) {
@@ -70,6 +72,7 @@ class AccountFragment : Fragment() {
 
     private fun goToProfile(){
         val intent = Intent(context, ProfileActivity::class.java)
+        intent.putExtra(Constants.BundleAccount, account)
         startActivity(intent)
     }
 
@@ -83,10 +86,12 @@ class AccountFragment : Fragment() {
 
     private val firebaseInterface = object: FirebaseAccountInterface {
         override fun getAccountSuccess(account: Account) {
+            this@AccountFragment.account = account
             val fullName = "${account.firstName} ${account.lastName}"
             with(binding){
                 profileUserName.text = fullName
                 email.text = account.contactInformation!!.emailAddress!!.email
+                profilePicture.setImageResource(account.profilePicture)
             }
         }
 

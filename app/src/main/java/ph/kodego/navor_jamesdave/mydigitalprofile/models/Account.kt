@@ -3,6 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
+import ph.kodego.navor_jamesdave.mydigitalprofile.R
 
 open class Account (
     var uID: String = "",
@@ -12,6 +13,7 @@ open class Account (
 ): Parcelable {
     var image: String = ""
     var fcmToken: String = ""
+    var profilePicture: Int = R.drawable.placeholder
 
     @get:Exclude
     var contactInformation: ContactInformation? = null
@@ -29,6 +31,8 @@ open class Account (
         parcel.writeString(contactInformationID)
         parcel.writeString(image)
         parcel.writeString(fcmToken)
+        parcel.writeInt(profilePicture)
+        parcel.writeParcelable(contactInformation, flags)
     }
 
     override fun describeContents(): Int = 0
@@ -38,13 +42,15 @@ open class Account (
         override fun newArray(size: Int): Array<Account?> = arrayOfNulls(size)
     }
 
-    open fun setAccount(account: Account){
+    fun setAccount(account: Account){
         uID = account.uID
         firstName = account.firstName
         lastName = account.lastName
         contactInformationID = account.contactInformationID
         image = account.image
         fcmToken = account.fcmToken
+        profilePicture = account.profilePicture
+        contactInformation = account.contactInformation
     }
 
     open fun setParcel(parcel: Parcel){
@@ -54,6 +60,8 @@ open class Account (
         contactInformationID = parcel.readString()!!
         image = parcel.readString()!!
         fcmToken = parcel.readString()!!
+        profilePicture = parcel.readInt()
+        contactInformation = parcel.readParcelable(ContactInformation::class.java.classLoader)
     }
     constructor(account: Account) : this(){
         setAccount(account)

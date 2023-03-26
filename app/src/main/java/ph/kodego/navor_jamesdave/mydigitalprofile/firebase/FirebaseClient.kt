@@ -17,7 +17,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     private fun registerContactInformation(contactInformation: ContactInformation){
         fireStore
             .collection(Constants.CollectionContactInformation)
-            .document(contactInformation.id)
+            .document(contactInformation.contactInformationID)
             .set(contactInformation, SetOptions.merge())
             .addOnSuccessListener {
                 Log.i("Contact Registration", "Successful")
@@ -77,7 +77,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
                 val emailAddress = EmailAddress(emailDocument.id, contactInformationReference.id, registeredEmail)
                 val contactInformation = ContactInformation(contactInformationReference.id)
                 contactInformation.emailAddress = emailAddress
-                val account = Account(firebaseUser.uid, firstName, lastName, contactInformation.id)
+                val account = Account(firebaseUser.uid, firstName, lastName, contactInformation.contactInformationID)
                 account.contactInformation = contactInformation
 
                 registerContactInformation(contactInformation)

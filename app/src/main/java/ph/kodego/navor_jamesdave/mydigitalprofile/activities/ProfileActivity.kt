@@ -12,6 +12,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.CareerFragme
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.EducationFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
@@ -31,10 +32,15 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val profileBundle = Bundle()
-        profile = if(intent.hasExtra(Constants.BundleProfile)){//TODO: Proper Data Handling
-            intent.getParcelableExtra(Constants.BundleProfile)!! //TODO: Parcelable only transfers data of the Class itself
-        }else{
-            Profile()
+        if(intent.hasExtra(Constants.BundleProfile)){//TODO: Proper Data Handling
+            profile = intent.getParcelableExtra(Constants.BundleProfile)!!
+//            profile = intent.getParcelableExtra(Constants.BundleProfile, Profile::class.java)!! //TODO: For API 33
+        }else if(intent.hasExtra(Constants.BundleAccount)){ //TODO: Retrieve Profile
+            val account: Account = intent.getParcelableExtra(Constants.BundleAccount)!!
+            profile = Profile()
+            profile.setAccount(account)
+        }else{ //TODO: Throw Error and Finish Activity
+            profile = Profile()
         }
         profileBundle.putParcelable(Constants.BundleProfile, profile)
 
