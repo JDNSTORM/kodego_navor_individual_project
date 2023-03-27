@@ -12,22 +12,23 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 interface FirebaseContactInformationDAO {
     suspend fun addContactInformation(contactInformation: ContactInformation): Boolean
-    suspend fun registerContactInformation(contactInformation: ContactInformation)
+    suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun getContactInformation(contactInformationID: String): ContactInformation?
-    suspend fun addEmail(emailAddress: EmailAddress): Boolean //TODO: Separate DAO
+    suspend fun addEmail(emailAddress: EmailAddress): Boolean //TODO: Separate DAO?
     suspend fun registerEmail(emailAddress: EmailAddress)
     suspend fun getEmail(contactInformation: ContactInformation): EmailAddress?
 }
 
 class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     private val collection = FirebaseCollections.ContactInformation
-    internal val fireStore = FirebaseFirestore.getInstance()
-    override suspend fun addContactInformation(contactInformation: ContactInformation): Boolean {
+    private val fireStore = FirebaseFirestore.getInstance()
+    override suspend fun addContactInformation(contactInformation: ContactInformation): Boolean { //TODO: Probably change parameter
         val reference = fireStore
             .collection(collection)
-            .document(contactInformation.contactInformationID)
+            .document()
         contactInformation.contactInformationID = reference.id
         val task = reference.set(contactInformation, SetOptions.merge())
+        task.await()
         return if (task.isSuccessful){
             Log.i("Contact Registration", "Successful")
             true
@@ -37,12 +38,15 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
         }
     }
 
-    override suspend fun registerContactInformation(contactInformation: ContactInformation) {
-        if (addContactInformation(contactInformation)){ //TODO
+    override suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean {
+        return if (addContactInformation(contactInformation)){ //TODO: Contents
             if (contactInformation.emailAddress != null) {
                 contactInformation.emailAddress!!.contactInformationID = contactInformation.contactInformationID
                 addEmail(contactInformation.emailAddress!!)
             }
+            true
+        }else{
+            false
         }
     }
 

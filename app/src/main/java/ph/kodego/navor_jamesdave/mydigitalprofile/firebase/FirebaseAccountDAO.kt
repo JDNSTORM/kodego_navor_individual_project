@@ -8,11 +8,12 @@ import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 interface FirebaseAccountDAO {
     suspend fun addAccount(account: Account): Boolean
-    suspend fun registerAccount(firstName: String, lastName: String, email: String, password: String)
+    suspend fun registerAccount(firstName: String, lastName: String, email: String, password: String): Boolean
     suspend fun getAccount(uID: String): Account?
 }
 
@@ -35,11 +36,24 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
         }
     }
 
-    override suspend fun registerAccount(firstName: String, lastName: String, email: String, password: String) {
+    override suspend fun registerAccount(firstName: String, lastName: String, email: String, password: String): Boolean {
         val user = registerUser(email, password)
-        if (user != null){
+        return if (user != null){
+            val dao = FirebaseContactInformationDAOImpl()
             val account = Account(user.uid, firstName, lastName)
             val contactInformation = ContactInformation()
+            contactInformation.emailAddress = EmailAddress(email = user.email.toString())
+            return if(dao.registerContactInformation(contactInformation)){
+                account.contactInformationID = contactInformation.contactInformationID
+                account.contactInformation = contactInformation
+                addAccount(account)
+            }else{
+                Log.e("ContactInformation", "Failed to register")
+                false
+            }
+        }else{
+            Toast.makeText(context, "Account Registration Fail", Toast.LENGTH_LONG).show()
+            false
         }
     }
 

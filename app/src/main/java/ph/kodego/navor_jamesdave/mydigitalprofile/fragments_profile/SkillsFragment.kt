@@ -520,7 +520,7 @@ class SkillsFragment : Fragment() {
             dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
         }
 
-        dialogueSkillSubEditBinding.labelSkillMain.setText(mainCategory.categoryMain)
+        dialogueSkillSubEditBinding.labelSkillMain.text = mainCategory.categoryMain
 
         with(dialogueSkillSubEditBinding.editButtons){
             if(subCategories.contains(subCategory)){

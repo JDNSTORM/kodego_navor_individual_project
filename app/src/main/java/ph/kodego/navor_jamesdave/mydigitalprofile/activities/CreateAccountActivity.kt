@@ -5,16 +5,20 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityCreateAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseRegisterInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
 
 class CreateAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateAccountBinding
@@ -26,6 +30,7 @@ class CreateAccountActivity : AppCompatActivity() {
         binding = ActivityCreateAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupActionBar()
+        progressDialog = ProgressDialog(binding.root.context, R.string.signing_up)
 
         formControls = FormControls() //TODO: Validate Fields upon losing focus
         with(formControls){
@@ -60,7 +65,19 @@ class CreateAccountActivity : AppCompatActivity() {
                 validateText(password) -> binding.password.requestFocus()
                 validateText(confirmPassword) -> binding.confirmPassword.requestFocus()
                 validatePassword(password, confirmPassword) -> binding.password.requestFocus()
-                else -> FirebaseClient(firebaseInterface).registerUser(firstName, lastName, email, password)
+//                else -> FirebaseClient(firebaseInterface).registerUser(firstName, lastName, email, password)
+                else -> {
+                    progressDialog.show()
+                    lifecycleScope.launch {
+                        val dao = FirebaseAccountDAOImpl(applicationContext)
+                        if (dao.registerAccount(firstName, lastName, email, password)) {
+                            progressDialog.dismiss()
+                            finish()
+                        } else {
+                            progressDialog.dismiss()
+                        }
+                    }
+                }
             }
         }
     }

@@ -19,6 +19,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseLoginInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
 
 class LoginFragment() : Fragment() {
     private var _binding: FragmentLoginBinding? = null
@@ -55,6 +56,8 @@ class LoginFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         formControls = FormControls() //TODO: Validate Fields upon losing focus
+        progressDialog = ProgressDialog(binding.root.context, R.string.signing_in)
+
         binding.btnSignIn.setOnClickListener {
 //            val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
 //            val viewPager = (requireActivity() as MainActivity).getViewPager()
@@ -81,8 +84,8 @@ class LoginFragment() : Fragment() {
                 validateEmail(email) -> binding.email.requestFocus()
                 validateText(password) -> binding.password.requestFocus()
 //                else -> FirebaseClient(firebaseInterface).signInUser(email, password)
-                else -> lifecycleScope.launch{ //TODO: AsyncTask
-                    firebaseInterface.showProgressDialog()
+                else -> lifecycleScope.launch{ //TODO: Proper Coroutine?
+                    progressDialog.show()
                     if(FirebaseUserDAOImpl(requireContext()).signInUser(email, password)){
                         Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
                         val activity = requireActivity()

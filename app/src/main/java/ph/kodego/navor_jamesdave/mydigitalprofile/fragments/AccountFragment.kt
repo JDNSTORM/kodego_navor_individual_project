@@ -21,6 +21,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
 
 class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
@@ -59,15 +60,17 @@ class AccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        FirebaseClient(firebaseInterface).getAccount()
         dao = FirebaseAccountDAOImpl(requireContext())
+        progressDialog = ProgressDialog(view.context, R.string.loading_account)
+
         lifecycleScope.launch {//TODO: Proper Coroutine?
-            firebaseInterface.showProgressDialog()
+            progressDialog.show()
             val firebaseAccount = dao.getAccount(dao.getCurrentUserID())
             if (firebaseAccount != null) {
                 account = firebaseAccount
                 val fullName = "${account.firstName} ${account.lastName}"
                 with(binding) {
                     profileUserName.text = fullName
-                    email.text = account.contactInformation!!.emailAddress!!.email //TODO: Retrieve ContactInformation
+                    email.text = account.contactInformation!!.emailAddress!!.email
                     profilePicture.setImageResource(account.profilePicture)
                 }
                 progressDialog.dismiss()
