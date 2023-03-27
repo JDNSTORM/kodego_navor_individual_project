@@ -14,6 +14,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountSettingsActi
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountInterface
@@ -24,6 +25,7 @@ class AccountFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var progressDialog: Dialog
     private lateinit var account: Account
+    private lateinit var dao: FirebaseAccountDAOImpl
 
     init {
         if(this.arguments == null) {
@@ -54,6 +56,20 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         FirebaseClient(firebaseInterface).getAccount()
+//        dao = FirebaseAccountDAOImpl(requireContext()) //TODO: AsyncTask
+//        val firebaseAccount = dao.getAccount(dao.getCurrentUserID())
+//        if (firebaseAccount != null){
+//            account = firebaseAccount
+//            val fullName = "${account.firstName} ${account.lastName}"
+//            with(binding){
+//                profileUserName.text = fullName
+//                email.text = account.contactInformation!!.emailAddress!!.email
+//                profilePicture.setImageResource(account.profilePicture)
+//            }
+//        }else{
+//            Toast.makeText(context, "Failed to get Account Data", Toast.LENGTH_LONG).show()
+//            signOut()
+//        }
 
         binding.btnAccountInformation.setOnClickListener { goToAccountInformation() }
         binding.btnAccountSettings.setOnClickListener { goToAccountSettings() }

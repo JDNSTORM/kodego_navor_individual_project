@@ -18,10 +18,11 @@ interface FirebaseContactInformationDAO {
 }
 
 class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
+    private val collection = FirebaseCollections.ContactInformation
     internal val fireStore = FirebaseFirestore.getInstance()
     override fun addContactInformation(contactInformation: ContactInformation): Boolean {
         val reference = fireStore
-            .collection(Constants.CollectionContactInformation)
+            .collection(collection)
             .document(contactInformation.contactInformationID)
         contactInformation.contactInformationID = reference.id
         val task = reference.set(contactInformation, SetOptions.merge())
@@ -49,12 +50,12 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
 
     override fun addEmail(emailAddress: EmailAddress): Boolean {
         val reference = fireStore
-            .collection(Constants.CollectionContactInformation)
+            .collection(collection)
             .document(emailAddress.contactInformationID)
-            .collection(Constants.CollectionEmail)
+            .collection(FirebaseCollections.Email)
             .document(emailAddress.contactInformationID)
         val emailReference = fireStore.collection(Constants.CollectionEmail).document()
-        emailAddress.id = emailReference.id //TODO: Wrong?
+        emailAddress.id = emailReference.id
 
         val task = reference.set(emailAddress, SetOptions.merge())
         return if (task.isSuccessful){

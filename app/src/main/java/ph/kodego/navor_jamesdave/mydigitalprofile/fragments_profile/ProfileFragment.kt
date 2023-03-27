@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfileData
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 

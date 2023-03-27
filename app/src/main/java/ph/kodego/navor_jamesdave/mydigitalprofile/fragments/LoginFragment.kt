@@ -14,6 +14,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBi
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentLoginBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseLoginInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 
 class LoginFragment() : Fragment() {
@@ -77,6 +78,19 @@ class LoginFragment() : Fragment() {
                 validateEmail(email) -> binding.email.requestFocus()
                 validateText(password) -> binding.password.requestFocus()
                 else -> FirebaseClient(firebaseInterface).signInUser(email, password)
+//                else -> { //TODO: AsyncTask
+//                    firebaseInterface.showProgressDialog()
+//                    if(FirebaseUserDAOImpl(requireContext()).signInUser(email, password)){
+//                        Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
+//                        val activity = requireActivity()
+//                        val intent = activity.intent
+//                        progressDialog.cancel()
+//                        activity.finish()
+//                        activity.startActivity(intent)
+//                    }else{
+//                        progressDialog.cancel()
+//                    }
+//                }
             }
         }
     }
@@ -93,6 +107,7 @@ class LoginFragment() : Fragment() {
 
         override fun signInFailed(message: String) {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            progressDialog.cancel()
         }
 
         override fun showProgressDialog() {

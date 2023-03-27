@@ -16,9 +16,11 @@ interface FirebaseAccountDAO {
 }
 
 open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context), FirebaseAccountDAO{
+    private val collection = FirebaseCollections.Accounts
+
     override fun addAccount(account: Account): Boolean {
         val task = fireStore
-            .collection(Constants.CollectionAccounts)
+            .collection(collection)
             .document(account.uID)
             .set(account, SetOptions.merge())
         return if (task.isSuccessful){
@@ -41,7 +43,7 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
 
     override fun getAccount(uID: String): Account? {
         val task = fireStore
-            .collection(Constants.CollectionAccounts)
+            .collection(collection)
             .document(uID)
             .get()
         return if (task.isSuccessful){

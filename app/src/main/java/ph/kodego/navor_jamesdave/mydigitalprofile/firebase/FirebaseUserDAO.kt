@@ -1,6 +1,7 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -24,14 +25,20 @@ open class FirebaseUserDAOImpl(internal val context: Context): FirebaseUserDAO{
         return if (task.isSuccessful){
             task.result.user
         }else{
-            Toast.makeText(context, task.exception!!.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, task.exception!!.message.toString(), Toast.LENGTH_LONG).show()
             null
         }
     }
 
-    override fun signInUser(email: String, password: String): Boolean {
+    override fun signInUser(email: String, password: String): Boolean { //TODO: AsyncTask
         val task = auth.signInWithEmailAndPassword(email, password)
-        return task.isSuccessful
+        Log.d("Sign In", task.result.toString())
+        return if (task.isSuccessful){
+            true
+        }else{
+            Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT).show()
+            false
+        }
     }
 
     override fun signOutUser() {
