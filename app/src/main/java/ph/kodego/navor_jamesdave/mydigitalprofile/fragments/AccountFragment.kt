@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountSettingsActivity
@@ -55,21 +57,26 @@ class AccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseClient(firebaseInterface).getAccount()
-//        dao = FirebaseAccountDAOImpl(requireContext()) //TODO: AsyncTask
-//        val firebaseAccount = dao.getAccount(dao.getCurrentUserID())
-//        if (firebaseAccount != null){
-//            account = firebaseAccount
-//            val fullName = "${account.firstName} ${account.lastName}"
-//            with(binding){
-//                profileUserName.text = fullName
-//                email.text = account.contactInformation!!.emailAddress!!.email
-//                profilePicture.setImageResource(account.profilePicture)
-//            }
-//        }else{
-//            Toast.makeText(context, "Failed to get Account Data", Toast.LENGTH_LONG).show()
-//            signOut()
-//        }
+//        FirebaseClient(firebaseInterface).getAccount()
+        dao = FirebaseAccountDAOImpl(requireContext())
+        lifecycleScope.launch {//TODO: Proper Coroutine?
+            firebaseInterface.showProgressDialog()
+            val firebaseAccount = dao.getAccount(dao.getCurrentUserID())
+            if (firebaseAccount != null) {
+                account = firebaseAccount
+                val fullName = "${account.firstName} ${account.lastName}"
+                with(binding) {
+                    profileUserName.text = fullName
+                    email.text = account.contactInformation!!.emailAddress!!.email //TODO: Retrieve ContactInformation
+                    profilePicture.setImageResource(account.profilePicture)
+                }
+                progressDialog.dismiss()
+            } else {
+                progressDialog.dismiss()
+                Toast.makeText(context, "Failed to get Account Data", Toast.LENGTH_LONG).show()
+                signOut()
+            }
+        }
 
         binding.btnAccountInformation.setOnClickListener { goToAccountInformation() }
         binding.btnAccountSettings.setOnClickListener { goToAccountSettings() }
@@ -93,7 +100,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun signOut(){
-        FirebaseClient().signOutUser()
+        dao.signOutUser()
         val activity = requireActivity()
         val intent = activity.intent
         activity.finish()

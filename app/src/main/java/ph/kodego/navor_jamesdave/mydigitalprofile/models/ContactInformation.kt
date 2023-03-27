@@ -3,8 +3,10 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.PropertyName
 
 open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, School
+    @PropertyName("id")
     var contactInformationID: String = ""
 ): Parcelable {
     @get:Exclude

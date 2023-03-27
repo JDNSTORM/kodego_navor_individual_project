@@ -5,24 +5,26 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.tasks.await
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 interface FirebaseAccountDAO {
-    fun addAccount(account: Account): Boolean
-    fun registerAccount(firstName: String, lastName: String, email: String, password: String)
-    fun getAccount(uID: String): Account?
+    suspend fun addAccount(account: Account): Boolean
+    suspend fun registerAccount(firstName: String, lastName: String, email: String, password: String)
+    suspend fun getAccount(uID: String): Account?
 }
 
 open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context), FirebaseAccountDAO{
     private val collection = FirebaseCollections.Accounts
 
-    override fun addAccount(account: Account): Boolean {
+    override suspend fun addAccount(account: Account): Boolean {
         val task = fireStore
             .collection(collection)
             .document(account.uID)
             .set(account, SetOptions.merge())
+        task.await()
         return if (task.isSuccessful){
             auth.signOut()
             Toast.makeText(context, "Account Registration Successful", Toast.LENGTH_SHORT).show()
@@ -33,7 +35,7 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
         }
     }
 
-    override fun registerAccount(firstName: String, lastName: String, email: String, password: String) {
+    override suspend fun registerAccount(firstName: String, lastName: String, email: String, password: String) {
         val user = registerUser(email, password)
         if (user != null){
             val account = Account(user.uid, firstName, lastName)
@@ -41,14 +43,18 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
         }
     }
 
-    override fun getAccount(uID: String): Account? {
+    override suspend fun getAccount(uID: String): Account? {
         val task = fireStore
             .collection(collection)
             .document(uID)
             .get()
+        task.await()
+        Log.d("Get Account", task.result.toString())
         return if (task.isSuccessful){
             Log.i("Account Document Retrieved", task.result.toString())
-            task.result.toObject(Account::class.java)!!
+            val account = task.result.toObject(Account::class.java)!!
+            account.contactInformation = FirebaseContactInformationDAOImpl().getContactInformation(account.contactInformationID)
+            return account
         }else{
             Log.e("Account Error", task.exception!!.message.toString())
             null

@@ -7,11 +7,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.tasks.await
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 interface FirebaseUserDAO {
-    fun registerUser(email: String, password: String): FirebaseUser?
-    fun signInUser(email: String, password: String): Boolean
+    suspend fun registerUser(email: String, password: String): FirebaseUser?
+    suspend fun signInUser(email: String, password: String): Boolean
     fun signOutUser()
     fun getCurrentUserID(): String
 }
@@ -20,8 +21,9 @@ open class FirebaseUserDAOImpl(internal val context: Context): FirebaseUserDAO{
     internal val auth = FirebaseAuth.getInstance()
     internal val fireStore = FirebaseFirestore.getInstance()
 
-    override fun registerUser(email: String, password: String): FirebaseUser? {
+    override suspend fun registerUser(email: String, password: String): FirebaseUser? {
         val task = auth.createUserWithEmailAndPassword(email, password)
+        task.await()
         return if (task.isSuccessful){
             task.result.user
         }else{
@@ -30,9 +32,9 @@ open class FirebaseUserDAOImpl(internal val context: Context): FirebaseUserDAO{
         }
     }
 
-    override fun signInUser(email: String, password: String): Boolean { //TODO: AsyncTask
+    override suspend fun signInUser(email: String, password: String): Boolean { //TODO: AsyncTask
         val task = auth.signInWithEmailAndPassword(email, password)
-        Log.d("Sign In", task.result.toString())
+        task.await()
         return if (task.isSuccessful){
             true
         }else{

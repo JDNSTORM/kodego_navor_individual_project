@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.CreateAccountActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
@@ -77,20 +80,20 @@ class LoginFragment() : Fragment() {
             when (false) {
                 validateEmail(email) -> binding.email.requestFocus()
                 validateText(password) -> binding.password.requestFocus()
-                else -> FirebaseClient(firebaseInterface).signInUser(email, password)
-//                else -> { //TODO: AsyncTask
-//                    firebaseInterface.showProgressDialog()
-//                    if(FirebaseUserDAOImpl(requireContext()).signInUser(email, password)){
-//                        Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
-//                        val activity = requireActivity()
-//                        val intent = activity.intent
-//                        progressDialog.cancel()
-//                        activity.finish()
-//                        activity.startActivity(intent)
-//                    }else{
-//                        progressDialog.cancel()
-//                    }
-//                }
+//                else -> FirebaseClient(firebaseInterface).signInUser(email, password)
+                else -> lifecycleScope.launch{ //TODO: AsyncTask
+                    firebaseInterface.showProgressDialog()
+                    if(FirebaseUserDAOImpl(requireContext()).signInUser(email, password)){
+                        Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
+                        val activity = requireActivity()
+                        val intent = activity.intent
+                        progressDialog.cancel()
+                        activity.finish()
+                        activity.startActivity(intent)
+                    }else{
+                        progressDialog.cancel()
+                    }
+                }
             }
         }
     }
