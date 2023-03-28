@@ -17,7 +17,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 data class Profile(
     var profession: String = ""
 ): Account(), Parcelable{
-    override var uID : String = ""
     var profileID: String = ""
 
 
