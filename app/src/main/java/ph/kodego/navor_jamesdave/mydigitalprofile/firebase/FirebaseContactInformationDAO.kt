@@ -56,7 +56,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             .document(contactInformationID)
             .get()
         task.await()
-        return if (task.isSuccessful){
+        return if (task.isSuccessful && task.result.data != null){
             Log.i("Contact Information", task.result.toString())
             val contactInformation = task.result.toObject(ContactInformation::class.java)!!
             Log.d("ContactInformationID", contactInformation.contactInformationID)
@@ -96,7 +96,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
         val task = fireStore.collection(collection).document(contactInformation.contactInformationID)
             .collection(subCollection).document(contactInformation.contactInformationID).get()
         task.await()
-        return if (task.isSuccessful){
+        return if (task.isSuccessful && task.result.data != null){
             Log.i("Email", task.result.toString())
             task.result.toObject(EmailAddress::class.java)!!
         }else{

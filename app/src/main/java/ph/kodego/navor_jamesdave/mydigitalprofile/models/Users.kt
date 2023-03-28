@@ -3,6 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.IgnoreExtraProperties
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 
 /**
@@ -16,16 +17,18 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 data class Profile(
     var profession: String = ""
 ): Account(), Parcelable{
+    override var uID : String = ""
     var profileID: String = ""
 
 
     override fun setParcel(parcel: Parcel) {
         super.setParcel(parcel)
         profession = parcel.readString()!!
+        uID = parcel.readString()!!
         profileID = parcel.readString()!!
     }
     constructor(parcel: Parcel) : this() {
-        setParcel(parcel)
+        this.setParcel(parcel)
     }
 
     constructor(profileID: String, profession: String = ""): this(profession){
@@ -35,6 +38,7 @@ data class Profile(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
         parcel.writeString(profession)
+        parcel.writeString(uID)
         parcel.writeString(profileID)
     }
 

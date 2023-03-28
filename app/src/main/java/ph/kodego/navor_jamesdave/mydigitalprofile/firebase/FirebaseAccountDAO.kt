@@ -64,7 +64,7 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
             .get()
         task.await()
         Log.d("Get Account", task.result.toString())
-        return if (task.isSuccessful){
+        return if (task.isSuccessful && task.result.data != null){
             Log.i("Account Document Retrieved", task.result.toString())
             val account = task.result.toObject(Account::class.java)!!
             account.contactInformation = FirebaseContactInformationDAOImpl().getContactInformation(account.contactInformationID)
