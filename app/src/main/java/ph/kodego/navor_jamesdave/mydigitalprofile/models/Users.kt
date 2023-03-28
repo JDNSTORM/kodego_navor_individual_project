@@ -19,11 +19,9 @@ data class Profile(
 ): Account(), Parcelable{
     var profileID: String = ""
 
-
     override fun setParcel(parcel: Parcel) {
         super.setParcel(parcel)
         profession = parcel.readString()!!
-        uID = parcel.readString()!!
         profileID = parcel.readString()!!
     }
     constructor(parcel: Parcel) : this() {
@@ -37,7 +35,6 @@ data class Profile(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
         parcel.writeString(profession)
-        parcel.writeString(uID)
         parcel.writeString(profileID)
     }
 
