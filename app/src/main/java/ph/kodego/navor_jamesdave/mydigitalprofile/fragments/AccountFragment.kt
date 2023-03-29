@@ -14,12 +14,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountSettingsActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
 
@@ -58,12 +55,20 @@ class AccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        FirebaseClient(firebaseInterface).getAccount()
         dao = FirebaseAccountDAOImpl(requireContext())
         progressDialog = ProgressDialog(view.context, R.string.loading_account)
 
-        lifecycleScope.launch {//TODO: Proper Coroutine?
-            progressDialog.show()
+        setAccount()
+
+        binding.btnAccountInformation.setOnClickListener { goToAccountInformation() }
+        binding.btnAccountSettings.setOnClickListener { goToAccountSettings() }
+        binding.btnViewProfile.setOnClickListener { goToProfile() }
+        binding.btnSignOut.setOnClickListener { signOut() }
+    }
+
+    private fun setAccount(){
+        progressDialog.show()
+        lifecycleScope.launch {
             val firebaseAccount = dao.getAccount(dao.getCurrentUserID())
             if (firebaseAccount != null) {
                 account = firebaseAccount
@@ -80,11 +85,6 @@ class AccountFragment : Fragment() {
                 signOut()
             }
         }
-
-        binding.btnAccountInformation.setOnClickListener { goToAccountInformation() }
-        binding.btnAccountSettings.setOnClickListener { goToAccountSettings() }
-        binding.btnViewProfile.setOnClickListener { goToProfile() }
-        binding.btnSignOut.setOnClickListener { signOut() }
     }
 
     private fun goToAccountInformation(){
@@ -108,36 +108,5 @@ class AccountFragment : Fragment() {
         val intent = activity.intent
         activity.finish()
         activity.startActivity(intent)
-    }
-
-    private val firebaseInterface = object: FirebaseAccountInterface {
-        override fun getAccountSuccess(account: Account) {
-            this@AccountFragment.account = account
-            val fullName = "${account.firstName} ${account.lastName}"
-            with(binding){
-                profileUserName.text = fullName
-                email.text = account.contactInformation!!.emailAddress!!.email
-                profilePicture.setImageResource(account.profilePicture)
-            }
-        }
-
-        override fun getAccountFailed() {
-            Toast.makeText(context, "Failed to get Account Data", Toast.LENGTH_LONG).show()
-            signOut()
-        }
-
-        override fun showProgressDialog() {
-            progressDialog = Dialog(requireContext())
-            val progressBinding = DialogueProgressBinding.inflate(layoutInflater)
-            progressBinding.progressText.setText(R.string.loading_account)
-            progressDialog.setContentView(progressBinding.root)
-            progressDialog.setCancelable(false)
-            progressDialog.show()
-        }
-
-        override fun hideProgressDialog() {
-            progressDialog.dismiss()
-        }
-
     }
 }

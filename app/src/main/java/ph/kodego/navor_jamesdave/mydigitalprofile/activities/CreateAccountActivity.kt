@@ -13,10 +13,7 @@ import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityCreateAccountBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseRegisterInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
 
@@ -65,50 +62,21 @@ class CreateAccountActivity : AppCompatActivity() {
                 validateText(password) -> binding.password.requestFocus()
                 validateText(confirmPassword) -> binding.confirmPassword.requestFocus()
                 validatePassword(password, confirmPassword) -> binding.password.requestFocus()
-//                else -> FirebaseClient(firebaseInterface).registerUser(firstName, lastName, email, password)
-                else -> {
-                    progressDialog.show()
-                    lifecycleScope.launch {
-                        val dao = FirebaseAccountDAOImpl(applicationContext)
-                        if (dao.registerAccount(firstName, lastName, email, password)) {
-                            progressDialog.dismiss()
-                            finish()
-                        } else {
-                            progressDialog.dismiss()
-                        }
-                    }
-                }
+                else -> registerAccount(firstName, lastName, email, password)
             }
         }
     }
 
-    private val firebaseInterface = object: FirebaseRegisterInterface {
-        override fun showProgressDialog() {
-            progressDialog = Dialog(binding.root.context)
-            val progressBinding = DialogueProgressBinding.inflate(layoutInflater)
-            progressBinding.progressText.setText(R.string.signing_up)
-            progressDialog.setContentView(progressBinding.root)
-            progressDialog.setCancelable(false)
-            progressDialog.show()
-        }
-
-        override fun hideProgressDialog() {
-            progressDialog.dismiss()
-        }
-
-        override fun userRegistrationFail(message: String) {
-            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
-        }
-
-        override fun accountRegistrationSuccess() {
-            Toast.makeText(applicationContext, "Account Registration Successful", Toast.LENGTH_SHORT).show()
-            FirebaseAuth.getInstance().signOut()
-            finish()
-        }
-
-        override fun accountRegistrationFail() {
-            Toast.makeText(applicationContext, "Account Registration Fail", Toast.LENGTH_LONG)
-                .show()
+    private fun registerAccount(firstName: String, lastName: String, email: String, password: String){
+        progressDialog.show()
+        lifecycleScope.launch {
+            val dao = FirebaseAccountDAOImpl(applicationContext)
+            if (dao.registerAccount(firstName, lastName, email, password)) {
+                progressDialog.dismiss()
+                finish()
+            } else {
+                progressDialog.dismiss()
+            }
         }
     }
 

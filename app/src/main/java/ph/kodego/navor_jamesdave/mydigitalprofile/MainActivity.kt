@@ -6,7 +6,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.AccountFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.HomeFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.LoginFragment
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
 
         fragmentAdapter.addFragment(HomeFragment())
-        val currentUserId = FirebaseClient().getCurrentUserID()
+        val currentUserId = FirebaseAccountDAOImpl(applicationContext).getCurrentUserID()
         var accountFragment: AccountFragment? = null
         if (currentUserId.isNotEmpty()) {
             accountFragment = AccountFragment()

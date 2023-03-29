@@ -9,14 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.CreateAccountActivity
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ForgotPasswordActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentLoginBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseClient
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseLoginInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
@@ -59,19 +56,15 @@ class LoginFragment() : Fragment() {
         progressDialog = ProgressDialog(binding.root.context, R.string.signing_in)
 
         binding.btnSignIn.setOnClickListener {
-//            val fragmentAdapter = (requireActivity() as MainActivity).getFragmentAdapter()
-//            val viewPager = (requireActivity() as MainActivity).getViewPager()
-//            fragmentAdapter.fragmentList.remove(this)
-////            fragmentAdapter.notifyItemRemoved(fragmentAdapter.fragmentList.indexOf(this))
-//            fragmentAdapter.addFragment(AccountFragment())
-//            fragmentAdapter.notifyItemInserted(fragmentAdapter.fragmentList.indexOf(AccountFragment()))
-//            viewPager.adapter = fragmentAdapter
-
             validateForm()
         }
 
         binding.btnSignUp.setOnClickListener {
             val intent = Intent(context, CreateAccountActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btnForgotPassword.setOnClickListener {
+            val intent = Intent(context, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
     }
@@ -83,49 +76,24 @@ class LoginFragment() : Fragment() {
             when (false) {
                 validateEmail(email) -> binding.email.requestFocus()
                 validateText(password) -> binding.password.requestFocus()
-//                else -> FirebaseClient(firebaseInterface).signInUser(email, password)
-                else -> lifecycleScope.launch{ //TODO: Proper Coroutine?
-                    progressDialog.show()
-                    if(FirebaseUserDAOImpl(requireContext()).signInUser(email, password)){
-                        Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
-                        val activity = requireActivity()
-                        val intent = activity.intent
-                        progressDialog.cancel()
-                        activity.finish()
-                        activity.startActivity(intent)
-                    }else{
-                        progressDialog.cancel()
-                    }
-                }
+                else -> signIn(email, password)
             }
         }
     }
 
-    private val firebaseInterface = object: FirebaseLoginInterface {
-        override fun signInSuccessful() {
-            Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
-            val activity = requireActivity()
-            val intent = activity.intent
-            progressDialog.cancel()
-            activity.finish()
-            activity.startActivity(intent)
-        }
-
-        override fun signInFailed(message: String) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-            progressDialog.cancel()
-        }
-
-        override fun showProgressDialog() {
-            progressDialog = Dialog(requireContext())
-            val progressBinding = DialogueProgressBinding.inflate(layoutInflater)
-            progressBinding.progressText.setText(R.string.signing_in)
-            progressDialog.setContentView(progressBinding.root)
-            progressDialog.setCancelable(false)
+    private fun signIn(email: String, password: String){
+        lifecycleScope.launch{ //TODO: Proper Coroutine?
             progressDialog.show()
-        }
-        override fun hideProgressDialog() {
-            progressDialog.dismiss()
+            if(FirebaseUserDAOImpl(requireContext()).signInUser(email, password)){
+                Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
+                val activity = requireActivity()
+                val intent = activity.intent
+                progressDialog.cancel()
+                activity.finish()
+                activity.startActivity(intent)
+            }else{
+                progressDialog.cancel()
+            }
         }
     }
 }
