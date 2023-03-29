@@ -33,5 +33,6 @@
         android:contentDescription="Delete Button"
         android:padding="5dp"
         android:src="@drawable/ic_delete_24"
+        android:visibility="gone"
         />
 </LinearLayout>
