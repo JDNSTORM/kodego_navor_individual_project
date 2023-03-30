@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfile
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 
@@ -24,7 +25,7 @@ class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
             .collection(collection)
             .document(profile.uID)
         profile.profileID = reference.id
-        val task = reference.set(profile, SetOptions.merge())
+        val task = reference.set(profile.exportFirebaseProfile(), SetOptions.merge())
         task.await()
         return if (task.isSuccessful){
             Log.i("Profile Creation", "Successful")
@@ -37,16 +38,16 @@ class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
 
     override suspend fun getProfile(uID: String): Profile {
         val task = fireStore
-//            .collection(FirebaseCollections.Accounts) //TODO: Cannot find profile without this
-//            .document(uID)
+            .collection(FirebaseCollections.Accounts) //TODO: Cannot find profile without this
+            .document(uID)
             .collection(collection)
             .document(uID)
             .get()
         task.await()
         return if (task.isSuccessful && task.result.data != null){
             Log.i("Profile", task.result.toString())
-            val profile = task.result.toObject(Profile::class.java)!!
-            profile
+            val profile = task.result.toObject(FirebaseProfile::class.java)!!
+            Profile(profile)
         }else{
             Log.e("Get Profile", task.exception?.message.toString())
             val profile = Profile()

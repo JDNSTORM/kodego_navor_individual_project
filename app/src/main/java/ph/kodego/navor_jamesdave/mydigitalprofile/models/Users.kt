@@ -5,6 +5,7 @@ import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfile
 
 /**
  * Data Flow
@@ -19,6 +20,7 @@ data class Profile(
 ): Account(), Parcelable{
     var profileID: String = ""
 
+
     override fun setParcel(parcel: Parcel) {
         super.setParcel(parcel)
         profession = parcel.readString()!!
@@ -30,6 +32,18 @@ data class Profile(
 
     constructor(profileID: String, profession: String = ""): this(profession){
         this.profileID = profileID
+    }
+    fun exportFirebaseProfile(): FirebaseProfile{
+        return FirebaseProfile(uID, profileID, profession)
+    }
+    fun importFirebaseProfile(firebaseProfile: FirebaseProfile){
+        uID = firebaseProfile.uid
+        profileID = firebaseProfile.profileID
+        profession = firebaseProfile.profession
+    }
+    constructor(firebaseProfile: FirebaseProfile): this(firebaseProfile.profession){
+        uID = firebaseProfile.uid
+        profileID = firebaseProfile.profileID
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
