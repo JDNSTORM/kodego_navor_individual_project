@@ -79,6 +79,7 @@ class AccountInformationActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 if (FirebaseAccountDAOImpl(binding.root.context).updateAccount(updatedAccountData)){
                     account.setAccount(updatedAccount)
+                    Toast.makeText(applicationContext, "Account Updated", Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
                     finish()
                 }else{

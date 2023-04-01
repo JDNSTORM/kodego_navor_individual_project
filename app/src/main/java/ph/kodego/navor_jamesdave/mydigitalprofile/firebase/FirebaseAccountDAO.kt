@@ -81,8 +81,6 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
             .document(getCurrentUserID())
             .update(fields)
         task.await()
-        Log.d("Update Account", task.toString())
-        Toast.makeText(context, "Account Updated", Toast.LENGTH_SHORT).show()
         return task.isSuccessful
     }
 
