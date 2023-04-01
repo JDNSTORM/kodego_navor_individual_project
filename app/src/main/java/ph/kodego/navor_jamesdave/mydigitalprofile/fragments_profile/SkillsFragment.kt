@@ -20,7 +20,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBind
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMainBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
 /**
  *  Main Category
@@ -52,8 +52,8 @@ class SkillsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        profile = if (requireArguments().containsKey(Constants.BundleProfile)){
-            requireArguments().getParcelable<Profile>(Constants.BundleProfile)!!
+        profile = if (requireArguments().containsKey(IntentBundles.Profile)){
+            requireArguments().getParcelable<Profile>(IntentBundles.Profile)!!
         }else{
             Profile()
         }

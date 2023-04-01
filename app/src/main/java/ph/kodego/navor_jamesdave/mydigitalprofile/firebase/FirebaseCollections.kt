@@ -5,4 +5,6 @@ object FirebaseCollections {
     const val ContactInformation: String = "contactInformation"
     const val Email: String = "emailAddresses"
     const val Profile: String = "profiles"
+    const val Address: String = "addresses"
+    const val ContactNumber: String = "contactNumbers"
 }

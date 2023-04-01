@@ -11,5 +11,16 @@ class AccountSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupActionBar()
+    }
+
+
+    private fun setupActionBar(){
+        setSupportActionBar(binding.tbTop)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.tbTop.setNavigationOnClickListener {
+//            onBackPressedDispatcher //TODO: Implement
+            onBackPressed()
+        }
     }
 }

@@ -17,7 +17,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
 
 class AccountFragment : Fragment() {
@@ -89,16 +89,18 @@ class AccountFragment : Fragment() {
 
     private fun goToAccountInformation(){
         val intent = Intent(context, AccountInformationActivity::class.java)
+        intent.putExtra(IntentBundles.Account, account)
         startActivity(intent)
     }
     private fun goToAccountSettings(){
         val intent = Intent(context, AccountSettingsActivity::class.java)
+        intent.putExtra(IntentBundles.Account, account)
         startActivity(intent)
     }
 
     private fun goToProfile(){
         val intent = Intent(context, ProfileActivity::class.java)
-        intent.putExtra(Constants.BundleAccount, account)
+        intent.putExtra(IntentBundles.Account, account)
         startActivity(intent)
     }
 

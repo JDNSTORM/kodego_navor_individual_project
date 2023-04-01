@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
 
 class ProfileFragment : Fragment() {
@@ -42,8 +42,8 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        profile = if(requireArguments().containsKey(Constants.BundleProfile)){
-            requireArguments().getParcelable(Constants.BundleProfile)!!
+        profile = if(requireArguments().containsKey(IntentBundles.Profile)){
+            requireArguments().getParcelable(IntentBundles.Profile)!!
         }else{
             Profile()
         }

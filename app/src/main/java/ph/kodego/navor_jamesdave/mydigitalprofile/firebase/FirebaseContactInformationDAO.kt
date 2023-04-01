@@ -3,20 +3,24 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
-interface FirebaseContactInformationDAO {
+interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO {
     suspend fun addContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun getContactInformation(contactInformationID: String): ContactInformation?
+}
+interface FirebaseEmailDAO{
     suspend fun addEmail(emailAddress: EmailAddress): Boolean //TODO: Separate DAO?
-    suspend fun registerEmail(emailAddress: EmailAddress)
+    suspend fun registerEmail(emailAddress: EmailAddress) //TODO: Not Needed?
     suspend fun getEmail(contactInformation: ContactInformation): EmailAddress?
+    suspend fun deleteEmail()
+}
+interface FirebaseAddressDAO{
+
 }
 
 class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
@@ -52,7 +56,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
 
     override suspend fun getContactInformation(contactInformationID: String): ContactInformation? {
         val task = fireStore
-            .collection(Constants.CollectionContactInformation)
+            .collection(IntentBundles.CollectionContactInformation)
             .document(contactInformationID)
             .get()
         task.await()
@@ -74,7 +78,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             .document(emailAddress.contactInformationID)
             .collection(FirebaseCollections.Email)
             .document(emailAddress.contactInformationID)
-        val emailReference = fireStore.collection(Constants.CollectionEmail).document()
+        val emailReference = fireStore.collection(IntentBundles.CollectionEmail).document()
         emailAddress.id = emailReference.id
         val task = reference.set(emailAddress, SetOptions.merge())
         task.await()
@@ -92,7 +96,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun getEmail(contactInformation: ContactInformation): EmailAddress? {
-        val subCollection = Constants.CollectionEmail
+        val subCollection = IntentBundles.CollectionEmail
         val task = fireStore.collection(collection).document(contactInformation.contactInformationID)
             .collection(subCollection).document(contactInformation.contactInformationID).get()
         task.await()
@@ -103,6 +107,10 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             Log.e("Get Email", task.exception!!.message.toString())
             null
         }
+    }
+
+    override suspend fun deleteEmail() {
+        TODO("Not yet implemented")
     }
 
 }

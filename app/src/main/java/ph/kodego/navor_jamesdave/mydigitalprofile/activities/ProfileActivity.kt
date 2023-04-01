@@ -2,7 +2,6 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -18,7 +17,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragm
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
@@ -29,27 +28,23 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.tbTop)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.tbTop.setNavigationOnClickListener {
-//            onBackPressedDispatcher
-            onBackPressed()
-        }
+        setupActionBar()
+
         dao = FirebaseProfileDAOImpl(binding.root.context)
 
         val profileBundle = Bundle()
         lifecycleScope.launch {
-            if (intent.hasExtra(Constants.BundleProfile)) {//TODO: Proper Data Handling
-                profile = intent.getParcelableExtra(Constants.BundleProfile)!!
+            if (intent.hasExtra(IntentBundles.Profile)) {//TODO: Proper Data Handling
+                profile = intent.getParcelableExtra(IntentBundles.Profile)!!
 //            profile = intent.getParcelableExtra(Constants.BundleProfile, Profile::class.java)!! //TODO: For API 33
-            } else if (intent.hasExtra(Constants.BundleAccount)) { //TODO: Retrieve Profile
-                val account: Account = intent.getParcelableExtra(Constants.BundleAccount)!!
+            } else if (intent.hasExtra(IntentBundles.Account)) { //TODO: Retrieve Profile
+                val account: Account = intent.getParcelableExtra(IntentBundles.Account)!!
                 profile = dao.getProfile(account.uID)
                 profile.setAccount(account)
             } else { //TODO: Throw Error and Finish Activity
                 profile = Profile()
             }
-            profileBundle.putParcelable(Constants.BundleProfile, profile)
+            profileBundle.putParcelable(IntentBundles.Profile, profile)
 
             with(binding.viewholderProfile) {
                 profilePicture.setImageResource(profile.profilePicture)
@@ -83,6 +78,14 @@ class ProfileActivity : AppCompatActivity() {
                 tab.text = text
                 tab.setIcon(icon)
             }.attach()
+        }
+    }
+    private fun setupActionBar(){
+        setSupportActionBar(binding.tbTop)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.tbTop.setNavigationOnClickListener {
+//            onBackPressedDispatcher //TODO: Implement
+            onBackPressed()
         }
     }
 }

@@ -1,14 +1,11 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.Constants
 
 interface FirebaseUserDAO {
     suspend fun registerUser(email: String, password: String): FirebaseUser?

@@ -4,9 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, School
-    @PropertyName("id")
     var contactInformationID: String = ""
 ): Parcelable {
     @get:Exclude
@@ -17,86 +18,38 @@ open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, Scho
     var contactNumber: ContactNumber? = null
     @get:Exclude
     var website: Website? = null
-
-    constructor(parcel: Parcel) : this(parcel.readString()!!) {
-        emailAddress = parcel.readParcelable(EmailAddress::class.java.classLoader)
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(contactInformationID)
-        parcel.writeParcelable(emailAddress, flags)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<ContactInformation> {
-        override fun createFromParcel(parcel: Parcel): ContactInformation {
-            return ContactInformation(parcel)
-        }
-
-        override fun newArray(size: Int): Array<ContactInformation?> {
-            return arrayOfNulls(size)
-        }
-    }
 }
 
+@Parcelize
 data class EmailAddress( //TODO: Inherit ContactInformation?
     var id: String = "",
     var contactInformationID: String = "",
     var email: String = ""
-): Parcelable {
-    constructor(): this("", "", "")
-    constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!
-    ) {
-    }
+): Parcelable
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
-        parcel.writeString(contactInformationID)
-        parcel.writeString(email)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<EmailAddress> {
-        override fun createFromParcel(parcel: Parcel): EmailAddress {
-            return EmailAddress(parcel)
-        }
-
-        override fun newArray(size: Int): Array<EmailAddress?> {
-            return arrayOfNulls(size)
-        }
-    }
-
-}
-
+@Parcelize
 data class Address(
-    var id: Long = 0,
-    val contactInformationID: Long,
+    var id: String = "",
+    val contactInformationID: String = "",
     var streetAddress: String = "",
     var subdivision: String = "",
-    var cityOrMunicipality: String,
-    var province: String,
-    var zipCode: Int,
-    var country: String
-)
+    var cityOrMunicipality: String = "",
+    var province: String = "",
+    var zipCode: Int = 0,
+    var country: String = ""
+): Parcelable
 
+@Parcelize
 data class ContactNumber(
-    var id: Long = 0,
-    val contactInformationID: Int,
-    var areaCode: Int,
-    var contact: Int
-)
+    var id: String = "",
+    val contactInformationID: String = "",
+    var areaCode: String = "",
+    var contact: Int = 0
+): Parcelable
 
+@Parcelize
 data class Website(
-    var id: Long = 0,
-    val contactInformationID: Long,
-    var domain: String
-)
+    var id: String = "",
+    val contactInformationID: String = "",
+    var website: String = ""
+): Parcelable

@@ -10,13 +10,14 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.*
 
+@Deprecated("Implemented DAO")
 class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     private val auth = FirebaseAuth.getInstance()
     private val fireStore = FirebaseFirestore.getInstance()
 
     private fun registerContactInformation(contactInformation: ContactInformation){
         fireStore
-            .collection(Constants.CollectionContactInformation)
+            .collection(IntentBundles.CollectionContactInformation)
             .document(contactInformation.contactInformationID)
             .set(contactInformation, SetOptions.merge())
             .addOnSuccessListener {
@@ -31,9 +32,9 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     }
     private fun registerEmail(emailAddress: EmailAddress){
         fireStore
-            .collection(Constants.CollectionContactInformation)
+            .collection(IntentBundles.CollectionContactInformation)
             .document(emailAddress.contactInformationID)
-            .collection(Constants.CollectionEmail)
+            .collection(IntentBundles.CollectionEmail)
             .document(emailAddress.contactInformationID)
             .set(emailAddress, SetOptions.merge())
             .addOnSuccessListener {
@@ -48,7 +49,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
         firebaseInterface as FirebaseRegisterInterface //TODO: Check if plausible
 
         fireStore
-            .collection(Constants.CollectionAccounts)
+            .collection(IntentBundles.CollectionAccounts)
             .document(getCurrentUserID())
             .set(account, SetOptions.merge())
             .addOnSuccessListener {
@@ -71,8 +72,8 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
             if(task.isSuccessful){
                 val firebaseUser: FirebaseUser = task.result!!.user!!
                 val registeredEmail = firebaseUser.email!!
-                val contactInformationReference = fireStore.collection(Constants.CollectionContactInformation).document()
-                val emailDocument = fireStore.collection(Constants.CollectionEmail).document()
+                val contactInformationReference = fireStore.collection(IntentBundles.CollectionContactInformation).document()
+                val emailDocument = fireStore.collection(IntentBundles.CollectionEmail).document()
 
                 val emailAddress = EmailAddress(emailDocument.id, contactInformationReference.id, registeredEmail)
                 val contactInformation = ContactInformation(contactInformationReference.id)
@@ -111,7 +112,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
         firebaseInterface as FirebaseAccountInterface
         firebaseInterface.showProgressDialog()
         fireStore
-            .collection(Constants.CollectionAccounts)
+            .collection(IntentBundles.CollectionAccounts)
             .document(getCurrentUserID())
             .get()
             .addOnSuccessListener { document ->
@@ -129,7 +130,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     private fun getAccountContactInformation(account: Account){
         firebaseInterface as FirebaseAccountInterface
         fireStore
-            .collection(Constants.CollectionContactInformation)
+            .collection(IntentBundles.CollectionContactInformation)
             .document(account.contactInformationID!!)
             .get()
             .addOnSuccessListener { document ->
@@ -149,8 +150,8 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     private fun getAccountEmailAddress(account: Account){
         firebaseInterface as FirebaseAccountInterface
 
-        fireStore.collection(Constants.CollectionContactInformation).document(account.contactInformationID!!)
-            .collection(Constants.CollectionEmail).document(account.contactInformationID!!).get()
+        fireStore.collection(IntentBundles.CollectionContactInformation).document(account.contactInformationID!!)
+            .collection(IntentBundles.CollectionEmail).document(account.contactInformationID!!).get()
             .addOnSuccessListener { document ->
                 Log.i("Email Retrieved", document.toString())
                 account.contactInformation!!.emailAddress = document.toObject(EmailAddress::class.java)!!
