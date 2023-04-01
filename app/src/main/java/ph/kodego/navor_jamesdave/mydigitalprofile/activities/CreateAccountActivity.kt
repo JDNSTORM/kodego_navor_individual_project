@@ -55,7 +55,7 @@ class CreateAccountActivity : AppCompatActivity() {
         val confirmPassword = binding.confirmPassword.text.toString()
 
         with(formControls){
-            when(false){
+            when(false){ //TODO: Simplify
                 validateText(firstName) -> binding.firstName.requestFocus()
                 validateText(lastName) -> binding.lastName.requestFocus()
                 validateEmail(email) -> binding.email.requestFocus()
