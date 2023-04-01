@@ -111,4 +111,9 @@ class AccountFragment : Fragment() {
         activity.finish()
         activity.startActivity(intent)
     }
+
+    override fun onResume() {
+        super.onResume()
+        setAccount()
+    }
 }

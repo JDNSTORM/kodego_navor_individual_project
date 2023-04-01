@@ -1,12 +1,14 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.utils
 
-import android.content.Context
 import android.text.InputType
 import android.util.Log
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
+import kotlin.reflect.full.memberProperties
 
 class FormControls {
     fun validateText(text: String): Boolean{
@@ -38,5 +40,35 @@ class FormControls {
     }
     fun setValidationListener(textInputEditText: TextInputEditText, textInputLayout: TextInputLayout){
 
+    }
+
+    fun getModified(source: Any, edited: Any): HashMap<String, Any?>{
+        val modified: HashMap<String, Any?> = HashMap()
+        val original: HashMap<String, Any?> = when(source){
+            is Account -> {
+                source.asMap() as HashMap<String, Any?>
+            }
+            is ContactInformation -> source as HashMap<String, Any?>
+            else -> {
+                HashMap()
+            }
+        }
+        val updated: HashMap<String, Any?> = when(edited){
+            is Account -> edited.asMap() as HashMap<String, Any?>
+            is ContactInformation -> edited.asMap() as HashMap<String, Any?>
+            else -> HashMap()
+        }
+        Log.i("Source", original.toString())
+        Log.i("Edited", updated.toString())
+        for (key in original.keys){
+            if (original[key] != updated[key]){
+                modified[key] = updated[key]
+            }
+        }
+        return modified
+    }
+    private inline fun <reified T : Any> T.asMap() : Map<String, Any?> {
+        val props = T::class.memberProperties.associateBy { it.name }
+        return props.keys.associateWith { props[it]?.get(this) }
     }
 }

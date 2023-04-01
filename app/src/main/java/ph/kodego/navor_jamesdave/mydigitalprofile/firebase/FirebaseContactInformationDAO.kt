@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
@@ -14,13 +15,14 @@ interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO {
     suspend fun getContactInformation(contactInformationID: String): ContactInformation?
 }
 interface FirebaseEmailDAO{
-    suspend fun addEmail(emailAddress: EmailAddress): Boolean //TODO: Separate DAO?
+    suspend fun addEmail(emailAddress: EmailAddress): Boolean
     suspend fun registerEmail(emailAddress: EmailAddress) //TODO: Not Needed?
     suspend fun getEmail(contactInformation: ContactInformation): EmailAddress?
     suspend fun deleteEmail()
 }
 interface FirebaseAddressDAO{
-
+    suspend fun addAddress(address: Address): Boolean
+    suspend fun getAddress(contactInformation: ContactInformation): Address?
 }
 
 class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
@@ -33,6 +35,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
         contactInformation.contactInformationID = reference.id
         val task = reference.set(contactInformation, SetOptions.merge())
         task.await()
+        Log.d("Contact Registration", task.result.toString(), task.exception)
         return if (task.isSuccessful){
             Log.i("Contact Registration", "Successful")
             true
@@ -73,10 +76,11 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun addEmail(emailAddress: EmailAddress): Boolean {
+        val subCollection = FirebaseCollections.Email
         val reference = fireStore
             .collection(collection)
             .document(emailAddress.contactInformationID)
-            .collection(FirebaseCollections.Email)
+            .collection(subCollection)
             .document(emailAddress.contactInformationID)
         val emailReference = fireStore.collection(IntentBundles.CollectionEmail).document()
         emailAddress.id = emailReference.id
@@ -96,7 +100,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun getEmail(contactInformation: ContactInformation): EmailAddress? {
-        val subCollection = IntentBundles.CollectionEmail
+        val subCollection = FirebaseCollections.Email
         val task = fireStore.collection(collection).document(contactInformation.contactInformationID)
             .collection(subCollection).document(contactInformation.contactInformationID).get()
         task.await()
@@ -111,6 +115,42 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
 
     override suspend fun deleteEmail() {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun addAddress(address: Address): Boolean {
+        val subCollection = FirebaseCollections.Email
+        val reference = fireStore
+            .collection(collection)
+            .document(address.contactInformationID)
+            .collection(subCollection)
+            .document(address.contactInformationID)
+        val addressReference = fireStore.collection(IntentBundles.CollectionEmail).document()
+        address.id = addressReference.id
+        val task = reference.set(address, SetOptions.merge())
+        task.await()
+        Log.d("Address Registration", task.result.toString(), task.exception)
+        return if (task.isSuccessful){
+            Log.i("Address Registration", "Successful")
+            true
+        }else{
+            Log.e("Address Registration", task.exception!!.message.toString())
+            false
+        }
+    }
+
+    override suspend fun getAddress(contactInformation: ContactInformation): Address? {
+        val subCollection = FirebaseCollections.Email
+        val task = fireStore.collection(collection).document(contactInformation.contactInformationID)
+            .collection(subCollection).document(contactInformation.contactInformationID).get()
+        task.await()
+        Log.d("Address", task.result.toString(), task.exception)
+        return if (task.isSuccessful && task.result.data != null){
+            Log.i("Address", task.result.toString())
+            task.result.toObject(Address::class.java)!!
+        }else{
+            Log.e("Get Email", task.exception!!.message.toString())
+            null
+        }
     }
 
 }

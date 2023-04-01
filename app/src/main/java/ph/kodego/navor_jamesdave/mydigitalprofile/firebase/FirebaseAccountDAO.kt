@@ -13,7 +13,7 @@ interface FirebaseAccountDAO {
     suspend fun addAccount(account: Account): Boolean
     suspend fun registerAccount(firstName: String, lastName: String, email: String, password: String): Boolean
     suspend fun getAccount(uID: String): Account?
-    suspend fun updateAccount(fields: HashMap<String, Any>): Boolean
+    suspend fun updateAccount(fields: HashMap<String, Any?>): Boolean
     suspend fun deleteAccount()
 }
 
@@ -75,13 +75,14 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
         }
     }
 
-    override suspend fun updateAccount(fields: HashMap<String, Any>): Boolean {
+    override suspend fun updateAccount(fields: HashMap<String, Any?>): Boolean {
         val task = fireStore
             .collection(collection)
             .document(getCurrentUserID())
             .update(fields)
         task.await()
-        Log.d("Update Account", task.result.toString(), task.exception)
+        Log.d("Update Account", task.toString())
+        Toast.makeText(context, "Account Updated", Toast.LENGTH_SHORT).show()
         return task.isSuccessful
     }
 
