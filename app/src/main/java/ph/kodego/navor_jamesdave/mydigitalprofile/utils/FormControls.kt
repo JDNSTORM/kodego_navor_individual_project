@@ -7,6 +7,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import kotlin.reflect.full.memberProperties
 
@@ -48,7 +49,8 @@ class FormControls {
             is Account -> {
                 source.asMap() as HashMap<String, Any?>
             }
-            is ContactInformation -> source as HashMap<String, Any?>
+            is ContactInformation -> source.asMap() as HashMap<String, Any?>
+            is Address -> source.asMap() as HashMap<String, Any?>
             else -> {
                 HashMap()
             }
@@ -56,6 +58,7 @@ class FormControls {
         val updated: HashMap<String, Any?> = when(edited){
             is Account -> edited.asMap() as HashMap<String, Any?>
             is ContactInformation -> edited.asMap() as HashMap<String, Any?>
+            is Address -> edited.asMap() as HashMap<String, Any?>
             else -> HashMap()
         }
         Log.i("Source", original.toString())

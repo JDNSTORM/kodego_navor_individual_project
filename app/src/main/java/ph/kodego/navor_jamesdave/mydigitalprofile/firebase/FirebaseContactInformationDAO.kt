@@ -23,6 +23,11 @@ interface FirebaseEmailDAO{
 interface FirebaseAddressDAO{
     suspend fun addAddress(address: Address): Boolean
     suspend fun getAddress(contactInformation: ContactInformation): Address?
+    suspend fun updateAddress(address: Address, fields: HashMap<String, Any?>): Boolean
+}
+
+interface FirebaseContactNumberDAO{
+    //TODO
 }
 
 class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
@@ -150,6 +155,19 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             Log.e("Get Email", task.exception!!.message.toString())
             null
         }
+    }
+
+    override suspend fun updateAddress(address: Address, fields: HashMap<String, Any?>): Boolean {
+        val subCollection = FirebaseCollections.Address
+        val task = fireStore
+            .collection(collection)
+            .document(address.contactInformationID)
+            .collection(subCollection)
+            .document(address.contactInformationID)
+            .update(fields)
+        task.await()
+        Log.i("Address Update", task.isSuccessful.toString())
+        return task.isSuccessful
     }
 
 }

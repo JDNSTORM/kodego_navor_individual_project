@@ -4,8 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
+import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 
+@Parcelize
 open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, School
     var contactInformationID: String = ""
 ): Parcelable {
@@ -25,25 +27,18 @@ open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, Scho
         website = parcel.readParcelable(Website::class.java.classLoader)
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(contactInformationID)
-        parcel.writeParcelable(emailAddress, flags)
-        parcel.writeParcelable(address, flags)
-        parcel.writeParcelable(contactNumber, flags)
-        parcel.writeParcelable(website, flags)
-    }
+    companion object : Parceler<ContactInformation> {
 
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<ContactInformation> {
-        override fun createFromParcel(parcel: Parcel): ContactInformation {
-            return ContactInformation(parcel)
+        override fun ContactInformation.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(contactInformationID)
+            parcel.writeParcelable(emailAddress, flags)
+            parcel.writeParcelable(address, flags)
+            parcel.writeParcelable(contactNumber, flags)
+            parcel.writeParcelable(website, flags)
         }
 
-        override fun newArray(size: Int): Array<ContactInformation?> {
-            return arrayOfNulls(size)
+        override fun create(parcel: Parcel): ContactInformation {
+            return ContactInformation(parcel)
         }
     }
 }
@@ -66,6 +61,44 @@ data class Address(
     var province: String = ""
     var zipCode: Int = 0
     var country: String = ""
+
+    constructor(parcel: Parcel) : this(parcel.readString()!!) {
+        id = parcel.readString()!!
+        streetAddress = parcel.readString()!!
+        subdivision = parcel.readString()!!
+        cityOrMunicipality = parcel.readString()!!
+        province = parcel.readString()!!
+        zipCode = parcel.readInt()
+        country = parcel.readString()!!
+    }
+
+    constructor(address: Address): this(address.contactInformationID){
+        id = address.id
+        streetAddress = address.streetAddress
+        subdivision = address.subdivision
+        cityOrMunicipality = address.cityOrMunicipality
+        province = address.cityOrMunicipality
+        zipCode = address.zipCode
+        country = address.country
+    }
+
+    companion object : Parceler<Address> {
+
+        override fun Address.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(contactInformationID)
+            parcel.writeString(id)
+            parcel.writeString(streetAddress)
+            parcel.writeString(subdivision)
+            parcel.writeString(cityOrMunicipality)
+            parcel.writeString(province)
+            parcel.writeInt(zipCode)
+            parcel.writeString(country)
+        }
+
+        override fun create(parcel: Parcel): Address {
+            return Address(parcel)
+        }
+    }
 }
 
 @Parcelize

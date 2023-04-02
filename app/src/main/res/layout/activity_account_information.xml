@@ -163,6 +163,7 @@
             android:id="@+id/zip_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="number"
             android:hint="ZIP Code"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -241,8 +242,8 @@
 <!--        android:text="Add Contact Number"-->
 <!--        android:layout_marginHorizontal="100dp"-->
 <!--        />-->
-    <include layout="@layout/viewholder_contact"
-        android:id="@+id/layout_contact"
+    <include layout="@layout/layout_contact_edit"
+        android:id="@+id/layout_contact_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"

@@ -3,6 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
@@ -10,7 +11,6 @@ import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountInformationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseContactInformationDAO
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseContactInformationDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
@@ -61,6 +61,8 @@ class AccountInformationActivity : AppCompatActivity() {
         val contactNumber = account.contactInformation!!.contactNumber
         binding.firstName.setText(account.firstName)
         binding.lastName.setText(account.lastName)
+        Log.d("Address", address.toString())
+        Log.d("Email", account.contactInformation!!.emailAddress.toString())
         if (address != null){
             binding.streetAddress.setText(address.streetAddress)
             binding.subdivision.setText(address.subdivision)
@@ -75,21 +77,31 @@ class AccountInformationActivity : AppCompatActivity() {
             }
         }
         if (contactNumber != null){
-            var contact = StringBuilder() //TODO: Format Contact Number
-            binding.layoutContact.contactNumber.setText("(${contactNumber.areaCode}) ${contactNumber.contact}")
+            binding.layoutContactEdit.telAreaCode.setText(contactNumber.areaCode)
+            binding.layoutContactEdit.telAreaCode.setText("${contactNumber.contact}")
         }
     }
     private fun checkFormData(){
         val updatedAccount = Account(account)
+        val updatedAddress = Address(updatedAccount.contactInformation!!.address!!)
         with(updatedAccount){
             firstName = binding.firstName.text.toString()
             lastName = binding.lastName.text.toString()
         }
+        with(updatedAddress){
+            streetAddress = binding.streetAddress.text.toString()
+            subdivision = binding.subdivision.text.toString()
+            cityOrMunicipality = binding.city.text.toString()
+            zipCode = binding.zipCode.text.toString().toInt()
+            province = binding.province.text.toString()
+            country = binding.country.text.toString()
+        }
         val updatedAccountData = FormControls().getModified(account, updatedAccount)
-        if (updatedAccountData.size > 0){
+        val updatedAddressData = FormControls().getModified(account.contactInformation!!.address!!, updatedAddress)
+        if (updatedAccountData.size > 0 || updatedAddressData.size > 0){
             progressDialog.show()
             lifecycleScope.launch {
-                if (accountDAO.updateAccount(updatedAccountData)){
+                if (accountDAO.updateAccount(updatedAccountData) && contactInformationDAO.updateAddress(updatedAddress, updatedAddressData)){ //TODO: Update Address
                     account.setAccount(updatedAccount) //TODO: ActivityForResult
                     Toast.makeText(applicationContext, "Account Updated", Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
