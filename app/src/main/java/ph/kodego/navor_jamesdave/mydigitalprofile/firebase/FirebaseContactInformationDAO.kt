@@ -68,6 +68,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             val contactInformation = task.result.toObject(ContactInformation::class.java)!!
             Log.d("ContactInformationID", contactInformation.contactInformationID)
             contactInformation.emailAddress = getEmail(contactInformation)
+            contactInformation.address = getAddress(contactInformation)
             contactInformation
         }else{
             Log.e("Get Contact Information", task.exception!!.message.toString())
@@ -118,7 +119,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun addAddress(address: Address): Boolean {
-        val subCollection = FirebaseCollections.Email
+        val subCollection = FirebaseCollections.Address
         val reference = fireStore
             .collection(collection)
             .document(address.contactInformationID)
@@ -128,7 +129,6 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
         address.id = addressReference.id
         val task = reference.set(address, SetOptions.merge())
         task.await()
-        Log.d("Address Registration", task.result.toString(), task.exception)
         return if (task.isSuccessful){
             Log.i("Address Registration", "Successful")
             true
@@ -139,11 +139,10 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun getAddress(contactInformation: ContactInformation): Address? {
-        val subCollection = FirebaseCollections.Email
+        val subCollection = FirebaseCollections.Address
         val task = fireStore.collection(collection).document(contactInformation.contactInformationID)
             .collection(subCollection).document(contactInformation.contactInformationID).get()
         task.await()
-        Log.d("Address", task.result.toString(), task.exception)
         return if (task.isSuccessful && task.result.data != null){
             Log.i("Address", task.result.toString())
             task.result.toObject(Address::class.java)!!
