@@ -9,7 +9,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountSet
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
-//TODO: Upload Image
+
 class AccountSettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountSettingsBinding
     private lateinit var dao: FirebaseUserDAOImpl

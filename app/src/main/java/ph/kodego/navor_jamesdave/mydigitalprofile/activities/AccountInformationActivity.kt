@@ -18,7 +18,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
-
+// TODO: Upload Image
 class AccountInformationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountInformationBinding
     private lateinit var account: Account
@@ -43,6 +43,8 @@ class AccountInformationActivity : AppCompatActivity() {
 
         setupActionBar()
         progressDialog = ProgressDialog(binding.root.context, R.string.updating_account)
+
+        binding.profilePicture.setOnClickListener { selectImageFromStorage() }
 
         binding.btnSave.setOnClickListener {
             checkFormData()
@@ -130,5 +132,9 @@ class AccountInformationActivity : AppCompatActivity() {
         }else{
             Snackbar.make(binding.root, "No Fields Changed", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun selectImageFromStorage(){
+        //TODO:
     }
 }
