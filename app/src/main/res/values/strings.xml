@@ -22,4 +22,5 @@
     <string name="field_required">Required</string>
     <string name="error_empty_field">Cannot be empty</string>
     <string name="updating_account">Updating Account</string>
+    <string name="updating_password">Updating Password</string>
 </resources>

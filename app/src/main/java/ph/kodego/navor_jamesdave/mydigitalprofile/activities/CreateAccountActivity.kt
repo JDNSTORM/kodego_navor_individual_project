@@ -73,6 +73,7 @@ class CreateAccountActivity : AppCompatActivity() {
             val dao = FirebaseAccountDAOImpl(applicationContext)
             if (dao.registerAccount(firstName, lastName, email, password)) {
                 progressDialog.dismiss()
+                Toast.makeText(applicationContext, "Account Registered", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
                 progressDialog.dismiss()

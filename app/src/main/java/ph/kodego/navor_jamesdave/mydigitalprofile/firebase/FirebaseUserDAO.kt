@@ -5,6 +5,7 @@ import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
@@ -16,7 +17,7 @@ interface FirebaseUserDAO {
     suspend fun signInUser(email: String, password: String): Boolean
     fun signOutUser()
     fun getCurrentUserID(): String
-    suspend fun updateUserPassword(password: String): Boolean
+    suspend fun updateUserPassword(oldPassword: String, password: String): Boolean
 }
 
 open class FirebaseUserDAOImpl(internal val context: Context): FirebaseUserDAO{
@@ -55,16 +56,19 @@ open class FirebaseUserDAOImpl(internal val context: Context): FirebaseUserDAO{
         return user?.uid ?: ""
     }
 
-    override suspend fun updateUserPassword(password: String): Boolean {
+    override suspend fun updateUserPassword(oldPassword: String, password: String): Boolean {
         val user = auth.currentUser!!
+        val credential = EmailAuthProvider.getCredential(user.email!!, oldPassword)
         val task: Task<Void>
         try {
+            user.reauthenticate(credential).await()
             task = user.updatePassword(password)
             task.await()
         }catch (e: FirebaseException){
             Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
             return false
         }
+        Toast.makeText(context, "Password Updated! Please Sign in again", Toast.LENGTH_SHORT).show()
         return task.isSuccessful
     }
 

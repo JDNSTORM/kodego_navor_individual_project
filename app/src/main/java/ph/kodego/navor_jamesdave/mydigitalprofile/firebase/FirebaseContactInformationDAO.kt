@@ -42,7 +42,6 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
         contactInformation.contactInformationID = reference.id
         val task = reference.set(contactInformation, SetOptions.merge())
         task.await()
-        Log.d("Contact Registration", task.result.toString(), task.exception)
         return if (task.isSuccessful){
             Log.i("Contact Registration", "Successful")
             true
@@ -80,7 +79,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             contactInformation.website = null //TODO
             contactInformation
         }else{
-            Log.e("Get Contact Information", task.exception!!.message.toString())
+            Log.e("Get ContactInformation", task.exception!!.message.toString())
             null
         }
     }
@@ -157,7 +156,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             Log.i("Address", task.result.toString())
             task.result.toObject(Address::class.java)!!
         }else{
-            Log.e("Get Email", task.exception!!.message.toString())
+            Log.e("Get Address", task.exception?.message.toString())
             null
         }
     }
@@ -171,7 +170,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             .document(address.contactInformationID)
             .update(fields)
         task.await()
-        Log.i("Address Update", task.isSuccessful.toString())
+        Log.i("Update Address", task.isSuccessful.toString())
         return task.isSuccessful
     }
 
@@ -204,7 +203,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             Log.i("ContactNumber", task.result.toString())
             task.result.toObject(ContactNumber::class.java)!!
         }else{
-            Log.e("Get ContactNumber", task.exception!!.message.toString())
+            Log.e("Get ContactNumber", task.exception?.message.toString())
             null
         }
     }
@@ -221,7 +220,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             .document(contactNumber.contactInformationID)
             .update(fields)
         task.await()
-        Log.i("ContactNumber Update", task.isSuccessful.toString())
+        Log.i("Update ContactNumber", task.isSuccessful.toString())
         return task.isSuccessful
     }
 

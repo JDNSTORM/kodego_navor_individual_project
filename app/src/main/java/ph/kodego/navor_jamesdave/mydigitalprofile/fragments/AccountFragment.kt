@@ -116,6 +116,13 @@ class AccountFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setAccount()
+        if (dao.getCurrentUserID().isNotEmpty()) {
+            setAccount()
+        }else{
+            val activity = requireActivity()
+            val intent = activity.intent
+            activity.finish()
+            activity.startActivity(intent)
+        }
     }
 }

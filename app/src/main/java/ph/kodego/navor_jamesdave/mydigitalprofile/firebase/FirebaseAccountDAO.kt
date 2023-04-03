@@ -8,6 +8,7 @@ import kotlinx.coroutines.tasks.await
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
+import kotlin.math.acos
 
 interface FirebaseAccountDAO {
     suspend fun addAccount(account: Account): Boolean
@@ -70,7 +71,7 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
             account.contactInformation = FirebaseContactInformationDAOImpl().getContactInformation(account.contactInformationID)
             return account
         }else{
-            Log.e("Account Error", task.exception!!.message.toString())
+            Log.e("Account Error", task.exception?.message.toString())
             null
         }
     }
