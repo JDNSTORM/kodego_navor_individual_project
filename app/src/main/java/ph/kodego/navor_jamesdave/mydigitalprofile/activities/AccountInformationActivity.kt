@@ -14,6 +14,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImp
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseContactInformationDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
@@ -78,15 +79,25 @@ class AccountInformationActivity : AppCompatActivity() {
         }
         if (contactNumber != null){
             binding.layoutContactEdit.telAreaCode.setText(contactNumber.areaCode)
-            binding.layoutContactEdit.telAreaCode.setText("${contactNumber.contact}")
+            binding.layoutContactEdit.telContactNumber.setText("${contactNumber.contact}")
+        }else{
+            account.contactInformation!!.contactNumber = ContactNumber(account.contactInformationID)
+            lifecycleScope.launch {
+                contactInformationDAO.addContactNumber(account.contactInformation!!.contactNumber!!)
+            }
         }
     }
     private fun checkFormData(){
         val updatedAccount = Account(account)
         val updatedAddress = Address(updatedAccount.contactInformation!!.address!!)
+        val updatedContactNumber = ContactNumber(updatedAccount.contactInformation!!.contactNumber!!)
         with(updatedAccount){
             firstName = binding.firstName.text.toString()
             lastName = binding.lastName.text.toString()
+        }
+        with(updatedContactNumber){
+            areaCode = binding.layoutContactEdit.telAreaCode.text.toString()
+            contact = binding.layoutContactEdit.telContactNumber.text.toString().toLong()
         }
         with(updatedAddress){
             streetAddress = binding.streetAddress.text.toString()
@@ -98,10 +109,15 @@ class AccountInformationActivity : AppCompatActivity() {
         }
         val updatedAccountData = FormControls().getModified(account, updatedAccount)
         val updatedAddressData = FormControls().getModified(account.contactInformation!!.address!!, updatedAddress)
-        if (updatedAccountData.size > 0 || updatedAddressData.size > 0){
+        val updatedContactNumberData = FormControls().getModified(account.contactInformation!!.contactNumber!!, updatedContactNumber)
+        if (updatedAccountData.size > 0 || updatedAddressData.size > 0 || updatedContactNumberData.size > 0){
             progressDialog.show()
             lifecycleScope.launch {
-                if (accountDAO.updateAccount(updatedAccountData) && contactInformationDAO.updateAddress(updatedAddress, updatedAddressData)){ //TODO: Update Address
+                if (
+                    accountDAO.updateAccount(updatedAccountData) &&
+                    contactInformationDAO.updateAddress(updatedAddress, updatedAddressData) &&
+                    contactInformationDAO.updateContactNumber(updatedContactNumber, updatedContactNumberData)
+                ){
                     account.setAccount(updatedAccount) //TODO: ActivityForResult
                     Toast.makeText(applicationContext, "Account Updated", Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()

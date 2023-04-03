@@ -6,10 +6,10 @@ import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
-interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO {
+interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO, FirebaseContactNumberDAO {
     suspend fun addContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun getContactInformation(contactInformationID: String): ContactInformation?
@@ -27,7 +27,9 @@ interface FirebaseAddressDAO{
 }
 
 interface FirebaseContactNumberDAO{
-    //TODO
+    suspend fun addContactNumber(contactNumber: ContactNumber): Boolean
+    suspend fun getContactNumber(contactInformation: ContactInformation): ContactNumber?
+    suspend fun updateContactNumber(contactNumber: ContactNumber, fields: HashMap<String, Any?>): Boolean
 }
 
 class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
@@ -64,7 +66,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
 
     override suspend fun getContactInformation(contactInformationID: String): ContactInformation? {
         val task = fireStore
-            .collection(IntentBundles.CollectionContactInformation)
+            .collection(collection)
             .document(contactInformationID)
             .get()
         task.await()
@@ -74,6 +76,8 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             Log.d("ContactInformationID", contactInformation.contactInformationID)
             contactInformation.emailAddress = getEmail(contactInformation)
             contactInformation.address = getAddress(contactInformation)
+            contactInformation.contactNumber = getContactNumber(contactInformation)
+            contactInformation.website = null //TODO
             contactInformation
         }else{
             Log.e("Get Contact Information", task.exception!!.message.toString())
@@ -88,7 +92,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             .document(emailAddress.contactInformationID)
             .collection(subCollection)
             .document(emailAddress.contactInformationID)
-        val emailReference = fireStore.collection(IntentBundles.CollectionEmail).document()
+        val emailReference = fireStore.collection(subCollection).document()
         emailAddress.id = emailReference.id
         val task = reference.set(emailAddress, SetOptions.merge())
         task.await()
@@ -102,6 +106,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun registerEmail(emailAddress: EmailAddress) {
+        val subCollection = FirebaseCollections.Email
         TODO("Not yet implemented")
     }
 
@@ -130,7 +135,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             .document(address.contactInformationID)
             .collection(subCollection)
             .document(address.contactInformationID)
-        val addressReference = fireStore.collection(IntentBundles.CollectionEmail).document()
+        val addressReference = fireStore.collection(subCollection).document()
         address.id = addressReference.id
         val task = reference.set(address, SetOptions.merge())
         task.await()
@@ -167,6 +172,56 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             .update(fields)
         task.await()
         Log.i("Address Update", task.isSuccessful.toString())
+        return task.isSuccessful
+    }
+
+    override suspend fun addContactNumber(contactNumber: ContactNumber): Boolean {
+        val subCollection = FirebaseCollections.ContactNumber
+        val reference = fireStore
+            .collection(collection)
+            .document(contactNumber.contactInformationID)
+            .collection(subCollection)
+            .document(contactNumber.contactInformationID)
+        val addressReference = fireStore.collection(subCollection).document()
+        contactNumber.id = addressReference.id
+        val task = reference.set(contactNumber, SetOptions.merge())
+        task.await()
+        return if (task.isSuccessful){
+            Log.i("ContactNumber Registration", "Successful")
+            true
+        }else{
+            Log.e("ContactNumber Registration", task.exception!!.message.toString())
+            false
+        }
+    }
+
+    override suspend fun getContactNumber(contactInformation: ContactInformation): ContactNumber? {
+        val subCollection = FirebaseCollections.ContactNumber
+        val task = fireStore.collection(collection).document(contactInformation.contactInformationID)
+            .collection(subCollection).document(contactInformation.contactInformationID).get()
+        task.await()
+        return if (task.isSuccessful && task.result.data != null){
+            Log.i("ContactNumber", task.result.toString())
+            task.result.toObject(ContactNumber::class.java)!!
+        }else{
+            Log.e("Get ContactNumber", task.exception!!.message.toString())
+            null
+        }
+    }
+
+    override suspend fun updateContactNumber(
+        contactNumber: ContactNumber,
+        fields: HashMap<String, Any?>
+    ): Boolean {
+        val subCollection = FirebaseCollections.ContactNumber
+        val task = fireStore
+            .collection(collection)
+            .document(contactNumber.contactInformationID)
+            .collection(subCollection)
+            .document(contactNumber.contactInformationID)
+            .update(fields)
+        task.await()
+        Log.i("ContactNumber Update", task.isSuccessful.toString())
         return task.isSuccessful
     }
 

@@ -6,9 +6,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 import kotlin.reflect.full.memberProperties
 
 class FormControls {
@@ -51,6 +49,9 @@ class FormControls {
             }
             is ContactInformation -> source.asMap() as HashMap<String, Any?>
             is Address -> source.asMap() as HashMap<String, Any?>
+            is ContactNumber -> source.asMap() as HashMap<String, Any?>
+            is EmailAddress -> source.asMap() as HashMap<String, Any?>
+            is Website -> source.asMap() as HashMap<String, Any?>
             else -> {
                 HashMap()
             }
@@ -59,6 +60,9 @@ class FormControls {
             is Account -> edited.asMap() as HashMap<String, Any?>
             is ContactInformation -> edited.asMap() as HashMap<String, Any?>
             is Address -> edited.asMap() as HashMap<String, Any?>
+            is ContactNumber -> edited.asMap() as HashMap<String, Any?>
+            is EmailAddress -> edited.asMap() as HashMap<String, Any?>
+            is Website -> edited.asMap() as HashMap<String, Any?>
             else -> HashMap()
         }
         Log.i("Source", original.toString())

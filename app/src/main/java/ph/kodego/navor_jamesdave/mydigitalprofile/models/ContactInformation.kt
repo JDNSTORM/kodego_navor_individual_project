@@ -48,7 +48,28 @@ data class EmailAddress( //TODO: Inherit ContactInformation?
     var id: String = "",
     var contactInformationID: String = "",
     var email: String = ""
-): Parcelable
+): Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!
+    ) {
+    }
+
+    companion object : Parceler<EmailAddress> {
+
+        override fun EmailAddress.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(id)
+            parcel.writeString(contactInformationID)
+            parcel.writeString(email)
+        }
+
+        override fun create(parcel: Parcel): EmailAddress {
+            return EmailAddress(parcel)
+        }
+    }
+
+}
 
 @Parcelize
 data class Address(
@@ -103,15 +124,60 @@ data class Address(
 
 @Parcelize
 data class ContactNumber(
-    var id: String = "",
     val contactInformationID: String = "",
-    var areaCode: String = "",
-    var contact: Int = 0
-): Parcelable
+): Parcelable{
+    var id: String = ""
+    var areaCode: String = ""
+    var contact: Long = 0
+
+    constructor(parcel: Parcel) : this(parcel.readString()!!) {
+        id = parcel.readString()!!
+        areaCode = parcel.readString()!!
+        contact = parcel.readLong()
+    }
+    constructor(contactNumber: ContactNumber) : this(contactNumber.contactInformationID) {
+        id = contactNumber.id
+        areaCode = contactNumber.areaCode
+        contact = contactNumber.contact
+    }
+
+    companion object : Parceler<ContactNumber> {
+
+        override fun ContactNumber.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(contactInformationID)
+            parcel.writeString(id)
+            parcel.writeString(areaCode)
+            parcel.writeLong(contact)
+        }
+
+        override fun create(parcel: Parcel): ContactNumber {
+            return ContactNumber(parcel)
+        }
+    }
+}
 
 @Parcelize
 data class Website(
-    var id: String = "",
-    val contactInformationID: String = "",
+    val contactInformationID: String = ""
+): Parcelable{
+    var id: String = ""
     var website: String = ""
-): Parcelable
+
+    constructor(parcel: Parcel) : this(parcel.readString()!!) {
+        id = parcel.readString()!!
+        website = parcel.readString()!!
+    }
+
+    companion object : Parceler<Website> {
+
+        override fun Website.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(contactInformationID)
+            parcel.writeString(id)
+            parcel.writeString(website)
+        }
+
+        override fun create(parcel: Parcel): Website {
+            return Website(parcel)
+        }
+    }
+}

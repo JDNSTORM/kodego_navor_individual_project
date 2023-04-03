@@ -18,6 +18,7 @@
             android:id="@+id/tel_area_code"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:maxLines="1"
             android:paddingHorizontal="10dp"
             android:textAlignment="textEnd"
             android:hint="Area Code"
@@ -38,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
+            android:inputType="number"
             android:hint="Contact Number" />
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>
