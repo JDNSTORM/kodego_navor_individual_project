@@ -25,6 +25,7 @@
         android:paddingBottom="50dp"
         android:clipToPadding="false"
         android:layout_marginHorizontal="10dp"
+        tools:listitem="@layout/viewholder_education"
         app:layout_constraintTop_toBottomOf="@id/label_education"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
