@@ -33,6 +33,7 @@
         android:src="@drawable/placeholder"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:foreground="?attr/selectableItemBackground"
         android:layout_marginHorizontal="10dp"
         app:layout_constraintTop_toTopOf="@id/til_first_name"
         app:layout_constraintStart_toStartOf="parent"

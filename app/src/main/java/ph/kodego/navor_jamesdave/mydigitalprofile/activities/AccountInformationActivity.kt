@@ -1,17 +1,22 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import android.app.Dialog
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activity_results_contracts.OpenDocumentContract
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountInformationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseContactInformationDAOImpl
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseStorageDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
@@ -25,6 +30,10 @@ class AccountInformationActivity : AppCompatActivity() {
     private lateinit var progressDialog: Dialog
     private lateinit var accountDAO: FirebaseAccountDAOImpl
     private lateinit var contactInformationDAO: FirebaseContactInformationDAOImpl
+
+    private val openDocumentLauncher = registerForActivityResult(OpenDocumentContract()) { uri ->
+        uri?.let { onImageSelected(it) } ?: Log.e("Document", "Image Pick Cancelled")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +53,7 @@ class AccountInformationActivity : AppCompatActivity() {
         setupActionBar()
         progressDialog = ProgressDialog(binding.root.context, R.string.updating_account)
 
-        binding.profilePicture.setOnClickListener { selectImageFromStorage() }
+        binding.profilePicture.setOnClickListener { openDocumentLauncher.launch(arrayOf("image/*")) }
 
         binding.btnSave.setOnClickListener {
             checkFormData()
@@ -134,7 +143,25 @@ class AccountInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun selectImageFromStorage(){
-        //TODO:
+    private fun onImageSelected(uri: Uri){
+        Log.i("URI", uri.toString())
+//        progressDialog.show()
+        lifecycleScope.launch {
+            val photoURL = FirebaseStorageDAOImpl(applicationContext).updateAccountPhoto(uri)
+            if (photoURL.isNotEmpty() && photoURL != "null"){
+                val updateImageMap = HashMap<String, Any?>()
+                updateImageMap["image"] = photoURL
+                if(accountDAO.updateAccount(updateImageMap)){
+                    Glide
+                        .with(binding.root.context)
+                        .load(photoURL)
+                        .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .placeholder(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)
+                        .into(binding.profilePicture)
+                }
+            }
+        }
     }
 }
