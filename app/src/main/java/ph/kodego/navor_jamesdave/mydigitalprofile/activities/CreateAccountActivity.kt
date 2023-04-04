@@ -81,7 +81,7 @@ class CreateAccountActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() { //TODO: Try
+    override fun onStart() {
         super.onStart()
         // Check if user is signed in.
         if (Firebase.auth.currentUser != null) {

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
@@ -45,9 +47,8 @@ class ProfileActivity : AppCompatActivity() {
                 profile = Profile()
             }
             profileBundle.putParcelable(IntentBundles.Profile, profile)
-
+            loadProfilePhoto(profile.image)
             with(binding.viewholderProfile) {
-                profilePicture.setImageResource(profile.profilePicture)
                 profileUserName.text = "${profile.firstName} ${profile.lastName}"
                 profession.text = profile.profession
             }
@@ -87,5 +88,16 @@ class ProfileActivity : AppCompatActivity() {
 //            onBackPressedDispatcher //TODO: Implement
             onBackPressed()
         }
+    }
+
+    private fun loadProfilePhoto(url: String){
+        Glide
+            .with(binding.root.context)
+            .load(url)
+            .circleCrop()
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .placeholder(R.drawable.placeholder)
+            .error(R.drawable.placeholder)
+            .into(binding.viewholderProfile.profilePicture)
     }
 }

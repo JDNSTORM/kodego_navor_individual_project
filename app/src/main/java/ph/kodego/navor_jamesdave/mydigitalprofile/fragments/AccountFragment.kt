@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
@@ -77,7 +79,7 @@ class AccountFragment : Fragment() {
                 with(binding) {
                     profileUserName.text = fullName
                     email.text = account.contactInformation!!.emailAddress!!.email
-                    profilePicture.setImageResource(account.profilePicture)
+                    loadProfilePhoto(account.image)
                 }
                 progressDialog.dismiss()
             } else {
@@ -124,5 +126,15 @@ class AccountFragment : Fragment() {
             activity.finish()
             activity.startActivity(intent)
         }
+    }
+    private fun loadProfilePhoto(url: String){
+        Glide
+            .with(binding.root.context)
+            .load(url)
+            .circleCrop()
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .placeholder(R.drawable.placeholder)
+            .error(R.drawable.placeholder)
+            .into(binding.profilePicture)
     }
 }

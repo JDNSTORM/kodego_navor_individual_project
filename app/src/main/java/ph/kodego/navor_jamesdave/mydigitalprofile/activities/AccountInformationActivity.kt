@@ -23,7 +23,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
-// TODO: Upload Image
+
 class AccountInformationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountInformationBinding
     private lateinit var account: Account
@@ -75,6 +75,9 @@ class AccountInformationActivity : AppCompatActivity() {
         binding.lastName.setText(account.lastName)
         Log.d("Address", address.toString())
         Log.d("Email", account.contactInformation!!.emailAddress.toString())
+        if (account.image.isNotEmpty() && account.image != "null"){
+            loadProfilePhoto(account.image)
+        }
         if (address != null){
             binding.streetAddress.setText(address.streetAddress)
             binding.subdivision.setText(address.subdivision)
@@ -145,23 +148,28 @@ class AccountInformationActivity : AppCompatActivity() {
 
     private fun onImageSelected(uri: Uri){
         Log.i("URI", uri.toString())
-//        progressDialog.show()
+        progressDialog.show()
         lifecycleScope.launch {
             val photoURL = FirebaseStorageDAOImpl(applicationContext).updateAccountPhoto(uri)
             if (photoURL.isNotEmpty() && photoURL != "null"){
                 val updateImageMap = HashMap<String, Any?>()
                 updateImageMap["image"] = photoURL
                 if(accountDAO.updateAccount(updateImageMap)){
-                    Glide
-                        .with(binding.root.context)
-                        .load(photoURL)
-                        .circleCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                        .into(binding.profilePicture)
+                    loadProfilePhoto(photoURL)
                 }
             }
+            progressDialog.dismiss()
         }
+    }
+
+    private fun loadProfilePhoto(url: String){
+        Glide
+            .with(binding.root.context)
+            .load(url)
+            .circleCrop()
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .placeholder(R.drawable.placeholder)
+            .error(R.drawable.placeholder)
+            .into(binding.profilePicture)
     }
 }
