@@ -13,7 +13,6 @@ open class Account (
 ): Parcelable {
     var image: String = ""
     var fcmToken: String = ""
-//    var profilePicture: Int = R.drawable.placeholder
 
     @get:Exclude
     var contactInformation: ContactInformation? = null
@@ -35,7 +34,6 @@ open class Account (
         parcel.writeString(contactInformationID)
         parcel.writeString(image)
         parcel.writeString(fcmToken)
-//        parcel.writeInt(profilePicture)
         parcel.writeParcelable(contactInformation, flags)
     }
 
@@ -53,7 +51,6 @@ open class Account (
         contactInformationID = account.contactInformationID
         image = account.image
         fcmToken = account.fcmToken
-//        profilePicture = account.profilePicture
         contactInformation = account.contactInformation
     }
 
@@ -64,7 +61,6 @@ open class Account (
         contactInformationID = parcel.readString()!!
         image = parcel.readString()!!
         fcmToken = parcel.readString()!!
-//        profilePicture = parcel.readInt()
         contactInformation = parcel.readParcelable(ContactInformation::class.java.classLoader)
     }
     constructor(account: Account) : this(){
