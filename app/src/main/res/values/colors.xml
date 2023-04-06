@@ -8,8 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+<!--  https://www.canva.com/colors/color-wheel/  -->
     <color name="colorPrimaryDark">#1D3752</color>
     <color name="colorPrimary">#214D72</color>
     <color name="colorAccent">#2C7695</color>
     <color name="colorLight">#50BFC3</color>
+    <color name="colorPrimarySub">#2A5078</color>
+    <color name="colorAccentSub">#21726F</color>
+    <color name="colorAccentDark">#1D5252</color>
+    <color name="colorLightSub">#50BFC3</color>
 </resources>
