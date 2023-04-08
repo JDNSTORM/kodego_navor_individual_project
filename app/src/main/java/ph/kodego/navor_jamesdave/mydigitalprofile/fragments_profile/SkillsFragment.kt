@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillSubAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsEditAdapter
@@ -70,13 +72,22 @@ class SkillsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        layoutSkillEventsBinding = LayoutSkillEventsBinding.inflate(layoutInflater)
-        binding.root.addView(layoutSkillEventsBinding.root, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-
-        minimizeFabs()
         skills.addAll(getSkillsSample())
 
         rvAdapter = RVSkillsMainAdapter(skills)
+
+        binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
+        binding.listSkills.adapter = rvAdapter
+
+//        if(Firebase.auth.currentUser?.uid == profile.uID) { //TODO: Enclose
+            attachEditingInterface()
+//        }
+    }
+
+    private fun attachEditingInterface(){
+        layoutSkillEventsBinding = LayoutSkillEventsBinding.inflate(layoutInflater)
+        binding.root.addView(layoutSkillEventsBinding.root, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+
         rvAdapter.setAdapterEvents(object: RVSkillsMainAdapter.AdapterEvents{
             override fun mainCategoryClick(mainCategory: SkillMainCategory) {
                 expandFabs(mainCategory)
@@ -86,8 +97,7 @@ class SkillsFragment : Fragment() {
             }
         })
 
-        binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
-        binding.listSkills.adapter = rvAdapter
+        minimizeFabs()
 
         layoutSkillEventsBinding.efabSkillsOptions.setOnClickListener {
             if (layoutSkillEventsBinding.efabSkillsOptions.isExtended){
