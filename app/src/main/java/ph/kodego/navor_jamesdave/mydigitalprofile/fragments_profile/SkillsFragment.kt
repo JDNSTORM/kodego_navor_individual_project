@@ -471,8 +471,8 @@ class SkillsFragment : Fragment() {
         val dialog = builder.create()
         val holder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as? ViewHolder //TODO: Optimize
         dialog.setCancelable(false)
-        Log.d("Main Category", "$mainCategory ${skills.contains(mainCategory)}")
-        if (skills.contains(mainCategory)){
+        Log.d("Main Category", "$mainCategory ${skills.indexOf(mainCategory)}")
+        if (mainCategory.mainCategoryID.isNotEmpty()){
             dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
             dialogueSkillMainEditBinding.editButtons.btnSave.visibility = View.GONE
             dialogueSkillMainEditBinding.editButtons.btnUpdate.visibility = View.VISIBLE
