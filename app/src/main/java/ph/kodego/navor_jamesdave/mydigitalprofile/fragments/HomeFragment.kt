@@ -66,42 +66,9 @@ class HomeFragment : Fragment() {
         jden.contactInformation
         jden.contactInformation!!.emailAddress = EmailAddress("22", "22", "esteban.dave999@gmail.com")
         profiles.add(jden)
-        profiles.add(Profile())
-//        profileDatas.add(
-//            ProfileData(
-//                user = User(
-//                    id = 22,
-//                    accountID = "22",
-//                    profilePicture = R.drawable.navor_james,
-//                    firstName = "James Dave",
-//                    lastName = "Navor",
-//                    contactInformationID = ""
-//                ),
-//                profile = Profile(
-//                    id = 22,
-//                    userID = 22,
-//                    profession = "Mobile App Developer"
-//                )
-//            )
-//        )
-//        for (num in 0L until 10L){
-//            profileDatas.add(
-//                ProfileData(
-//                    user = User(
-//                        id = num,
-//                        accountID = "$num",
-//                        firstName = "User",
-//                        lastName = "$num",
-//                        contactInformationID = ""
-//                    ),
-//                    profile = Profile(
-//                        id = num,
-//                        userID = num,
-//                        profession = "Profession $num"
-//                    )
-//                )
-//            )
-//        }
+        val sampleProfile = Profile("asdasd")
+        sampleProfile.profileID = "11"
+        profiles.add(sampleProfile)
         return profiles
     }
 }

@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillSubAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsEditAdapter
@@ -115,15 +114,15 @@ class SkillsFragment : Fragment() {
     private fun getSkillsSample(): ArrayList<SkillMainCategory>{
         val skills: ArrayList<SkillMainCategory> = ArrayList()
         with(profile) {
-            if (profile.profileID != 22L) {
+            if (profile.profileID != "22") {
                 for (categoryMainID in 0..2) {
                     val mainCategory =
-                        SkillMainCategory(categoryMainID, profile.profileID, "Main $categoryMainID")
+                        SkillMainCategory(categoryMainID.toString(), profile.profileID, "Main $categoryMainID")
                     for (categorySubID in 0..2) {
                         val skillSub =
-                            SkillSubCategory(categorySubID, categoryMainID, "Sub $categorySubID")
+                            SkillSubCategory(categorySubID.toString(), categoryMainID.toString(), "Sub $categorySubID")
                         for (skillID in 0..3) {
-                            val skill = Skill(skillID, categorySubID, "Skill $skillID")
+                            val skill = Skill(skillID.toString(), categorySubID.toString(), "Skill $skillID")
                             skillSub.skills.add(skill)
                         }
                         mainCategory.subCategories.add(skillSub)
@@ -132,16 +131,16 @@ class SkillsFragment : Fragment() {
                 }
                 skills.add(
                     SkillMainCategory(
-                        4,
+                        "4",
                         profile.profileID,
                         "Main 4",
                         arrayListOf(
                             SkillSubCategory(
-                                0,
-                                4,
+                                "0",
+                                "4",
                                 "",
                                 arrayListOf(
-                                    Skill(0, 0, "asdkaj")
+                                    Skill("0", "0", "asdkaj")
                                 )
                             )
                         )
@@ -149,7 +148,7 @@ class SkillsFragment : Fragment() {
                 )
                 skills.add(
                     SkillMainCategory(
-                        5,
+                        "5",
                         profile.profileID,
                         "Main 5"
                     )
@@ -158,165 +157,165 @@ class SkillsFragment : Fragment() {
                 skills.addAll(
                     arrayListOf(
                         SkillMainCategory(
-                            0,
+                            "0",
                             profile.profileID,
                             "Computer Maintenance and Troubleshooting",
                             arrayListOf(
                                 SkillSubCategory(
-                                    0,
-                                    0,
+                                    "0",
+                                    "0",
                                     "Hardware",
                                     arrayListOf(
-                                        Skill(0, 0, "Hardware Installation and Setup"),
-                                        Skill(1, 0, "Hardware Troubleshooting and Repair"),
-                                        Skill(2, 0, "System Upgrade/Downgrade"),
-                                        Skill(3, 0, "Hardware Maintenance"),
-                                        Skill(4, 0, "Peripheral Installation and Setup"),
+                                        Skill("0", "0", "Hardware Installation and Setup"),
+                                        Skill("1", "0", "Hardware Troubleshooting and Repair"),
+                                        Skill("2", "0", "System Upgrade/Downgrade"),
+                                        Skill("3", "0", "Hardware Maintenance"),
+                                        Skill("4", "0", "Peripheral Installation and Setup"),
                                     )
                                 ),
                                 SkillSubCategory(
-                                    1,
-                                    0,
+                                    "1",
+                                    "0",
                                     "Software",
                                     arrayListOf(
-                                        Skill(0, 0, "Software Troubleshooting and Repair"),
-                                        Skill(1, 0, "Malware/Virus Removal"),
-                                        Skill(2, 0, "Software/System Update"),
-                                        Skill(3, 0, "Formatting"),
-                                        Skill(4, 0, "Operating System/Application Installation"),
-                                        Skill(5, 0, "File Recovery"),
+                                        Skill("0", "0", "Software Troubleshooting and Repair"),
+                                        Skill("1", "0", "Malware/Virus Removal"),
+                                        Skill("2", "0", "Software/System Update"),
+                                        Skill("3", "0", "Formatting"),
+                                        Skill("4", "0", "Operating System/Application Installation"),
+                                        Skill("5", "0", "File Recovery"),
                                     )
                                 ),
                             )
                         ),
                         SkillMainCategory(
-                            1,
+                            "1",
                             profile.profileID,
                             "Network Management",
                             arrayListOf(
                                 SkillSubCategory(
-                                    0,
-                                    1,
+                                    "0",
+                                    "1",
                                     "",
                                     arrayListOf(
-                                        Skill(0, 0, "Network Setup and Configuration"),
-                                        Skill(1, 0, "File and Printer Sharing"),
-                                        Skill(2, 0, "Network Sharing"),
-                                        Skill(3, 0, "Remote Desktop Configuration"),
+                                        Skill("0", "0", "Network Setup and Configuration"),
+                                        Skill("1", "0", "File and Printer Sharing"),
+                                        Skill("2", "0", "Network Sharing"),
+                                        Skill("3", "0", "Remote Desktop Configuration"),
                                     )
                                 ),
                             )
                         ),
                         SkillMainCategory(
-                            2,
+                            "2",
                             profile.profileID,
                             "Android App Development",
                             arrayListOf(
                                 SkillSubCategory(
-                                    0,
-                                    2,
+                                    "0",
+                                    "2",
                                     "",
                                     arrayListOf(
-                                        Skill(0, 0, "Kotlin"),
-                                        Skill(1, 0, "Android Studio"),
-                                        Skill(2, 0, "Object-Oriented Programming"),
-                                        Skill(3, 0, "ViewBinding"),
-                                        Skill(4, 0, "RecyclerView Manipulation"),
-                                        Skill(5, 0, "WireFraming"),
+                                        Skill("0", "0", "Kotlin"),
+                                        Skill("1", "0", "Android Studio"),
+                                        Skill("2", "0", "Object-Oriented Programming"),
+                                        Skill("3", "0", "ViewBinding"),
+                                        Skill("4", "0", "RecyclerView Manipulation"),
+                                        Skill("5", "0", "WireFraming"),
                                     )
                                 ),
                             )
                         ),
                         SkillMainCategory(
-                            3,
+                            "3",
                             profile.profileID,
                             "Web Development (Obsolete)",
                             arrayListOf(
                                 SkillSubCategory(
-                                    0,
-                                    3,
+                                    "0",
+                                    "3",
                                     "",
                                     arrayListOf(
-                                        Skill(0, 0, "HTML5"),
-                                        Skill(1, 0, "CSS3"),
-                                        Skill(2, 0, "Bootstrap 4"),
-                                        Skill(3, 0, "Javascript"),
-                                        Skill(4, 0, "jQuery"),
-                                        Skill(5, 0, "PHP"),
-                                        Skill(6, 0, "MySQL"),
+                                        Skill("0", "0", "HTML5"),
+                                        Skill("1", "0", "CSS3"),
+                                        Skill("2", "0", "Bootstrap 4"),
+                                        Skill("3", "0", "Javascript"),
+                                        Skill("4", "0", "jQuery"),
+                                        Skill("5", "0", "PHP"),
+                                        Skill("6", "0", "MySQL"),
                                     )
                                 ),
                             )
                         ),
                         SkillMainCategory(
-                            4,
+                            "4",
                             profile.profileID,
                             "Java Programming (Obsolete)",
                             arrayListOf(
                                 SkillSubCategory(
-                                    0,
-                                    4,
+                                    "0",
+                                    "4",
                                     "",
                                     arrayListOf(
-                                        Skill(0, 0, "Netbeans IDE"),
-                                        Skill(1, 0, "GUI Applications"),
-                                        Skill(2, 0, "Console Applications"),
+                                        Skill("0", "0", "Netbeans IDE"),
+                                        Skill("1", "0", "GUI Applications"),
+                                        Skill("2", "0", "Console Applications"),
                                     )
                                 ),
                             )
                         ),
                         SkillMainCategory(
-                            5,
+                            "5",
                             profile.profileID,
                             "Java Development (Obsolete)",
                             arrayListOf(
                                 SkillSubCategory(
-                                    0,
-                                    5,
+                                    "0",
+                                    "5",
                                     "",
                                     arrayListOf(
-                                        Skill(0, 0, "Netbeans IDE"),
-                                        Skill(1, 0, "GUI Applications"),
-                                        Skill(2, 0, "Console Applications"),
-                                        Skill(3, 0, "Javascript"),
-                                        Skill(4, 0, "jQuery"),
-                                        Skill(5, 0, "PHP"),
-                                        Skill(6, 0, "MySQL"),
+                                        Skill("0", "0", "Netbeans IDE"),
+                                        Skill("1", "0", "GUI Applications"),
+                                        Skill("2", "0", "Console Applications"),
+                                        Skill("3", "0", "Javascript"),
+                                        Skill("4", "0", "jQuery"),
+                                        Skill("5", "0", "PHP"),
+                                        Skill("6", "0", "MySQL"),
                                     )
                                 ),
                             )
                         ),
                         SkillMainCategory(
-                            6,
+                            "6",
                             profile.profileID,
                             "C# Development (Obsolete)",
                             arrayListOf(
                                 SkillSubCategory(
-                                    0,
-                                    6,
+                                    "0",
+                                    "6",
                                     "",
                                     arrayListOf(
-                                        Skill(0, 0, "Visual Studio 2017"),
-                                        Skill(1, 0, "Windows Applications"),
-                                        Skill(2, 0, "Console Applications"),
-                                        Skill(3, 0, "MySQL Connection"),
+                                        Skill("0", "0", "Visual Studio 2017"),
+                                        Skill("1", "0", "Windows Applications"),
+                                        Skill("2", "0", "Console Applications"),
+                                        Skill("3", "0", "MySQL Connection"),
                                     )
                                 ),
                             )
                         ),
                         SkillMainCategory(
-                            7,
+                            "7",
                             profile.profileID,
                             "Adobe Photoshop",
                             arrayListOf(
                                 SkillSubCategory(
-                                    0,
-                                    7,
+                                    "0",
+                                    "7",
                                     "",
                                     arrayListOf(
-                                        Skill(0, 0, "Basic Photo Editing"),
-                                        Skill(1, 0, "Basic Photo Manipulation"),
-                                        Skill(2, 0, "Basic Retouching"),
+                                        Skill("0", "0", "Basic Photo Editing"),
+                                        Skill("1", "0", "Basic Photo Manipulation"),
+                                        Skill("2", "0", "Basic Retouching"),
                                     )
                                 ),
                             )
@@ -464,14 +463,15 @@ class SkillsFragment : Fragment() {
      *  Add MainCategory if a MainCategory doesn't exist
      *  Update MainCategory if MainCategory exists
      */
-    private fun editMainCategoryDialogue(
-        mainCategory: SkillMainCategory = SkillMainCategory(profileID = profile.profileID)
+    private fun editMainCategoryDialogue( //TODO: Change Approach
+        mainCategory: SkillMainCategory = SkillMainCategory(profile.profileID)
     ){
         val dialogueSkillMainEditBinding = DialogueSkillMainEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)
         val dialog = builder.create()
         val holder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as? ViewHolder //TODO: Optimize
         dialog.setCancelable(false)
+        Log.d("Main Category", "$mainCategory ${skills.contains(mainCategory)}")
         if (skills.contains(mainCategory)){
             dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
             dialogueSkillMainEditBinding.editButtons.btnSave.visibility = View.GONE
@@ -517,7 +517,7 @@ class SkillsFragment : Fragment() {
      */
     private fun editSubCategoryDialogue(
         mainCategory: SkillMainCategory,
-        subCategory: SkillSubCategory = SkillSubCategory(categoryMainID = mainCategory.id)
+        subCategory: SkillSubCategory = SkillSubCategory(mainCategoryID = mainCategory.mainCategoryID)
     ){
         val subCategories = mainCategory.subCategories
         val dialogueSkillSubEditBinding = DialogueSkillSubEditBinding.inflate(layoutInflater)
@@ -580,7 +580,7 @@ class SkillsFragment : Fragment() {
          */
         dialogueSkillSubEditBinding.btnAddSkill.setOnClickListener {
             val skill = Skill(
-                categorySubID = subCategory.id,
+                subCategoryID = subCategory.subCategoryID,
                 skill = dialogueSkillSubEditBinding.skill.text.toString().trim()
             )
             subCategory.skills.add(skill)
