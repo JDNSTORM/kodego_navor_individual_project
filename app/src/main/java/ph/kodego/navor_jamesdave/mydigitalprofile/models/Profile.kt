@@ -2,9 +2,6 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.IgnoreExtraProperties
-import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfile
 
 /**
