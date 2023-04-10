@@ -6,44 +6,41 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SkillMainCategory(
-    val profileID: String = ""
-): Parcelable{
-    var mainCategoryID: String = ""
+    var mainCategoryID: String = "",
+    val profileID: String = "",
     var categoryMain: String = ""
+): Parcelable{
     @get:Exclude
     val subCategories: ArrayList<SkillSubCategory> = ArrayList()
 
-    constructor(mainCategoryID: String, profileID: String, categoryMain: String, subCategories: ArrayList<SkillSubCategory> = ArrayList()): this(profileID){
-        this.mainCategoryID = mainCategoryID
-        this.categoryMain = categoryMain
-        this.subCategories.addAll(subCategories)
-    }
+    constructor(mainCategoryID: String, profileID: String, categoryMain: String, subCategories: ArrayList<SkillSubCategory> = ArrayList()):
+        this(mainCategoryID, profileID, categoryMain){
+            this.subCategories.addAll(subCategories)
+        }
+    constructor(profileID: String): this("", profileID, "")
 }
 
 @Parcelize
 data class SkillSubCategory(
-    val mainCategoryID: String = ""
-): Parcelable{
-    var subCategoryID: String = ""
+    var subCategoryID: String = "",
+    val mainCategoryID: String = "",
     var categorySub: String = ""
+): Parcelable{
     @get:Exclude
     val skills: ArrayList<Skill> = ArrayList()
 
-    constructor(subCategoryID: String, mainCategoryID: String, categorySub: String, skills: ArrayList<Skill> = ArrayList()): this(mainCategoryID){
-        this.subCategoryID = subCategoryID
-        this.categorySub = categorySub
+    constructor(subCategoryID: String, mainCategoryID: String, categorySub: String, skills: ArrayList<Skill> = ArrayList()): this(subCategoryID, mainCategoryID, categorySub){
         this.skills.addAll(skills)
     }
+    constructor(mainCategoryID: String): this("", mainCategoryID, "")
 }
 
 @Parcelize
 data class Skill(
+    var skillID: String = "",
     val subCategoryID: String = "",
     var skill: String
 ): Parcelable{
-    var skillID: String = ""
 
-    constructor(skillID: String, subCategoryID: String, skill: String): this(subCategoryID, skill){
-        this.skillID = skillID
-    }
+    constructor(subCategoryID: String, skill: String): this("", subCategoryID, skill)
 }

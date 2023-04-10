@@ -471,8 +471,7 @@ class SkillsFragment : Fragment() {
         val dialog = builder.create()
         val holder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as? ViewHolder //TODO: Optimize
         dialog.setCancelable(false)
-        Log.d("Main Category", "$mainCategory ${skills.indexOf(mainCategory)}")
-        if (mainCategory.mainCategoryID.isNotEmpty()){
+        if (skills.contains(mainCategory)){
             dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
             dialogueSkillMainEditBinding.editButtons.btnSave.visibility = View.GONE
             dialogueSkillMainEditBinding.editButtons.btnUpdate.visibility = View.VISIBLE
@@ -490,9 +489,7 @@ class SkillsFragment : Fragment() {
                 val scrollListener =
                     View.OnScrollChangeListener { _, _, _, _, _ ->
                         editSubCategoryDialogue(mainCategory)
-                        binding.listSkills.setOnScrollChangeListener(
-                            View.OnScrollChangeListener { _, _, _, _, _ ->  }
-                        )
+                        binding.listSkills.setOnScrollChangeListener { _, _, _, _, _ -> }
                     }
                 binding.listSkills.setOnScrollChangeListener(scrollListener)
                 minimizeFabs()
@@ -517,7 +514,7 @@ class SkillsFragment : Fragment() {
      */
     private fun editSubCategoryDialogue(
         mainCategory: SkillMainCategory,
-        subCategory: SkillSubCategory = SkillSubCategory(mainCategoryID = mainCategory.mainCategoryID)
+        subCategory: SkillSubCategory = SkillSubCategory(mainCategory.mainCategoryID)
     ){
         val subCategories = mainCategory.subCategories
         val dialogueSkillSubEditBinding = DialogueSkillSubEditBinding.inflate(layoutInflater)
@@ -580,8 +577,8 @@ class SkillsFragment : Fragment() {
          */
         dialogueSkillSubEditBinding.btnAddSkill.setOnClickListener {
             val skill = Skill(
-                subCategoryID = subCategory.subCategoryID,
-                skill = dialogueSkillSubEditBinding.skill.text.toString().trim()
+                subCategory.subCategoryID,
+                dialogueSkillSubEditBinding.skill.text.toString().trim()
             )
             subCategory.skills.add(skill)
             skillAdapter.notifyItemInserted(skillAdapter.itemCount-1)
