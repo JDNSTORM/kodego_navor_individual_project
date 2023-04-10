@@ -7,4 +7,7 @@ object FirebaseCollections {
     const val Profile: String = "profiles"
     const val Address: String = "addresses"
     const val ContactNumber: String = "contactNumbers"
+    const val SkillsMainCategory: String = "skillsMainCategories"
+    const val SkillsSubCategory: String = "skillsSubCategories"
+    const val Skills: String = "skills"
 }
