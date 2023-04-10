@@ -12,15 +12,16 @@ interface FirebaseProfileDAO {
     suspend fun addProfile(profile: Profile): Boolean
     suspend fun getProfile(uID: String): Profile
     suspend fun getProfiles(): ArrayList<Profile>
-    suspend fun updateProfile(profile: Profile): Boolean
+    suspend fun updateProfile(profile: Profile, fields: HashMap<String, Any?>): Boolean
     suspend fun deleteProfile(profile: Profile): Boolean
 }
 
 class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context), FirebaseProfileDAO{
     private val collection = FirebaseCollections.Profile
+    private val collectionAccounts = FirebaseCollections.Accounts
     override suspend fun addProfile(profile: Profile): Boolean { //TODO: uID
         val reference = fireStore
-            .collection(FirebaseCollections.Accounts)
+            .collection(collectionAccounts)
             .document(profile.uID)
             .collection(collection)
             .document(profile.uID)
@@ -38,7 +39,7 @@ class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
 
     override suspend fun getProfile(uID: String): Profile {
         val task = fireStore
-            .collection(FirebaseCollections.Accounts) //TODO: Cannot find profile without this
+            .collection(collectionAccounts) //TODO: Cannot find profile without this
             .document(uID)
             .collection(collection)
             .document(uID)
@@ -46,27 +47,57 @@ class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
         task.await()
         return if (task.isSuccessful && task.result.data != null){
             Log.i("Profile", task.result.toString())
-            val profile = task.result.toObject(FirebaseProfile::class.java)!!
-            Profile(profile)
+            task.result.toObject(Profile::class.java)!!
         }else{
             Log.e("Get Profile", task.exception?.message.toString())
             val profile = Profile()
             profile.uID = uID
             addProfile(profile)
-            return profile
+            profile
         }
     }
 
     override suspend fun getProfiles(): ArrayList<Profile> {
-        TODO("Not yet implemented")
+        val profiles: ArrayList<Profile> = ArrayList()
+        val task = fireStore.collectionGroup(collection).get()
+        task.await()
+        if (task.isSuccessful && task.result.documents.isNotEmpty()){
+            Log.i("Profiles", task.result.documents.toString())
+            task.result.documents.forEach { snapshot ->
+                Log.i("Profile Data", snapshot.data.toString())
+                val profile = snapshot.toObject(Profile::class.java)!!
+                profile.setAccount(getAccount(profile.uID)!!)
+                Log.d("Profile", profile.toString())
+                profiles.add(profile)
+            }
+        }else{
+            Log.e("Get Profiles", task.exception?.message.toString())
+        }
+        return profiles
     }
 
-    override suspend fun updateProfile(profile: Profile): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun updateProfile(profile: Profile, fields: HashMap<String, Any?>): Boolean {
+//        TODO("Not yet implemented")
+        val task = fireStore
+            .collection(collectionAccounts)
+            .document(profile.uID)
+            .collection(collection)
+            .document(profile.profileID)
+            .update(fields)
+        task.await()
+        return task.isSuccessful
     }
 
     override suspend fun deleteProfile(profile: Profile): Boolean {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
+        val task = fireStore
+            .collection(collectionAccounts)
+            .document(profile.uID)
+            .collection(collection)
+            .document(profile.profileID)
+            .delete()
+        task.await()
+        return task.isSuccessful
     }
 
 }
