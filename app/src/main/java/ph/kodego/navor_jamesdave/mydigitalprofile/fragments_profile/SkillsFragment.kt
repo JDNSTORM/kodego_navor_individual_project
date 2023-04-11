@@ -25,8 +25,10 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillSubEd
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMainBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsMainCategoryDAO
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsMainCategoryDAOImpl
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsSubCategoryDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
@@ -560,6 +562,7 @@ class SkillsFragment : Fragment() {
         mainCategory: SkillMainCategory,
         subCategory: SkillSubCategory = SkillSubCategory(mainCategory.mainCategoryID)
     ){
+        val subCategoryDAO = FirebaseSkillsSubCategoryDAOImpl(mainCategory)
         val subCategories = mainCategory.subCategories
         val dialogueSkillSubEditBinding = DialogueSkillSubEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillSubEditBinding.root)
@@ -570,7 +573,7 @@ class SkillsFragment : Fragment() {
         val mainCategoryBinding = mainViewHolder.binding as ViewholderSkillsMainBinding
         val skillSubAdapter = mainCategoryBinding.listSkillSub.adapter as RVSkillSubAdapter
 
-        val skillAdapter = RVSkillsEditAdapter(subCategory.skills)
+        val skillAdapter = RVSkillsEditAdapter(subCategory)
         dialogueSkillSubEditBinding.listSkill.layoutManager =  LinearLayoutManager(context)
         dialogueSkillSubEditBinding.listSkill.adapter =  skillAdapter
 
@@ -605,13 +608,37 @@ class SkillsFragment : Fragment() {
             }
             btnSave.setOnClickListener {
                 subCategory.categorySub = dialogueSkillSubEditBinding.skillSub.text.toString().trim()
-                subCategories.add(subCategory)
-                skillSubAdapter.notifyItemInserted(skillSubAdapter.itemCount-1)
-                minimizeFabs()
-                dialog.dismiss()
+                lifecycleScope.launch {
+                    progressDialog.show()
+                    if (subCategoryDAO.addSubCategory(subCategory)){
+                        val skillsDAO = FirebaseSkillsDAOImpl(subCategory)
+                        subCategory.skills.forEach {  skill ->
+                            if(!skillsDAO.addSkill(skill)){
+                                subCategory.skills.remove(skill)
+                            }
+                        }
+                        subCategories.add(subCategory)
+//                        skillSubAdapter.notifyItemInserted(skillSubAdapter.itemCount-1)
+                        rvAdapter.notifyItemChanged(skills.indexOf(mainCategory))
+                    }else{
+                        Toast.makeText(requireContext(), "Error Saving SubCategory", Toast.LENGTH_SHORT).show()
+                    }
+                    progressDialog.dismiss()
+                    minimizeFabs()
+                    dialog.dismiss()
+                }
             }
             btnUpdate.setOnClickListener {
                 subCategory.categorySub = dialogueSkillSubEditBinding.skillSub.text.toString().trim()
+                val fields: HashMap<String, Any?> = hashMapOf("categorySub" to subCategory.categorySub)
+                Toast.makeText(requireContext(), "SubCategory will be updated in the background", Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch {
+                    if(subCategoryDAO.updateSubCategory(subCategory, fields)){
+                        Toast.makeText(requireContext(), "SubCategory Updated", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(requireContext(), "Error Updating SubCategory", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 minimizeFabs()
                 dialog.dismiss()
             }
@@ -619,19 +646,26 @@ class SkillsFragment : Fragment() {
         /**
          * Adding Skills
          */
-        dialogueSkillSubEditBinding.btnAddSkill.setOnClickListener {
+        dialogueSkillSubEditBinding.btnAddSkill.setOnClickListener {// TODO: Save Skills when saving subCategory
             val skill = Skill(
                 subCategory.subCategoryID,
                 dialogueSkillSubEditBinding.skill.text.toString().trim()
             )
-            subCategory.skills.add(skill)
-            skillAdapter.notifyItemInserted(skillAdapter.itemCount-1)
-            dialogueSkillSubEditBinding.listSkill.scrollToPosition(skillAdapter.itemCount-1)
-            if (skillAdapter.itemCount > 0){
-                dialogueSkillSubEditBinding.listSkill.visibility = View.VISIBLE
-                dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
+            lifecycleScope.launch {
+                if (subCategory.subCategoryID.isNotEmpty()){
+                    progressDialog.show()
+                    FirebaseSkillsDAOImpl(subCategory).addSkill(skill)
+                    progressDialog.dismiss()
+                }
+                subCategory.skills.add(skill)
+                skillAdapter.notifyItemInserted(skillAdapter.itemCount-1)
+                dialogueSkillSubEditBinding.listSkill.scrollToPosition(skillAdapter.itemCount-1)
+                if (skillAdapter.itemCount > 0){
+                    dialogueSkillSubEditBinding.listSkill.visibility = View.VISIBLE
+                    dialogueSkillSubEditBinding.listEmpty.visibility = View.GONE
+                }
+                dialogueSkillSubEditBinding.skill.text?.clear()
             }
-            dialogueSkillSubEditBinding.skill.text?.clear()
         }
         dialog.show()
         dialogueSkillSubEditBinding.skillSub.requestFocus()

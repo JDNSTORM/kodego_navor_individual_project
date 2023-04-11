@@ -39,7 +39,7 @@ data class SkillSubCategory(
 data class Skill(
     var skillID: String = "",
     val subCategoryID: String = "",
-    var skill: String
+    var skill: String = ""
 ): Parcelable{
 
     constructor(subCategoryID: String, skill: String): this("", subCategoryID, skill)

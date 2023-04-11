@@ -169,7 +169,7 @@ class FirebaseSkillsDAOImpl(subCategory: SkillSubCategory): FirebaseSkillsDAO{
     private val collection = FirebaseCollections.Skills
     private val reference = fireStore.collection(FirebaseCollections.SkillsMainCategory)
         .document(subCategory.mainCategoryID)
-        .collection(collection)
+        .collection(FirebaseCollections.SkillsSubCategory)
         .document(subCategory.subCategoryID)
         .collection(collection)
 
