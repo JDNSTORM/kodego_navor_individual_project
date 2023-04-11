@@ -8,8 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillSubAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsEditAdapter
@@ -20,6 +24,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillSubEd
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMainBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsMainCategoryDAO
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsMainCategoryDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
@@ -37,6 +43,7 @@ class SkillsFragment : Fragment() {
     private val skills: ArrayList<SkillMainCategory> = ArrayList()
     private lateinit var rvAdapter: RVSkillsMainAdapter
     private lateinit var layoutSkillEventsBinding: LayoutSkillEventsBinding
+    private lateinit var dao: FirebaseSkillsMainCategoryDAO
 
     init {
         if(arguments == null) {
@@ -71,16 +78,23 @@ class SkillsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dao = FirebaseSkillsMainCategoryDAOImpl(profile.profileID)
         skills.addAll(getSkillsSample())
+        setupRecyclerView()
+    }
 
-        rvAdapter = RVSkillsMainAdapter(skills)
+    private fun setupRecyclerView(){
+        lifecycleScope.launch {
+            skills.addAll(dao.getMainCategories())
+            rvAdapter = RVSkillsMainAdapter(skills)
 
-        binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
-        binding.listSkills.adapter = rvAdapter
+            binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
+            binding.listSkills.adapter = rvAdapter
 
-//        if(Firebase.auth.currentUser?.uid == profile.uID) { //TODO: Enclose
-            attachEditingInterface()
-//        }
+            if(Firebase.auth.currentUser?.uid == profile.uID) { //TODO: Enclose
+                attachEditingInterface()
+            }
+        }
     }
 
     private fun attachEditingInterface(){
@@ -481,19 +495,22 @@ class SkillsFragment : Fragment() {
             btnCancel.setOnClickListener {
                 dialog.dismiss()
             }
-            btnSave.setOnClickListener {
+            btnSave.setOnClickListener { //TODO: Form Validation
                 mainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
-                skills.add(mainCategory)
-                rvAdapter.notifyItemInserted(skills.size-1)
-                binding.listSkills.scrollToPosition(rvAdapter.itemCount-1)
-                val scrollListener =
-                    View.OnScrollChangeListener { _, _, _, _, _ ->
-                        editSubCategoryDialogue(mainCategory)
-                        binding.listSkills.setOnScrollChangeListener { _, _, _, _, _ -> }
-                    }
-                binding.listSkills.setOnScrollChangeListener(scrollListener)
-                minimizeFabs()
-                dialog.dismiss()
+                lifecycleScope.launch {
+
+                    skills.add(mainCategory)
+                    rvAdapter.notifyItemInserted(skills.size - 1)
+                    binding.listSkills.scrollToPosition(rvAdapter.itemCount - 1)
+                    val scrollListener =
+                        View.OnScrollChangeListener { _, _, _, _, _ ->
+                            editSubCategoryDialogue(mainCategory)
+                            binding.listSkills.setOnScrollChangeListener { _, _, _, _, _ -> }
+                        }
+                    binding.listSkills.setOnScrollChangeListener(scrollListener)
+                    minimizeFabs()
+                    dialog.dismiss()
+                }
             }
             btnUpdate.setOnClickListener {
                 mainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()

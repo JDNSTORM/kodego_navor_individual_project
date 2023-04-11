@@ -11,7 +11,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 interface FirebaseSkillsMainCategoryDAO {
     suspend fun addMainCategory(mainCategory: SkillMainCategory): Boolean
     suspend fun getMainCategory(mainCategoryID: String): SkillMainCategory
-    suspend fun getMainCategories(profileID: String): ArrayList<SkillMainCategory>
+    suspend fun getMainCategories(): ArrayList<SkillMainCategory>
     suspend fun updateMainCategory(mainCategory: SkillMainCategory, fields: HashMap<String, Any?>): Boolean
     suspend fun deleteMainCategory(mainCategory: SkillMainCategory): Boolean
 }
@@ -19,7 +19,7 @@ interface FirebaseSkillsMainCategoryDAO {
 interface FirebaseSkillsSubCategoryDAO {
     suspend fun addSubCategory(subCategory: SkillSubCategory): Boolean
     suspend fun getSubCategory(subCategoryID: String): SkillSubCategory
-    suspend fun getSubCategories(mainCategoryID: String): ArrayList<SkillSubCategory>
+    suspend fun getSubCategories(): ArrayList<SkillSubCategory>
     suspend fun updateSubCategory(subCategory: SkillSubCategory, fields: HashMap<String, Any?>): Boolean
     suspend fun deleteSubCategory(subCategory: SkillSubCategory): Boolean
 }
@@ -27,12 +27,12 @@ interface FirebaseSkillsSubCategoryDAO {
 interface FirebaseSkillsDAO {
     suspend fun addSkill(skill: Skill): Boolean
     suspend fun getSkill(skillID: String): Skill
-    suspend fun getSkills(subCategoryID: String): ArrayList<Skill>
+    suspend fun getSkills(): ArrayList<Skill>
     suspend fun updateSkill(skill: Skill, fields: HashMap<String, Any?>): Boolean
     suspend fun deleteSkill(skill: Skill): Boolean
 }
 
-class FirebaseSkillsMainCategoryDAOImpl(): FirebaseSkillsMainCategoryDAO{
+class FirebaseSkillsMainCategoryDAOImpl(private val profileID: String): FirebaseSkillsMainCategoryDAO{
     private val fireStore = FirebaseFirestore.getInstance()
     private val collection = FirebaseCollections.SkillsMainCategory
     private val reference = fireStore.collection(collection)
@@ -56,7 +56,7 @@ class FirebaseSkillsMainCategoryDAOImpl(): FirebaseSkillsMainCategoryDAO{
         TODO("Not yet implemented")
     }
 
-    override suspend fun getMainCategories(profileID: String): ArrayList<SkillMainCategory> {
+    override suspend fun getMainCategories(): ArrayList<SkillMainCategory> {
 //        TODO("Not yet implemented")
         val mainCategories: ArrayList<SkillMainCategory> = ArrayList()
         val task = reference
@@ -65,10 +65,12 @@ class FirebaseSkillsMainCategoryDAOImpl(): FirebaseSkillsMainCategoryDAO{
         task.await()
         if (task.isSuccessful && task.result.documents.isNotEmpty()){
             Log.i("MainCategories", task.result.documents.toString())
-            task.result.documents.forEach { snapshot ->
-                Log.i("Main Data", snapshot.data.toString())
-                val mainCategory = snapshot.toObject(SkillMainCategory::class.java)!!
+            task.result.documents.forEach { document ->
+                Log.i("Main Data", document.data.toString())
+                val mainCategory = document.toObject(SkillMainCategory::class.java)!!
+                mainCategory.subCategories.addAll(FirebaseSkillsSubCategoryDAOImpl(mainCategory).getSubCategories())
                 Log.d("MainCategory", mainCategory.toString())
+
                 mainCategories.add(mainCategory)
             }
         }else{
@@ -119,16 +121,17 @@ class FirebaseSkillsSubCategoryDAOImpl(mainCategory: SkillMainCategory): Firebas
         TODO("Not yet implemented")
     }
 
-    override suspend fun getSubCategories(mainCategoryID: String): ArrayList<SkillSubCategory> {
+    override suspend fun getSubCategories(): ArrayList<SkillSubCategory> {
 //        TODO("Not yet implemented")
         val subCategories: ArrayList<SkillSubCategory> = ArrayList()
         val task = reference.get()
         task.await()
         if (task.isSuccessful && task.result.documents.isNotEmpty()){
             Log.i("SubCategories", task.result.documents.toString())
-            task.result.documents.forEach { snapshot ->
-                Log.i("Sub Data", snapshot.data.toString())
-                val subCategory = snapshot.toObject(SkillSubCategory::class.java)!!
+            task.result.documents.forEach { document ->
+                Log.i("Sub Data", document.data.toString())
+                val subCategory = document.toObject(SkillSubCategory::class.java)!!
+                subCategory.skills.addAll(FirebaseSkillsDAOImpl(subCategory).getSkills())
                 Log.d("SubCategory", subCategory.toString())
                 subCategories.add(subCategory)
             }
@@ -190,16 +193,16 @@ class FirebaseSkillsDAOImpl(subCategory: SkillSubCategory): FirebaseSkillsDAO{
         TODO("Not yet implemented")
     }
 
-    override suspend fun getSkills(subCategoryID: String): ArrayList<Skill> {
+    override suspend fun getSkills(): ArrayList<Skill> {
 //        TODO("Not yet implemented")
         val skills: ArrayList<Skill> = ArrayList()
         val task = reference.get()
         task.await()
         if (task.isSuccessful && task.result.documents.isNotEmpty()){
             Log.i("Skills", task.result.documents.toString())
-            task.result.documents.forEach { snapshot ->
-                Log.i("Skill Data", snapshot.data.toString())
-                val skill = snapshot.toObject(Skill::class.java)!!
+            task.result.documents.forEach { document ->
+                Log.i("Skill Data", document.data.toString())
+                val skill = document.toObject(Skill::class.java)!!
                 Log.d("Skill", skill.toString())
                 skills.add(skill)
             }
