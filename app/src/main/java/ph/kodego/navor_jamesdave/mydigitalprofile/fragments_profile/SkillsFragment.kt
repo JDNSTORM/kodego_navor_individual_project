@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -27,7 +28,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMa
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsMainCategoryDAO
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsMainCategoryDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
 
 /**
  *  Main Category
@@ -44,6 +47,7 @@ class SkillsFragment : Fragment() {
     private lateinit var rvAdapter: RVSkillsMainAdapter
     private lateinit var layoutSkillEventsBinding: LayoutSkillEventsBinding
     private lateinit var dao: FirebaseSkillsMainCategoryDAO
+    private lateinit var progressDialog: ProgressDialog
 
     init {
         if(arguments == null) {
@@ -79,7 +83,7 @@ class SkillsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dao = FirebaseSkillsMainCategoryDAOImpl(profile.profileID)
-        skills.addAll(getSkillsSample())
+//        skills.addAll(getSkillsSample()) //TODO: Remove
         setupRecyclerView()
     }
 
@@ -93,6 +97,7 @@ class SkillsFragment : Fragment() {
 
             if(Firebase.auth.currentUser?.uid == profile.uID) { //TODO: Enclose
                 attachEditingInterface()
+                progressDialog = ProgressDialog(requireContext(), R.string.please_wait)
             }
         }
     }
@@ -477,13 +482,14 @@ class SkillsFragment : Fragment() {
      *  Add MainCategory if a MainCategory doesn't exist
      *  Update MainCategory if MainCategory exists
      */
-    private fun editMainCategoryDialogue( //TODO: Change Approach
+    private fun editMainCategoryDialogue(
         mainCategory: SkillMainCategory = SkillMainCategory(profile.profileID)
     ){
         val dialogueSkillMainEditBinding = DialogueSkillMainEditBinding.inflate(layoutInflater)
         val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)
         val dialog = builder.create()
-        val holder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as? ViewHolder //TODO: Optimize
+        val index = skills.indexOf(mainCategory)
+        val holder = binding.listSkills.findViewHolderForLayoutPosition(index) as? ViewHolder //TODO: Optimize
         dialog.setCancelable(false)
         if (skills.contains(mainCategory)){
             dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
@@ -498,6 +504,7 @@ class SkillsFragment : Fragment() {
             btnSave.setOnClickListener { //TODO: Form Validation
                 mainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
                 lifecycleScope.launch {
+                    progressDialog.show()
                     if(dao.addMainCategory(mainCategory)) {
                         skills.add(mainCategory)
                         rvAdapter.notifyItemInserted(skills.size - 1)
@@ -509,15 +516,32 @@ class SkillsFragment : Fragment() {
                             }
                         binding.listSkills.setOnScrollChangeListener(scrollListener)
                     }else{
-                        Snackbar.make(requireView(), "Error Adding Main Category", Snackbar.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Error Adding Main Category", Toast.LENGTH_SHORT).show()
                     }
+                    progressDialog.dismiss()
                     minimizeFabs()
                     dialog.dismiss()
                 }
             }
             btnUpdate.setOnClickListener {
-                mainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
-                rvAdapter.notifyItemChanged(holder!!.layoutPosition)
+                val updatedMainCategory = mainCategory.copy()
+                updatedMainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
+                val modified = FormControls().getModified(mainCategory, updatedMainCategory)
+                modified.remove("subCategories")
+                if (modified.isNotEmpty()) {
+                    lifecycleScope.launch {
+                        Toast.makeText(requireContext(), "Main Category will be updated in the background", Toast.LENGTH_SHORT).show()
+                        if(dao.updateMainCategory(mainCategory, modified)){
+                            skills[index] = updatedMainCategory
+                            rvAdapter.notifyItemChanged(holder!!.layoutPosition)
+                            Toast.makeText(requireContext(), "Main Category Updated Successfully", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(requireContext(), "Error updating Main Category", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }else{
+                    Toast.makeText(requireContext(), "No Fields Changed", Toast.LENGTH_SHORT).show()
+                }
                 minimizeFabs()
                 dialog.dismiss()
             }

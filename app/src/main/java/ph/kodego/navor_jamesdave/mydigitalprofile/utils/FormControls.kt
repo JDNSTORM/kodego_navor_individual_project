@@ -52,6 +52,9 @@ class FormControls {
             is ContactNumber -> source.asMap() as HashMap<String, Any?>
             is EmailAddress -> source.asMap() as HashMap<String, Any?>
             is Website -> source.asMap() as HashMap<String, Any?>
+            is SkillMainCategory -> source.asMap() as HashMap<String, Any?>
+            is SkillSubCategory -> source.asMap() as HashMap<String, Any?>
+            is Skill -> source.asMap() as HashMap<String, Any?>
             else -> {
                 HashMap()
             }
@@ -63,6 +66,9 @@ class FormControls {
             is ContactNumber -> edited.asMap() as HashMap<String, Any?>
             is EmailAddress -> edited.asMap() as HashMap<String, Any?>
             is Website -> edited.asMap() as HashMap<String, Any?>
+            is SkillMainCategory -> edited.asMap() as HashMap<String, Any?>
+            is SkillSubCategory -> edited.asMap() as HashMap<String, Any?>
+            is Skill -> edited.asMap() as HashMap<String, Any?>
             else -> HashMap()
         }
         Log.i("Source", original.toString())
