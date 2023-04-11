@@ -498,16 +498,19 @@ class SkillsFragment : Fragment() {
             btnSave.setOnClickListener { //TODO: Form Validation
                 mainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
                 lifecycleScope.launch {
-
-                    skills.add(mainCategory)
-                    rvAdapter.notifyItemInserted(skills.size - 1)
-                    binding.listSkills.scrollToPosition(rvAdapter.itemCount - 1)
-                    val scrollListener =
-                        View.OnScrollChangeListener { _, _, _, _, _ ->
-                            editSubCategoryDialogue(mainCategory)
-                            binding.listSkills.setOnScrollChangeListener { _, _, _, _, _ -> }
-                        }
-                    binding.listSkills.setOnScrollChangeListener(scrollListener)
+                    if(dao.addMainCategory(mainCategory)) {
+                        skills.add(mainCategory)
+                        rvAdapter.notifyItemInserted(skills.size - 1)
+                        binding.listSkills.scrollToPosition(rvAdapter.itemCount - 1)
+                        val scrollListener =
+                            View.OnScrollChangeListener { _, _, _, _, _ ->
+                                editSubCategoryDialogue(mainCategory)
+                                binding.listSkills.setOnScrollChangeListener { _, _, _, _, _ -> }
+                            }
+                        binding.listSkills.setOnScrollChangeListener(scrollListener)
+                    }else{
+                        Snackbar.make(requireView(), "Error Adding Main Category", Snackbar.LENGTH_SHORT).show()
+                    }
                     minimizeFabs()
                     dialog.dismiss()
                 }
