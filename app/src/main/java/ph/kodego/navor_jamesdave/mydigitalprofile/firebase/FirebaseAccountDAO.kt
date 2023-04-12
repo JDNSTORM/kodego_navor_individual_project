@@ -28,7 +28,6 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
             .set(account, SetOptions.merge())
         task.await()
         return if (task.isSuccessful){
-            auth.signOut()
             Toast.makeText(context, "Account Registration Successful", Toast.LENGTH_SHORT).show()
             true
         }else{
