@@ -124,7 +124,7 @@ class AccountInformationActivity : AppCompatActivity() {
         val updatedAccountData = FormControls().getModified(account, updatedAccount)
         val updatedAddressData = FormControls().getModified(account.contactInformation!!.address!!, updatedAddress)
         val updatedContactNumberData = FormControls().getModified(account.contactInformation!!.contactNumber!!, updatedContactNumber)
-        if (updatedAccountData.size > 0 || updatedAddressData.size > 0 || updatedContactNumberData.size > 0){
+        if (updatedAccountData.isNotEmpty() || updatedAddressData.isNotEmpty() || updatedContactNumberData.isNotEmpty()){
             progressDialog.show()
             lifecycleScope.launch {
                 if (
