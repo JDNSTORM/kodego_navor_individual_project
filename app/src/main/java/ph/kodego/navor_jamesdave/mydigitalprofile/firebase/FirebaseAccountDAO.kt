@@ -76,6 +76,7 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
     }
 
     override suspend fun updateAccount(fields: HashMap<String, Any?>): Boolean {
+        updateUser(fields)
         val task = fireStore
             .collection(collection)
             .document(getCurrentUserID())

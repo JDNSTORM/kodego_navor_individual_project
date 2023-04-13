@@ -10,9 +10,9 @@ import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.tasks.await
 
 interface FirebaseStorageDAO {
-    suspend fun uploadAccountPhoto(uri: Uri): Uri?
-    suspend fun updateAccountPhoto(uri: Uri): String
-    suspend fun deleteAccountPhoto(url: String): Boolean
+    suspend fun uploadImage(uri: Uri): Uri?
+    suspend fun updateAccountPhoto(uri: Uri): Boolean
+    suspend fun deleteImage(url: String): Boolean
 }
 
 class FirebaseStorageDAOImpl(context: Context): FirebaseUserDAOImpl(context), FirebaseStorageDAO{
@@ -20,7 +20,7 @@ class FirebaseStorageDAOImpl(context: Context): FirebaseUserDAOImpl(context), Fi
     private val parentTree = getCurrentUserID()
     private val imageTree = "images"
 
-    override suspend fun uploadAccountPhoto(uri: Uri): Uri? {
+    override suspend fun uploadImage(uri: Uri): Uri? {
         val reference = firebaseStorage
             .getReference(parentTree)
             .child(imageTree)
@@ -45,28 +45,32 @@ class FirebaseStorageDAOImpl(context: Context): FirebaseUserDAOImpl(context), Fi
         }
     }
 
-    override suspend fun updateAccountPhoto(uri: Uri): String {
-        val storageUri = uploadAccountPhoto(uri)
+    override suspend fun updateAccountPhoto(uri: Uri): Boolean {
+        val storageUri = uploadImage(uri)
         if (storageUri != null){
             val user = auth.currentUser!!
-            val oldReference = firebaseStorage.getReferenceFromUrl(user.photoUrl.toString())
-            val newReference = firebaseStorage.getReferenceFromUrl(storageUri.toString())
-            if (oldReference != newReference) {
-                deleteAccountPhoto(user.photoUrl.toString())
+            Log.d("User PhotoUrl", user.photoUrl.toString())
+            if (user.photoUrl != null && user.photoUrl.toString().contains("firebasestorage")) {
+                val oldReference = firebaseStorage.getReferenceFromUrl(user.photoUrl.toString())
+                val newReference = firebaseStorage.getReferenceFromUrl(storageUri.toString())
+                if (oldReference != newReference) {
+                    deleteImage(user.photoUrl.toString())
+                }
             }
-            val photoUriUpdate = userProfileChangeRequest {
-                photoUri = storageUri
+            val userProfileChangeMap: HashMap<String, Any?> = hashMapOf("photoUri" to storageUri)
+            return if (updateUser(userProfileChangeMap)){
+                val updateImageMap = HashMap<String, Any?>()
+                updateImageMap["image"] = storageUri.toString()
+                updateUser(updateImageMap)
+            }else{
+                false
             }
-            val task = user.updateProfile(photoUriUpdate)
-            task.await()
-            if (!task.isSuccessful){
-                Log.e("PhotoUpdate", task.exception?.message.toString())
-            }
+        }else{
+            return false
         }
-        return storageUri.toString()
     }
 
-    override suspend fun deleteAccountPhoto(url: String): Boolean {
+    override suspend fun deleteImage(url: String): Boolean {
         try {
             val imageReference = firebaseStorage.getReferenceFromUrl(url)
             val task = imageReference.delete()

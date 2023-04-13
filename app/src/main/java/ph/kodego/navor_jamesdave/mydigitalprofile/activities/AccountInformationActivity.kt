@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activity_results_contracts.OpenDocumentContract
@@ -76,7 +78,7 @@ class AccountInformationActivity : AppCompatActivity() {
         Log.d("Address", address.toString())
         Log.d("Email", account.contactInformation!!.emailAddress.toString())
         if (account.image.isNotEmpty() && account.image != "null"){
-            loadProfilePhoto(account.image)
+            loadProfilePhoto()
         }
         if (address != null){
             binding.streetAddress.setText(address.streetAddress)
@@ -150,22 +152,17 @@ class AccountInformationActivity : AppCompatActivity() {
         Log.i("URI", uri.toString())
         progressDialog.show()
         lifecycleScope.launch {
-            val photoURL = FirebaseStorageDAOImpl(applicationContext).updateAccountPhoto(uri)
-            if (photoURL.isNotEmpty() && photoURL != "null"){
-                val updateImageMap = HashMap<String, Any?>()
-                updateImageMap["image"] = photoURL
-                if(accountDAO.updateAccount(updateImageMap)){
-                    loadProfilePhoto(photoURL)
-                }
+            if (FirebaseStorageDAOImpl(applicationContext).updateAccountPhoto(uri)){
+                loadProfilePhoto()
             }
             progressDialog.dismiss()
         }
     }
 
-    private fun loadProfilePhoto(url: String){
+    private fun loadProfilePhoto(){
         Glide
             .with(binding.root.context)
-            .load(url)
+            .load(Firebase.auth.currentUser!!.photoUrl)
             .circleCrop()
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .placeholder(R.drawable.placeholder)
