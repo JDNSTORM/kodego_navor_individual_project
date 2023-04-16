@@ -526,6 +526,7 @@ class SkillsFragment : Fragment() {
             }
             btnUpdate.setOnClickListener {
                 val updatedMainCategory = mainCategory.copy()
+                updatedMainCategory.subCategories.addAll(mainCategory.subCategories)
                 updatedMainCategory.categoryMain = dialogueSkillMainEditBinding.skillMain.text.toString().trim()
                 val modified = FormControls().getModified(mainCategory, updatedMainCategory)
                 modified.remove("subCategories")
@@ -592,7 +593,10 @@ class SkillsFragment : Fragment() {
                 btnSave.visibility = View.GONE
                 btnUpdate.visibility = View.VISIBLE
                 dialog.setOnDismissListener {
-                    if (subCategory.categorySub.isEmpty() && subCategory.skills.isEmpty()){
+                    if (subCategory.categorySub.isEmpty() && subCategory.skills.isEmpty()){ //TODO: Delete SubCategory
+                        lifecycleScope.launch{
+                            subCategoryDAO.deleteSubCategory(subCategory)
+                        }
                         subCategories.remove(subCategory)
                         skillSubAdapter.notifyItemRemoved(holder.layoutPosition)
                         expandFabs(mainCategory)
