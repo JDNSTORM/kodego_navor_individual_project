@@ -1,6 +1,12 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile
 
-import
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentEducationBinding
 
 /**
  * TODO:
