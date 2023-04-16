@@ -9,10 +9,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillsMa
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
-/**
- * TODO: Setting ClickListener inside ViewHolder is inefficient because it is redundant but same
- * TODO: Nested RecyclerViews are not affected by ViewHolder.OnClickListener
- */
 class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>): RecyclerView.Adapter<ViewHolder>() {
     interface AdapterEvents{
         fun mainCategoryClick(mainCategory: SkillMainCategory)
