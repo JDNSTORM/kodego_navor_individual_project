@@ -39,7 +39,7 @@ open class FirebaseUserDAOImpl(internal val context: Context): FirebaseUserDAO{
         }
     }
 
-    override suspend fun signInUser(email: String, password: String): Boolean { //TODO: AsyncTask
+    override suspend fun signInUser(email: String, password: String): Boolean {
         val task: Task<AuthResult>
         try {
             task = auth.signInWithEmailAndPassword(email, password)

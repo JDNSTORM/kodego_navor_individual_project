@@ -39,7 +39,7 @@ class ProfileActivity : AppCompatActivity() {
             if (intent.hasExtra(IntentBundles.Profile)) {//TODO: Proper Data Handling
                 profile = intent.getParcelableExtra(IntentBundles.Profile)!!
 //            profile = intent.getParcelableExtra(Constants.BundleProfile, Profile::class.java)!! //TODO: For API 33
-            } else if (intent.hasExtra(IntentBundles.Account)) { //TODO: Retrieve Profile
+            } else if (intent.hasExtra(IntentBundles.Account)) {
                 val account: Account = intent.getParcelableExtra(IntentBundles.Account)!!
                 profile = dao.getProfile(account.uID)
                 profile.setAccount(account)

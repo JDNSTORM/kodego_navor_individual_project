@@ -85,7 +85,6 @@ class SkillsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dao = FirebaseSkillsMainCategoryDAOImpl(profile.profileID)
-//        skills.addAll(getSkillsSample()) //TODO: Remove
         setupRecyclerView()
     }
 
@@ -646,7 +645,7 @@ class SkillsFragment : Fragment() {
         /**
          * Adding Skills
          */
-        dialogueSkillSubEditBinding.btnAddSkill.setOnClickListener {// TODO: Save Skills when saving subCategory
+        dialogueSkillSubEditBinding.btnAddSkill.setOnClickListener {
             val skill = Skill(
                 subCategory.subCategoryID,
                 dialogueSkillSubEditBinding.skill.text.toString().trim()
@@ -690,8 +689,16 @@ class SkillsFragment : Fragment() {
                 setTitle("Delete $title?")
                 setMessage("Are you sure to delete $message and all of its components?")
                 setPositiveButton("Yes"){ dialog, _ ->
-                    mainCategory.subCategories.remove(subCategory)
-                    skillSubAdapter.notifyItemRemoved(holder.layoutPosition)
+                    Toast.makeText(requireContext(), "$title will be deleted in the background.", Toast.LENGTH_SHORT).show()
+                    lifecycleScope.launch {
+                        if (FirebaseSkillsSubCategoryDAOImpl(mainCategory).deleteSubCategory(subCategory)){
+                            mainCategory.subCategories.remove(subCategory)
+                            skillSubAdapter.notifyItemRemoved(holder.layoutPosition)
+                            Toast.makeText(requireContext(), "Successfully deleted $title", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(requireContext(), "Error deleting $title", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                     minimizeFabs()
                     dialog.dismiss()
                 }
@@ -700,12 +707,21 @@ class SkillsFragment : Fragment() {
                 }
             }
         }else{
+            val categoryName = mainCategory.categoryMain
             builder.apply {
                 setTitle("Delete Main Category?")
-                setMessage("Are you sure to delete ${mainCategory.categoryMain} and all of its components?")
+                setMessage("Are you sure to delete $categoryName all of its components?")
                 setPositiveButton("Yes"){ dialog, _ ->
-                    skills.remove(mainCategory)
-                    rvAdapter.notifyItemRemoved(mainViewHolder.layoutPosition)
+                    Toast.makeText(requireContext(), "$categoryName be deleted in the background/", Toast.LENGTH_SHORT).show()
+                    lifecycleScope.launch {
+                        if(dao.deleteMainCategory(mainCategory)){
+                            skills.remove(mainCategory)
+                            rvAdapter.notifyItemRemoved(mainViewHolder.layoutPosition)
+                            Toast.makeText(requireContext(), "Successfully deleted $categoryName", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(requireContext(), "Error Deleting $categoryName", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                     minimizeFabs()
                     dialog.dismiss()
                 }

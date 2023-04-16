@@ -8,6 +8,11 @@ import android.view.ViewGroup
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentCareerBinding
 
+/**
+ * TODO:
+ *  Firebase DAO
+ *  Editing Interface
+ */
 class CareerFragment : Fragment() {
     private var _binding: FragmentCareerBinding? = null
     private val binding get() = _binding!!

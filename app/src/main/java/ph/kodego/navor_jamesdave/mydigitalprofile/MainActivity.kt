@@ -10,7 +10,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImp
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.AccountFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.HomeFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.LoginFragment
-// TODO: Experiment Inserting and Retrieving Profiles
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fragmentAdapter:FragmentAdapter

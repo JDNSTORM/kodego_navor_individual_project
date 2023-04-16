@@ -19,7 +19,7 @@ interface FirebaseProfileDAO {
 class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context), FirebaseProfileDAO{
     private val collection = FirebaseCollections.Profile
     private val collectionAccounts = FirebaseCollections.Accounts
-    override suspend fun addProfile(profile: Profile): Boolean { //TODO: uID
+    override suspend fun addProfile(profile: Profile): Boolean {
         val reference = fireStore
             .collection(collectionAccounts)
             .document(profile.uID)
@@ -39,7 +39,7 @@ class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
 
     override suspend fun getProfile(uID: String): Profile {
         val task = fireStore
-            .collection(collectionAccounts) //TODO: Cannot find profile without this
+            .collection(collectionAccounts)
             .document(uID)
             .collection(collection)
             .document(uID)
@@ -77,7 +77,6 @@ class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
     }
 
     override suspend fun updateProfile(profile: Profile, fields: HashMap<String, Any?>): Boolean {
-//        TODO("Not yet implemented")
         val task = fireStore
             .collection(collectionAccounts)
             .document(profile.uID)

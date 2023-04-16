@@ -59,7 +59,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView(){
-        profiles.addAll(getProfilesSample()) //TODO: Remove
         lifecycleScope.launch{
             profiles.addAll(dao.getProfiles())
             rvUsersProfileAdapter = RVProfilesAdapter(profiles)

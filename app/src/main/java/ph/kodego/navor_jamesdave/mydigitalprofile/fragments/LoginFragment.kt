@@ -82,7 +82,7 @@ class LoginFragment() : Fragment() {
     }
 
     private fun signIn(email: String, password: String){
-        lifecycleScope.launch{ //TODO: Proper Coroutine?
+        lifecycleScope.launch{
             progressDialog.show()
             if(FirebaseUserDAOImpl(requireContext()).signInUser(email, password)){
                 Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()

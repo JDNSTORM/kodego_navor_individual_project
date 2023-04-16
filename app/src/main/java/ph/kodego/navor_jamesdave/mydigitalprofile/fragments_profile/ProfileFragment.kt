@@ -10,7 +10,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentProfileBin
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
-
+/**
+ * TODO:
+ *  Firebase DAO
+ *  Editing Interface
+ */
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!

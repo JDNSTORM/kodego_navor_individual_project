@@ -54,16 +54,14 @@ class CreateAccountActivity : AppCompatActivity() {
         val password = binding.password.text.toString()
         val confirmPassword = binding.confirmPassword.text.toString()
 
-        with(formControls){
-            when(false){ //TODO: Simplify
-                validateText(firstName) -> binding.firstName.requestFocus()
-                validateText(lastName) -> binding.lastName.requestFocus()
-                validateEmail(email) -> binding.email.requestFocus()
-                validateText(password) -> binding.password.requestFocus()
-                validateText(confirmPassword) -> binding.confirmPassword.requestFocus()
-                validatePassword(password, confirmPassword) -> binding.password.requestFocus()
-                else -> registerAccount(firstName, lastName, email, password)
-            }
+        when(false){
+            firstName.isNotEmpty() -> binding.firstName.requestFocus()
+            lastName.isNotEmpty() -> binding.lastName.requestFocus()
+            email.isNotEmpty() -> binding.email.requestFocus()
+            password.isNotEmpty() -> binding.password.requestFocus()
+            confirmPassword.isNotEmpty() -> binding.confirmPassword.requestFocus()
+            (password == confirmPassword) -> binding.password.requestFocus()
+            else -> registerAccount(firstName, lastName, email, password)
         }
     }
 
@@ -87,7 +85,6 @@ class CreateAccountActivity : AppCompatActivity() {
         // Check if user is signed in.
         if (Firebase.auth.currentUser != null) {
             // Not signed in, launch the Sign In activity
-            startActivity(Intent(this, MainActivity::class.java))
             finish()
             Toast.makeText(applicationContext, "A user is signed in", Toast.LENGTH_SHORT).show()
             return

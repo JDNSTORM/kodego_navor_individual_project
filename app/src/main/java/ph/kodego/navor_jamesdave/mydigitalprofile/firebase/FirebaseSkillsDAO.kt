@@ -38,7 +38,6 @@ class FirebaseSkillsMainCategoryDAOImpl(private val profileID: String): Firebase
     private val reference = fireStore.collection(collection)
 
     override suspend fun addMainCategory(mainCategory: SkillMainCategory): Boolean {
-//        TODO("Not yet implemented")
         val document = reference.document()
         mainCategory.mainCategoryID = document.id
         val task = document.set(mainCategory, SetOptions.merge())
@@ -57,7 +56,6 @@ class FirebaseSkillsMainCategoryDAOImpl(private val profileID: String): Firebase
     }
 
     override suspend fun getMainCategories(): ArrayList<SkillMainCategory> {
-//        TODO("Not yet implemented")
         val mainCategories: ArrayList<SkillMainCategory> = ArrayList()
         val task = reference
             .whereEqualTo("profileID", profileID)
@@ -102,7 +100,6 @@ class FirebaseSkillsSubCategoryDAOImpl(mainCategory: SkillMainCategory): Firebas
     private val reference = fireStore.collection(FirebaseCollections.SkillsMainCategory).document(mainCategory.mainCategoryID).collection(collection)
 
     override suspend fun addSubCategory(subCategory: SkillSubCategory): Boolean {
-//        TODO("Not yet implemented")
         val document = reference
             .document()
         subCategory.subCategoryID = document.id
@@ -122,7 +119,6 @@ class FirebaseSkillsSubCategoryDAOImpl(mainCategory: SkillMainCategory): Firebas
     }
 
     override suspend fun getSubCategories(): ArrayList<SkillSubCategory> {
-//        TODO("Not yet implemented")
         val subCategories: ArrayList<SkillSubCategory> = ArrayList()
         val task = reference.get()
         task.await()
@@ -154,7 +150,6 @@ class FirebaseSkillsSubCategoryDAOImpl(mainCategory: SkillMainCategory): Firebas
     }
 
     override suspend fun deleteSubCategory(subCategory: SkillSubCategory): Boolean {
-//        TODO("Not yet implemented")
         val task = reference
             .document(subCategory.subCategoryID)
             .delete()
@@ -174,7 +169,6 @@ class FirebaseSkillsDAOImpl(subCategory: SkillSubCategory): FirebaseSkillsDAO{
         .collection(collection)
 
     override suspend fun addSkill(skill: Skill): Boolean {
-//        TODO("Not yet implemented")
         val document = reference
             .document()
         skill.skillID = document.id
@@ -194,7 +188,6 @@ class FirebaseSkillsDAOImpl(subCategory: SkillSubCategory): FirebaseSkillsDAO{
     }
 
     override suspend fun getSkills(): ArrayList<Skill> {
-//        TODO("Not yet implemented")
         val skills: ArrayList<Skill> = ArrayList()
         val task = reference.get()
         task.await()
@@ -213,7 +206,6 @@ class FirebaseSkillsDAOImpl(subCategory: SkillSubCategory): FirebaseSkillsDAO{
     }
 
     override suspend fun updateSkill(skill: Skill, fields: HashMap<String, Any?>): Boolean {
-//        TODO("Not yet implemented")
         val task = reference
             .document(skill.skillID)
             .update(fields)
@@ -222,7 +214,6 @@ class FirebaseSkillsDAOImpl(subCategory: SkillSubCategory): FirebaseSkillsDAO{
     }
 
     override suspend fun deleteSkill(skill: Skill): Boolean {
-//        TODO("Not yet implemented")
         val task = reference
             .document(skill.skillID)
             .delete()
