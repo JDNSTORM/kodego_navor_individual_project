@@ -33,6 +33,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.expandFabs
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.minimizeFabs
 
 /**
  *  Main Category
@@ -116,13 +118,13 @@ class SkillsFragment : Fragment() {
             }
         })
 
-        minimizeFabs()
+        layoutSkillEventsBinding.minimizeFabs()
 
         layoutSkillEventsBinding.efabSkillsOptions.setOnClickListener {
             if (layoutSkillEventsBinding.efabSkillsOptions.isExtended){
-                minimizeFabs()
+                layoutSkillEventsBinding.minimizeFabs()
             }else{
-                expandFabs()
+                layoutSkillEventsBinding.expandFabs()
             }
         }
 
@@ -348,56 +350,6 @@ class SkillsFragment : Fragment() {
         return skills
     }
 
-    private fun minimizeFabs(){
-        with(layoutSkillEventsBinding) {
-            layoutBackground.visibility = View.GONE
-            efabSkillsOptions.shrink()
-            btnAddMainCategory.hide()
-            btnEditMainCategory.hide()
-            btnDeleteMainCategory.hide()
-            labelMainCategoryFab.visibility = View.GONE
-            btnAddSubCategory.hide()
-            btnEditSubCategory.hide()
-            btnDeleteSubCategory.hide()
-            labelSubCategoryFab.visibility = View.GONE
-
-            skillMain.visibility = View.GONE
-            skillSub.visibility = View.GONE
-        }
-    }
-    private fun expandFabs(){
-        with(layoutSkillEventsBinding) {
-            layoutBackground.visibility = View.VISIBLE
-            efabSkillsOptions.extend()
-            btnAddMainCategory.show()
-            btnEditMainCategory.show()
-            btnDeleteMainCategory.show()
-            labelMainCategoryFab.visibility = View.VISIBLE
-            btnAddSubCategory.show()
-            btnEditSubCategory.show()
-            btnDeleteSubCategory.show()
-            labelSubCategoryFab.visibility = View.VISIBLE
-
-            skillMain.visibility = View.GONE
-            skillSub.visibility = View.GONE
-            btnEditMainCategory.setOnClickListener {
-                Snackbar.make(requireView(), "A Main Category must be selected in order to edit.", Snackbar.LENGTH_SHORT).show()
-            }
-            btnDeleteMainCategory.setOnClickListener {
-                Snackbar.make(requireView(), "A Main Category must be selected in order to delete.", Snackbar.LENGTH_SHORT).show()
-            }
-            btnAddSubCategory.setOnClickListener {
-                Snackbar.make(requireView(), "A Sub Category must be selected in order to add.", Snackbar.LENGTH_SHORT).show()
-            }
-            btnEditSubCategory.setOnClickListener {
-                Snackbar.make(requireView(), "A Sub Category must be selected in order to edit.", Snackbar.LENGTH_SHORT).show()
-            }
-            btnDeleteSubCategory.setOnClickListener {
-                Snackbar.make(requireView(), "A Sub Category must be selected in order to delete.", Snackbar.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     /**
      *  Has: Nothing
      *      Add MainCategory
@@ -426,7 +378,7 @@ class SkillsFragment : Fragment() {
         mainCategory: SkillMainCategory,
         subCategory: SkillSubCategory? = null
     ){
-        expandFabs()
+        layoutSkillEventsBinding.expandFabs()
         with(layoutSkillEventsBinding) {
             skillMain.text = mainCategory.categoryMain
             skillMain.visibility = View.VISIBLE
@@ -520,7 +472,7 @@ class SkillsFragment : Fragment() {
                         Toast.makeText(requireContext(), "Error Adding Main Category", Toast.LENGTH_SHORT).show()
                     }
                     progressDialog.dismiss()
-                    minimizeFabs()
+                    layoutSkillEventsBinding.minimizeFabs()
                     dialog.dismiss()
                 }
             }
@@ -544,7 +496,7 @@ class SkillsFragment : Fragment() {
                 }else{
                     Toast.makeText(requireContext(), "No Fields Changed", Toast.LENGTH_SHORT).show()
                 }
-                minimizeFabs()
+                layoutSkillEventsBinding.minimizeFabs()
                 dialog.dismiss()
             }
         }
@@ -627,7 +579,7 @@ class SkillsFragment : Fragment() {
                         Toast.makeText(requireContext(), "Error Saving SubCategory", Toast.LENGTH_SHORT).show()
                     }
                     progressDialog.dismiss()
-                    minimizeFabs()
+                    layoutSkillEventsBinding.minimizeFabs()
                     dialog.dismiss()
                 }
             }
@@ -642,7 +594,7 @@ class SkillsFragment : Fragment() {
                         Toast.makeText(requireContext(), "Error Updating SubCategory", Toast.LENGTH_SHORT).show()
                     }
                 }
-                minimizeFabs()
+                layoutSkillEventsBinding.minimizeFabs()
                 dialog.dismiss()
             }
         }
@@ -703,7 +655,7 @@ class SkillsFragment : Fragment() {
                             Toast.makeText(requireContext(), "Error deleting $title", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    minimizeFabs()
+                    layoutSkillEventsBinding.minimizeFabs()
                     dialog.dismiss()
                 }
                 setNegativeButton("No"){ dialog, _ ->
@@ -726,7 +678,7 @@ class SkillsFragment : Fragment() {
                             Toast.makeText(requireContext(), "Error Deleting $categoryName", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    minimizeFabs()
+                    layoutSkillEventsBinding.minimizeFabs()
                     dialog.dismiss()
                 }
                 setNegativeButton("No"){ dialog, _ ->
