@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class SkillMainCategory(
     var mainCategoryID: String = "",
-    val profileID: String = "",
+    var profileID: String = "",
     var categoryMain: String = ""
 ): Parcelable{
     @get:Exclude

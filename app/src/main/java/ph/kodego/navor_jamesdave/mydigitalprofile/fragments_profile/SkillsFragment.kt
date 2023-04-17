@@ -50,7 +50,7 @@ class SkillsFragment : Fragment() {
     private val skills: ArrayList<SkillMainCategory> = ArrayList()
     private lateinit var rvAdapter: RVSkillsMainAdapter
     private lateinit var layoutSkillEventsBinding: LayoutSkillEventsBinding
-    private lateinit var dao: FirebaseSkillsMainCategoryDAO
+    private lateinit var dao: FirebaseSkillsMainCategoryDAOImpl
     private lateinit var progressDialog: ProgressDialog
 
     init {
@@ -108,6 +108,8 @@ class SkillsFragment : Fragment() {
     private fun attachEditingInterface(){
         layoutSkillEventsBinding = LayoutSkillEventsBinding.inflate(layoutInflater)
         binding.root.addView(layoutSkillEventsBinding.root, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+
+        rvAdapter.setEditingInterface(dao, layoutSkillEventsBinding)
 
         rvAdapter.setAdapterEvents(object: RVSkillsMainAdapter.AdapterEvents{
             override fun mainCategoryClick(mainCategory: SkillMainCategory) {
@@ -378,8 +380,8 @@ class SkillsFragment : Fragment() {
         mainCategory: SkillMainCategory,
         subCategory: SkillSubCategory? = null
     ){
-        layoutSkillEventsBinding.expandFabs()
         with(layoutSkillEventsBinding) {
+            expandFabs()
             skillMain.text = mainCategory.categoryMain
             skillMain.visibility = View.VISIBLE
 

@@ -40,6 +40,7 @@ class FirebaseSkillsMainCategoryDAOImpl(private val profileID: String): Firebase
     override suspend fun addMainCategory(mainCategory: SkillMainCategory): Boolean {
         val document = reference.document()
         mainCategory.mainCategoryID = document.id
+        mainCategory.profileID = profileID
         val task = document.set(mainCategory, SetOptions.merge())
         task.await()
         return if (task.isSuccessful){
