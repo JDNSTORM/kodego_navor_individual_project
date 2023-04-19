@@ -141,7 +141,6 @@ class FirebaseSkillsSubCategoryDAOImpl(mainCategory: SkillMainCategory): Firebas
         subCategory: SkillSubCategory,
         fields: HashMap<String, Any?>
     ): Boolean {
-//        TODO("Not yet implemented")
         val task = reference
             .document(subCategory.subCategoryID)
             .update(fields)

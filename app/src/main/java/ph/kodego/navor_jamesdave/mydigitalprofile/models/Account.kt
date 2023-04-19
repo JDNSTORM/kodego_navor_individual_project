@@ -16,11 +16,6 @@ open class Account (
 
     @get:Exclude
     var contactInformation: ContactInformation? = null
-//    @get:Exclude
-//    var firstName: String = ""
-//        get() = fName
-
-//        private set
 
     /** Parcelable Constructor */
     constructor(parcel: Parcel) : this(){

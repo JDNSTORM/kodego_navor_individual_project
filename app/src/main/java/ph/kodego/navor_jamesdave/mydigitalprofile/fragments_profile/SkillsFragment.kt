@@ -46,7 +46,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.minimizeFabs
 class SkillsFragment : Fragment() {
     private var _binding: FragmentSkillsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var profile: Profile //TODO: Proper Data Handling
+    private lateinit var profile: Profile
     private val skills: ArrayList<SkillMainCategory> = ArrayList()
     private lateinit var rvAdapter: RVSkillsMainAdapter
     private lateinit var layoutSkillEventsBinding: LayoutSkillEventsBinding
@@ -71,7 +71,7 @@ class SkillsFragment : Fragment() {
         profile = if (requireArguments().containsKey(IntentBundles.Profile)){
             requireArguments().getParcelable<Profile>(IntentBundles.Profile)!!
         }else{
-            Profile()
+            Profile() // TODO: Throw Error
         }
     }
 
@@ -98,9 +98,9 @@ class SkillsFragment : Fragment() {
             binding.listSkills.layoutManager = LinearLayoutManager(requireContext())
             binding.listSkills.adapter = rvAdapter
 
-            if(Firebase.auth.currentUser?.uid == profile.uID) { //TODO: Enclose
+            if(Firebase.auth.currentUser?.uid == profile.uID) {
                 attachEditingInterface()
-                progressDialog = ProgressDialog(requireContext(), R.string.please_wait)
+                progressDialog = ProgressDialog(requireContext())
             }
         }
     }

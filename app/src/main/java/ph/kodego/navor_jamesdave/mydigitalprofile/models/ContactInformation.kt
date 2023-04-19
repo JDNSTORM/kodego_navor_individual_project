@@ -44,7 +44,7 @@ open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, Scho
 }
 
 @Parcelize
-data class EmailAddress( //TODO: Inherit ContactInformation?
+data class EmailAddress(
     var id: String = "",
     var contactInformationID: String = "",
     var email: String = ""
@@ -120,6 +120,26 @@ data class Address(
             return Address(parcel)
         }
     }
+
+    fun completeAddress(): String{
+        val address = StringBuilder()
+        if (streetAddress.isNotEmpty()){
+            address.append(streetAddress)
+        }
+        if (subdivision.isNotEmpty()){
+            address.append(" $subdivision")
+        }
+        if (cityOrMunicipality.isNotEmpty()){
+            address.append(" ,$cityOrMunicipality")
+        }
+        if (province.isNotEmpty()){
+            address.append(" ,$province")
+        }
+        if (country.isNotEmpty()){
+            address.append(" ,$country")
+        }
+        return address.toString().trim()
+    }
 }
 
 @Parcelize
@@ -153,6 +173,10 @@ data class ContactNumber(
         override fun create(parcel: Parcel): ContactNumber {
             return ContactNumber(parcel)
         }
+    }
+
+    fun telephone(): String{
+        return "($areaCode) $contact"
     }
 }
 

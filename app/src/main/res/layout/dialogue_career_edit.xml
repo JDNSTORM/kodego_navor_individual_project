@@ -37,23 +37,10 @@
         android:layout_marginHorizontal="10dp"
         android:lines="15"
         />
-    <LinearLayout
+    <include layout="@layout/layout_edit_buttons"
+        android:id="@+id/edit_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_margin="10dp"
-        android:gravity="bottom|end">
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:padding="5dp"
-            />
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:padding="5dp"
-            />
-    </LinearLayout>
+        />
 </LinearLayout>

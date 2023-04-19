@@ -8,8 +8,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
 
-interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO, FirebaseContactNumberDAO {
+interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO, FirebaseContactNumberDAO, FirebaseWebsiteDAO {
     suspend fun addContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun getContactInformation(contactInformationID: String): ContactInformation?
@@ -30,6 +31,12 @@ interface FirebaseContactNumberDAO{
     suspend fun addContactNumber(contactNumber: ContactNumber): Boolean
     suspend fun getContactNumber(contactInformation: ContactInformation): ContactNumber?
     suspend fun updateContactNumber(contactNumber: ContactNumber, fields: HashMap<String, Any?>): Boolean
+}
+
+interface FirebaseWebsiteDAO{
+    suspend fun addWebsite(website: Website): Boolean
+    suspend fun getWebsite(contactInformation: ContactInformation): Website?
+    suspend fun updateWebsite(website: Website, fields: HashMap<String, Any?>): Boolean
 }
 
 class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
@@ -76,7 +83,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             contactInformation.emailAddress = getEmail(contactInformation)
             contactInformation.address = getAddress(contactInformation)
             contactInformation.contactNumber = getContactNumber(contactInformation)
-            contactInformation.website = null //TODO
+            contactInformation.website = getWebsite(contactInformation)
             contactInformation
         }else{
             Log.e("Get ContactInformation", task.exception!!.message.toString())
@@ -221,6 +228,56 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             .update(fields)
         task.await()
         Log.i("Update ContactNumber", task.isSuccessful.toString())
+        return task.isSuccessful
+    }
+
+    override suspend fun addWebsite(website: Website): Boolean {
+//        TODO("Not yet implemented")
+        val subCollection = FirebaseCollections.Website
+        val reference = fireStore
+            .collection(collection)
+            .document(website.contactInformationID)
+            .collection(subCollection)
+            .document(website.contactInformationID)
+        val websiteReference = fireStore.collection(subCollection).document()
+        website.id = websiteReference.id
+        val task = reference.set(website, SetOptions.merge())
+        task.await()
+        return if (task.isSuccessful){
+            Log.i("Website Registration", "Successful")
+            true
+        }else{
+            Log.e("Website Registration", task.exception!!.message.toString())
+            false
+        }
+    }
+
+    override suspend fun getWebsite(contactInformation: ContactInformation): Website? {
+//        TODO("Not yet implemented")
+        val subCollection = FirebaseCollections.Website
+        val task = fireStore.collection(collection).document(contactInformation.contactInformationID)
+            .collection(subCollection).document(contactInformation.contactInformationID).get()
+        task.await()
+        return if (task.isSuccessful && task.result.data != null){
+            Log.i("Website", task.result.toString())
+            task.result.toObject(Website::class.java)!!
+        }else{
+            Log.e("Get Website", task.exception?.message.toString())
+            null
+        }
+    }
+
+    override suspend fun updateWebsite(website: Website, fields: HashMap<String, Any?>): Boolean {
+//        TODO("Not yet implemented")
+        val subCollection = FirebaseCollections.Website
+        val task = fireStore
+            .collection(collection)
+            .document(website.contactInformationID)
+            .collection(subCollection)
+            .document(website.contactInformationID)
+            .update(fields)
+        task.await()
+        Log.i("Update Website", task.isSuccessful.toString())
         return task.isSuccessful
     }
 
