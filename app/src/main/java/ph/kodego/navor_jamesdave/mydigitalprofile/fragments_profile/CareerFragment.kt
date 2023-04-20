@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVCareersAdapter
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FabListAddBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseCareerDAO
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseCareerDAOImpl
@@ -33,6 +34,7 @@ class CareerFragment : Fragment() {
     private lateinit var dao: FirebaseCareerDAOImpl
     private lateinit var rvAdapter: RVCareersAdapter
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var fabListAddBinding: FabListAddBinding
 
     init {
         if(this.arguments == null) {
@@ -84,5 +86,7 @@ class CareerFragment : Fragment() {
 
     private fun attachEditingInterface() {
 //        TODO("Not yet implemented")
+        fabListAddBinding = FabListAddBinding.inflate(layoutInflater)
+        binding.root.addView(fabListAddBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 }
