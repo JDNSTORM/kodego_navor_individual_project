@@ -9,6 +9,7 @@ object FirebaseCollections {
     const val ContactNumber: String = "contactNumbers"
     const val Website: String = "websites"
 
+    const val ProfessionalSummary: String = "professionalSummaries"
     const val Career: String = "careers"
     const val Education: String = "educations"
 

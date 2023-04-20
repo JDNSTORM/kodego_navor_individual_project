@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfile
 
 /**
@@ -64,11 +65,13 @@ data class Profile(
     }
 }
 
-data class ProfileSummary(
-    var id: Long = 0,
-    val profileID: Long,
-    var profileSummary: String
-)
+@Parcelize
+data class ProfessionalSummary(
+    val profileID: String = ""
+): Parcelable{
+    var id: String = ""
+    var profileSummary: String = ""
+}
 
 data class ProfileCareer(
     val profile: Profile?,

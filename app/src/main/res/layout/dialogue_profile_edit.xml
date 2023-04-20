@@ -33,9 +33,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
+        android:gravity="top|start"
         android:padding="5dp"
         android:layout_marginHorizontal="10dp"
-        android:lines="15"
+        android:lines="10"
         />
     <include layout="@layout/layout_edit_buttons"
         android:id="@+id/edit_buttons"

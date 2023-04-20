@@ -129,6 +129,11 @@ data class Address(
         if (subdivision.isNotEmpty()){
             address.append(" $subdivision")
         }
+        address.append(" ,${localAddress()}")
+        return address.toString().trim()
+    }
+    fun localAddress(): String{
+        val address = StringBuilder()
         if (cityOrMunicipality.isNotEmpty()){
             address.append(" ,$cityOrMunicipality")
         }
@@ -138,7 +143,8 @@ data class Address(
         if (country.isNotEmpty()){
             address.append(" ,$country")
         }
-        return address.toString().trim()
+
+        return address.trim().trim(',').toString() //TODO: Check trimming
     }
 }
 
