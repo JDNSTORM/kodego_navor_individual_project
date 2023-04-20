@@ -18,6 +18,11 @@ data class Profile(
 ): Account(), Parcelable{
     var profileID: String = ""
 
+    fun setProfile(profile: Profile){
+        profession = profile.profession
+        profileID = profile.profileID
+        setAccount(profile)
+    }
 
     override fun setParcel(parcel: Parcel) {
         super.setParcel(parcel)
@@ -71,6 +76,11 @@ data class ProfessionalSummary(
 ): Parcelable{
     var id: String = ""
     var profileSummary: String = ""
+
+    fun setSummary(professionalSummary: ProfessionalSummary){
+        id = professionalSummary.id
+        profileSummary = professionalSummary.profileSummary
+    }
 }
 
 data class ProfileCareer(

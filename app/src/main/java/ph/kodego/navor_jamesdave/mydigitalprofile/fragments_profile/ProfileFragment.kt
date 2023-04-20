@@ -6,16 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProfileEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfessionalSummaryDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfessionalSummary
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
 
@@ -52,7 +55,7 @@ class ProfileFragment : Fragment() {
         }else{
             Profile() //TODO: Throw Error
         }
-        dao = FirebaseProfessionalSummaryDAOImpl(profile)
+        dao = FirebaseProfessionalSummaryDAOImpl(profile, requireContext())
     }
 
     override fun onCreateView(
@@ -68,10 +71,14 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setProfileDetails()
-        setSummaryDetails()
+        getSummary()
+        if(Firebase.auth.currentUser?.uid == profile.uID) {
+            attachEditingInterface()
+        }
     }
 
     private fun attachEditingInterface() {
+        progressDialog = ProgressDialog(requireContext())
         editBinding = DialogueProfileEditBinding.inflate(LayoutInflater.from(requireContext()))
         val builder = AlertDialog.Builder(requireContext())
         builder.setView(editBinding.root)
@@ -80,6 +87,38 @@ class ProfileFragment : Fragment() {
         with(editBinding.editButtons){
             btnSave.visibility = View.GONE
             btnUpdate.visibility = View.VISIBLE
+            btnUpdate.setOnClickListener {
+                val updatedProfile = profile.exportFirebaseProfile()
+                val updatedProfessionalSummary = professionalSummary.copy()
+                updatedProfessionalSummary.setSummary(professionalSummary)
+                with(editBinding){
+                    updatedProfile.profession = profession.text.toString().trim()
+                    updatedProfessionalSummary.profileSummary = profileSummary.text.toString().trim()
+                }
+                val updatedProfileFields: HashMap<String, Any?> = FormControls().getModified(profile.exportFirebaseProfile(), updatedProfile)
+                val updatedSummaryFields: HashMap<String, Any?> = FormControls().getModified(professionalSummary, updatedProfessionalSummary)
+                if (updatedProfileFields.isNotEmpty() || updatedSummaryFields.isNotEmpty()){
+                    progressDialog.show()
+                    lifecycleScope.launch {
+                        if (dao.updateProfile(profile, updatedProfileFields) && dao.updateProfessionalSummary(professionalSummary, updatedSummaryFields)){
+                            profile.importFirebaseProfile(updatedProfile)
+                            professionalSummary = updatedProfessionalSummary
+                            setProfileDetails()
+                            setSummaryDetails()
+//                            requireActivity().startActivity(requireActivity().intent)
+//                            requireActivity().finish()
+                            (requireActivity() as ProfileActivity).updateProfile()
+                            Toast.makeText(requireContext(), "Profile and Summary updated", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(requireContext(), "Error Updating Profile and Summary", Toast.LENGTH_SHORT).show()
+                        }
+                        editDialog.dismiss()
+                        progressDialog.dismiss()
+                    }
+                }else{
+                    Toast.makeText(requireContext(), "No fields have been changed", Toast.LENGTH_SHORT).show()
+                }
+            }
             btnCancel.setOnClickListener {
                 editDialog.dismiss()
             }
@@ -100,13 +139,8 @@ class ProfileFragment : Fragment() {
     private fun setProfileDetails(){
         binding.address.text = profile.contactInformation?.address?.localAddress()
         binding.email.text = profile.contactInformation?.emailAddress?.email
-
-        if(Firebase.auth.currentUser?.uid == profile.uID) {
-            attachEditingInterface()
-            progressDialog = ProgressDialog(requireContext())
-        }
     }
-    private fun setSummaryDetails(){
+    private fun getSummary(){
         lifecycleScope.launch{
             val summary = dao.getProfessionalSummary()
             if (summary != null){
@@ -115,7 +149,10 @@ class ProfileFragment : Fragment() {
                 professionalSummary = ProfessionalSummary(profile.profileID)
                 dao.addProfessionalSummary(professionalSummary)
             }
-            binding.professionalSummary.text = professionalSummary.profileSummary
+            setSummaryDetails()
         }
+    }
+    private fun setSummaryDetails(){
+        binding.professionalSummary.text = professionalSummary.profileSummary
     }
 }

@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class FirebaseProfile(
     val uid: String = "",
     val profileID: String = "",
-    val profession: String = ""
+    var profession: String = ""
 ): Parcelable

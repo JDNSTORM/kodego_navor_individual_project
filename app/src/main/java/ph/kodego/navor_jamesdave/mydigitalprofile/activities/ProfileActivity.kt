@@ -24,7 +24,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private lateinit var profile: Profile
-    private lateinit var dao: FirebaseProfileDAO
+    private lateinit var dao: FirebaseProfileDAOImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +47,7 @@ class ProfileActivity : AppCompatActivity() {
                 profile = Profile()
             }
             profileBundle.putParcelable(IntentBundles.Profile, profile)
-            loadProfilePhoto(profile.image)
-            with(binding.viewholderProfile) {
-                profileUserName.text = "${profile.firstName} ${profile.lastName}"
-                profession.text = profile.profession
-            }
+            setProfileDetails()
 
             val fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
 
@@ -99,5 +95,21 @@ class ProfileActivity : AppCompatActivity() {
             .placeholder(R.drawable.placeholder)
             .error(R.drawable.placeholder)
             .into(binding.viewholderProfile.profilePicture)
+    }
+
+    private fun setProfileDetails(){
+        loadProfilePhoto(profile.image)
+        with(binding.viewholderProfile) {
+            profileUserName.text = "${profile.firstName} ${profile.lastName}"
+            profession.text = profile.profession
+        }
+    }
+    fun updateProfile(){
+        lifecycleScope.launch {
+            val updatedProfile = dao.getProfile(profile.uID)
+            updatedProfile.setAccount(profile)
+            profile = updatedProfile
+            setProfileDetails()
+        }
     }
 }

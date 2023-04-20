@@ -1,5 +1,6 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 
+import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -15,8 +16,7 @@ interface FirebaseProfessionalSummaryDAO {
     suspend fun deleteProfessionalSummary(professionalSummary: ProfessionalSummary): Boolean
 }
 
-class FirebaseProfessionalSummaryDAOImpl(profile: Profile): FirebaseProfessionalSummaryDAO{
-    private val fireStore = FirebaseFirestore.getInstance()
+class FirebaseProfessionalSummaryDAOImpl(profile: Profile, context: Context): FirebaseProfileDAOImpl(context), FirebaseProfessionalSummaryDAO{
     private val collectionAccounts = FirebaseCollections.Accounts
     private val collectionProfiles = FirebaseCollections.Profile
     private val collection = FirebaseCollections.ProfessionalSummary
@@ -25,7 +25,6 @@ class FirebaseProfessionalSummaryDAOImpl(profile: Profile): FirebaseProfessional
         .document(profile.profileID).collection(collection)
 
     override suspend fun addProfessionalSummary(professionalSummary: ProfessionalSummary): Boolean {
-//        TODO("Not yet implemented")
         val document = reference.document()
         professionalSummary.id = document.id
         val task = document.set(professionalSummary, SetOptions.merge())
@@ -40,7 +39,6 @@ class FirebaseProfessionalSummaryDAOImpl(profile: Profile): FirebaseProfessional
     }
 
     override suspend fun getProfessionalSummary(): ProfessionalSummary? {
-//        TODO("Not yet implemented")
         val task = reference.get()
         task.await()
         return if (task.isSuccessful && task.result.documents.isNotEmpty()){
@@ -56,7 +54,6 @@ class FirebaseProfessionalSummaryDAOImpl(profile: Profile): FirebaseProfessional
         professionalSummary: ProfessionalSummary,
         fields: HashMap<String, Any?>
     ): Boolean {
-//        TODO("Not yet implemented")
         val task = reference
             .document(professionalSummary.id)
             .update(fields)

@@ -6,6 +6,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfile
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 import kotlin.reflect.full.memberProperties
 
@@ -44,14 +45,14 @@ class FormControls {
     fun getModified(source: Any, edited: Any): HashMap<String, Any?>{
         val modified: HashMap<String, Any?> = HashMap()
         val original: HashMap<String, Any?> = when(source){
-            is Account -> {
-                source.asMap() as HashMap<String, Any?>
-            }
+            is FirebaseProfile -> source.asMap() as HashMap<String, Any?>
+            is Account -> source.asMap() as HashMap<String, Any?>
             is ContactInformation -> source.asMap() as HashMap<String, Any?>
             is Address -> source.asMap() as HashMap<String, Any?>
             is ContactNumber -> source.asMap() as HashMap<String, Any?>
             is EmailAddress -> source.asMap() as HashMap<String, Any?>
             is Website -> source.asMap() as HashMap<String, Any?>
+            is ProfessionalSummary -> source.asMap() as HashMap<String, Any?>
             is SkillMainCategory -> source.asMap() as HashMap<String, Any?>
             is SkillSubCategory -> source.asMap() as HashMap<String, Any?>
             is Skill -> source.asMap() as HashMap<String, Any?>
@@ -60,12 +61,14 @@ class FormControls {
             }
         }
         val updated: HashMap<String, Any?> = when(edited){
+            is FirebaseProfile -> edited.asMap() as HashMap<String, Any?>
             is Account -> edited.asMap() as HashMap<String, Any?>
             is ContactInformation -> edited.asMap() as HashMap<String, Any?>
             is Address -> edited.asMap() as HashMap<String, Any?>
             is ContactNumber -> edited.asMap() as HashMap<String, Any?>
             is EmailAddress -> edited.asMap() as HashMap<String, Any?>
             is Website -> edited.asMap() as HashMap<String, Any?>
+            is ProfessionalSummary -> edited.asMap() as HashMap<String, Any?>
             is SkillMainCategory -> edited.asMap() as HashMap<String, Any?>
             is SkillSubCategory -> edited.asMap() as HashMap<String, Any?>
             is Skill -> edited.asMap() as HashMap<String, Any?>

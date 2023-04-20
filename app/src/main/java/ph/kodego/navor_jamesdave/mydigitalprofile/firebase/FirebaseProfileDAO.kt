@@ -16,7 +16,7 @@ interface FirebaseProfileDAO {
     suspend fun deleteProfile(profile: Profile): Boolean
 }
 
-class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context), FirebaseProfileDAO{
+open class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context), FirebaseProfileDAO{
     private val collection = FirebaseCollections.Profile
     private val collectionAccounts = FirebaseCollections.Accounts
     override suspend fun addProfile(profile: Profile): Boolean {
