@@ -63,24 +63,28 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             with(contactInformation) {
                 if (emailAddress != null) {
                     emailAddress!!.contactInformationID = contactInformationID
-                    addEmail(emailAddress!!)
+                }else{
+                    emailAddress = EmailAddress(contactInformationID =  contactInformationID)
                 }
+                addEmail(emailAddress!!)
                 if (contactNumber != null) {
                     contactNumber!!.contactInformationID = contactInformationID
-                    addContactNumber(contactNumber!!)
+                }else{
+                    contactNumber = ContactNumber(contactInformationID)
                 }
+                addContactNumber(contactNumber!!)
                 if (address != null) {
                     address!!.contactInformationID = contactInformationID
-                    addAddress(address!!)
+                }else{
+                    address = Address(contactInformationID)
                 }
-                if (emailAddress != null){
-                    emailAddress!!.contactInformationID = contactInformationID
-                    addEmail(emailAddress!!)
-                }
+                addAddress(address!!)
                 if (website != null){
                     website!!.contactInformationID = contactInformationID
-                    addWebsite(website!!)
+                }else{
+                    website = Website(contactInformationID)
                 }
+                addWebsite(website!!)
             }
             true
         }else{

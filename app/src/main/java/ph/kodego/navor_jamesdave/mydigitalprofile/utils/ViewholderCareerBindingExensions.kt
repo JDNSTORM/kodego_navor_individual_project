@@ -6,7 +6,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 
 fun ViewholderCareerBinding.bind(career: Career) {
     position.text = career.position
-    employmentPeriod.text = career.employmentStart + " - " + career.employmentEnd
+    employmentPeriod.text = career.employmentPeriod()
     companyName.text = career.companyName
     val address = career.contactInformation?.address?.completeAddress()
     if (!address.isNullOrEmpty()) {

@@ -30,6 +30,14 @@ data class Career(
         jobDescription = career.jobDescription
         contactInformation = career.contactInformation
     }
+
+    fun employmentPeriod(): String{
+        return if (employmentStart.isNotEmpty() && employmentEnd.isNotEmpty()){
+            "$employmentStart - $employmentEnd"
+        }else{
+            ""
+        }
+    }
 }
 
 @Parcelize
