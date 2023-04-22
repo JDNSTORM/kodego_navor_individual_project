@@ -17,14 +17,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentCareerBind
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseCareerDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.CareerEditDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.CareerEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
-/**
- * TODO:
- *  Firebase DAO
- *  Editing Interface
- */
 class CareerFragment : Fragment() {
     private var _binding: FragmentCareerBinding? = null
     private val binding get() = _binding!!
@@ -33,7 +28,6 @@ class CareerFragment : Fragment() {
     private lateinit var dao: FirebaseCareerDAOImpl
     private lateinit var rvAdapter: RVCareersAdapter
     private lateinit var editDialog: CareerEditDialog
-    private lateinit var fabListAddBinding: FabListAddBinding
 
     init {
         if(this.arguments == null) {
@@ -88,11 +82,10 @@ class CareerFragment : Fragment() {
     }
 
     private fun attachEditingInterface() {
-//        TODO("Not yet implemented")
         editDialog = CareerEditDialog(requireContext(), dao, rvAdapter)
         rvAdapter.editDialog = editDialog
 
-        fabListAddBinding = FabListAddBinding.inflate(layoutInflater)
+        val fabListAddBinding = FabListAddBinding.inflate(layoutInflater)
         binding.root.addView(fabListAddBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         fabListAddBinding.btnAdd.setOnClickListener {

@@ -1,21 +1,18 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import android.app.Dialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
-import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityCreateAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
 class CreateAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateAccountBinding

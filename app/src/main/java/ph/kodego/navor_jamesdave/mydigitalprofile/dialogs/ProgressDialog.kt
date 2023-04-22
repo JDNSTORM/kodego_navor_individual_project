@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.utils
+package ph.kodego.navor_jamesdave.mydigitalprofile.dialogs
 
 import android.app.Dialog
 import android.content.Context

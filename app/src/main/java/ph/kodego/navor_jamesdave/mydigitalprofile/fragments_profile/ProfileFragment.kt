@@ -21,7 +21,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfessionalSummary
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null

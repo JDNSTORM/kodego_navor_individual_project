@@ -30,7 +30,6 @@ class FirebaseCareerDAOImpl(private val profile: Profile): FirebaseCareerDAO{
     fun profileID(): String = profile.profileID
 
     override suspend fun addCareer(career: Career): Boolean {
-//        TODO("Not yet implemented")
         val document = reference.document()
         if(dao.registerContactInformation(career.contactInformation!!)){
             career.contactInformationID = career.contactInformation!!.contactInformationID
@@ -52,7 +51,6 @@ class FirebaseCareerDAOImpl(private val profile: Profile): FirebaseCareerDAO{
     }
 
     override suspend fun getCareers(): ArrayList<Career> {
-//        TODO("Not yet implemented")
         val careers: ArrayList<Career> = ArrayList()
         val task = reference
 //            .whereEqualTo("profileID", profileID)
@@ -74,11 +72,30 @@ class FirebaseCareerDAOImpl(private val profile: Profile): FirebaseCareerDAO{
         return careers
     }
 
-    override suspend fun updateCareer(career: Career, fields: HashMap<String, Any?>): Boolean {
-//        TODO("Not yet implemented")
+    override suspend fun updateCareer(career: Career, fields: HashMap<String, Any?>): Boolean { //TODO!!!: Optimize
+        val careerUpdates: HashMap<String, Any?> = fields["Career"] as HashMap<String, Any?>
+        val contactInformation = career.contactInformation!!
+        if (fields.containsKey("Address")){
+            dao.updateAddress(
+                contactInformation.address!!,
+                fields["Address"] as HashMap<String, Any?>
+            )
+        }
+        if (fields.containsKey("Website")){
+            dao.updateWebsite(
+                contactInformation.website!!,
+                fields["Website"] as HashMap<String, Any?>
+            )
+        }
+        if (fields.containsKey("ContactNumber")){
+            dao.updateContactNumber(
+                contactInformation.contactNumber!!,
+                fields["ContactNumber"] as HashMap<String, Any?>
+            )
+        }
         val task = reference
             .document(career.id)
-            .update(fields)
+            .update(careerUpdates)
         task.await()
         return task.isSuccessful
     }

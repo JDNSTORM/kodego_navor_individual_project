@@ -42,7 +42,7 @@ class FormControls {
 
     }
 
-    fun getModified(source: Any, edited: Any): HashMap<String, Any?>{
+    fun getModified(source: Any, edited: Any): HashMap<String, Any?>{ //TODO: Use Internal Functions instead
         val modified: HashMap<String, Any?> = HashMap()
         val original: HashMap<String, Any?> = when(source){
             is FirebaseProfile -> source.asMap() as HashMap<String, Any?>
@@ -53,6 +53,7 @@ class FormControls {
             is EmailAddress -> source.asMap() as HashMap<String, Any?>
             is Website -> source.asMap() as HashMap<String, Any?>
             is ProfessionalSummary -> source.asMap() as HashMap<String, Any?>
+            is Career -> source.asMap() as HashMap<String, Any?>
             is SkillMainCategory -> source.asMap() as HashMap<String, Any?>
             is SkillSubCategory -> source.asMap() as HashMap<String, Any?>
             is Skill -> source.asMap() as HashMap<String, Any?>
@@ -69,6 +70,7 @@ class FormControls {
             is EmailAddress -> edited.asMap() as HashMap<String, Any?>
             is Website -> edited.asMap() as HashMap<String, Any?>
             is ProfessionalSummary -> edited.asMap() as HashMap<String, Any?>
+            is Career -> edited.asMap() as HashMap<String, Any?>
             is SkillMainCategory -> edited.asMap() as HashMap<String, Any?>
             is SkillSubCategory -> edited.asMap() as HashMap<String, Any?>
             is Skill -> edited.asMap() as HashMap<String, Any?>

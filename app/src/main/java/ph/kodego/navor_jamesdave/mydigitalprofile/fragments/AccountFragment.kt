@@ -21,7 +21,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBin
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
 class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null

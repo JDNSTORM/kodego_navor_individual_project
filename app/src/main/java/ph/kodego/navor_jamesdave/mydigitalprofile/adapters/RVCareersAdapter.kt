@@ -1,12 +1,12 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.CareerEditDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.CareerEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.bind
 
 class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Adapter<ViewHolder>() {
@@ -35,5 +35,13 @@ class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Ada
     fun addCareer(career: Career){
         careers.add(career)
         notifyItemInserted(itemCount - 1)
+    }
+    fun updateCareer(career: Career, newCareer: Career, holder: ViewHolder){
+        val index = careers.indexOf(career)
+        Log.d("Index", index.toString())
+        Log.d("Career", career.toString())
+        Log.d("NewCareer", newCareer.toString())
+        careers[index] = newCareer
+        notifyItemChanged(holder.adapterPosition)
     }
 }

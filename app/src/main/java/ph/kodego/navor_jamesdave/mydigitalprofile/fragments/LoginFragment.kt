@@ -16,7 +16,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ForgotPasswordActiv
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentLoginBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
 class LoginFragment() : Fragment() {
     private var _binding: FragmentLoginBinding? = null

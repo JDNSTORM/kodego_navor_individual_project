@@ -2,15 +2,12 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.activity_results_contracts.OpenDocumentContract
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountSettingsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
 class AccountSettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountSettingsBinding

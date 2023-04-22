@@ -24,7 +24,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
 class AccountInformationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountInformationBinding

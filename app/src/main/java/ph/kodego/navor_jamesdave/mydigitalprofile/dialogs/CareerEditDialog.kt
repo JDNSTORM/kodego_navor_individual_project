@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.utils
+package ph.kodego.navor_jamesdave.mydigitalprofile.dialogs
 
 import android.app.AlertDialog
 import android.content.Context
@@ -16,6 +16,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.bind
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.clear
 
 class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl, private val adapter: RVCareersAdapter): AlertDialog(context) {
     private lateinit var binding: DialogueCareerEditBinding
@@ -41,7 +44,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
         with(binding.editButtons) {
             btnCancel.setOnClickListener { dismiss() }
             btnSave.setOnClickListener { saveCareer() }
-            btnUpdate.setOnClickListener { updateCareer() }
+            btnUpdate.setOnClickListener { checkUpdates() }
         }
     }
 
@@ -104,11 +107,12 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
         }
     }
 
-    private fun updateCareer(){
+    private fun checkUpdates(){
         val updatedCareer = Career(career!!)
-        val updatedAddress = Address(career!!.contactInformation!!.address!!)
-        val updatedWebsite = Website(career!!.contactInformation!!.website!!)
-        val updatedTelephone = ContactNumber(career!!.contactInformation!!.contactNumber!!)
+        val contactInformation = career!!.contactInformation!!
+        val updatedAddress = Address(contactInformation.address!!)
+        val updatedWebsite = Website(contactInformation.website!!)
+        val updatedTelephone = ContactNumber(contactInformation.contactNumber!!)
         with(binding) {
             updatedCareer.employmentStart = dateEmployed.text.toString().trim()
             updatedCareer.employmentEnd = employmentEnd.text.toString().trim()
@@ -130,5 +134,45 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
 
             updatedCareer.jobDescription = jobDescription.text.toString().trim()
         }
+        val careerUpdate = FormControls().getModified(career!!, updatedCareer)
+        val addressUpdate = FormControls().getModified(contactInformation.address!!, updatedAddress)
+        val websiteUpdate = FormControls().getModified(contactInformation.website!!, updatedWebsite)
+        val telUpdate = FormControls().getModified(contactInformation.contactNumber!!, updatedTelephone)
+        if (careerUpdate.size > 0 || addressUpdate.size > 0 || websiteUpdate.size > 0 || telUpdate.size > 0){
+            val updates: HashMap<String, Any?> = HashMap()
+            if (careerUpdate.size > 0 ){
+                updates["Career"] = careerUpdate
+            }
+            if (addressUpdate.size > 0 ){
+                updates["Address"] = addressUpdate
+            }
+            if (websiteUpdate.size > 0 ){
+                updates["Website"] = websiteUpdate
+            }
+            if (telUpdate.size > 0 ){
+                updates["ContactNumber"] = telUpdate
+            }
+            updatedCareer.contactInformation!!.address = updatedAddress
+            updatedCareer.contactInformation!!.website = updatedWebsite
+            updatedCareer.contactInformation!!.contactNumber = updatedTelephone
+            updateCareer(updatedCareer, updates)
+        }else{
+            Toast.makeText(context, "No Fields Updated", Toast.LENGTH_SHORT).show()
+        }
     }
+
+    private fun updateCareer(updatedCareer: Career, fields: HashMap<String, Any?>){
+        progressDialog.show()
+        lifecycleScope.launch {
+            if(dao.updateCareer(career!!, fields)){
+                adapter.updateCareer(career!!, updatedCareer, holder!!)
+                Toast.makeText(context, "Update Successful", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context, "Error Updating Career", Toast.LENGTH_SHORT).show()
+            }
+            dismiss()
+            progressDialog.dismiss()
+        }
+    }
+    //TODO: Delete Career
 }

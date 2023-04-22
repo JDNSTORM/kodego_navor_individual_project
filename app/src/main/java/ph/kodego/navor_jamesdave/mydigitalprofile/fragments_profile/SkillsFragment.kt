@@ -2,7 +2,6 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +31,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsSubCate
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.expandFabs
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.minimizeFabs
 
