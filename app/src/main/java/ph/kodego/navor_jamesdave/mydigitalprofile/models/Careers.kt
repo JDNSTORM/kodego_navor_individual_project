@@ -15,6 +15,7 @@ data class Career(
     var companyName: String = ""
 //    var competencies: ArrayList<Competency> = ArrayList()
     var contactInformationID: String = ""
+    var jobDescription: String = ""
 
     @get:Exclude
     var contactInformation: ContactInformation? = null

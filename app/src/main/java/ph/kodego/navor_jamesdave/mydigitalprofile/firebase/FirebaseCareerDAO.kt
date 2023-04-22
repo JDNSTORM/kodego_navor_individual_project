@@ -18,6 +18,7 @@ interface FirebaseCareerDAO {
 }
 
 class FirebaseCareerDAOImpl(profile: Profile): FirebaseCareerDAO{
+    private val dao = FirebaseContactInformationDAOImpl()
     private val fireStore = FirebaseFirestore.getInstance()
     private val collectionAccounts = FirebaseCollections.Accounts
     private val collectionProfiles = FirebaseCollections.Profile
@@ -29,6 +30,9 @@ class FirebaseCareerDAOImpl(profile: Profile): FirebaseCareerDAO{
     override suspend fun addCareer(career: Career): Boolean {
 //        TODO("Not yet implemented")
         val document = reference.document()
+        if(dao.registerContactInformation(career.contactInformation!!)){
+            career.contactInformationID = career.contactInformation!!.contactInformationID
+        }
         career.id = document.id
         val task = document.set(career, SetOptions.merge())
         task.await()
@@ -58,6 +62,7 @@ class FirebaseCareerDAOImpl(profile: Profile): FirebaseCareerDAO{
                 Log.i("Career Data", document.data.toString())
                 val career = document.toObject(Career::class.java)!!
                 Log.d("Career", career.toString())
+                career.contactInformation = dao.getContactInformation(career.contactInformationID)
 
                 careers.add(career)
             }

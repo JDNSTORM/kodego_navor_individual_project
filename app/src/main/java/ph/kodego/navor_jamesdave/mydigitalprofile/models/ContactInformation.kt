@@ -73,7 +73,7 @@ data class EmailAddress(
 
 @Parcelize
 data class Address(
-    val contactInformationID: String = ""
+    var contactInformationID: String = ""
 ): Parcelable {
     var id: String = ""
     var streetAddress: String = ""
@@ -150,7 +150,7 @@ data class Address(
 
 @Parcelize
 data class ContactNumber(
-    val contactInformationID: String = "",
+    var contactInformationID: String = "",
 ): Parcelable{
     var id: String = ""
     var areaCode: String = ""
@@ -182,13 +182,17 @@ data class ContactNumber(
     }
 
     fun telephone(): String{
-        return "($areaCode) $contact"
+        return if (contact != 0L) {
+            "($areaCode) $contact"
+        }else{
+            ""
+        }
     }
 }
 
 @Parcelize
 data class Website(
-    val contactInformationID: String = ""
+    var contactInformationID: String = ""
 ): Parcelable{
     var id: String = ""
     var website: String = ""

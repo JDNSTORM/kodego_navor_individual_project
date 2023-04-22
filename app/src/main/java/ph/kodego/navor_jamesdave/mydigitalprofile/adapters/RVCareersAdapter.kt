@@ -34,10 +34,15 @@ class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Ada
                 companyWebsite.visibility = View.VISIBLE
             }
             val contactNumber = career.contactInformation?.contactNumber
-            if (contactNumber != null){
+            if (contactNumber != null && contactNumber.telephone().isNotEmpty()){
                 companyTelephone.text = contactNumber.telephone()
                 companyTelephone.visibility = View.VISIBLE
             }
+            if (career.jobDescription.isNotEmpty()){
+                jobDescription.text = career.jobDescription
+                jobDescription.visibility = View.VISIBLE
+            }
+            root.setOnClickListener {  }
         }
     }
 }

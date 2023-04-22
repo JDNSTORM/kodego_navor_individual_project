@@ -42,10 +42,10 @@ class FirebaseProfessionalSummaryDAOImpl(profile: Profile, context: Context): Fi
         val task = reference.get()
         task.await()
         return if (task.isSuccessful && task.result.documents.isNotEmpty()){
-            Log.i("Careers", task.result.documents.toString())
+            Log.i("Summary", task.result.documents.toString())
             task.result.documents[0].toObject(ProfessionalSummary::class.java)!!
         }else{
-            Log.e("Get Careers", task.exception?.message.toString())
+            Log.e("Get Summary", task.exception?.message.toString())
             null
         }
     }

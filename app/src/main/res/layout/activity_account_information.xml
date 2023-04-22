@@ -93,7 +93,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_street_address"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:endIconMode="clear_text"
         android:padding="2dp"
@@ -116,8 +116,8 @@
         android:layout_height="wrap_content"
         app:endIconMode="clear_text"
         android:padding="2dp"
-        app:layout_constraintTop_toBottomOf="@id/heading_address"
-        app:layout_constraintStart_toEndOf="@id/til_street_address"
+        app:layout_constraintTop_toBottomOf="@id/til_street_address"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
         android:layout_marginHorizontal="10dp"
@@ -136,10 +136,10 @@
         android:layout_height="wrap_content"
         app:endIconMode="clear_text"
         android:padding="2dp"
-        app:layout_constraintTop_toBottomOf="@id/til_street_address"
+        app:layout_constraintTop_toBottomOf="@id/til_subdivision"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/til_zip_code"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/city"
@@ -155,10 +155,10 @@
         android:layout_height="wrap_content"
         app:endIconMode="clear_text"
         android:padding="2dp"
-        app:layout_constraintTop_toBottomOf="@id/til_street_address"
+        app:layout_constraintTop_toBottomOf="@id/til_subdivision"
         app:layout_constraintStart_toEndOf="@id/til_city"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginEnd="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/zip_code"
@@ -178,7 +178,7 @@
         app:layout_constraintTop_toBottomOf="@id/til_city"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/til_country"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/province"
@@ -197,7 +197,7 @@
         app:layout_constraintTop_toBottomOf="@id/til_city"
         app:layout_constraintStart_toEndOf="@id/til_province"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginEnd="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/country"
@@ -252,7 +252,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

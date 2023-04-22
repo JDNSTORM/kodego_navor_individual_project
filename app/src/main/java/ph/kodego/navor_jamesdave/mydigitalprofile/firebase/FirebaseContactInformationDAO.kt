@@ -60,9 +60,27 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
 
     override suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean {
         return if (addContactInformation(contactInformation)){ //TODO: Contents
-            if (contactInformation.emailAddress != null) {
-                contactInformation.emailAddress!!.contactInformationID = contactInformation.contactInformationID
-                addEmail(contactInformation.emailAddress!!)
+            with(contactInformation) {
+                if (emailAddress != null) {
+                    emailAddress!!.contactInformationID = contactInformationID
+                    addEmail(emailAddress!!)
+                }
+                if (contactNumber != null) {
+                    contactNumber!!.contactInformationID = contactInformationID
+                    addContactNumber(contactNumber!!)
+                }
+                if (address != null) {
+                    address!!.contactInformationID = contactInformationID
+                    addAddress(address!!)
+                }
+                if (emailAddress != null){
+                    emailAddress!!.contactInformationID = contactInformationID
+                    addEmail(emailAddress!!)
+                }
+                if (website != null){
+                    website!!.contactInformationID = contactInformationID
+                    addWebsite(website!!)
+                }
             }
             true
         }else{
@@ -71,6 +89,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun getContactInformation(contactInformationID: String): ContactInformation? {
+        if (contactInformationID.isEmpty()) return null
         val task = fireStore
             .collection(collection)
             .document(contactInformationID)
@@ -125,7 +144,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             Log.i("Email", task.result.toString())
             task.result.toObject(EmailAddress::class.java)!!
         }else{
-            Log.e("Get Email", task.exception!!.message.toString())
+            Log.e("Get Email", task.exception?.message.toString())
             null
         }
     }
