@@ -45,22 +45,21 @@ open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, Scho
 
 @Parcelize
 data class EmailAddress(
-    var id: String = "",
-    var contactInformationID: String = "",
-    var email: String = ""
+    var contactInformationID: String = ""
 ): Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
+    var id: String = ""
+    var email: String = ""
+
+    constructor(parcel: Parcel) : this(parcel.readString()!!) {
         parcel.readString()!!
-    ) {
+        parcel.readString()!!
     }
 
     companion object : Parceler<EmailAddress> {
 
         override fun EmailAddress.write(parcel: Parcel, flags: Int) {
-            parcel.writeString(id)
             parcel.writeString(contactInformationID)
+            parcel.writeString(id)
             parcel.writeString(email)
         }
 
@@ -69,6 +68,10 @@ data class EmailAddress(
         }
     }
 
+    constructor(id: String, contactInformationID: String, email: String): this(contactInformationID){
+        this.id = id
+        this.email = email
+    }
 }
 
 @Parcelize
@@ -213,5 +216,9 @@ data class Website(
         override fun create(parcel: Parcel): Website {
             return Website(parcel)
         }
+    }
+    constructor(website: Website):this(website.contactInformationID){
+        id = website.id
+        this.website = website.website
     }
 }

@@ -81,7 +81,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
                 layoutContactEdit.telContactNumber.text.toString().toLongOrNull() ?: 0
             contactInformation.contactNumber = telephone
             career.contactInformation = contactInformation
-            career.jobDescription = jobDescription.text.toString()
+            career.jobDescription = jobDescription.text.toString().trim()
         }
         addCareer(career)
         dismiss()
@@ -103,33 +103,28 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
     private fun updateCareer(){
         val updatedCareer = Career(career!!)
         val updatedAddress = Address(career!!.contactInformation!!.address!!)
+        val updatedWebsite = Website(career!!.contactInformation!!.website!!)
+        val updatedTelephone = ContactNumber(career!!.contactInformation!!.contactNumber!!)
         with(binding) {
             updatedCareer.employmentStart = dateEmployed.text.toString().trim()
             updatedCareer.employmentEnd = employmentEnd.text.toString().trim()
             updatedCareer.position = position.text.toString().trim()
             updatedCareer.companyName = company.text.toString().trim()
-            val contactInformation = ContactInformation()
-            val address = Address()
-            address.streetAddress = streetAddress.text.toString().trim()
-            address.subdivision = subdivision.text.toString().trim()
-            address.cityOrMunicipality = city.text.toString().trim()
-            address.zipCode = zipCode.text.toString().toIntOrNull() ?: 0
-            address.province = province.text.toString().trim()
-            address.country = country.text.toString().trim()
-            contactInformation.address = address
-            val companyWebsite = companyWebsite.text.toString().trim()
-            if (companyWebsite.isNotEmpty()) {
-                val website = Website()
-                website.website = companyWebsite
-                contactInformation.website = website
-            }
-            val telephone = ContactNumber()
-            telephone.areaCode = layoutContactEdit.telAreaCode.text.toString().trim()
-            telephone.contact =
+
+            updatedAddress.streetAddress = streetAddress.text.toString().trim()
+            updatedAddress.subdivision = subdivision.text.toString().trim()
+            updatedAddress.cityOrMunicipality = city.text.toString().trim()
+            updatedAddress.zipCode = zipCode.text.toString().toIntOrNull() ?: 0
+            updatedAddress.province = province.text.toString().trim()
+            updatedAddress.country = country.text.toString().trim()
+
+            updatedWebsite.website = companyWebsite.text.toString().trim()
+
+            updatedTelephone.areaCode = layoutContactEdit.telAreaCode.text.toString().trim()
+            updatedTelephone.contact =
                 layoutContactEdit.telContactNumber.text.toString().toLongOrNull() ?: 0
-            contactInformation.contactNumber = telephone
-            updatedCareer.contactInformation = contactInformation
-            updatedCareer.jobDescription = jobDescription.text.toString()
+
+            updatedCareer.jobDescription = jobDescription.text.toString().trim()
         }
     }
 }

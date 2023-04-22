@@ -42,7 +42,8 @@ open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context
             val dao = FirebaseContactInformationDAOImpl()
             val account = Account(user.uid, firstName, lastName)
             val contactInformation = ContactInformation()
-            contactInformation.emailAddress = EmailAddress(email = user.email.toString())
+            contactInformation.emailAddress = EmailAddress()
+            contactInformation.emailAddress!!.email = user.email.toString()
             return if(dao.registerContactInformation(contactInformation)){
                 account.contactInformationID = contactInformation.contactInformationID
                 account.contactInformation = contactInformation
