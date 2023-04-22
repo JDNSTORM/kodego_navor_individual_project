@@ -46,7 +46,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     }
 
     private fun registerAccount(account: Account){
-        firebaseInterface as FirebaseRegisterInterface //TODO: Check if plausible
+        firebaseInterface as FirebaseRegisterInterface
 
         fireStore
             .collection(IntentBundles.CollectionAccounts)
@@ -104,7 +104,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
         }
     }
 
-    fun signOutUser(){ //TODO: Possibly use AuthUI to Sign Out
+    fun signOutUser(){
         auth.signOut()
     }
 

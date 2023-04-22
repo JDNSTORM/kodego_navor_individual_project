@@ -26,19 +26,16 @@ class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Ada
             val address = career.contactInformation?.address?.completeAddress()
             if (!address.isNullOrEmpty()) {
                 companyAddress.text = address
-                icAddress.visibility = View.VISIBLE
                 companyAddress.visibility = View.VISIBLE
             }
             val website = career.contactInformation?.website?.website
             if (!website.isNullOrEmpty()) {
                 companyWebsite.text = website
-                icWebsite.visibility = View.VISIBLE
                 companyWebsite.visibility = View.VISIBLE
             }
             val contactNumber = career.contactInformation?.contactNumber
             if (contactNumber != null){
                 companyTelephone.text = contactNumber.telephone()
-                icPhone.visibility = View.VISIBLE
                 companyTelephone.visibility = View.VISIBLE
             }
         }

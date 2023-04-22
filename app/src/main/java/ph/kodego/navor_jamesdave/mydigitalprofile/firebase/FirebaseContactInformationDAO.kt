@@ -42,7 +42,7 @@ interface FirebaseWebsiteDAO{
 class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     private val collection = FirebaseCollections.ContactInformation
     private val fireStore = FirebaseFirestore.getInstance()
-    override suspend fun addContactInformation(contactInformation: ContactInformation): Boolean { //TODO: Probably change parameter
+    override suspend fun addContactInformation(contactInformation: ContactInformation): Boolean {
         val reference = fireStore
             .collection(collection)
             .document()
