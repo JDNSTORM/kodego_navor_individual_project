@@ -17,7 +17,7 @@ interface FirebaseCareerDAO {
     suspend fun deleteCareer(career: Career): Boolean
 }
 
-class FirebaseCareerDAOImpl(profile: Profile): FirebaseCareerDAO{
+class FirebaseCareerDAOImpl(private val profile: Profile): FirebaseCareerDAO{
     private val dao = FirebaseContactInformationDAOImpl()
     private val fireStore = FirebaseFirestore.getInstance()
     private val collectionAccounts = FirebaseCollections.Accounts
@@ -26,6 +26,8 @@ class FirebaseCareerDAOImpl(profile: Profile): FirebaseCareerDAO{
     private val reference = fireStore.collection(collectionAccounts)
         .document(profile.uID).collection(collectionProfiles)
         .document(profile.profileID).collection(collection)
+
+    fun profileID(): String = profile.profileID
 
     override suspend fun addCareer(career: Career): Boolean {
 //        TODO("Not yet implemented")

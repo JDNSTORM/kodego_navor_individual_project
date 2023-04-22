@@ -19,6 +19,17 @@ data class Career(
 
     @get:Exclude
     var contactInformation: ContactInformation? = null
+
+    constructor(career: Career): this(career.profileID){
+        id = career.id
+        employmentStart = career.employmentStart
+        employmentEnd = career.employmentEnd
+        position = career.position
+        companyName = career.companyName
+        contactInformationID = career.contactInformationID
+        jobDescription = career.jobDescription
+        contactInformation = career.contactInformation
+    }
 }
 
 @Parcelize

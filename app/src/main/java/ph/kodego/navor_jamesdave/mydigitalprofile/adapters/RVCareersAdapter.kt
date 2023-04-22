@@ -25,4 +25,8 @@ class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Ada
             root.setOnClickListener {  }
         }
     }
+    fun addCareer(career: Career){
+        careers.add(career)
+        notifyItemInserted(itemCount - 1)
+    }
 }
