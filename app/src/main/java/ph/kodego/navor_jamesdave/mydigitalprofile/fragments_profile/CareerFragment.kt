@@ -27,6 +27,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.clear
 
 /**
  * TODO:
@@ -107,6 +108,9 @@ class CareerFragment : Fragment() {
         builder.setView(editBinding.root)
         builder.setCancelable(false)
         editDialog = builder.create()
+        editDialog.setOnDismissListener {
+            editBinding.clear()
+        }
 
         with(editBinding.editButtons) {
             btnCancel.setOnClickListener {
