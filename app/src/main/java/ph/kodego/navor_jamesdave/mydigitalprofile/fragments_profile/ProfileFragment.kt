@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -133,7 +134,9 @@ class ProfileFragment : Fragment() {
 
     private fun setProfileDetails(){
         binding.address.text = profile.contactInformation?.address?.localAddress()
-        binding.email.text = profile.contactInformation?.emailAddress?.email
+        val email = profile.contactInformation!!.emailAddress!!
+        Log.d("Email", "${email.id}, ${email.contactInformationID}, ${email.email}")
+        binding.email.text = profile.contactInformation!!.emailAddress!!.email
     }
     private fun getSummary(){
         lifecycleScope.launch{

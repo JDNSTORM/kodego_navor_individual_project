@@ -51,8 +51,13 @@ data class EmailAddress(
     var email: String = ""
 
     constructor(parcel: Parcel) : this(parcel.readString()!!) {
-        parcel.readString()!!
-        parcel.readString()!!
+        id = parcel.readString()!!
+        email = parcel.readString()!!
+    }
+
+    constructor(id: String, contactInformationID: String, email: String): this(contactInformationID){
+        this.id = id
+        this.email = email
     }
 
     companion object : Parceler<EmailAddress> {
@@ -66,11 +71,6 @@ data class EmailAddress(
         override fun create(parcel: Parcel): EmailAddress {
             return EmailAddress(parcel)
         }
-    }
-
-    constructor(id: String, contactInformationID: String, email: String): this(contactInformationID){
-        this.id = id
-        this.email = email
     }
 }
 

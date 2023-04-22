@@ -78,18 +78,19 @@ class CareerFragment : Fragment() {
             careers.addAll(dao.getCareers())
             rvAdapter = RVCareersAdapter(careers)
 
-            binding.listCareer.layoutManager = LinearLayoutManager(requireContext())
-            binding.listCareer.adapter = rvAdapter
-
             if(Firebase.auth.currentUser?.uid == profile.uID) {
                 attachEditingInterface()
             }
+
+            binding.listCareer.layoutManager = LinearLayoutManager(requireContext())
+            binding.listCareer.adapter = rvAdapter
         }
     }
 
     private fun attachEditingInterface() {
 //        TODO("Not yet implemented")
         editDialog = CareerEditDialog(requireContext(), dao, rvAdapter)
+        rvAdapter.editDialog = editDialog
 
         fabListAddBinding = FabListAddBinding.inflate(layoutInflater)
         binding.root.addView(fabListAddBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)

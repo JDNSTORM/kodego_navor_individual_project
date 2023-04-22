@@ -24,6 +24,10 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
     private var holder: ViewHolder? = null
     private val lifecycleScope = CoroutineScope(Dispatchers.Main.immediate)
 
+    init {
+        create()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DialogueCareerEditBinding.inflate(layoutInflater)
