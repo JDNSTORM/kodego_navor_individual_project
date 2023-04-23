@@ -44,4 +44,9 @@ class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Ada
         careers[index] = newCareer
         notifyItemChanged(holder.adapterPosition)
     }
+
+    fun deleteCareer(career: Career, holder: ViewHolder) {
+        careers.remove(career)
+        notifyItemRemoved(holder.adapterPosition)
+    }
 }

@@ -14,6 +14,7 @@ interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO, F
     suspend fun addContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun getContactInformation(contactInformationID: String): ContactInformation?
+    suspend fun deleteContactInformation(contactInformation: ContactInformation): Boolean
 }
 interface FirebaseEmailDAO{
     suspend fun addEmail(emailAddress: EmailAddress): Boolean
@@ -112,6 +113,16 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             Log.e("Get ContactInformation", task.exception!!.message.toString())
             null
         }
+    }
+
+    override suspend fun deleteContactInformation(contactInformation: ContactInformation): Boolean {
+//        TODO("Not yet fully implemented")
+        val task = fireStore
+            .collection(collection)
+            .document(contactInformation.contactInformationID)
+            .delete()
+        task.await()
+        return task.isSuccessful
     }
 
     override suspend fun addEmail(emailAddress: EmailAddress): Boolean {

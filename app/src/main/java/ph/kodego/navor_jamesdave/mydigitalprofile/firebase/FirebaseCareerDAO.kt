@@ -101,7 +101,7 @@ class FirebaseCareerDAOImpl(private val profile: Profile): FirebaseCareerDAO{
     }
 
     override suspend fun deleteCareer(career: Career): Boolean {
-//        TODO("Not yet implemented")
+        dao.deleteContactInformation(career.contactInformation!!)
         val task = reference
             .document(career.id)
             .delete()

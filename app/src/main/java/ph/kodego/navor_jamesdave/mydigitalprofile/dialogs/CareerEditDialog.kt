@@ -45,6 +45,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
             btnCancel.setOnClickListener { dismiss() }
             btnSave.setOnClickListener { saveCareer() }
             btnUpdate.setOnClickListener { checkUpdates() }
+            btnDelete.setOnClickListener { deleteCareer() }
         }
     }
 
@@ -175,4 +176,29 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
         }
     }
     //TODO: Delete Career
+    private fun deleteCareer(){
+        val builder = AlertDialog.Builder(context)
+        builder.apply {
+            setTitle("Delete Work History?")
+            setMessage("Are you sure to delete ${career!!.position} history?")
+            setPositiveButton("Yes") { dialog, _ ->
+                progressDialog.show()
+                lifecycleScope.launch {
+                    if(dao.deleteCareer(career!!)){
+                        Toast.makeText(context, "${career!!.position} deleted successfully", Toast.LENGTH_SHORT).show()
+                        adapter.deleteCareer(career!!, holder!!)
+                        dialog.dismiss()
+                        dismiss()
+                    }else{
+                        Toast.makeText(context, "Error deleting career", Toast.LENGTH_SHORT).show()
+                    }
+                    progressDialog.dismiss()
+                }
+            }
+            setNegativeButton("No"){ dialog, _ ->
+                dialog.dismiss()
+            }
+        }
+        builder.show()
+    }
 }
