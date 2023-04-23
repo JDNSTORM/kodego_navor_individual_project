@@ -17,4 +17,12 @@
     <color name="colorAccentSub">#21726F</color>
     <color name="colorAccentDark">#1D5252</color>
     <color name="colorLightSub">#50BFC3</color>
+
+<!--  https://m2.material.io/design/color/the-color-system.html#tools-for-picking-colors  -->
+    <color name="Primary">#048af1</color>
+    <color name="Complimentary">#f16b04</color>
+    <color name="Analogous1">#04f1e1</color>
+    <color name="Analogous2">#0414f1</color>
+    <color name="Triadic1">#6b04f1</color>
+    <color name="Triadic2">#f1048a</color>
 </resources>

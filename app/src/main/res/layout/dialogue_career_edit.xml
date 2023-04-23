@@ -298,7 +298,7 @@
     </ScrollView>
     <include layout="@layout/layout_edit_buttons"
         android:id="@+id/edit_buttons"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_gravity="end"

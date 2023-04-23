@@ -22,6 +22,7 @@ fun DialogueCareerEditBinding.clear() {
     with(editButtons){
         btnSave.visibility = View.VISIBLE
         btnUpdate.visibility = View.GONE
+        btnDelete.visibility = View.GONE
     }
 }
 fun DialogueCareerEditBinding.bind(career: Career){
@@ -52,5 +53,6 @@ fun DialogueCareerEditBinding.bind(career: Career){
     with(editButtons){
         btnSave.visibility = View.GONE
         btnUpdate.visibility = View.VISIBLE
+        btnDelete.visibility = View.VISIBLE
     }
 }
