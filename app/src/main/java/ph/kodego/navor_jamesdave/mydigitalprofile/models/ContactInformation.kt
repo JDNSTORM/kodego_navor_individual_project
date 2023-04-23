@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-open class ContactInformation( //TODO: Many-to-One - User, Profile, Career, School
+open class ContactInformation(
     var contactInformationID: String = ""
 ): Parcelable {
     @get:Exclude
@@ -147,7 +147,7 @@ data class Address(
             address.append(", $country")
         }
 
-        return address.trim(',').trim().toString() //TODO: Check trimming
+        return address.trim(',').trim().toString()
     }
 }
 

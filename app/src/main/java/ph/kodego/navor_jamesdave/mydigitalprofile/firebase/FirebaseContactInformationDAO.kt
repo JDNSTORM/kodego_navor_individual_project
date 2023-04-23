@@ -18,7 +18,6 @@ interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO, F
 }
 interface FirebaseEmailDAO{
     suspend fun addEmail(emailAddress: EmailAddress): Boolean
-    suspend fun registerEmail(emailAddress: EmailAddress) //TODO: Not Needed?
     suspend fun getEmail(contactInformation: ContactInformation): EmailAddress?
     suspend fun deleteEmail()
 }
@@ -60,7 +59,7 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean {
-        return if (addContactInformation(contactInformation)){ //TODO: Contents
+        return if (addContactInformation(contactInformation)){
             with(contactInformation) {
                 if (emailAddress != null) {
                     emailAddress!!.contactInformationID = contactInformationID
@@ -116,7 +115,6 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun deleteContactInformation(contactInformation: ContactInformation): Boolean {
-//        TODO("Not yet fully implemented")
         val task = fireStore
             .collection(collection)
             .document(contactInformation.contactInformationID)
@@ -143,11 +141,6 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
             Log.e("Email Registration", task.exception!!.message.toString())
             false
         }
-    }
-
-    override suspend fun registerEmail(emailAddress: EmailAddress) {
-        val subCollection = FirebaseCollections.Email
-        TODO("Not yet implemented")
     }
 
     override suspend fun getEmail(contactInformation: ContactInformation): EmailAddress? {
@@ -266,7 +259,6 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun addWebsite(website: Website): Boolean {
-//        TODO("Not yet implemented")
         val subCollection = FirebaseCollections.Website
         val reference = fireStore
             .collection(collection)
@@ -287,7 +279,6 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun getWebsite(contactInformation: ContactInformation): Website? {
-//        TODO("Not yet implemented")
         val subCollection = FirebaseCollections.Website
         val task = fireStore.collection(collection).document(contactInformation.contactInformationID)
             .collection(subCollection).document(contactInformation.contactInformationID).get()
@@ -302,7 +293,6 @@ class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
     }
 
     override suspend fun updateWebsite(website: Website, fields: HashMap<String, Any?>): Boolean {
-//        TODO("Not yet implemented")
         val subCollection = FirebaseCollections.Website
         val task = fireStore
             .collection(collection)

@@ -9,8 +9,8 @@ open class Account (
     var uID: String = "",
     var firstName: String = "",
     var lastName: String = "",
-    var contactInformationID: String = "", //TODO: Move inside class instead of constructor
 ): Parcelable {
+    var contactInformationID: String = ""
     var image: String = ""
     var fcmToken: String = ""
 
@@ -60,5 +60,8 @@ open class Account (
     }
     constructor(account: Account) : this(){
         setAccount(account)
+    }
+    constructor(uID: String, firstName: String, lastName: String, contactInformationID: String): this(uID, firstName, lastName){
+        this.contactInformationID = contactInformationID
     }
 }

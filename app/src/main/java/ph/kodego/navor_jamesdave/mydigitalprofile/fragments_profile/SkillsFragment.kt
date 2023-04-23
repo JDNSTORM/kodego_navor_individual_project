@@ -544,7 +544,7 @@ class SkillsFragment : Fragment() {
                 btnSave.visibility = View.GONE
                 btnUpdate.visibility = View.VISIBLE
                 dialog.setOnDismissListener {
-                    if (subCategory.categorySub.isEmpty() && subCategory.skills.isEmpty()){ //TODO: Delete SubCategory
+                    if (subCategory.categorySub.isEmpty() && subCategory.skills.isEmpty()){
                         lifecycleScope.launch{
                             subCategoryDAO.deleteSubCategory(subCategory)
                         }

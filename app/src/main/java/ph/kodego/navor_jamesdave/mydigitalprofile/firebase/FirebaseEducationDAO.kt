@@ -28,7 +28,6 @@ class FirebaseEducationDAOImpl(private val profile: Profile): FirebaseEducationD
     fun profileID(): String = profile.profileID
 
     override suspend fun addEducation(education: Education): Boolean {
-//        TODO("Not yet implemented")
         val document = reference.document()
         if(dao.registerContactInformation(education.contactInformation!!)){
             education.contactInformationID = education.contactInformation!!.contactInformationID
@@ -50,7 +49,6 @@ class FirebaseEducationDAOImpl(private val profile: Profile): FirebaseEducationD
     }
 
     override suspend fun getEducations(): ArrayList<Education> {
-//        TODO("Not yet implemented")
         val educations: ArrayList<Education> = ArrayList()
         val task = reference
 //            .whereEqualTo("profileID", profileID)
@@ -76,7 +74,6 @@ class FirebaseEducationDAOImpl(private val profile: Profile): FirebaseEducationD
         education: Education,
         fields: HashMap<String, Any?>
     ): Boolean {
-//        TODO("Not yet implemented")
         val educationUpdates: HashMap<String, Any?> = fields["Career"] as HashMap<String, Any?>
         val contactInformation = education.contactInformation!!
         if (fields.containsKey("Address")){
@@ -105,7 +102,6 @@ class FirebaseEducationDAOImpl(private val profile: Profile): FirebaseEducationD
     }
 
     override suspend fun deleteEducation(education: Education): Boolean {
-//        TODO("Not yet implemented")
         dao.deleteContactInformation(education.contactInformation!!)
         val task = reference
             .document(education.id)

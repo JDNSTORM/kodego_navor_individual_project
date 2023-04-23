@@ -62,7 +62,6 @@ class FirebaseProfessionalSummaryDAOImpl(profile: Profile, context: Context): Fi
     }
 
     override suspend fun deleteProfessionalSummary(professionalSummary: ProfessionalSummary): Boolean {
-//        TODO("Not yet implemented")
         val task = reference
             .document(professionalSummary.id)
             .delete()
