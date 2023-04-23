@@ -3,6 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.dialogs
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,7 @@ class EducationEditDialog(
             btnUpdate.setOnClickListener { checkUpdates() }
             btnDelete.setOnClickListener { deleteEducation() }
         }
+        window!!.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
     }
 
     override fun show() {
