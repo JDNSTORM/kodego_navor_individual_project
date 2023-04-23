@@ -57,6 +57,7 @@ class FormControls {
             is SkillMainCategory -> source.asMap() as HashMap<String, Any?>
             is SkillSubCategory -> source.asMap() as HashMap<String, Any?>
             is Skill -> source.asMap() as HashMap<String, Any?>
+            is Education -> source.asMap() as HashMap<String, Any?>
             else -> {
                 HashMap()
             }
@@ -74,6 +75,7 @@ class FormControls {
             is SkillMainCategory -> edited.asMap() as HashMap<String, Any?>
             is SkillSubCategory -> edited.asMap() as HashMap<String, Any?>
             is Skill -> edited.asMap() as HashMap<String, Any?>
+            is Education -> edited.asMap() as HashMap<String, Any?>
             else -> HashMap()
         }
         Log.i("Source", original.toString())

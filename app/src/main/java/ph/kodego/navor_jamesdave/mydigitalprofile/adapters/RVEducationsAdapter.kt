@@ -29,4 +29,20 @@ class RVEducationsAdapter(private val educations: ArrayList<Education>): Recycle
             }
         }
     }
+
+    fun addEducation(education: Education) {
+        educations.add(education)
+        notifyItemInserted(itemCount - 1)
+    }
+
+    fun updateEducation(education: Education, newEducation: Education, holder: ViewHolder){
+        val index = educations.indexOf(education)
+        educations[index] = newEducation
+        notifyItemChanged(holder.adapterPosition)
+    }
+
+    fun deleteEducation(education: Education, holder: ViewHolder){
+        educations.remove(education)
+        notifyItemRemoved(holder.adapterPosition)
+    }
 }

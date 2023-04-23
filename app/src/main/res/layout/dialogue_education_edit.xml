@@ -48,7 +48,7 @@
             android:id="@+id/date_graduated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Employment End"
+            android:hint="Date Graduated"
             />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout

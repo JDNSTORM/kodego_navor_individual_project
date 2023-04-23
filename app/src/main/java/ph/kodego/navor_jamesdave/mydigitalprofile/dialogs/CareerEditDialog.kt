@@ -20,6 +20,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.clear
 //TODO: Find a Workaround to enable SoftInputMode
+//  Study AlertDialog.Builder
 class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl, private val adapter: RVCareersAdapter): AlertDialog(context) {
     private lateinit var binding: DialogueCareerEditBinding
     private val progressDialog: ProgressDialog = ProgressDialog(context)
@@ -171,8 +172,8 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
             }else{
                 Toast.makeText(context, "Error Updating Career", Toast.LENGTH_SHORT).show()
             }
-            dismiss()
             progressDialog.dismiss()
+            dismiss()
         }
     }
 
