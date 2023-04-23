@@ -27,9 +27,9 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
     private var holder: ViewHolder? = null
     private val lifecycleScope = CoroutineScope(Dispatchers.Main.immediate)
 
-    init {
-        create()
-    }
+//    init {
+//        create()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,10 +55,10 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
     }
 
     fun show(career: Career, holder: ViewHolder) {
+        super.show()
         this.career = career
         this.holder = holder
         binding.bind(career)
-        super.show()
     }
 
     private fun saveCareer(){
