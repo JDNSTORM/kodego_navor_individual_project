@@ -23,6 +23,7 @@ class EducationEditDialog(
     private var education: Education? = null
     private var holder: ViewHolder? = null
     private val lifecycleScope = CoroutineScope(Dispatchers.Main.immediate)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DialogueEducationEditBinding.inflate(layoutInflater)

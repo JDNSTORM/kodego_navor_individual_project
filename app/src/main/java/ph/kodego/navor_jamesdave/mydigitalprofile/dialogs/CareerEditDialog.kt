@@ -19,7 +19,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.clear
-
+//TODO: Find a Workaround to enable SoftInputMode
 class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl, private val adapter: RVCareersAdapter): AlertDialog(context) {
     private lateinit var binding: DialogueCareerEditBinding
     private val progressDialog: ProgressDialog = ProgressDialog(context)
@@ -175,7 +175,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
             progressDialog.dismiss()
         }
     }
-    //TODO: Delete Career
+
     private fun deleteCareer(){
         val builder = AlertDialog.Builder(context)
         builder.apply {
