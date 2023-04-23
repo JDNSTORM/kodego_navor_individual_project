@@ -25,7 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/til_date_graduated"
         android:padding="5dp"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/date_enrolled"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toEndOf="@id/til_date_enrolled"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="5dp"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginEnd="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/date_graduated"

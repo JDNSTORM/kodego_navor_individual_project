@@ -70,7 +70,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
             career.companyName = company.text.toString().trim()
             val contactInformation = ContactInformation()
             val address = Address()
-            address.streetAddress = streetAddress.text.toString().trim()
+            address.streetAddress = streetAddress.text.toString().trim() //TODO: Only use Street Address
             address.subdivision = subdivision.text.toString().trim()
             address.cityOrMunicipality = city.text.toString().trim()
             address.zipCode = zipCode.text.toString().toIntOrNull() ?: 0

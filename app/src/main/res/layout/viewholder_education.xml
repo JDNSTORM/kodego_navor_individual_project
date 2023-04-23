@@ -96,37 +96,18 @@
         app:layout_constraintStart_toStartOf="@id/degree"
         app:layout_constraintEnd_toEndOf="@id/degree"
         />
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ic_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/school_address"
-        app:layout_constraintStart_toStartOf="@id/school_name"
-        app:layout_constraintEnd_toStartOf="@id/school_address"
-        app:layout_constraintBottom_toBottomOf="@id/school_address"
-        android:src="@drawable/ic_address_24"
-        />
     <TextView
         android:id="@+id/school_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintHorizontal_weight="1"
         android:padding="5dp"
+        android:drawableStart="@drawable/ic_address_24"
         android:textAlignment="center"
         tools:text="Upper Bonifacio St, Baguio, Benguet"
         app:layout_constraintTop_toBottomOf="@id/school_name"
-        app:layout_constraintStart_toEndOf="@id/ic_address"
-        app:layout_constraintEnd_toEndOf="@id/school_name"
-        />
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ic_website"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/school_website"
         app:layout_constraintStart_toStartOf="@id/school_name"
-        app:layout_constraintEnd_toStartOf="@id/school_website"
-        app:layout_constraintBottom_toBottomOf="@id/school_website"
-        android:src="@drawable/ic_website_24"
+        app:layout_constraintEnd_toEndOf="@id/school_name"
         />
     <TextView
         android:id="@+id/school_website"
@@ -134,21 +115,12 @@
         android:layout_height="wrap_content"
         app:layout_constraintHorizontal_weight="1"
         android:padding="5dp"
+        android:drawableStart="@drawable/ic_website_24"
         android:textAlignment="center"
         tools:text="https://www.slu.edu.ph/"
         app:layout_constraintTop_toBottomOf="@id/school_address"
-        app:layout_constraintStart_toEndOf="@id/ic_website"
-        app:layout_constraintEnd_toEndOf="@id/school_name"
-        />
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ic_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/school_telephone"
         app:layout_constraintStart_toStartOf="@id/school_name"
-        app:layout_constraintEnd_toStartOf="@id/school_telephone"
-        app:layout_constraintBottom_toBottomOf="@id/school_telephone"
-        android:src="@drawable/ic_phone_24"
+        app:layout_constraintEnd_toEndOf="@id/school_name"
         />
     <TextView
         android:id="@+id/school_telephone"
@@ -157,9 +129,10 @@
         app:layout_constraintHorizontal_weight="1"
         android:padding="5dp"
         android:textAlignment="center"
+        android:drawableStart="@drawable/ic_phone_24"
         tools:text="(074) 442 2793"
         app:layout_constraintTop_toBottomOf="@id/school_website"
-        app:layout_constraintStart_toEndOf="@id/ic_phone"
+        app:layout_constraintStart_toStartOf="@id/school_name"
         app:layout_constraintEnd_toEndOf="@id/school_name"
         />
 

@@ -16,7 +16,6 @@ fun DialogueCareerEditBinding.clear() {
     province.text?.clear()
     country.text?.clear()
     companyWebsite.text?.clear()
-    layoutContactEdit.telAreaCode.text?.clear()
     layoutContactEdit.telContactNumber.text?.clear()
     jobDescription.text?.clear()
     with(editButtons){
