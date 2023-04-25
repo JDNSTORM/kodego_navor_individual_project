@@ -32,8 +32,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.expandFabs
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.minimizeFabs
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.expandFabs
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.minimizeFabs
 
 /**
  *  Main Category

@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.utils
+package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
 
 import android.view.View
 import com.google.android.material.snackbar.Snackbar

@@ -9,12 +9,7 @@ fun DialogueCareerEditBinding.clear() {
     employmentEnd.text?.clear()
     position.text?.clear()
     company.text?.clear()
-    streetAddress.text?.clear()
-    subdivision.text?.clear()
-    city.text?.clear()
-    zipCode.text?.clear()
-    province.text?.clear()
-    country.text?.clear()
+    companyAddress.text?.clear()
     companyWebsite.text?.clear()
     layoutContactEdit.telContactNumber.text?.clear()
     jobDescription.text?.clear()
@@ -32,12 +27,7 @@ fun DialogueCareerEditBinding.bind(career: Career){
     company.setText(career.companyName)
     val address = career.contactInformation?.address
     if (address != null) {
-        streetAddress.setText(address.streetAddress)
-        subdivision.setText(address.subdivision)
-        city.setText(address.cityOrMunicipality)
-        zipCode.setText(address.zipCode.toString())
-        province.setText(address.province)
-        country.setText(address.country)
+        companyAddress.setText(address.streetAddress)
     }
     val website = career.contactInformation?.website
     if (website != null) {

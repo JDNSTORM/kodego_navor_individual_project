@@ -18,10 +18,10 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.clear
-//TODO: Find a Workaround to enable SoftInputMode
-//  Study AlertDialog.Builder
+
 class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl, private val adapter: RVCareersAdapter): AlertDialog(context) {
     private lateinit var binding: DialogueCareerEditBinding
     private val progressDialog: ProgressDialog = ProgressDialog(context)
@@ -73,12 +73,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
             career.companyName = company.text.toString().trim()
             val contactInformation = ContactInformation()
             val address = Address()
-            address.streetAddress = streetAddress.text.toString().trim() //TODO: Only use Street Address
-            address.subdivision = subdivision.text.toString().trim()
-            address.cityOrMunicipality = city.text.toString().trim()
-            address.zipCode = zipCode.text.toString().toIntOrNull() ?: 0
-            address.province = province.text.toString().trim()
-            address.country = country.text.toString().trim()
+            address.streetAddress = companyAddress.text.toString().trim()
             contactInformation.address = address
             val companyWebsite = companyWebsite.text.toString().trim()
             if (companyWebsite.isNotEmpty()) {
@@ -123,12 +118,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
             updatedCareer.position = position.text.toString().trim()
             updatedCareer.companyName = company.text.toString().trim()
 
-            updatedAddress.streetAddress = streetAddress.text.toString().trim()
-            updatedAddress.subdivision = subdivision.text.toString().trim()
-            updatedAddress.cityOrMunicipality = city.text.toString().trim()
-            updatedAddress.zipCode = zipCode.text.toString().toIntOrNull() ?: 0
-            updatedAddress.province = province.text.toString().trim()
-            updatedAddress.country = country.text.toString().trim()
+            updatedAddress.streetAddress = companyAddress.text.toString().trim()
 
             updatedWebsite.website = companyWebsite.text.toString().trim()
 
@@ -144,9 +134,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
         val telUpdate = FormControls().getModified(contactInformation.contactNumber!!, updatedTelephone)
         if (careerUpdate.size > 0 || addressUpdate.size > 0 || websiteUpdate.size > 0 || telUpdate.size > 0){
             val updates: HashMap<String, Any?> = HashMap()
-            if (careerUpdate.size > 0 ){
-                updates["Career"] = careerUpdate
-            }
+            updates["Career"] = careerUpdate
             if (addressUpdate.size > 0 ){
                 updates["Address"] = addressUpdate
             }

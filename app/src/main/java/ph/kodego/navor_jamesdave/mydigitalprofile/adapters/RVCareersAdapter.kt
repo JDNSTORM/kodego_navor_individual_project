@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.CareerEditDialog
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.bind
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 
 class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Adapter<ViewHolder>() {
     var editDialog: CareerEditDialog? = null

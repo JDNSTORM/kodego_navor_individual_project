@@ -13,7 +13,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewHolder
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueEducationEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.clear
-import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.getContents
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.storeContents
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseEducationDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
@@ -62,7 +62,7 @@ class EducationEditDialog(
 
     private fun saveEducation(){
         val education = Education(dao.profileID())
-        binding.getContents(education)
+        binding.storeContents(education)
         addEducation(education)
         dismiss()
     }
@@ -82,7 +82,7 @@ class EducationEditDialog(
 
     private fun checkUpdates(){
         val updatedEducation = Education(education!!)
-        binding.getContents(updatedEducation)
+        binding.storeContents(updatedEducation)
         val contactInformation = education!!.contactInformation!!
         val updatedContactInformation = updatedEducation.contactInformation!!
         val educationUpdate = FormControls().getModified(education!!, updatedEducation)

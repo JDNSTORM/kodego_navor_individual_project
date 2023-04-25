@@ -40,7 +40,7 @@ fun DialogueEducationEditBinding.bind(education: Education){
     }
 }
 
-fun DialogueEducationEditBinding.getContents(education: Education){
+fun DialogueEducationEditBinding.storeContents(education: Education){
     education.dateEnrolled =  dateEnrolled.text.toString().trim()
     education.dateGraduated =  dateGraduated.text.toString().trim()
     education.schoolName =  schoolName.text.toString().trim()
