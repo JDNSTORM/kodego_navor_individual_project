@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         app:endIconMode="dropdown_menu"
         android:layout_weight="0.3"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         >
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/tel_area_code"
@@ -29,9 +30,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_contact_number"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:endIconMode="clear_text"
         android:layout_weight="0.6"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         >
 
         <com.google.android.material.textfield.TextInputEditText

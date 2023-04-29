@@ -33,7 +33,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.expandFabs
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadData
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.minimizeFabs
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
 
 /**
  *  Main Category
@@ -90,6 +92,7 @@ class SkillsFragment : Fragment() {
     }
 
     private fun setupRecyclerView(){
+        binding.loadData()
         lifecycleScope.launch {
             skills.addAll(dao.getMainCategories())
             rvAdapter = RVSkillsMainAdapter(skills)
@@ -101,6 +104,7 @@ class SkillsFragment : Fragment() {
                 attachEditingInterface()
                 progressDialog = ProgressDialog(requireContext())
             }
+            binding.showData()
         }
     }
 

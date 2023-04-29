@@ -18,6 +18,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseCareerDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.CareerEditDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadData
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
 class CareerFragment : Fragment() {
@@ -68,6 +70,7 @@ class CareerFragment : Fragment() {
     }
 
     private fun setupRecyclerView(){
+        binding.loadData()
         lifecycleScope.launch {
             careers.addAll(dao.getCareers())
             rvAdapter = RVCareersAdapter(careers)
@@ -78,6 +81,7 @@ class CareerFragment : Fragment() {
 
             binding.listCareer.layoutManager = LinearLayoutManager(requireContext())
             binding.listCareer.adapter = rvAdapter
+            binding.showData()
         }
     }
 

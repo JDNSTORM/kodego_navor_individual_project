@@ -15,6 +15,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVEducationsAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FabListAddBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentEducationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.EducationEditDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadData
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseEducationDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
@@ -73,6 +75,7 @@ class EducationFragment : Fragment() {
     }
 
     private fun setupRecyclerView(){
+        binding.loadData()
         lifecycleScope.launch {
             educations.addAll(dao.getEducations())
             rvAdapter = RVEducationsAdapter(educations)
@@ -83,6 +86,7 @@ class EducationFragment : Fragment() {
 
             binding.listEducation.layoutManager = LinearLayoutManager(requireContext())
             binding.listEducation.adapter = rvAdapter
+            binding.showData()
         }
     }
 

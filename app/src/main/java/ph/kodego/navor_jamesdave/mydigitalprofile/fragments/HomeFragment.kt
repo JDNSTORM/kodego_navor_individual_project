@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVProfilesAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentHomeBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadData
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfileDAO
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfileDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
@@ -52,35 +54,16 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dao = FirebaseProfileDAOImpl(requireContext())
         setupRecyclerView()
-
-        binding.btnSearch.setOnClickListener {
-
-        }
     }
 
     private fun setupRecyclerView(){
+        binding.loadData()
         lifecycleScope.launch{
             profiles.addAll(dao.getProfiles())
             rvUsersProfileAdapter = RVProfilesAdapter(profiles)
             binding.listProfiles.layoutManager = LinearLayoutManager(context)
             binding.listProfiles.adapter = rvUsersProfileAdapter
+            binding.showData()
         }
-    }
-
-    private fun getProfilesSample(): ArrayList<Profile>{
-        val profiles = ArrayList<Profile>()
-        val jden = Profile("22", "Mobile App Developer")
-//        jden.profilePicture = R.drawable.navor_james
-        jden.uID = "22"
-        jden.firstName = "James Dave"
-        jden.lastName = "Navor"
-        jden.contactInformation = ContactInformation("22")
-        jden.contactInformation
-        jden.contactInformation!!.emailAddress = EmailAddress("22", "22", "esteban.dave999@gmail.com")
-        profiles.add(jden)
-        val sampleProfile = Profile("asdasd")
-        sampleProfile.profileID = "11"
-        profiles.add(sampleProfile)
-        return profiles
     }
 }
