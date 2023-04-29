@@ -19,8 +19,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.bind
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.clear
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.clear
 
 class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl, private val adapter: RVCareersAdapter): AlertDialog(context) {
     private lateinit var binding: DialogueCareerEditBinding

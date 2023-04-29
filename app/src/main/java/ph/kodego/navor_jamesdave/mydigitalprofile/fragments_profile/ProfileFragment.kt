@@ -16,6 +16,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProfileEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentProfileBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProfileEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfessionalSummaryDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfessionalSummary
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
@@ -29,9 +30,7 @@ class ProfileFragment : Fragment() {
     private lateinit var profile: Profile
     private lateinit var dao: FirebaseProfessionalSummaryDAOImpl
     private lateinit var professionalSummary: ProfessionalSummary
-    private lateinit var progressDialog: ProgressDialog
-    private lateinit var editBinding: DialogueProfileEditBinding
-    private lateinit var editDialog: AlertDialog
+    private lateinit var editDialog: ProfileEditDialog
 
     init {
         if(this.arguments == null) {
@@ -74,49 +73,13 @@ class ProfileFragment : Fragment() {
     }
 
     private fun attachEditingInterface() {
-        progressDialog = ProgressDialog(requireContext())
-        editBinding = DialogueProfileEditBinding.inflate(LayoutInflater.from(requireContext()))
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setView(editBinding.root)
-        editDialog = builder.create()
-        editDialog.setCancelable(false)
-        with(editBinding.editButtons){
-            btnSave.visibility = View.GONE
-            btnUpdate.visibility = View.VISIBLE
-            btnUpdate.setOnClickListener {
-                val updatedProfile = profile.exportFirebaseProfile()
-                val updatedProfessionalSummary = professionalSummary.copy()
-                updatedProfessionalSummary.setSummary(professionalSummary)
-                with(editBinding){
-                    updatedProfile.profession = profession.text.toString().trim()
-                    updatedProfessionalSummary.profileSummary = profileSummary.text.toString().trim()
-                }
-                val updatedProfileFields: HashMap<String, Any?> = FormControls().getModified(profile.exportFirebaseProfile(), updatedProfile)
-                val updatedSummaryFields: HashMap<String, Any?> = FormControls().getModified(professionalSummary, updatedProfessionalSummary)
-                if (updatedProfileFields.isNotEmpty() || updatedSummaryFields.isNotEmpty()){
-                    progressDialog.show()
-                    lifecycleScope.launch {
-                        if (dao.updateProfile(profile, updatedProfileFields) && dao.updateProfessionalSummary(professionalSummary, updatedSummaryFields)){
-                            profile.importFirebaseProfile(updatedProfile)
-                            professionalSummary = updatedProfessionalSummary
-                            setProfileDetails()
-                            setSummaryDetails()
-//                            requireActivity().startActivity(requireActivity().intent)
-//                            requireActivity().finish()
-                            (requireActivity() as ProfileActivity).updateProfile()
-                            Toast.makeText(requireContext(), "Profile and Summary updated", Toast.LENGTH_SHORT).show()
-                        }else{
-                            Toast.makeText(requireContext(), "Error Updating Profile and Summary", Toast.LENGTH_SHORT).show()
-                        }
-                        editDialog.dismiss()
-                        progressDialog.dismiss()
-                    }
-                }else{
-                    Toast.makeText(requireContext(), "No fields have been changed", Toast.LENGTH_SHORT).show()
-                }
-            }
-            btnCancel.setOnClickListener {
-                editDialog.dismiss()
+        editDialog = ProfileEditDialog(requireContext(), dao)
+        editDialog.setOnDismissListener {
+            if (editDialog.updated){
+                profile = editDialog.profile
+                professionalSummary = editDialog.professionalSummary
+                setProfileDetails()
+                setSummaryDetails()
             }
         }
 
@@ -124,15 +87,13 @@ class ProfileFragment : Fragment() {
             isEnabled = true
             visibility = View.VISIBLE
             setOnClickListener {
-                editBinding.profession.setText(profile.profession)
-                editBinding.profileSummary.setText(professionalSummary.profileSummary)
-
-                editDialog.show()
+                editDialog.show(profile, professionalSummary)
             }
         }
     }
 
     private fun setProfileDetails(){
+        (requireActivity() as ProfileActivity).updateProfile()
         binding.address.text = profile.contactInformation?.address?.localAddress()
         val email = profile.contactInformation!!.emailAddress!!
         Log.d("Email", "${email.id}, ${email.contactInformationID}, ${email.email}")
@@ -152,5 +113,7 @@ class ProfileFragment : Fragment() {
     }
     private fun setSummaryDetails(){
         binding.professionalSummary.text = professionalSummary.profileSummary
+        binding.professionalSummary.visibility = View.VISIBLE
+        binding.loadingData.visibility = View.GONE
     }
 }

@@ -23,4 +23,5 @@
     <string name="error_empty_field">Cannot be empty</string>
     <string name="updating_account">Updating Account</string>
     <string name="updating_password">Updating Password</string>
+    <string name="loading_data">Loading Data</string>
 </resources>
