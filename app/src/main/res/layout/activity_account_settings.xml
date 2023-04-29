@@ -77,7 +77,7 @@
             android:textAlignment="center"
             />
     </com.google.android.material.textfield.TextInputLayout>
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,6 +85,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Save"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_marginHorizontal="100dp"
         android:layout_marginBottom="10dp"
         />

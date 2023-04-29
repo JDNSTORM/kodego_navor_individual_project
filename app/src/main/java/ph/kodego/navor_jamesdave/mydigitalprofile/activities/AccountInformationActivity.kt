@@ -1,6 +1,7 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import android.app.Dialog
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activity_results_contracts.OpenDocumentContract
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountInformationBinding
@@ -113,7 +115,7 @@ class AccountInformationActivity : AppCompatActivity() {
         }
         with(updatedContactNumber){
             areaCode = binding.layoutContactEdit.telAreaCode.text.toString()
-            contact = binding.layoutContactEdit.telContactNumber.text.toString().toLong()
+            contact = binding.layoutContactEdit.telContactNumber.text.toString().toLongOrNull() ?: 0
         }
         with(updatedAddress){
             streetAddress = binding.streetAddress.text.toString()
@@ -137,7 +139,7 @@ class AccountInformationActivity : AppCompatActivity() {
                     account.setAccount(updatedAccount) //TODO: ActivityForResult
                     Toast.makeText(applicationContext, "Account Updated", Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
-                    finish()
+                    goToMain()
                 }else{
                     Snackbar.make(binding.root, "Update Failed", Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
@@ -168,5 +170,16 @@ class AccountInformationActivity : AppCompatActivity() {
             .placeholder(R.drawable.placeholder)
             .error(R.drawable.placeholder)
             .into(binding.profilePicture)
+    }
+
+    private fun goToMain(){
+        val intent = Intent(baseContext, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        goToMain()
     }
 }

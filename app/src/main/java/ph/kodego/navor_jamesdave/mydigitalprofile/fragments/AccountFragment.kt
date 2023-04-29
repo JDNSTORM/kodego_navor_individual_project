@@ -95,6 +95,7 @@ class AccountFragment : Fragment() {
         Log.d("Account", account.toString())
         intent.putExtra(IntentBundles.Account, account)
         startActivity(intent)
+        requireActivity().finish()
     }
     private fun goToAccountSettings(){
         val intent = Intent(context, AccountSettingsActivity::class.java)
@@ -116,17 +117,6 @@ class AccountFragment : Fragment() {
         activity.startActivity(intent)
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (dao.getCurrentUserID().isNotEmpty()) {
-            setAccount()
-        }else{
-            val activity = requireActivity()
-            val intent = activity.intent
-            activity.finish()
-            activity.startActivity(intent)
-        }
-    }
     private fun loadProfilePhoto(url: String){
         Glide
             .with(binding.root.context)
