@@ -33,7 +33,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
-    />
 
     <LinearLayout
         android:id="@+id/loading_data"
