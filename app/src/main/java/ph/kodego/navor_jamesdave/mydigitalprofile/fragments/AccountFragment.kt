@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
@@ -22,6 +20,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImp
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 
 class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
@@ -75,11 +74,11 @@ class AccountFragment : Fragment() {
             val firebaseAccount = dao.getAccount(dao.getCurrentUserID())
             if (firebaseAccount != null) {
                 account = firebaseAccount
-                val fullName = "${account.firstName} ${account.lastName}"
+                val fullName = account.fullName()
                 with(binding) {
                     profileUserName.text = fullName
                     email.text = account.contactInformation!!.emailAddress!!.email
-                    loadProfilePhoto(account.image)
+                    GlideModule().loadProfilePhoto(binding.profilePicture, account.image)
                 }
                 progressDialog.dismiss()
             } else {
@@ -115,16 +114,5 @@ class AccountFragment : Fragment() {
         val intent = activity.intent
         activity.finish()
         activity.startActivity(intent)
-    }
-
-    private fun loadProfilePhoto(url: String){
-        Glide
-            .with(binding.root.context)
-            .load(url)
-            .circleCrop()
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .placeholder(R.drawable.placeholder)
-            .error(R.drawable.placeholder)
-            .into(binding.profilePicture)
     }
 }

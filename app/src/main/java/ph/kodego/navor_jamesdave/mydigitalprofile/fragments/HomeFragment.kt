@@ -1,11 +1,12 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
@@ -21,8 +22,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var rvUsersProfileAdapter: RVProfilesAdapter
+    private lateinit var rvAdapter: RVProfilesAdapter
     private val profiles: ArrayList<Profile> = ArrayList()
+    private val shownProfiles: ArrayList<Profile> = ArrayList()
     private lateinit var dao: FirebaseProfileDAO
 
     init {
@@ -54,16 +56,42 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dao = FirebaseProfileDAOImpl(requireContext())
         setupRecyclerView()
+        binding.searchBox.addTextChangedListener {
+            if (it?.length!! > 3){
+                searchKeyword(it.toString())
+            }else{
+                resetRecyclerView()
+            }
+        }
     }
 
     private fun setupRecyclerView(){
         binding.loadData()
         lifecycleScope.launch{
             profiles.addAll(dao.getProfiles())
-            rvUsersProfileAdapter = RVProfilesAdapter(profiles)
+            shownProfiles.addAll(profiles)
+            rvAdapter = RVProfilesAdapter(shownProfiles)
             binding.listProfiles.layoutManager = LinearLayoutManager(context)
-            binding.listProfiles.adapter = rvUsersProfileAdapter
+            binding.listProfiles.adapter = rvAdapter
             binding.showData()
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun resetRecyclerView(){
+        shownProfiles.clear()
+        shownProfiles.addAll(profiles)
+        rvAdapter.notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun searchKeyword(keyword: String){
+        shownProfiles.clear()
+        shownProfiles.addAll(
+            profiles.filter { profile ->
+                profile.profession.contains(keyword, true) or profile.fullName().contains(keyword, true)
+            }
+        )
+        rvAdapter.notifyDataSetChanged()
     }
 }

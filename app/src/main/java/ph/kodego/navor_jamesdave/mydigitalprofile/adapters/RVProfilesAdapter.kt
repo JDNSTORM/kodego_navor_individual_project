@@ -2,16 +2,12 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters
 
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderProfileBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
@@ -29,25 +25,12 @@ class RVProfilesAdapter(private val profiles: ArrayList<Profile>): RecyclerView.
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ViewholderProfileBinding
         val profile = profiles[position]
-//        binding.profilePicture.setImageResource(profile.profilePicture)
-        loadProfilePhoto(binding.profilePicture, profile.image)
-        binding.profileUserName.text = "${profile.firstName} ${profile.lastName}"
-        binding.profession.text = profile.profession
+        binding.bind(profile)
 
         binding.root.setOnClickListener {
             val intent = Intent(it.context, ProfileActivity::class.java)
             intent.putExtra(IntentBundles.Profile, profile)
             startActivity(it.context, intent, null)
         }
-    }
-    private fun loadProfilePhoto(view: ImageView, url: String){
-        Glide
-            .with(view.context)
-            .load(url)
-            .circleCrop()
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .placeholder(R.drawable.placeholder)
-            .error(R.drawable.placeholder)
-            .into(view)
     }
 }

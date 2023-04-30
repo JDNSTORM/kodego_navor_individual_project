@@ -64,4 +64,6 @@ open class Account (
     constructor(uID: String, firstName: String, lastName: String, contactInformationID: String): this(uID, firstName, lastName){
         this.contactInformationID = contactInformationID
     }
+
+    fun fullName(): String = "$firstName $lastName"
 }
