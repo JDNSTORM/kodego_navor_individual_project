@@ -15,7 +15,7 @@ interface FirebaseStorageDAO {
     suspend fun deleteImage(url: String): Boolean
 }
 
-class FirebaseStorageDAOImpl(context: Context): FirebaseUserDAOImpl(context), FirebaseStorageDAO{
+class FirebaseStorageDAOImpl(context: Context): FirebaseAccountDAOImpl(context), FirebaseStorageDAO{
     internal val firebaseStorage = FirebaseStorage.getInstance()
     private val parentTree = getCurrentUserID()
     private val imageTree = "images"
@@ -61,7 +61,7 @@ class FirebaseStorageDAOImpl(context: Context): FirebaseUserDAOImpl(context), Fi
             return if (updateUser(userProfileChangeMap)){
                 val updateImageMap = HashMap<String, Any?>()
                 updateImageMap["image"] = storageUri.toString()
-                updateUser(updateImageMap)
+                updateAccount(updateImageMap)
             }else{
                 false
             }
