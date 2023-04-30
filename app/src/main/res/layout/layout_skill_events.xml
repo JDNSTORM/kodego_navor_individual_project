@@ -11,15 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:alpha="0.5"
+        android:alpha="0.7"
         />
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/efab_skills_options"
-        android:theme="@style/EFabTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Options"
-        android:backgroundTint="@color/colorAccent"
         app:icon="@drawable/ic_commands_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,6 +34,7 @@
         app:layout_constraintEnd_toStartOf="@id/btn_add_main_category"
         android:visibility="gone"
         tools:visibility="visible"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_main_category"
@@ -85,6 +84,7 @@
         app:layout_constraintEnd_toStartOf="@id/btn_add_sub_category"
         android:visibility="gone"
         tools:visibility="visible"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_sub_category"
@@ -129,8 +129,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
         android:layout_margin="10dp"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
+        style="@style/TextAppearance.AppCompat.Headline"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,8 +144,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
         android:layout_margin="10dp"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
+        style="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="20sp"
+        style="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
         android:text="Professional Summary"
         />

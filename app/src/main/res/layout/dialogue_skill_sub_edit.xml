@@ -10,10 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
         android:text="Skill Main Category"
+        style="@style/TextAppearance.AppCompat.Title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,9 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="18sp"
         android:textStyle="bold"
+        android:textSize="18sp"
         android:text="Skill Sub Category"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintTop_toBottomOf="@id/label_skill_main"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,9 +52,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:text="Skills"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
         app:layout_constraintTop_toBottomOf="@id/til_skill_sub"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,6 +84,7 @@
         app:layout_constraintBottom_toTopOf="@id/til_skill"
         android:text="Skill List is Empty. Please add a Skill."
         android:textAlignment="center"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -103,17 +105,17 @@
             android:hint="Skill Name"
             />
     </com.google.android.material.textfield.TextInputLayout>
-    <androidx.appcompat.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_add_skill"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:padding="5dp"
         android:layout_marginEnd="10dp"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        app:layout_constraintTop_toTopOf="@id/til_skill"
+        android:theme="@style/Widget.AppCompat.Button.Small"
         app:layout_constraintStart_toEndOf="@id/til_skill"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/til_skill"
+        android:src="@drawable/ic_add_24"
         android:text="Add"
         />
 

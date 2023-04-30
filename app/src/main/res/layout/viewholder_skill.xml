@@ -10,5 +10,6 @@
     android:gravity="center_vertical"
     android:padding="5dp"
     tools:text="Skill Name"
-    android:textColor="@android:color/black"
+    style="@style/TextAppearance.AppCompat.Body2"
+    android:foreground="?attr/selectableItemBackground"
     />

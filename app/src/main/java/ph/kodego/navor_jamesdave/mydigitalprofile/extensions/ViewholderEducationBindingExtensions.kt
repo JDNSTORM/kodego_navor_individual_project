@@ -17,7 +17,7 @@ fun ViewholderEducationBinding.bind(education: Education) {
         }
         val telephone = contactNumber!!.telephone()
         if (telephone.isNotEmpty()) {
-            schoolTelephone.text
+            schoolTelephone.text = telephone
             schoolTelephone.visibility = View.VISIBLE
         }
     }
