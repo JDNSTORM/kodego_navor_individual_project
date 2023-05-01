@@ -1,6 +1,5 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
 
-import android.view.View
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueCareerEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 
@@ -13,11 +12,8 @@ fun DialogueCareerEditBinding.clear() {
     companyWebsite.text?.clear()
     layoutContactEdit.telContactNumber.text?.clear()
     jobDescription.text?.clear()
-    with(editButtons){
-        btnSave.visibility = View.VISIBLE
-        btnUpdate.visibility = View.GONE
-        btnDelete.visibility = View.GONE
-    }
+
+    editButtons.saveInterface()
 }
 fun DialogueCareerEditBinding.bind(career: Career){
     dateEmployed.setText(career.employmentStart)
@@ -39,9 +35,6 @@ fun DialogueCareerEditBinding.bind(career: Career){
         layoutContactEdit.telContactNumber.setText(telephone.contact.toString())
     }
     jobDescription.setText(career.jobDescription)
-    with(editButtons){
-        btnSave.visibility = View.GONE
-        btnUpdate.visibility = View.VISIBLE
-        btnDelete.visibility = View.VISIBLE
-    }
+
+    editButtons.editInterface()
 }

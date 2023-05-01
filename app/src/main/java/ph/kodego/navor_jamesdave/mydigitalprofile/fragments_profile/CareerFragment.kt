@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
@@ -46,10 +47,11 @@ class CareerFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        profile = if (requireArguments().containsKey(IntentBundles.Profile)){
-            requireArguments().getParcelable<Profile>(IntentBundles.Profile)!!
+        if (requireArguments().containsKey(IntentBundles.Profile)){
+            profile = requireArguments().getParcelable<Profile>(IntentBundles.Profile)!!
         }else{
-            Profile() // TODO: Throw Error
+            Toast.makeText(requireContext(), "No Profile Selected!", Toast.LENGTH_SHORT).show()
+            requireActivity().finish()
         }
         dao = FirebaseCareerDAOImpl(profile)
     }

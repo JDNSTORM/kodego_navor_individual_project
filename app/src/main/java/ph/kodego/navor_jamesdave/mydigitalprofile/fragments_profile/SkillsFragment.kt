@@ -36,6 +36,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.expandFabs
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadData
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.minimizeFabs
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.updateInterface
 
 /**
  *  Main Category
@@ -69,10 +70,11 @@ class SkillsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        profile = if (requireArguments().containsKey(IntentBundles.Profile)){
-            requireArguments().getParcelable<Profile>(IntentBundles.Profile)!!
+        if (requireArguments().containsKey(IntentBundles.Profile)){
+            profile = requireArguments().getParcelable<Profile>(IntentBundles.Profile)!!
         }else{
-            Profile() // TODO: Throw Error
+            Toast.makeText(requireContext(), "No Profile Selected!", Toast.LENGTH_SHORT).show()
+            requireActivity().finish()
         }
     }
 
@@ -449,8 +451,7 @@ class SkillsFragment : Fragment() {
         dialog.setCancelable(false)
         if (skills.contains(mainCategory)){
             dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
-            dialogueSkillMainEditBinding.editButtons.btnSave.visibility = View.GONE
-            dialogueSkillMainEditBinding.editButtons.btnUpdate.visibility = View.VISIBLE
+            dialogueSkillMainEditBinding.editButtons.updateInterface()
         }
 
         with(dialogueSkillMainEditBinding.editButtons){

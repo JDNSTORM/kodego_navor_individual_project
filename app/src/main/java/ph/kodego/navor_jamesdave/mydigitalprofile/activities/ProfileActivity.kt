@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -36,15 +37,16 @@ class ProfileActivity : AppCompatActivity() {
 
         val profileBundle = Bundle()
         lifecycleScope.launch {
-            if (intent.hasExtra(IntentBundles.Profile)) {//TODO: Proper Data Handling
+            if (intent.hasExtra(IntentBundles.Profile)) {
                 profile = intent.getParcelableExtra(IntentBundles.Profile)!!
 //            profile = intent.getParcelableExtra(Constants.BundleProfile, Profile::class.java)!! //TODO: For API 33
             } else if (intent.hasExtra(IntentBundles.Account)) {
                 val account: Account = intent.getParcelableExtra(IntentBundles.Account)!!
                 profile = dao.getProfile(account.uID)
                 profile.setAccount(account)
-            } else { //TODO: Throw Error and Finish Activity
-                profile = Profile()
+            } else {
+                Toast.makeText(applicationContext, "No Profile Selected!", Toast.LENGTH_SHORT).show()
+                finish()
             }
             profileBundle.putParcelable(IntentBundles.Profile, profile)
             setProfileDetails()

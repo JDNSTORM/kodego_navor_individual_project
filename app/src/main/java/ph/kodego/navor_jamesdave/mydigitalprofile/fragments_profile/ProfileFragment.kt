@@ -45,10 +45,11 @@ class ProfileFragment : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        profile = if(requireArguments().containsKey(IntentBundles.Profile)){
-            requireArguments().getParcelable(IntentBundles.Profile)!!
+        if(requireArguments().containsKey(IntentBundles.Profile)){
+            profile = requireArguments().getParcelable(IntentBundles.Profile)!!
         }else{
-            Profile() //TODO: Throw Error
+            Toast.makeText(requireContext(), "No Profile Selected!", Toast.LENGTH_SHORT).show()
+            requireActivity().finish()
         }
         dao = FirebaseProfessionalSummaryDAOImpl(profile, requireContext())
     }

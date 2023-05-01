@@ -17,11 +17,8 @@ fun DialogueEducationEditBinding.clear() {
     contactEdit.telContactNumber.text?.clear()
     degree.text?.clear()
     fieldOfStudy.text?.clear()
-    with(editButtons){
-        btnSave.visibility = View.VISIBLE
-        btnUpdate.visibility = View.GONE
-        btnDelete.visibility = View.GONE
-    }
+
+    editButtons.saveInterface()
 }
 fun DialogueEducationEditBinding.bind(education: Education){
     dateEnrolled.setText(education.dateEnrolled)
@@ -33,11 +30,8 @@ fun DialogueEducationEditBinding.bind(education: Education){
     contactEdit.telContactNumber.setText(education.contactInformation!!.contactNumber!!.contact.toString())
     degree.setText(education.degree)
     fieldOfStudy.setText(education.fieldOfStudy)
-    with(editButtons){
-        btnSave.visibility = View.GONE
-        btnUpdate.visibility = View.VISIBLE
-        btnDelete.visibility = View.VISIBLE
-    }
+
+    editButtons.editInterface()
 }
 
 fun DialogueEducationEditBinding.storeContents(education: Education){

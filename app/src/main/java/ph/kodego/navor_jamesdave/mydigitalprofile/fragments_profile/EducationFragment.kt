@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
@@ -22,11 +23,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
-/**
- * TODO:
- *  Firebase DAO
- *  Editing Interface
- */
 class EducationFragment : Fragment() {
     private var _binding: FragmentEducationBinding? = null
     private val binding get() = _binding!!
@@ -51,10 +47,11 @@ class EducationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        profile = if (requireArguments().containsKey(IntentBundles.Profile)){
-            requireArguments().getParcelable<Profile>(IntentBundles.Profile)!!
+        if (requireArguments().containsKey(IntentBundles.Profile)){
+            profile = requireArguments().getParcelable(IntentBundles.Profile)!!
         }else{
-            Profile() // TODO: Throw Error
+            Toast.makeText(requireContext(), "No Profile Selected!", Toast.LENGTH_SHORT).show()
+            requireActivity().finish()
         }
         dao = FirebaseEducationDAOImpl(profile)
     }

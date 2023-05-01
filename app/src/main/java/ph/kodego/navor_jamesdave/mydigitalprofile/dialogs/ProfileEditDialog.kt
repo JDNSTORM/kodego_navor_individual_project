@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProfileEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.updateInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfessionalSummaryDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfessionalSummary
@@ -33,17 +34,18 @@ class ProfileEditDialog(context: Context, private val dao: FirebaseProfessionalS
             btnUpdate.setOnClickListener { updateProfile() }
             btnCancel.setOnClickListener { dismiss() }
         }
-
-        binding.profession.setText(profile.profession)
-        binding.profileSummary.setText(professionalSummary.profileSummary)
     }
 
+    /**
+     * Disable default show
+     */
     override fun show() {}
     fun show(profile: Profile, professionalSummary: ProfessionalSummary){
         this.profile = profile
         this.professionalSummary = professionalSummary
         updated = false
         super.show()
+        binding.bind(profile, professionalSummary)
     }
 
     private fun updateProfile(){
