@@ -37,7 +37,7 @@ class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Ada
         notifyItemInserted(itemCount - 1)
     }
     fun updateCareer(career: Career, newCareer: Career, holder: ViewHolder){
-        val index = careers.indexOf(career)
+        val index = careers.indexOfFirst{ it.id == career.id}
         Log.d("Index", index.toString())
         Log.d("Career", career.toString())
         Log.d("NewCareer", newCareer.toString())

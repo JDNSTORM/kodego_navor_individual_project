@@ -27,6 +27,21 @@ open class ContactInformation(
         website = parcel.readParcelable(Website::class.java.classLoader)
     }
 
+    constructor(contactInformation: ContactInformation): this(contactInformation.contactInformationID){
+        if (contactInformation.emailAddress != null){
+            emailAddress = EmailAddress(contactInformation.emailAddress!!)
+        }
+        if (contactInformation.address != null){
+            address = Address(contactInformation.address!!)
+        }
+        if (contactInformation.contactNumber != null){
+            contactNumber = ContactNumber(contactInformation.contactNumber!!)
+        }
+        if (contactInformation.website != null){
+            website = Website(contactInformation.website!!)
+        }
+    }
+
     companion object : Parceler<ContactInformation> {
 
         override fun ContactInformation.write(parcel: Parcel, flags: Int) {
@@ -58,6 +73,11 @@ data class EmailAddress(
     constructor(id: String, contactInformationID: String, email: String): this(contactInformationID){
         this.id = id
         this.email = email
+    }
+
+    constructor(emailAddress: EmailAddress): this(emailAddress.contactInformationID){
+        id = emailAddress.id
+        email = emailAddress.email
     }
 
     companion object : Parceler<EmailAddress> {

@@ -8,20 +8,19 @@
     android:layout_margin="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
         <LinearLayout
             android:id="@+id/ll_enrollment_period"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="0.2"
+            android:layout_weight="0.2"
             android:padding="5dp"
             android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/divider"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="center_vertical"
             >
             <TextView
                 android:id="@+id/date_enrolled"
@@ -51,100 +50,80 @@
                 style="@style/TextAppearance.MaterialComponents.Body1"
                 />
         </LinearLayout>
-
         <View
             android:id="@+id/divider"
             android:layout_width="1dp"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="5dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintStart_toEndOf="@id/ll_enrollment_period"
-            app:layout_constraintEnd_toStartOf="@id/degree"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             />
-        <TextView
-            android:id="@+id/degree"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="0.8"
-            android:textAlignment="center"
-            tools:text="Bachelor of Science"
-            style="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/divider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/field_of_study"
-            />
-        <TextView
-            android:id="@+id/field_of_study"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="1"
-            android:textAlignment="center"
-            tools:text="Information Technology"
-            android:textStyle="bold"
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            app:layout_constraintTop_toBottomOf="@id/degree"
-            app:layout_constraintStart_toStartOf="@id/school_name"
-            app:layout_constraintEnd_toEndOf="@id/school_name"
-            />
-        <TextView
-            android:id="@+id/school_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            tools:text="Saint Louis University"
-            style="@style/TextAppearance.MaterialComponents.Subtitle2"
-            app:layout_constraintTop_toBottomOf="@id/field_of_study"
-            app:layout_constraintStart_toStartOf="@id/degree"
-            app:layout_constraintEnd_toEndOf="@id/degree"
-            />
-        <TextView
-            android:id="@+id/school_address"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="1"
-            android:padding="5dp"
-            android:drawableStart="@drawable/ic_address_24"
-            android:gravity="center"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            tools:text="Upper Bonifacio St, Baguio, Benguet"
-            app:layout_constraintTop_toBottomOf="@id/school_name"
-            app:layout_constraintStart_toStartOf="@id/school_name"
-            app:layout_constraintEnd_toEndOf="@id/school_name"
-            />
-        <TextView
-            android:id="@+id/school_website"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="1"
-            android:padding="5dp"
-            android:gravity="center"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:visibility="gone"
-            tools:visibility="visible"
-            tools:text="https://www.slu.edu.ph/"
-            app:layout_constraintTop_toBottomOf="@id/school_address"
-            app:layout_constraintStart_toStartOf="@id/school_name"
-            app:layout_constraintEnd_toEndOf="@id/school_name"
-            app:drawableStartCompat="@drawable/ic_website_24" />
-        <TextView
-            android:id="@+id/school_telephone"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="1"
-            android:padding="5dp"
-            android:gravity="center"
-            tools:text="(074) 442 2793"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@id/school_website"
-            app:layout_constraintStart_toStartOf="@id/school_name"
-            app:layout_constraintEnd_toEndOf="@id/school_name"
-            app:drawableStartCompat="@drawable/ic_phone_24" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:orientation="vertical"
+            android:layout_weight="0.8"
+            android:layout_gravity="center_vertical"
+            >
+            <TextView
+                android:id="@+id/degree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                tools:text="Bachelor of Science"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/field_of_study"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                tools:text="Information Technology"
+                android:textStyle="bold"
+                style="@style/TextAppearance.AppCompat.Title"
+                />
+            <TextView
+                android:id="@+id/school_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                tools:text="Saint Louis University"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                />
+            <TextView
+                android:id="@+id/school_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                tools:text="Upper Bonifacio St, Baguio, Benguet"
+                app:drawableStartCompat="@drawable/ic_address_24" />
+            <TextView
+                android:id="@+id/school_website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="center"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="https://www.slu.edu.ph/"
+                app:drawableStartCompat="@drawable/ic_website_24" />
+            <TextView
+                android:id="@+id/school_telephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="center"
+                tools:text="(074) 442 2793"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:drawableStartCompat="@drawable/ic_phone_24" />
+        </LinearLayout>
+    </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

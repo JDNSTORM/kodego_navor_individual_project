@@ -25,6 +25,6 @@ data class Education(val profileID: String = ""): Parcelable {
         degree = education.degree
         fieldOfStudy = education.fieldOfStudy
         schoolName = education.schoolName
-        contactInformation = education.contactInformation
+        contactInformation = ContactInformation(education.contactInformation!!)
     }
 }

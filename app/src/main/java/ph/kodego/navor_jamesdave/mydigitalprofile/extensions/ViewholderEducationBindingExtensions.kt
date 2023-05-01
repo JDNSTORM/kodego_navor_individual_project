@@ -9,7 +9,11 @@ fun ViewholderEducationBinding.bind(education: Education) {
     dateGraduated.text = education.dateGraduated
     schoolName.text = education.schoolName
     with(education.contactInformation!!) {
-        schoolAddress.text = address!!.streetAddress
+        val address = address!!.streetAddress
+        if (address.isNotEmpty()) {
+            schoolAddress.text = address
+            schoolAddress.visibility = View.VISIBLE
+        }
         val website = website!!.website
         if (website.isNotEmpty()) {
             schoolWebsite.text = website

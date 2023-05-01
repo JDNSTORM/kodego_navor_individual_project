@@ -36,7 +36,7 @@ class RVEducationsAdapter(private val educations: ArrayList<Education>): Recycle
     }
 
     fun updateEducation(education: Education, newEducation: Education, holder: ViewHolder){
-        val index = educations.indexOf(education)
+        val index = educations.indexOfFirst { it.id == education.id }
         educations[index] = newEducation
         notifyItemChanged(holder.adapterPosition)
     }
