@@ -28,7 +28,7 @@ class RVSkillsAdapter(private val mainCategory: SkillMainCategory, private val s
         val skill = subCategory.skills[position]
         val binding = holder.binding as ViewholderSkillBinding
 
-        binding.skill.setText(skill.skill)
+        binding.skill.text = skill.skill
         binding.root.setOnClickListener{
             adapterEvents?.subCategoryClick(mainCategory, subCategory)
         }

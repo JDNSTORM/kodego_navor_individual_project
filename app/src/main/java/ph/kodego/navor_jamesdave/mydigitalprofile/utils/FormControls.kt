@@ -15,7 +15,7 @@ class FormControls {
         return text.isNotEmpty()
     }
     fun validateEmail(email: String): Boolean{
-        val emailRegex: Regex = Regex("^[A-Za-z](.*)(@+)(.+)(\\.)(.+)")
+        val emailRegex = Regex("^[A-Za-z](.*)(@+)(.+)(\\.)(.+)")
         return email.matches(emailRegex)
     }
     fun validatePassword(password: String, confirmPassword: String): Boolean{

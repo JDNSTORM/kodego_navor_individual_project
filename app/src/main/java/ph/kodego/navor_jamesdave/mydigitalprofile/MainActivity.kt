@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 text = it.getString("TabName").toString()
                 icon = it.getInt("TabIcon")
             }
-            tab.setText(text)
+            tab.text = text
             tab.setIcon(icon)
         }.attach()
 

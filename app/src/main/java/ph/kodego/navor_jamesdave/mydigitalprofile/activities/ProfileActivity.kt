@@ -92,7 +92,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun setProfileDetails(){
         GlideModule().loadProfilePhoto(binding.viewholderProfile.profilePicture, profile.image)
         with(binding.viewholderProfile) {
-            profileUserName.text = "${profile.firstName} ${profile.lastName}"
+            profileUserName.text = profile.fullName()
             profession.text = profile.profession
         }
     }

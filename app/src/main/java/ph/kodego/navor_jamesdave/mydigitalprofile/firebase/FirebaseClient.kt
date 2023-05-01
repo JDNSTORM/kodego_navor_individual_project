@@ -131,7 +131,7 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
         firebaseInterface as FirebaseAccountInterface
         fireStore
             .collection(IntentBundles.CollectionContactInformation)
-            .document(account.contactInformationID!!)
+            .document(account.contactInformationID)
             .get()
             .addOnSuccessListener { document ->
                 Log.i("Contact Information Retrieved", document.toString())
@@ -150,8 +150,8 @@ class FirebaseClient(private val firebaseInterface: FirebaseInterface? = null) {
     private fun getAccountEmailAddress(account: Account){
         firebaseInterface as FirebaseAccountInterface
 
-        fireStore.collection(IntentBundles.CollectionContactInformation).document(account.contactInformationID!!)
-            .collection(IntentBundles.CollectionEmail).document(account.contactInformationID!!).get()
+        fireStore.collection(IntentBundles.CollectionContactInformation).document(account.contactInformationID)
+            .collection(IntentBundles.CollectionEmail).document(account.contactInformationID).get()
             .addOnSuccessListener { document ->
                 Log.i("Email Retrieved", document.toString())
                 account.contactInformation!!.emailAddress = document.toObject(EmailAddress::class.java)!!

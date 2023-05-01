@@ -29,6 +29,6 @@ class OpenDocumentContract : ActivityResultContracts.OpenDocument() {
         val intent = super.createIntent(context, input)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
 
-        return intent;
+        return intent
     }
 }
