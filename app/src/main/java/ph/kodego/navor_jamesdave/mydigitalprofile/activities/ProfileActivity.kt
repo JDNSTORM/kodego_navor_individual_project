@@ -20,6 +20,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.ProfileFragm
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments_profile.SkillsFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
 class ProfileActivity : AppCompatActivity() {
@@ -88,19 +89,8 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadProfilePhoto(url: String){
-        Glide
-            .with(binding.root.context)
-            .load(url)
-            .circleCrop()
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .placeholder(R.drawable.placeholder)
-            .error(R.drawable.placeholder)
-            .into(binding.viewholderProfile.profilePicture)
-    }
-
     private fun setProfileDetails(){
-        loadProfilePhoto(profile.image)
+        GlideModule().loadProfilePhoto(binding.viewholderProfile.profilePicture, profile.image)
         with(binding.viewholderProfile) {
             profileUserName.text = "${profile.firstName} ${profile.lastName}"
             profession.text = profile.profession
