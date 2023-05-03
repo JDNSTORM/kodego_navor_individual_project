@@ -2,10 +2,14 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.firebase.firestore.Exclude
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 //TODO: Try Parcelize
+@Entity(tableName = "accounts-table")
 open class Account (
+    @PrimaryKey(false)
     var uID: String = "",
     var firstName: String = "",
     var lastName: String = "",

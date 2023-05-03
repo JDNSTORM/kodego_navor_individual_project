@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfile
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 
 interface FirebaseProfileDAO {
@@ -26,7 +24,7 @@ open class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(cont
             .collection(collection)
             .document(profile.uID)
         profile.profileID = reference.id
-        val task = reference.set(profile.exportFirebaseProfile(), SetOptions.merge())
+        val task = reference.set(profile.exportDaoProfile(), SetOptions.merge())
         task.await()
         return if (task.isSuccessful){
             Log.i("Profile Creation", "Successful")

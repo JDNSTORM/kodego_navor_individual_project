@@ -3,7 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfile
+import ph.kodego.navor_jamesdave.mydigitalprofile.dao_models.DaoProfile
 
 /**
  * Data Flow
@@ -12,7 +12,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfil
  *          -> Fragments = Profile
  *
  */
-
 data class Profile(
     var profession: String = ""
 ): Account(), Parcelable{
@@ -36,17 +35,17 @@ data class Profile(
     constructor(profileID: String, profession: String = ""): this(profession){
         this.profileID = profileID
     }
-    fun exportFirebaseProfile(): FirebaseProfile{
-        return FirebaseProfile(uID, profileID, profession)
+    fun exportDaoProfile(): DaoProfile{
+        return DaoProfile(uID, profileID, profession)
     }
-    fun importFirebaseProfile(firebaseProfile: FirebaseProfile){
-        uID = firebaseProfile.uid
-        profileID = firebaseProfile.profileID
-        profession = firebaseProfile.profession
+    fun importDaoProfile(daoProfile: DaoProfile){
+        uID = daoProfile.uid
+        profileID = daoProfile.profileID
+        profession = daoProfile.profession
     }
-    constructor(firebaseProfile: FirebaseProfile): this(firebaseProfile.profession){
-        uID = firebaseProfile.uid
-        profileID = firebaseProfile.profileID
+    constructor(daoProfile: DaoProfile): this(daoProfile.profession){
+        uID = daoProfile.uid
+        profileID = daoProfile.profileID
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

@@ -6,7 +6,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase_models.FirebaseProfile
+import ph.kodego.navor_jamesdave.mydigitalprofile.dao_models.DaoProfile
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.*
 import kotlin.reflect.full.memberProperties
 
@@ -45,7 +45,7 @@ class FormControls {
     fun getModified(source: Any, edited: Any): HashMap<String, Any?>{ //TODO: Use Internal Functions instead
         val modified: HashMap<String, Any?> = HashMap()
         val original: HashMap<String, Any?> = when(source){
-            is FirebaseProfile -> source.asMap() as HashMap<String, Any?>
+            is DaoProfile -> source.asMap() as HashMap<String, Any?>
             is Account -> source.asMap() as HashMap<String, Any?>
             is ContactInformation -> source.asMap() as HashMap<String, Any?>
             is Address -> source.asMap() as HashMap<String, Any?>
@@ -63,7 +63,7 @@ class FormControls {
             }
         }
         val updated: HashMap<String, Any?> = when(edited){
-            is FirebaseProfile -> edited.asMap() as HashMap<String, Any?>
+            is DaoProfile -> edited.asMap() as HashMap<String, Any?>
             is Account -> edited.asMap() as HashMap<String, Any?>
             is ContactInformation -> edited.asMap() as HashMap<String, Any?>
             is Address -> edited.asMap() as HashMap<String, Any?>

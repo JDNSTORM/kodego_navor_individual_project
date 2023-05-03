@@ -49,20 +49,20 @@ class ProfileEditDialog(context: Context, private val dao: FirebaseProfessionalS
     }
 
     private fun updateProfile(){
-        val updatedProfile = profile.exportFirebaseProfile()
+        val updatedProfile = profile.exportDaoProfile()
         val updatedProfessionalSummary = professionalSummary.copy()
         updatedProfessionalSummary.setSummary(professionalSummary)
         with(binding){
             updatedProfile.profession = profession.text.toString().trim()
             updatedProfessionalSummary.profileSummary = profileSummary.text.toString().trim()
         }
-        val updatedProfileFields: HashMap<String, Any?> = FormControls().getModified(profile.exportFirebaseProfile(), updatedProfile)
+        val updatedProfileFields: HashMap<String, Any?> = FormControls().getModified(profile.exportDaoProfile(), updatedProfile)
         val updatedSummaryFields: HashMap<String, Any?> = FormControls().getModified(professionalSummary, updatedProfessionalSummary)
         if (updatedProfileFields.isNotEmpty() || updatedSummaryFields.isNotEmpty()){
             progressDialog.show()
             lifecycleScope.launch {
                 if (dao.updateProfile(profile, updatedProfileFields) && dao.updateProfessionalSummary(professionalSummary, updatedSummaryFields)){
-                    profile.importFirebaseProfile(updatedProfile)
+                    profile.importDaoProfile(updatedProfile)
                     professionalSummary = updatedProfessionalSummary
 
                     updated = true
