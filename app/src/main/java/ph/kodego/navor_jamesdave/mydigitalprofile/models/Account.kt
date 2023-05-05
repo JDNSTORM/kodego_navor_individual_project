@@ -3,6 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.models
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.Exclude
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
@@ -18,6 +19,7 @@ open class Account (
     var image: String = ""
     var fcmToken: String = ""
 
+    @Ignore
     @get:Exclude
     var contactInformation: ContactInformation? = null
 
