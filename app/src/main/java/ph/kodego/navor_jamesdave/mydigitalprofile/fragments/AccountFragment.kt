@@ -100,6 +100,7 @@ class AccountFragment : Fragment() {
         val intent = Intent(context, AccountSettingsActivity::class.java)
         intent.putExtra(IntentBundles.Account, account)
         startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun goToProfile(){

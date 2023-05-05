@@ -1,9 +1,11 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import ph.kodego.navor_jamesdave.mydigitalprofile.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountSettingsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
@@ -52,10 +54,21 @@ class AccountSettingsActivity : AppCompatActivity() {
             if(dao.updateUserPassword(oldPassword, password)){
                 dao.signOutUser()
                 progressDialog.dismiss()
-                finish()
+                goToMain()
             }else{
                 progressDialog.dismiss()
             }
         }
+    }
+
+    private fun goToMain(){
+        val intent = Intent(baseContext, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        goToMain()
     }
 }
