@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/introduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=
+            "Hi! My name is James Dave Navor and this is an app the I developed while learning how to develop a mobile application.\n
+This app is called My Digital Profile which is inspired by PHP which was originally known as 'Personal Home Page'.\n
+I developed this app with the idea of how I can showcase my skills considering the use case for other users too.
+"
+        />
+
+</LinearLayout>
