@@ -45,6 +45,10 @@ class ProfileActivity : AppCompatActivity() {
                 val account: Account = intent.getParcelableExtra(IntentBundles.Account)!!
                 profile = dao.getProfile(account.uID)
                 profile.setAccount(account)
+            } else if (intent.hasExtra(IntentBundles.ProfileID)) {
+                val profileID: String = intent.getStringExtra(IntentBundles.ProfileID)!!
+                profile = dao.getProfile(profileID)
+                profile.setAccount(dao.getAccount(profile.uID)!!)
             } else {
                 Toast.makeText(applicationContext, "No Profile Selected!", Toast.LENGTH_SHORT).show()
                 finish()
@@ -82,7 +86,7 @@ class ProfileActivity : AppCompatActivity() {
     }
     private fun setupActionBar(){
         setSupportActionBar(binding.tbTop)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.tbTop.setNavigationOnClickListener {
 //            onBackPressedDispatcher //TODO: Implement
             onBackPressed()

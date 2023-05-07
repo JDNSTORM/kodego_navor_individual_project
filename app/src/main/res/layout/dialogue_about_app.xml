@@ -3,15 +3,57 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="About My Digital Profile 2"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:textAlignment="center"
+            />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_24"
+            style="@style/Widget.AppCompat.Button.Small"
+            />
+    </LinearLayout>
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/introduction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=
-            "Hi! My name is James Dave Navor and this is an app the I developed while learning how to develop a mobile application.\n
-This app is called My Digital Profile which is inspired by PHP which was originally known as 'Personal Home Page'.\n
-I developed this app with the idea of how I can showcase my skills considering the use case for other users too.
-"
+        android:padding="10dp"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:text="@string/introduction"
         />
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view_git"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:text="Git Repository"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:text="View Profile"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            />
+    </LinearLayout>
 </LinearLayout>
