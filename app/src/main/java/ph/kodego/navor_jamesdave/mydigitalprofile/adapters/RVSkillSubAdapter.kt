@@ -46,8 +46,10 @@ class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): RecyclerVi
                 listEmpty.visibility = View.GONE
             }
 
-            root.setOnClickListener {
-                adapterEvents?.subCategoryClick(mainCategory, subCategory)
+            if (adapterEvents != null) {
+                root.setOnClickListener {
+                    adapterEvents!!.subCategoryClick(mainCategory, subCategory)
+                }
             }
         }
 

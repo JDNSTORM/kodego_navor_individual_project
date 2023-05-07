@@ -41,9 +41,10 @@ class RVSkillsMainAdapter(private val skillsMain: ArrayList<SkillMainCategory>):
             listSkillSub.layoutManager = LinearLayoutManager(root.context)
             listSkillSub.adapter = skillSubAdapter
 
-            root.setOnClickListener {
-//                adapterEvents?.holderClickNotify(position) ?: Log.e("AdapterError", "adapterActions not set")
-                adapterEvents?.mainCategoryClick(skillMainCategory)
+            if (adapterEvents != null) {
+                root.setOnClickListener {
+                    adapterEvents!!.mainCategoryClick(skillMainCategory)
+                }
             }
         }
     }
