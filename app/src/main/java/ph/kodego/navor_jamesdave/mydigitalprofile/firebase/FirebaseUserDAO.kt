@@ -16,6 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 interface FirebaseUserDAO {
+    /**
+     * Creates a new User using Email and Password
+     */
     suspend fun registerUser(email: String, password: String): FirebaseUser?
     suspend fun signInUser(email: String, password: String): Boolean
     suspend fun updateUser(fields: HashMap<String, Any?>): Boolean

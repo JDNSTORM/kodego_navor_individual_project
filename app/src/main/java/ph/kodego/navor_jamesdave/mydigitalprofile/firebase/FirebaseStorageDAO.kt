@@ -11,6 +11,11 @@ import kotlinx.coroutines.tasks.await
 
 interface FirebaseStorageDAO {
     suspend fun uploadImage(uri: Uri): Uri?
+
+    /**
+     * Uploads Image into storage then checks if the uploaded image is the same as the previous Account Photo
+     * If not, it will remove the old image.
+     */
     suspend fun updateAccountPhoto(uri: Uri): Boolean
     suspend fun deleteImage(url: String): Boolean
 }

@@ -11,7 +11,14 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
 
 interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO, FirebaseContactNumberDAO, FirebaseWebsiteDAO {
+    /**
+     * Creates a Contact Information Document to Reference each class inside Contact Information
+     */
     suspend fun addContactInformation(contactInformation: ContactInformation): Boolean
+
+    /**
+     * Creates a Contact Information Document and each class inside the Contact Information
+     */
     suspend fun registerContactInformation(contactInformation: ContactInformation): Boolean
     suspend fun getContactInformation(contactInformationID: String): ContactInformation?
     suspend fun deleteContactInformation(contactInformation: ContactInformation): Boolean

@@ -11,8 +11,20 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
 import kotlin.math.acos
 
 interface FirebaseAccountDAO {
+    /**
+     * Creates an Account Document using the User's UID
+     */
     suspend fun addAccount(account: Account): Boolean
+
+    /**
+     * Registers User using Email and Password then proceeds to register Account's Contact Information then lastly creates Account Document
+     * @return If the registration is successful
+     */
     suspend fun registerAccount(firstName: String, lastName: String, email: String, password: String): Boolean
+    /**
+     * Gets Account Document using the User's UID
+     * @return an Account or Null of the Document doesn't exist
+     */
     suspend fun getAccount(uID: String): Account?
     suspend fun updateAccount(fields: HashMap<String, Any?>): Boolean
     suspend fun deleteAccount()
