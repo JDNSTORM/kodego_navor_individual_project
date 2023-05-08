@@ -1,12 +1,15 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -38,6 +41,21 @@ class AccountInformationActivity : AppCompatActivity() {
     private val openDocumentLauncher = registerForActivityResult(OpenDocumentContract()) { uri ->
         uri?.let { onImageSelected(it) } ?: Log.e("Document", "Image Pick Cancelled")
     }
+    private val pictureChosen = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ){result ->
+        if(result.resultCode == Activity.RESULT_CANCELED){
+            Log.e("Document", "Image Pick Cancelled")
+        }else{
+            val data = result.data
+            if(data == null){
+                Toast.makeText(applicationContext, "No image was chosen", Toast.LENGTH_SHORT).show()
+            }else{
+                val imageFileUri = result.data!!.data!!
+                onImageSelected(imageFileUri)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +75,14 @@ class AccountInformationActivity : AppCompatActivity() {
         setupActionBar()
         progressDialog = ProgressDialog(binding.root.context, R.string.updating_account)
 
-        binding.profilePicture.setOnClickListener { openDocumentLauncher.launch(arrayOf("image/*")) }
+        binding.profilePicture.setOnClickListener {
+//            openDocumentLauncher.launch(arrayOf("image/*"))
+            val choosePictureIntent = Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            )
+            pictureChosen.launch(choosePictureIntent)
+        }
 
         binding.btnSave.setOnClickListener {
             checkFormData()
