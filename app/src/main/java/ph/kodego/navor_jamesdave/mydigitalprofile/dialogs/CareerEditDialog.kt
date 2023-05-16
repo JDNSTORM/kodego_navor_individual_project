@@ -8,8 +8,8 @@ import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ItemsAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVCareersAdapter
-import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewHolder
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueCareerEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseCareerDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
@@ -25,7 +25,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
     private lateinit var binding: DialogueCareerEditBinding
     private val progressDialog: ProgressDialog = ProgressDialog(context)
     private var career: Career? = null
-    private var holder: ViewHolder? = null
+    private var holder: ItemsAdapter.ViewHolder? = null
     private val lifecycleScope = CoroutineScope(Dispatchers.Main.immediate)
 
 //    init {
@@ -56,7 +56,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
         binding.dateEmployed.requestFocus()
     }
 
-    fun show(career: Career, holder: ViewHolder) {
+    fun show(career: Career, holder: ItemsAdapter.ViewHolder) {
         super.show()
         this.career = career
         this.holder = holder

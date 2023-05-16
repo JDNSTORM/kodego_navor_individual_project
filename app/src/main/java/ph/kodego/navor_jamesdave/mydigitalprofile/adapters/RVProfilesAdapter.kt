@@ -4,28 +4,22 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
-import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderProfileBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
-class RVProfilesAdapter(private val profiles: ArrayList<Profile>): RecyclerView.Adapter<ViewHolder>() {
+class RVProfilesAdapter(private val profiles: ArrayList<Profile>): ItemsAdapter(profiles) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ViewholderProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
-    override fun getItemCount(): Int {
-        return profiles.size
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val binding = holder.binding as ViewholderProfileBinding
         val profile = profiles[position]
-        binding.bind(profile)
 
         binding.root.setOnClickListener {
             val intent = Intent(it.context, ProfileActivity::class.java)

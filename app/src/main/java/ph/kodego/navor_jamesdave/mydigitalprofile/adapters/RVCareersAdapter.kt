@@ -3,13 +3,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.CareerEditDialog
-import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 
-class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Adapter<ViewHolder>() {
+class RVCareersAdapter(private val careers: ArrayList<Career>): ItemsAdapter(careers) {
     var editDialog: CareerEditDialog? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,12 +16,10 @@ class RVCareersAdapter(private val careers: ArrayList<Career>): RecyclerView.Ada
         )
     }
 
-    override fun getItemCount(): Int = careers.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val binding = holder.binding as ViewholderCareerBinding
         val career = careers[position]
-        binding.bind(career)
         with(binding){
             if (editDialog != null) {
                 root.setOnClickListener {

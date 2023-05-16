@@ -2,13 +2,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderEducationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.EducationEditDialog
-import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
 
-class RVEducationsAdapter(private val educations: ArrayList<Education>): RecyclerView.Adapter<ViewHolder>() {
+class RVEducationsAdapter(private val educations: ArrayList<Education>): ItemsAdapter(educations) {
     var editDialog: EducationEditDialog? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -17,12 +15,10 @@ class RVEducationsAdapter(private val educations: ArrayList<Education>): Recycle
         )
     }
 
-    override fun getItemCount(): Int = educations.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val binding = holder.binding as ViewholderEducationBinding
         val education = educations[position]
-        binding.bind(education)
         with(binding){
             if (editDialog != null){
                 root.setOnClickListener { editDialog!!.show(education, holder) }

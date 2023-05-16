@@ -8,8 +8,8 @@ import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ItemsAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVEducationsAdapter
-import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewHolder
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueEducationEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.clear
@@ -26,7 +26,7 @@ class EducationEditDialog(
     private lateinit var binding: DialogueEducationEditBinding
     private val progressDialog: ProgressDialog = ProgressDialog(context)
     private var education: Education? = null
-    private var holder: ViewHolder? = null
+    private var holder: ItemsAdapter.ViewHolder? = null
     private val lifecycleScope = CoroutineScope(Dispatchers.Main.immediate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +53,7 @@ class EducationEditDialog(
         binding.dateEnrolled.requestFocus()
     }
 
-    fun show(education: Education, holder: ViewHolder) {
+    fun show(education: Education, holder: ItemsAdapter.ViewHolder) {
         super.show()
         this.education = education
         this.holder = holder
