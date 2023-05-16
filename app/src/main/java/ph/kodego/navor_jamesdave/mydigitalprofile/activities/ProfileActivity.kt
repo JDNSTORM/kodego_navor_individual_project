@@ -34,7 +34,7 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupActionBar()
 
-        dao = FirebaseProfileDAOImpl(binding.root.context)
+        dao = FirebaseProfileDAOImpl(this)
 
         val profileBundle = Bundle()
         lifecycleScope.launch {

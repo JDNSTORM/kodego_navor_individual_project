@@ -53,7 +53,7 @@ class LoginFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         formControls = FormControls() //TODO: Validate Fields upon losing focus
-        progressDialog = ProgressDialog(binding.root.context, R.string.signing_in)
+        progressDialog = ProgressDialog(requireContext(), R.string.signing_in)
 
         binding.btnSignIn.setOnClickListener {
             validateForm()
@@ -89,7 +89,7 @@ class LoginFragment() : Fragment() {
                 val activity = requireActivity()
                 val intent = activity.intent
                 progressDialog.cancel()
-                activity.finish()
+                activity.finish() //TODO: ActivityForResult
                 activity.startActivity(intent)
             }else{
                 progressDialog.cancel()

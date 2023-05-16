@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
 
         fragmentAdapter.addFragment(HomeFragment())
-        val currentUserId = FirebaseAccountDAOImpl(applicationContext).getCurrentUserID()
+        val currentUserId = FirebaseAccountDAOImpl(this).getCurrentUserID()
         var accountFragment: AccountFragment? = null
         if (currentUserId.isNotEmpty()) {
             accountFragment = AccountFragment()
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAboutAppDialog(){
-        val dialog = AboutAppDialog(binding.root.context)
+        val dialog = AboutAppDialog(this)
         dialog.show()
         dialog.onViewGitRepository{ openGitRepositoryURL() }
         dialog.onViewProfile{
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun viewDeveloperProfile(){
         val profileID = getString(R.string.profile_id)
-        val intent = Intent(binding.root.context, ProfileActivity::class.java)
+        val intent = Intent(this, ProfileActivity::class.java)
         intent.putExtra(IntentBundles.ProfileID, profileID)
         startActivity(intent)
     }

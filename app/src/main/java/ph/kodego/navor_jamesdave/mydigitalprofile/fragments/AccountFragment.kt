@@ -58,7 +58,7 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dao = FirebaseAccountDAOImpl(requireContext())
-        progressDialog = ProgressDialog(view.context, R.string.loading_account)
+        progressDialog = ProgressDialog(requireContext(), R.string.loading_account)
 
         setAccount()
 
