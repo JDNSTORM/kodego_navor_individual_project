@@ -15,10 +15,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ItemsAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillSubAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsEditAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVSkillsMainAdapter
-import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewHolder
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillMainEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueSkillSubEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
@@ -230,7 +230,7 @@ class SkillsFragment : Fragment() {
         val builder = AlertDialog.Builder(context).setView(dialogueSkillMainEditBinding.root)
         val dialog = builder.create()
         val index = skills.indexOf(mainCategory)
-        val holder = binding.listSkills.findViewHolderForLayoutPosition(index) as? ViewHolder //TODO: Optimize
+        val holder = binding.listSkills.findViewHolderForLayoutPosition(index) as? ItemsAdapter.ViewHolder //TODO: Optimize
         dialog.setCancelable(false)
         if (skills.contains(mainCategory)){
             dialogueSkillMainEditBinding.skillMain.setText(mainCategory.categoryMain)
@@ -308,7 +308,7 @@ class SkillsFragment : Fragment() {
         val dialog = builder.create()
         dialog.setCancelable(false)
 
-        val mainViewHolder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as ViewHolder
+        val mainViewHolder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as ItemsAdapter.ViewHolder
         val mainCategoryBinding = mainViewHolder.binding as ViewholderSkillsMainBinding
         val skillSubAdapter = mainCategoryBinding.listSkillSub.adapter as RVSkillSubAdapter
 
@@ -327,7 +327,7 @@ class SkillsFragment : Fragment() {
             if(subCategories.contains(subCategory)){
                 val holder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(
                     subCategories.indexOf(subCategory)
-                ) as ViewHolder
+                ) as ItemsAdapter.ViewHolder
                 dialogueSkillSubEditBinding.skillSub.setText(subCategory.categorySub)
                 btnSave.visibility = View.GONE
                 btnUpdate.visibility = View.VISIBLE
@@ -417,13 +417,13 @@ class SkillsFragment : Fragment() {
         subCategory: SkillSubCategory? = null
     ){
         val builder = AlertDialog.Builder(context)
-        val mainViewHolder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as ViewHolder
+        val mainViewHolder = binding.listSkills.findViewHolderForLayoutPosition(skills.indexOf(mainCategory)) as ItemsAdapter.ViewHolder
         val mainCategoryBinding = mainViewHolder.binding as ViewholderSkillsMainBinding
         if (subCategory != null){
             val skillSubAdapter = mainCategoryBinding.listSkillSub.adapter as RVSkillSubAdapter
             val holder = mainCategoryBinding.listSkillSub.findViewHolderForLayoutPosition(
                 mainCategory.subCategories.indexOf(subCategory)
-            ) as ViewHolder
+            ) as ItemsAdapter.ViewHolder
 
             val title = if(subCategory.categorySub.isEmpty()) "Skills List" else "Sub Category"
             val message = subCategory.categorySub.ifEmpty { "Skills List" }

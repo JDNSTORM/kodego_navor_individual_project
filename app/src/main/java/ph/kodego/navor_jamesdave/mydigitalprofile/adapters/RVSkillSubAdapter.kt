@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillSubBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 
-class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): RecyclerView.Adapter<ViewHolder>() {
+class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): ItemsAdapter(mainCategory.subCategories) {
     private var adapterEvents: RVSkillsMainAdapter.AdapterEvents? = null
 
     fun setAdapterEvents(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
@@ -20,11 +20,8 @@ class RVSkillSubAdapter(private val mainCategory: SkillMainCategory): RecyclerVi
         )
     }
 
-    override fun getItemCount(): Int {
-        return mainCategory.subCategories.size
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+//        super.onBindViewHolder(holder, position) //TODO: Binding Extension
         val subCategory = mainCategory.subCategories[position]
         val binding = holder.binding as ViewholderSkillSubBinding
         val context = binding.root.context

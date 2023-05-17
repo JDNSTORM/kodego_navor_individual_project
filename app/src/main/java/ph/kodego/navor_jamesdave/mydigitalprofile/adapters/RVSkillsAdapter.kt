@@ -8,7 +8,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
-class RVSkillsAdapter(private val mainCategory: SkillMainCategory, private val subCategory: SkillSubCategory): RecyclerView.Adapter<ViewHolder>() {
+class RVSkillsAdapter(private val mainCategory: SkillMainCategory, private val subCategory: SkillSubCategory): ItemsAdapter(subCategory.skills) {
     private var adapterEvents: RVSkillsMainAdapter.AdapterEvents? = null
 
     fun setAdapterEvents(adapterEvents: RVSkillsMainAdapter.AdapterEvents?){
@@ -20,11 +20,8 @@ class RVSkillsAdapter(private val mainCategory: SkillMainCategory, private val s
         )
     }
 
-    override fun getItemCount(): Int {
-        return subCategory.skills.size
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+//        super.onBindViewHolder(holder, position) //TODO: Binding Extension
         val skill = subCategory.skills[position]
         val binding = holder.binding as ViewholderSkillBinding
 

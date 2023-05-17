@@ -13,7 +13,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
 
-class RVSkillsEditAdapter(private val subCategory: SkillSubCategory): RecyclerView.Adapter<ViewHolder>() {
+class RVSkillsEditAdapter(private val subCategory: SkillSubCategory): ItemsAdapter(subCategory.skills) {
     private lateinit var dao: FirebaseSkillsDAO
 
     init {
@@ -28,11 +28,8 @@ class RVSkillsEditAdapter(private val subCategory: SkillSubCategory): RecyclerVi
         )
     }
 
-    override fun getItemCount(): Int {
-        return subCategory.skills.size
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {//TODO: Add color stripes per row
+//        super.onBindViewHolder(holder, position) //TODO: Binding Extension
         val skill = subCategory.skills[position]
         val binding = holder.binding as ViewholderSkillEditBinding
 
