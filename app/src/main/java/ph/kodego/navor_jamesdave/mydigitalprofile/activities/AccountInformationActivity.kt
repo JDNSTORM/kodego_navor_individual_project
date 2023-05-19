@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -87,14 +88,14 @@ class AccountInformationActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             checkFormData()
         }
+        onBackPressedDispatcher.addCallback { goToMain() }
     }
 
     private fun setupActionBar(){
         setSupportActionBar(binding.tbTop)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.tbTop.setNavigationOnClickListener {
-//            onBackPressedDispatcher //TODO: Implement
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
     private fun setFormData(){
@@ -203,8 +204,8 @@ class AccountInformationActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onBackPressed() {
-//        super.onBackPressed()
-        goToMain()
-    }
+//    override fun onBackPressed() {
+////        super.onBackPressed()
+//        goToMain()
+//    }
 }
