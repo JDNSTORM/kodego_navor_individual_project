@@ -1,5 +1,7 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firestore
 
+import android.util.Log
+import com.google.firebase.firestore.CollectionReference
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseCollections
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
 
@@ -17,6 +19,9 @@ open class AccountDAOImpl(): FirestoreDAOImpl(), AccountDAO{
     }
 
     override suspend fun getAccount(uID: String): Account? {
-        TODO("Not yet implemented")
+        Log.d("AccountDAO", collection)
+        val document = getDocument(uID)
+        Log.d("AccountDocument", document?.data.toString())
+        return document?.toObject(Account::class.java)
     }
 }

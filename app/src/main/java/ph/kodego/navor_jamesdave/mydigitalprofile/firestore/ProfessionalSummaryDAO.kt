@@ -17,7 +17,7 @@ class ProfessionalSummaryDAOImpl(profile: Profile, context: Context): FirestoreD
     ProfessionalSummaryDAO {
     override val collection: String
         get() = FirebaseCollections.ProfessionalSummary
-    private val parentReference = fireStore.collection(FirebaseCollections.Profile).document(profile.profileID)
+    private val parentReference = db.collection(FirebaseCollections.Profile).document(profile.profileID)
 
     override fun getCollectionReference(): CollectionReference {
         return parentReference.collection(collection)
