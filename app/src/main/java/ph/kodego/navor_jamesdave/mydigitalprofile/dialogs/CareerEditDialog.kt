@@ -22,19 +22,16 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.bind
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.clear
 
 class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl, private val adapter: RVCareersAdapter): AlertDialog(context) {
-    private lateinit var binding: DialogueCareerEditBinding
+    private val binding: DialogueCareerEditBinding by lazy {
+        DialogueCareerEditBinding.inflate(layoutInflater)
+    }
     private val progressDialog: ProgressDialog = ProgressDialog(context)
     private var career: Career? = null
     private var holder: ItemsAdapter.ViewHolder? = null
     private val lifecycleScope = CoroutineScope(Dispatchers.Main.immediate)
 
-//    init {
-//        create()
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DialogueCareerEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setCancelable(false)
         setOnDismissListener {

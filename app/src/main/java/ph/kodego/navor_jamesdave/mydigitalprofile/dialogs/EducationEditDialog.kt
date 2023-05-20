@@ -23,7 +23,9 @@ class EducationEditDialog(
     private val dao: FirebaseEducationDAOImpl,
     private val adapter: RVEducationsAdapter
 ): AlertDialog(context) {
-    private lateinit var binding: DialogueEducationEditBinding
+    private val binding: DialogueEducationEditBinding by lazy {
+        DialogueEducationEditBinding.inflate(layoutInflater)
+    }
     private val progressDialog: ProgressDialog = ProgressDialog(context)
     private var education: Education? = null
     private var holder: ItemsAdapter.ViewHolder? = null
@@ -31,7 +33,6 @@ class EducationEditDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DialogueEducationEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setCancelable(false)
         setOnDismissListener {

@@ -36,20 +36,14 @@ abstract class ItemsAdapter(private val items: ArrayList<*>): RecyclerView.Adapt
      * ViewBinding and Item must be matched accordingly.
      */
     private fun bindItem(binding: ViewBinding, item: Any){
-        if (binding is ViewholderProfileBinding && item is Profile){
-            binding.bind(item)
-        }else if (binding is ViewholderCareerBinding && item is Career){
-            binding.bind(item)
-        }else if (binding is ViewholderEducationBinding && item is Education){
-            binding.bind(item)
-        }else if (binding is ViewholderSkillsMainBinding && item is SkillMainCategory){
-//            binding.bind(item) //TODO
-        }else if (binding is ViewholderSkillSubBinding && item is SkillSubCategory){
-//            binding.bind(item) //TODO
-        }else if (binding is ViewholderSkillBinding && item is Skill){
-//            binding.bind(item) //TODO
-        }else if (binding is ViewholderSkillEditBinding && item is Skill){
-//            binding.bind(item) //TODO
+        when {
+            binding is ViewholderProfileBinding && item is Profile -> binding.bind(item)
+            binding is ViewholderCareerBinding && item is Career -> binding.bind(item)
+            binding is ViewholderEducationBinding && item is Education -> binding.bind(item)
+//            binding is ViewholderSkillsMainBinding && item is SkillMainCategory -> binding.bind(item) //TODO
+//            binding is ViewholderSkillSubBinding && item is SkillSubCategory -> binding.bind(item) //TODO
+//            binding is ViewholderSkillBinding && item is Skill -> binding.bind(item) //TODO
+//            binding is ViewholderSkillEditBinding && item is Skill -> binding.bind(item) //TODO
         }
     }
 }

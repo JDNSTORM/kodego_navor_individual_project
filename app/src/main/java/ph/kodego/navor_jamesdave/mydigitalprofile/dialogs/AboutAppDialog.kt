@@ -7,11 +7,12 @@ import androidx.appcompat.app.AlertDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueAboutAppBinding
 
 class AboutAppDialog(context: Context): AlertDialog(context) {
-    private lateinit var binding: DialogueAboutAppBinding
+    private val binding: DialogueAboutAppBinding by lazy {
+        DialogueAboutAppBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DialogueAboutAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.btnClose.setOnClickListener { dismiss() }

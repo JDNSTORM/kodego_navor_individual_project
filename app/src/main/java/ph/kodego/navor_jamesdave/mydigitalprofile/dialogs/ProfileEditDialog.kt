@@ -16,7 +16,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 
 class ProfileEditDialog(context: Context, private val dao: FirebaseProfessionalSummaryDAOImpl): AlertDialog(context) {
-    private lateinit var binding: DialogueProfileEditBinding
+    private val binding: DialogueProfileEditBinding by lazy {
+        DialogueProfileEditBinding.inflate(layoutInflater)
+    }
     private val progressDialog: ProgressDialog = ProgressDialog(context)
     lateinit var profile: Profile
     lateinit var professionalSummary: ProfessionalSummary
@@ -24,7 +26,6 @@ class ProfileEditDialog(context: Context, private val dao: FirebaseProfessionalS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DialogueProfileEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setCancelable(false)
         window!!.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)

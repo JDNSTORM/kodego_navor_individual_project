@@ -7,10 +7,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 
 class ProgressDialog(context: Context, private val progressText: Int = R.string.please_wait): Dialog(context) {
-    private lateinit var binding: DialogueProgressBinding
+    private val binding: DialogueProgressBinding by lazy {
+        DialogueProgressBinding.inflate(layoutInflater)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DialogueProgressBinding.inflate(layoutInflater)
         binding.progressText.setText(progressText)
         setContentView(binding.root)
         setCancelable(false)
