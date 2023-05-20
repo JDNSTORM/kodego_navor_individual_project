@@ -80,12 +80,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAboutAppDialog(){
         val dialog = AboutAppDialog(this)
-        dialog.show()
         dialog.onViewGitRepository{ openGitRepositoryURL() }
         dialog.onViewProfile{
             viewDeveloperProfile()
             dialog.dismiss()
         }
+        dialog.show()
     }
 
     private fun openGitRepositoryURL(){
