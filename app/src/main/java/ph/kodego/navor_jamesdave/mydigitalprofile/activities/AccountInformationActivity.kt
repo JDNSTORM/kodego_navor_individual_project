@@ -180,7 +180,7 @@ class AccountInformationActivity : AppCompatActivity() {
         Log.i("URI", uri.toString())
         progressDialog.show()
         lifecycleScope.launch {
-            if (FirebaseStorageDAOImpl(applicationContext).updateAccountPhoto(uri)){
+            if (FirebaseStorageDAOImpl(this@AccountInformationActivity).updateAccountPhoto(uri)){
                 loadProfilePhoto()
             }
             progressDialog.dismiss()

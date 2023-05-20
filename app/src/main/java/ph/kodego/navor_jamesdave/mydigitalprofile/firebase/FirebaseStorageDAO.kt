@@ -3,6 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.webkit.MimeTypeMap
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
@@ -26,10 +27,11 @@ class FirebaseStorageDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
     private val imageTree = "images"
 
     override suspend fun uploadImage(uri: Uri): Uri? {
+        val filename = "${System.currentTimeMillis()}.${MimeTypeMap.getSingleton().getMimeTypeFromExtension(context.contentResolver.getType(uri))}"
         val reference = firebaseStorage
             .getReference(parentTree)
             .child(imageTree)
-            .child(uri.lastPathSegment.toString())
+            .child(filename)
         val task: UploadTask = reference.putFile(uri)
         task.await()
         if (task.isSuccessful){
