@@ -164,7 +164,7 @@ class CareerEditDialog(context: Context, private val dao: FirebaseCareerDAOImpl,
     }
 
     private fun deleteCareer(){
-        val builder = AlertDialog.Builder(context)
+        val builder = Builder(context)
         builder.apply {
             setTitle("Delete Work History?")
             setMessage("Are you sure to delete ${career!!.position} history?")

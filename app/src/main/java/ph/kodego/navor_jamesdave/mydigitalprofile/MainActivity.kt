@@ -71,34 +71,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.btn_about -> {
-                showAboutAppDialog()
+                AboutAppDialog(this).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun showAboutAppDialog(){
-        val dialog = AboutAppDialog(this)
-        dialog.onViewGitRepository{ openGitRepositoryURL() }
-        dialog.onViewProfile{
-            viewDeveloperProfile()
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
-    private fun openGitRepositoryURL(){
-        val url = Uri.parse("https://github.com/JDNSTORM/kodego_navor_individual_project.git")
-        val openURL = Intent(Intent.ACTION_VIEW)
-        openURL.data = url
-        startActivity(openURL)
-    }
-
-    private fun viewDeveloperProfile(){
-        val profileID = getString(R.string.profile_id)
-        val intent = Intent(this, ProfileActivity::class.java)
-        intent.putExtra(IntentBundles.ProfileID, profileID)
-        startActivity(intent)
     }
 }
