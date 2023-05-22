@@ -1,10 +1,10 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.webkit.MimeTypeMap
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.UploadTask
@@ -27,7 +27,9 @@ class FirebaseStorageDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
     private val imageTree = "images"
 
     override suspend fun uploadImage(uri: Uri): Uri? {
-        val filename = "${System.currentTimeMillis()}.${MimeTypeMap.getSingleton().getMimeTypeFromExtension(context.contentResolver.getType(uri))}"
+//        val filename = "${System.currentTimeMillis()}.${MimeTypeMap.getSingleton().getMimeTypeFromExtension(context.contentResolver.getType(uri))}"
+        val filename = getFileName(uri)
+        Log.d("FileName", filename)
         val reference = firebaseStorage
             .getReference(parentTree)
             .child(imageTree)
@@ -82,11 +84,26 @@ class FirebaseStorageDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
             val imageReference = firebaseStorage.getReferenceFromUrl(url)
             val task = imageReference.delete()
             task.await()
-            Log.d("Photo Deletion", task.exception?.message.toString())
             return task.isSuccessful
         }catch (e: StorageException){
             Log.e("Photo Deletion", e.message.toString())
             return false
         }
+    }
+
+    private fun getFileName(uri: Uri): String{
+        val fileExtension = if (uri.scheme == ContentResolver.SCHEME_CONTENT){
+            val mimeType = context.contentResolver.getType(uri)
+            Log.d("MimeType", mimeType.toString())
+            MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+        }else{
+            MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+        }
+        val fileName = StringBuilder()
+        fileName.append(System.currentTimeMillis())
+        fileName.append('.')
+        fileName.append(fileExtension)
+
+        return fileName.toString()
     }
 }
