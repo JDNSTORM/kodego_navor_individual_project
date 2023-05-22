@@ -10,7 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountInformationActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AccountSettingsActivity
@@ -70,21 +75,23 @@ class AccountFragment : Fragment() {
 
     private fun setAccount(){
         progressDialog.show()
-        lifecycleScope.launch {
-            val firebaseAccount = dao.getAccount(dao.getCurrentUserID())
-            if (firebaseAccount != null) {
-                account = firebaseAccount
-                val fullName = account.fullName()
-                with(binding) {
-                    profileUserName.text = fullName
-                    email.text = account.contactInformation!!.emailAddress!!.email
-                    GlideModule().loadProfilePhoto(binding.profilePicture, account.image)
+        CoroutineScope(IO).launch {
+            val firebaseAccount = async { dao.getAccount(dao.getCurrentUserID()) }.await()
+            withContext(Main) {
+                if (firebaseAccount != null) {
+                    account = firebaseAccount
+                    val fullName = account.fullName()
+                    with(binding) {
+                        profileUserName.text = fullName
+                        email.text = account.contactInformation!!.emailAddress!!.email
+                        GlideModule().loadProfilePhoto(binding.profilePicture, account.image)
+                    }
+                    progressDialog.dismiss()
+                } else {
+                    progressDialog.dismiss()
+                    Toast.makeText(context, "Failed to get Account Data", Toast.LENGTH_LONG).show()
+                    signOut()
                 }
-                progressDialog.dismiss()
-            } else {
-                progressDialog.dismiss()
-                Toast.makeText(context, "Failed to get Account Data", Toast.LENGTH_LONG).show()
-                signOut()
             }
         }
     }

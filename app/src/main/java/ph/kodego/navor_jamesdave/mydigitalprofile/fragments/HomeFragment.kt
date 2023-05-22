@@ -9,7 +9,12 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.RVProfilesAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentHomeBinding
@@ -67,13 +72,17 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView(){
         binding.loadData()
-        lifecycleScope.launch{
-            profiles.addAll(dao.getProfiles())
-            shownProfiles.addAll(profiles)
-            rvAdapter = RVProfilesAdapter(shownProfiles)
-            binding.listProfiles.layoutManager = LinearLayoutManager(context)
-            binding.listProfiles.adapter = rvAdapter
-            binding.showData()
+        CoroutineScope(IO).launch{
+            launch {
+                profiles.addAll(dao.getProfiles())
+                shownProfiles.addAll(profiles)
+            }.join()
+            withContext(Main) {
+                rvAdapter = RVProfilesAdapter(shownProfiles)
+                binding.listProfiles.layoutManager = LinearLayoutManager(context)
+                binding.listProfiles.adapter = rvAdapter
+                binding.showData()
+            }
         }
     }
 
