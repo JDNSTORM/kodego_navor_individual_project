@@ -34,4 +34,7 @@ This will not be the final output but it will be further enhanced in the future.
 \nIf you are also a developer and is interested in looking into my code, or if you are interested into looking into my profile inside this app,
 You can view it through the buttons below.</string>
     <string name="profile_id">cKpaCr9luoh7dOmE3mzGbLfFtHd2</string>
+    <string name="dialog_yes">YES</string>
+    <string name="dialog_no">NO</string>
+    <string name="permission_required">Permission Required</string>
 </resources>

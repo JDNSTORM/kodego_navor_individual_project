@@ -1,9 +1,14 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
+import android.Manifest.permission.READ_MEDIA_IMAGES
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.Intent.ACTION_PICK
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
+import android.os.Build
+import android.os.Build.VERSION_CODES.TIRAMISU
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,6 +16,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -33,9 +40,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
 class AccountInformationActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAccountInformationBinding
+    private val binding by lazy { ActivityAccountInformationBinding.inflate(layoutInflater) }
     private lateinit var account: Account
-    private lateinit var progressDialog: Dialog
+    private val progressDialog: Dialog by lazy { ProgressDialog(binding.root.context, R.string.updating_account) }
     private lateinit var accountDAO: FirebaseAccountDAOImpl
     private lateinit var contactInformationDAO: FirebaseContactInformationDAOImpl
 
@@ -60,7 +67,6 @@ class AccountInformationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAccountInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         accountDAO = FirebaseAccountDAOImpl(applicationContext)
         contactInformationDAO = FirebaseContactInformationDAOImpl()
@@ -74,20 +80,9 @@ class AccountInformationActivity : AppCompatActivity() {
         }
 
         setupActionBar()
-        progressDialog = ProgressDialog(binding.root.context, R.string.updating_account)
 
-        binding.profilePicture.setOnClickListener {
-//            openDocumentLauncher.launch(arrayOf("image/*"))
-            val choosePictureIntent = Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            )
-            pictureChosen.launch(choosePictureIntent)
-        }
-
-        binding.btnSave.setOnClickListener {
-            checkFormData()
-        }
+        binding.profilePicture.setOnClickListener { chooseProfilePicture() }
+        binding.btnSave.setOnClickListener { checkFormData() }
         onBackPressedDispatcher.addCallback { goToMain() }
     }
 
@@ -98,6 +93,7 @@ class AccountInformationActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
     }
+
     private fun setFormData(){
         val address = account.contactInformation!!.address
         val contactNumber = account.contactInformation!!.contactNumber
@@ -131,6 +127,50 @@ class AccountInformationActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun chooseProfilePicture(){
+        val choosePictureIntent = Intent(
+            ACTION_PICK,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
+        pictureChosen.launch(choosePictureIntent)
+
+//        when (Build.VERSION.SDK_INT){
+//            TIRAMISU -> {
+//                if (ActivityCompat.checkSelfPermission(this, READ_MEDIA_IMAGES) == PERMISSION_GRANTED) {
+//                    val choosePictureIntent = Intent(
+//                        ACTION_PICK,
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//                    )
+//                    pictureChosen.launch(choosePictureIntent)
+//                }else{
+//                    requestMediaImagesPermission()
+//                }
+//            }
+//            else -> {
+//                openDocumentLauncher.launch(arrayOf("image/*"))
+//            }
+//        }
+    }
+
+    private fun requestMediaImagesPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, READ_MEDIA_IMAGES)){
+            AlertDialog.Builder(this)
+                .setTitle(R.string.permission_required)
+                .setMessage("This Permission is required to Read Media Storage. Grant Permission?")
+                .setPositiveButton(R.string.dialog_yes){ dialog, _ ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ActivityCompat.requestPermissions(this, arrayOf(READ_MEDIA_IMAGES), MEDIA_IMAGES_REQUEST_CODE)
+                    }
+                    dialog.dismiss()
+                }.setNegativeButton(R.string.dialog_no){ dialog, _ ->
+                    dialog.dismiss()
+                }.show()
+        }else{
+            ActivityCompat.requestPermissions(this, arrayOf(READ_MEDIA_IMAGES), MEDIA_IMAGES_REQUEST_CODE)
+        }
+    }
+
     private fun checkFormData(){
         val updatedAccount = Account(account)
         val updatedAddress = Address(updatedAccount.contactInformation!!.address!!)
@@ -198,14 +238,30 @@ class AccountInformationActivity : AppCompatActivity() {
             .into(binding.profilePicture)
     }
 
-    private fun goToMain(){
+    private fun goToMain(){ //TODO: Use ActivityForResult
         val intent = Intent(baseContext, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-//    override fun onBackPressed() {
-////        super.onBackPressed()
-//        goToMain()
-//    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (
+            requestCode == MEDIA_IMAGES_REQUEST_CODE &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PERMISSION_GRANTED
+        ){
+            chooseProfilePicture()
+        }else{
+            Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    companion object {
+        private const val MEDIA_IMAGES_REQUEST_CODE = 1
+    }
 }
