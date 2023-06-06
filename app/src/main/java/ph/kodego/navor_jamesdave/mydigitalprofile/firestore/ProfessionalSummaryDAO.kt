@@ -13,7 +13,7 @@ interface ProfessionalSummaryDAO{
     suspend fun getProfessionalSummary(): ProfessionalSummary?
 }
 
-class ProfessionalSummaryDAOImpl(profile: Profile, context: Context): FirestoreDAOImpl(),
+class ProfessionalSummaryDAOImpl(profile: Profile, context: Context): FirestoreDAOImpl<Profile>(),
     ProfessionalSummaryDAO {
     override val collection: String
         get() = FirebaseCollections.ProfessionalSummary

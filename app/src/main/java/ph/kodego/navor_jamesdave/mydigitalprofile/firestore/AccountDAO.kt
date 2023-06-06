@@ -10,7 +10,7 @@ interface AccountDAO {
     suspend fun getAccount(uID: String): Account?
 }
 
-open class AccountDAOImpl(): FirestoreDAOImpl(), AccountDAO{
+open class AccountDAOImpl(): FirestoreDAOImpl<Account>(), AccountDAO{
     override val collection: String
         get() = FirebaseCollections.Accounts
 
