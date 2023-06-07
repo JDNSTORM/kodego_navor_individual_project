@@ -9,6 +9,7 @@ import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
@@ -19,6 +20,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.HomeFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.LoginFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fragmentAdapter:FragmentAdapter

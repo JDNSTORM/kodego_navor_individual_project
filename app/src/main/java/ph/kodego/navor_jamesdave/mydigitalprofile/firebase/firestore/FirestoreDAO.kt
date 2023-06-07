@@ -28,8 +28,8 @@ interface FirestoreDAO<Model: Any> {
 abstract class FirestoreDAOImpl<Model: Any>(): FirestoreDAO<Model> {
     protected val db = FirebaseFirestore.getInstance()
     protected val collection: String get() = getCollectionName()
-    val reference: CollectionReference get() = getCollectionReference()
-    val groupReference by lazy { db.collectionGroup(collection) }
+    protected val reference: CollectionReference get() = getCollectionReference()
+    protected val groupReference by lazy { db.collectionGroup(collection) }
 
     abstract fun getCollectionName(): String
 
@@ -162,6 +162,7 @@ abstract class FirestoreDAOImpl<Model: Any>(): FirestoreDAO<Model> {
      * Returns a Flow of the CollectionReference which then returns a List of Object of type Model.
      * For smooth execution, implement a function to use this function.
      * Example: fun readDataSet(documentID: String): Flow<List<Data>> = readModels(documentID)
+     * For results with filters, please use $reference.
      * @param Model Any Class used for storing data. Preferably Data Class.
      * @return Flow of List of Object of type Model
      */
@@ -173,6 +174,7 @@ abstract class FirestoreDAOImpl<Model: Any>(): FirestoreDAO<Model> {
      * Returns a Flow of the CollectionGroup which then returns a List of Object of type Model.
      * For smooth execution, implement a function to use this function.
      * Example: fun readDataGroup(documentID: String): Flow<List<Data>> = readGroup(documentID)
+     * For results with filters, please use $groupReference.
      * @param Model Any Class used for storing data. Preferably Data Class.
      * @return Flow of List of Object of type Model
      */
