@@ -12,16 +12,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 interface FirebaseAuthDAO {
     fun currentUser(): FirebaseUser?
-    suspend fun registerUser(email: String, password: String): FirebaseUser?
+    suspend fun createUser(email: String, password: String): FirebaseUser?
     suspend fun signInUser(email: String, password: String): Boolean
     suspend fun updateUser(fields: Map<String, Any?>): Boolean
     suspend fun updateUserPassword(oldPassword: String, password: String): Boolean
@@ -35,7 +32,7 @@ class FirebaseAuthDAOImpl(private val context: Context): FirebaseAuthDAO {
         return auth.currentUser
     }
 
-    override suspend fun registerUser(email: String, password: String): FirebaseUser? {
+    override suspend fun createUser(email: String, password: String): FirebaseUser? {
         val task: Task<AuthResult>
         try {
             task = auth.createUserWithEmailAndPassword(email, password)

@@ -14,6 +14,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImp
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
+@Deprecated("Replaced with SignUpActivity")
 class CreateAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateAccountBinding
     private lateinit var progressDialog: Dialog
@@ -41,7 +42,7 @@ class CreateAccountActivity : AppCompatActivity() {
     private fun setupActionBar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     private fun validateForm(){

@@ -8,4 +8,6 @@ object IntentBundles {
     const val Account: String = "Account"
     const val Profile: String = "Profile"
     const val ProfileID: String = "ProfileID"
+
+    const val EXTRA_SIGNED_IN = "signedIn"
 }
