@@ -27,6 +27,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 
+@Deprecated("Used AccountFragment in activities")
 class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!

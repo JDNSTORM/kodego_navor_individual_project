@@ -3,7 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountBinding
-
+@Deprecated("Unused")
 class AccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountBinding
 

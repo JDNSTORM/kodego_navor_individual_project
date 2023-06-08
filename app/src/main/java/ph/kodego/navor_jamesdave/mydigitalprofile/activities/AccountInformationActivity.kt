@@ -38,6 +38,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
+@Deprecated("Replaced with Activity inside account")
 class AccountInformationActivity : AppCompatActivity() {
     private val binding by lazy { ActivityAccountInformationBinding.inflate(layoutInflater) }
     private lateinit var account: Account

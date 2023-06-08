@@ -17,11 +17,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(app: Application, private val repository: AccountRepository): AndroidViewModel(app) {
-    private lateinit var account: Flow<Account?>
-    fun readAccount(uID: String): Flow<Account?> {
-        account = repository.source.readAccount(uID)
-        return account
+    private lateinit var activeAccount: Flow<Account?>
+    private fun readAccount(uID: String): Flow<Account?> {
+        return repository.source.readAccount(uID)
     }
+    fun readActiveAccount(): Flow<Account?>{
+        if (!this::activeAccount.isInitialized) {
+            activeAccount = readAccount(repository.auth.currentUser()!!.uid)
+        }
+        return activeAccount
+    }
+
     private suspend fun addAccount(uID: String, account: Account): Boolean {
         return repository.source.addAccount(uID, account)
     }
@@ -49,7 +55,7 @@ class AccountViewModel @Inject constructor(app: Application, private val reposit
     suspend fun signIn(email: String, password: String) = repository.auth.signInUser(email, password)
 
     suspend fun updateAccount(fields: Map<String, Any?>): Boolean{
-        val account = account.single() ?: return false
+        val account = activeAccount.single() ?: return false
         val userChanges: HashMap<String, Any?> = HashMap()
         if (fields.containsKey(KEY_FIRST_NAME) || fields.containsKey(KEY_LAST_NAME)){
             userChanges[USER_DISPLAY_NAME] = account.displayName()

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -14,6 +16,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivitySignUpBind
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 
+@AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
     private val binding by lazy {ActivitySignUpBinding.inflate(layoutInflater)}
     private val viewModel: AccountViewModel by viewModels()
@@ -54,7 +57,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun registerAccount(firstName: String, lastName: String, email: String, password: String){
         progressDialog.show()
-        CoroutineScope(IO).launch {
+        lifecycleScope.launch {
             val signUpSuccessful = viewModel.signUp(firstName, lastName, email, password)
             withContext(Main) {
                 if (signUpSuccessful) {

@@ -18,6 +18,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.FormControls
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
+@Deprecated("Used SignInFragment")
 class LoginFragment() : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!

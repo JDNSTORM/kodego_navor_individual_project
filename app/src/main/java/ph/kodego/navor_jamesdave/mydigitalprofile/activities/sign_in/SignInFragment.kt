@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.CreateAccountActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ForgotPasswordActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSignInBinding
@@ -29,7 +28,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 @AndroidEntryPoint
 class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
     override fun getTabInformation(): TabInfo = TabInfo(
-        getString(R.string.sign_in),
+        "Sign In",
         R.drawable.ic_switch_account_24
     )
     private val viewModel by lazy{
@@ -96,8 +95,8 @@ class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
                     val intent = activity.intent
                     intent.putExtra(EXTRA_SIGNED_IN, true)
                     progressDialog.dismiss()
-                    activity.startActivity(intent)
                     activity.finish()
+                    startActivity(intent)
                 } else {
                     progressDialog.dismiss()
                 }

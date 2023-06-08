@@ -37,4 +37,5 @@ You can view it through the buttons below.</string>
     <string name="dialog_yes">YES</string>
     <string name="dialog_no">NO</string>
     <string name="permission_required">Permission Required</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
