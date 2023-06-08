@@ -5,7 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.singleOrNull
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.auth.FirebaseAuthDAOImpl.Companion.USER_DISPLAY_NAME
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.auth.FirebaseAuthDAOImpl.Companion.USER_PHOTO_URI
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
@@ -55,7 +57,7 @@ class AccountViewModel @Inject constructor(app: Application, private val reposit
     suspend fun signIn(email: String, password: String) = repository.auth.signInUser(email, password)
 
     suspend fun updateAccount(fields: Map<String, Any?>): Boolean{
-        val account = activeAccount.single() ?: return false
+        val account = activeAccount.first() ?: return false
         val userChanges: HashMap<String, Any?> = HashMap()
         if (fields.containsKey(KEY_FIRST_NAME) || fields.containsKey(KEY_LAST_NAME)){
             userChanges[USER_DISPLAY_NAME] = account.displayName()

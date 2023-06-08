@@ -13,8 +13,8 @@ open class Account(
     var lastName: String = ""
     var image: String = ""
     var emailAddress: String = ""
-    var address: Address? = null
-    var contactNumber: ContactNumber? = null
+    var address: Address = Address()
+    var contactNumber: ContactNumber = ContactNumber()
     var website: String = ""
     var fcmTokem: String = ""
 
@@ -25,10 +25,13 @@ open class Account(
         this.lastName = lastName
         this.emailAddress = email
     }
-    constructor(account: Account, firstName: String, lastName: String): this(account.uID){
+    constructor(account: Account, firstName: String = "", lastName: String = ""): this(account.uID){
         this.firstName = firstName
         this.lastName = lastName
         this.emailAddress = account.emailAddress
+        address = account.address.copy()
+        contactNumber = account.contactNumber.copy()
+        website = account.website
     }
 
     companion object{

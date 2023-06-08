@@ -44,8 +44,8 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
     }
 
     private fun toAccountInformation() {
-//        val intent = Intent(requireContext(), AccountInformationActivity::class.java)
-//        startActivity(intent)
+        val intent = Intent(requireContext(), AccountInformationActivity::class.java)
+        startActivity(intent)
     }
 
     private fun readAccount(){

@@ -11,7 +11,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 class GlideModule() : AppGlideModule() {
     fun loadProfilePhoto(view: ImageView, url: String){
         Glide
-            .with(view.context)
+            .with(view)
             .load(url)
             .circleCrop()
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
