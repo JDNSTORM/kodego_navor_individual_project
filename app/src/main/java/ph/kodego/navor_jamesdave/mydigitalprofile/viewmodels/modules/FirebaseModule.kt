@@ -7,17 +7,22 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
-import dagger.hilt.components.SingletonComponent
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.auth.FirebaseAuthDAOImpl
-import javax.inject.Singleton
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.storage.FirebaseStorageDAOImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object AuthModule {
+object FirebaseModule {
 
     @ViewModelScoped
     @Provides
     fun provideAuthDAO(@ApplicationContext context: Context): FirebaseAuthDAOImpl{
         return FirebaseAuthDAOImpl(context)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideStorageDAO(@ApplicationContext context: Context): FirebaseStorageDAOImpl{
+        return FirebaseStorageDAOImpl(context)
     }
 }

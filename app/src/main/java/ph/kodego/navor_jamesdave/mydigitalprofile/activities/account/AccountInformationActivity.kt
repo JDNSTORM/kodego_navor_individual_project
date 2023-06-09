@@ -97,7 +97,7 @@ class AccountInformationActivity : AppCompatActivity() {
         if (account.lastName != newAccount.lastName) changes[KEY_LAST_NAME] = newAccount.lastName
         if (account.address != newAccount.address) changes[KEY_ADDRESS] = newAccount.address
         if (account.contactNumber != newAccount.contactNumber) changes[KEY_CONTACT_NUMBER] = newAccount.contactNumber
-//        pickedImage?.let { changes[KEY_IMAGE] }
+        pickedImage?.let { changes[KEY_IMAGE] = "" }
 
         if (changes.isNotEmpty()) updateAccount(changes)
     }
@@ -105,6 +105,12 @@ class AccountInformationActivity : AppCompatActivity() {
     private fun updateAccount(changes: HashMap<String, Any?>){
         progressDialog.show()
         CoroutineScope(IO).launch {
+            pickedImage?.let {
+                viewModel.uploadImage(it)?.let {
+                    changes[KEY_IMAGE] = it
+                } ?: changes.remove(KEY_IMAGE)
+            }
+
             val updateSuccessful = viewModel.updateAccount(changes)
             withContext(Main){
                 if(updateSuccessful){

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
@@ -39,8 +40,18 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         readAccount()
-        binding.btnAccountInformation.setOnClickListener { toAccountInformation() }
-        binding.btnSignOut.setOnClickListener { signOut() }
+
+        with(binding) {
+            btnAccountInformation.setOnClickListener { toAccountInformation() }
+            btnAccountSettings.setOnClickListener { toAccountSettings() }
+//            btnViewProfile.setOnClickListener { goToProfile() }
+            btnSignOut.setOnClickListener { signOut() }
+        }
+    }
+
+    private fun toAccountSettings() {
+        val intent = Intent(requireContext(), AccountSettingsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun toAccountInformation() {
@@ -80,5 +91,10 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
         val intent = activity.intent
         activity.finish()
         startActivity(intent)
+    }
+
+    override fun onResume() {
+        FirebaseAuth.getInstance().currentUser ?: signOut()
+        super.onResume()
     }
 }

@@ -11,6 +11,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountSet
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 
+@Deprecated("Replaced with Activity from activities/account")
 class AccountSettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountSettingsBinding
     private lateinit var dao: FirebaseUserDAOImpl

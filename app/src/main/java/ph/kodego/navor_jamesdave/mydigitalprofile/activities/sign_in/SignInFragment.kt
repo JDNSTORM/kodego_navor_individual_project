@@ -2,13 +2,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.sign_in
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -20,7 +18,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ForgotPasswordActiv
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSignInBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseUserDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles.EXTRA_SIGNED_IN
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
