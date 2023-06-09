@@ -1,15 +1,17 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models
 
-import android.os.Parcelable
 import com.google.firebase.firestore.DocumentId
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class Profile(
     @DocumentId
     val profileID: String = "",
     override val uID: String = "",
-    var profession: String = ""
-): Account(uID), Parcelable {
+    var profession: String = "",
+    var isPublic: Boolean = false,
+    var profileSummary: String = "",
+    val careers: ArrayList<Career> = ArrayList(),
+    val skills: ArrayList<SkillsMain> = ArrayList(),
+    val educations: ArrayList<Education> = ArrayList()
+): Account(uID) {
 
 }
