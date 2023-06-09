@@ -20,6 +20,15 @@ open class Account(
 
     fun displayName() = "$firstName $lastName".trim()
 
+    fun setAccount(account: Account){
+        firstName = account.firstName
+        lastName = account.lastName
+        emailAddress = account.emailAddress
+        address = account.address.copy()
+        contactNumber = account.contactNumber.copy()
+        website = account.website
+    }
+
     constructor(firstName: String, lastName: String, email: String): this(){
         this.firstName = firstName
         this.lastName = lastName
@@ -28,10 +37,7 @@ open class Account(
     constructor(account: Account, firstName: String = "", lastName: String = ""): this(account.uID){
         this.firstName = firstName
         this.lastName = lastName
-        this.emailAddress = account.emailAddress
-        address = account.address.copy()
-        contactNumber = account.contactNumber.copy()
-        website = account.website
+        setAccount(account)
     }
 
     companion object{
