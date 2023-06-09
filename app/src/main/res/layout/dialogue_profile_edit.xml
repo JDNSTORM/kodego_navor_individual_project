@@ -14,7 +14,7 @@
             android:id="@+id/profession"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Profession"
+            android:hint="@string/profession"
             android:textAlignment="center"
             />
     </com.google.android.material.textfield.TextInputLayout>

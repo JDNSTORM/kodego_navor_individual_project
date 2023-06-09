@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
@@ -44,9 +45,14 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
         with(binding) {
             btnAccountInformation.setOnClickListener { toAccountInformation() }
             btnAccountSettings.setOnClickListener { toAccountSettings() }
-//            btnViewProfile.setOnClickListener { goToProfile() }
+            btnViewProfile.setOnClickListener { goToProfile() }
             btnSignOut.setOnClickListener { signOut() }
         }
+    }
+
+    private fun goToProfile() {
+        val intent = Intent(requireContext(), ProfileActivity::class.java)
+        startActivity(intent)
     }
 
     private fun toAccountSettings() {

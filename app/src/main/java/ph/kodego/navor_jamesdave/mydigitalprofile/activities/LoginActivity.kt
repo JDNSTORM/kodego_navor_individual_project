@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityLoginBinding
 
+@Deprecated("Unused")
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 

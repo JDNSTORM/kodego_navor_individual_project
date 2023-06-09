@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_profile"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:textAlignment="center"
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_profession"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_margin="10dp"
+        app:endIconMode="clear_text"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/profession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/profession"
+            android:textAlignment="center"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/is_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/is_public" />
+    <include layout="@layout/layout_edit_buttons"
+        android:id="@+id/edit_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        />
+</LinearLayout>

@@ -32,7 +32,7 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(), FlowCollector<Li
     private val viewModel by lazy{
         ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
     }
-    private val itemsAdapter by lazy { ProfilesAdapter() }
+    private val itemsAdapter by lazy { ProfilesAdapter(viewModel) }
     private var profiles: List<Profile> = emptyList()
 
     override fun onCreateView(

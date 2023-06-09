@@ -38,4 +38,8 @@ You can view it through the buttons below.</string>
     <string name="dialog_no">NO</string>
     <string name="permission_required">Permission Required</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="about_app">About My Digital Profile 2</string>
+    <string name="select_profile">Select Profile</string>
+    <string name="profession">Profession</string>
+    <string name="is_public">Public</string>
 </resources>
