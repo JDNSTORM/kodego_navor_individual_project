@@ -69,7 +69,7 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(), FlowCollector<Li
     }
 
     private fun resetRecyclerView(){
-        itemsAdapter.setList(emptyList())
+        itemsAdapter.setList(profiles)
     }
 
     private fun searchList(keyword: String){
@@ -82,6 +82,7 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(), FlowCollector<Li
 
     override suspend fun emit(value: List<Profile>) {
         profiles = value
+        resetRecyclerView()
         binding.showData()
     }
 

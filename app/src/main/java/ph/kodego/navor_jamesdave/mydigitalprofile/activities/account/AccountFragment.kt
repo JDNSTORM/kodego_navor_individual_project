@@ -21,6 +21,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
+import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
 class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollector<Account?> {
@@ -68,7 +69,7 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
     private fun readAccount(){
         progressDialog.show()
         lifecycleScope.launch {
-            viewModel.readActiveAccount().collect(this@AccountFragment)
+            viewModel.activeAccount.collect(this@AccountFragment)
         }
     }
 

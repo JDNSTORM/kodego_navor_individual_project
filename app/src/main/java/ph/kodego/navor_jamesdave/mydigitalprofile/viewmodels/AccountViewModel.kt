@@ -19,15 +19,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(app: Application, private val repository: AccountRepository): AndroidViewModel(app) {
-    private lateinit var activeAccount: Flow<Account?>
-    private fun readAccount(uID: String): Flow<Account?> {
-        return repository.source.readAccount(uID)
-    }
-    fun readActiveAccount(): Flow<Account?>{
-        if (!this::activeAccount.isInitialized) {
-            activeAccount = readAccount(repository.auth.currentUser()!!.uid)
-        }
-        return activeAccount
+    val activeAccount: Flow<Account?> by lazy { readActiveAccount(repository.auth.currentUser()!!.uid) }
+    private fun readActiveAccount(uID: String): Flow<Account?> {
+        return repository.source.readActiveAccount(uID)
     }
 
     private suspend fun addAccount(uID: String, account: Account): Boolean {
@@ -53,7 +47,10 @@ class AccountViewModel @Inject constructor(app: Application, private val reposit
         } ?: false
     }
 
-    fun signOut() = repository.auth.signOutUser()
+    fun signOut() {
+        repository.source.clearActiveAccount()
+        repository.auth.signOutUser()
+    }
     suspend fun signIn(email: String, password: String) = repository.auth.signInUser(email, password)
 
     suspend fun updateAccount(fields: Map<String, Any?>): Boolean{
@@ -68,7 +65,7 @@ class AccountViewModel @Inject constructor(app: Application, private val reposit
         if (userChanges.isNotEmpty()){
             updateUser(userChanges)
         }
-        return updateAccount(account.uID, fields)
+        return updateAccount(account.uid, fields)
     }
 
     private suspend fun updateAccount(uID: String, fields: Map<String, Any?>) = repository.source.updateAccount(uID, fields)

@@ -1,14 +1,11 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models
 
-import android.os.Parcelable
 import com.google.firebase.firestore.DocumentId
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 open class Account(
     @DocumentId
-    open val uID: String = ""
-): Parcelable {
+    val uid: String = ""
+) {
     var firstName: String = ""
     var lastName: String = ""
     var image: String = ""
@@ -34,7 +31,7 @@ open class Account(
         this.lastName = lastName
         this.emailAddress = email
     }
-    constructor(account: Account, firstName: String = "", lastName: String = ""): this(account.uID){
+    constructor(account: Account, firstName: String = "", lastName: String = ""): this(account.uid){
         this.firstName = firstName
         this.lastName = lastName
         setAccount(account)

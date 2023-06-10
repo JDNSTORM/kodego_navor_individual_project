@@ -142,7 +142,7 @@ class AccountInformationActivity : AppCompatActivity() {
 
     private fun loadAccount(){
         lifecycleScope.launch {
-            val activeAccount = viewModel.readActiveAccount().first()
+            val activeAccount = viewModel.activeAccount.first()
             activeAccount?.let {
                 account = it
                 setFormData()

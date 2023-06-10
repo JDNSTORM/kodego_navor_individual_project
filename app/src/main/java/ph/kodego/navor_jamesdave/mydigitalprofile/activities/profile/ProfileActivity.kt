@@ -23,13 +23,16 @@ class ProfileActivity : AppCompatActivity(), FlowCollector<Profile?> {
     private val selectProfileDialog by lazy {
         val dialog = SelectProfileDialog(this)
         dialog.setOnDismissListener {
-            viewModel.readActiveProfile() ?: throwError()
+            viewModel.readActiveProfile()?.let {
+                loadProfile()
+            } ?: throwError()
         }
         dialog
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         setupActionBar()
         loadProfile()
     }
@@ -68,10 +71,16 @@ class ProfileActivity : AppCompatActivity(), FlowCollector<Profile?> {
             profileUserName.text = profile.displayName()
             profession.text = profile.profession
         }
+        progressDialog.dismiss()
     }
 
     private fun throwError(){
         Toast.makeText(this, "Profile Inaccessible!", Toast.LENGTH_SHORT).show()
         finish()
+    }
+
+    override fun onDestroy() {
+        viewModel.clearActiveProfile()
+        super.onDestroy()
     }
 }

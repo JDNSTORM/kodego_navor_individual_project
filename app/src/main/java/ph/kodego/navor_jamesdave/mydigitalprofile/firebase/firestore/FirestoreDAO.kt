@@ -11,9 +11,9 @@ import com.google.firebase.firestore.ktx.snapshots
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 
-interface FirestoreDAO<Model: Any> {
-    suspend fun addDocument(model: Model): Boolean
-    suspend fun addDocument(documentID: String, model: Model): Boolean
+interface FirestoreDAO {
+    suspend fun addDocument(model: Any): Boolean
+    suspend fun addDocument(documentID: String, model: Any): Boolean
     suspend fun getDocument(): DocumentSnapshot?
     suspend fun getDocument(documentID: String): DocumentSnapshot?
     fun readDocument(documentID: String): Flow<DocumentSnapshot>
@@ -25,7 +25,7 @@ interface FirestoreDAO<Model: Any> {
     suspend fun deleteDocument(documentID: String): Boolean
 }
 
-abstract class FirestoreDAOImpl<Model: Any>(): FirestoreDAO<Model> {
+abstract class FirestoreDAOImpl<Model: Any>(): FirestoreDAO {
     protected val db = FirebaseFirestore.getInstance()
     protected val collection: String get() = getCollectionName()
     protected val reference: CollectionReference get() = getCollectionReference()
@@ -42,7 +42,7 @@ abstract class FirestoreDAOImpl<Model: Any>(): FirestoreDAO<Model> {
      */
     open fun getCollectionReference(): CollectionReference = db.collection(collection)
 
-    override suspend fun addDocument(model: Model): Boolean {
+    override suspend fun addDocument(model: Any): Boolean {
         val task = reference
             .document()
             .set(model, SetOptions.merge())
@@ -50,7 +50,7 @@ abstract class FirestoreDAOImpl<Model: Any>(): FirestoreDAO<Model> {
         return task.isSuccessful
     }
 
-    override suspend fun addDocument(documentID: String, model: Model): Boolean {
+    override suspend fun addDocument(documentID: String, model: Any): Boolean {
         val task = db
             .collection(collection)
             .document(documentID)

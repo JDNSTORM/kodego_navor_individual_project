@@ -11,6 +11,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 interface ProfileDAO {
     suspend fun getProfile(profileID: String): Profile?
     fun readProfile(profileID: String): Flow<Profile?>
+    fun readProfile(profile: Profile): Flow<Profile?>
     fun readProfiles(): Flow<List<Profile>>
     fun readProfilesGroup(): Flow<List<Profile>>
     fun readPublicProfiles(): Flow<List<Profile>>
@@ -26,6 +27,11 @@ class ProfileDAOImpl(): FirestoreDAOImpl<Profile>(), ProfileDAO{
 
     override suspend fun getProfile(profileID: String): Profile? = getProfile(profileID)
     override fun readProfile(profileID: String): Flow<Profile?> = readModel(profileID)
+    override fun readProfile(profile: Profile): Flow<Profile?> {
+        return db.collection(ACCOUNT_COLLECTION).document(profile.refUID)
+            .collection(collection).document(profile.profileID).dataObjects()
+    }
+
     override fun readProfiles(): Flow<List<Profile>> = readModels()
     override fun readProfilesGroup(): Flow<List<Profile>> = readGroup()
     override fun readPublicProfiles(): Flow<List<Profile>> {
