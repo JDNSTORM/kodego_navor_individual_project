@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,9 +30,7 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(), FlowCollector<Li
         "Home",
         R.drawable.ic_home_24
     )
-    private val viewModel by lazy{
-        ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
-    }
+    private val viewModel: ProfileViewModel by viewModels()
     private val itemsAdapter by lazy { ProfilesAdapter(viewModel) }
     private var profiles: List<Profile> = emptyList()
 

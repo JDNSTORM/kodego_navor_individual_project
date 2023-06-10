@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
@@ -26,9 +27,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 @AndroidEntryPoint
 class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollector<Account?> {
     override fun getTabInformation(): TabInfo = TabInfo("Account", R.drawable.ic_account_circle_24)
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[AccountViewModel::class.java]
-    }
+    private val viewModel: AccountViewModel by viewModels()
     private val progressDialog by lazy { ProgressDialog(requireContext(), R.string.loading_account) }
 
     override fun onCreateView(

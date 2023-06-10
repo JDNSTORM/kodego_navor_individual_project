@@ -35,6 +35,6 @@ class ProfileDAOImpl(): FirestoreDAOImpl<Profile>(), ProfileDAO{
     override fun readProfiles(): Flow<List<Profile>> = readModels()
     override fun readProfilesGroup(): Flow<List<Profile>> = readGroup()
     override fun readPublicProfiles(): Flow<List<Profile>> {
-        return groupReference.whereEqualTo("isPublic", true).dataObjects()
+        return groupReference.whereEqualTo("public", true).dataObjects()
     }
 }

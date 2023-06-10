@@ -20,6 +20,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfessionalSummary
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 
+@Deprecated("Replaced")
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
