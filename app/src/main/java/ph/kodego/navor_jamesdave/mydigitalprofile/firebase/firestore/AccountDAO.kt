@@ -11,7 +11,7 @@ interface AccountDAO{
     fun readAccounts(): Flow<List<Account>>
 }
 
-class AccountDAOImpl(): FirestoreDAOImpl<Account>(), AccountDAO {
+class AccountDAOImpl(): FirestoreDAOImpl(), AccountDAO {
     override fun getCollectionName(): String = ACCOUNT_COLLECTION
 
     override suspend fun addAccount(uID: String, account: Account): Boolean {

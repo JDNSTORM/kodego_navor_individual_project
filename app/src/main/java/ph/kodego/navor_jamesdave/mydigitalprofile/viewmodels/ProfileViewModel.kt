@@ -71,4 +71,8 @@ class ProfileViewModel @Inject constructor(
     private fun readProfiles(): Flow<List<Profile>> = repository.profileSource.readProfiles()
     private fun readAccounts(): Flow<List<Account>> = repository.accountSource.readAccounts()
     private fun readAccount(uID: String) = repository.accountSource.readAccount(uID)
+
+    suspend fun updateProfile(profile: Profile, changes: Map<String, Any?>): Boolean {
+        return repository.profileSource.updateProfile(profile, changes)
+    }
 }

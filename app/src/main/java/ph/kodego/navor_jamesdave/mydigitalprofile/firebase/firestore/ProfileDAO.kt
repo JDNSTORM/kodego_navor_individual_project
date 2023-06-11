@@ -17,7 +17,7 @@ interface ProfileDAO {
     fun readPublicProfiles(): Flow<List<Profile>>
 }
 
-class ProfileDAOImpl(): FirestoreDAOImpl<Profile>(), ProfileDAO{
+class ProfileDAOImpl(): FirestoreDAOImpl(), ProfileDAO{
     private val uID by lazy { FirebaseAuth.getInstance().currentUser!!.uid }
     override fun getCollectionName(): String = PROFILE_COLLECTION
 

@@ -27,7 +27,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 @AndroidEntryPoint
 class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
-//    private val editDialog TODO
+    private lateinit var profile: Profile
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Profile",
@@ -65,9 +65,7 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollec
         with(binding.btnEdit){
             isEnabled = true
             visibility = View.VISIBLE
-            setOnClickListener {
-//                editDialog.show(profile, professionalSummary)
-            }
+            setOnClickListener { ProfileEditDialog(requireActivity(), profile).show() }
         }
     }
 
@@ -78,11 +76,12 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollec
 
     override suspend fun emit(value: Profile?) {
         value?.let {
-            setProfileDetails(it)
+            profile = it
+            setProfileDetails()
         } ?: noActiveProfile()
     }
 
-    private fun setProfileDetails(profile: Profile) {
+    private fun setProfileDetails() {
         with(binding){
             address.text = profile.address.localAddress()
             email.text = profile.emailAddress

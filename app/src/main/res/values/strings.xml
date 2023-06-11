@@ -42,4 +42,5 @@ You can view it through the buttons below.</string>
     <string name="select_profile">Select Profile</string>
     <string name="profession">Profession</string>
     <string name="is_public">Public</string>
+    <string name="updating_profile">Updating Profile</string>
 </resources>

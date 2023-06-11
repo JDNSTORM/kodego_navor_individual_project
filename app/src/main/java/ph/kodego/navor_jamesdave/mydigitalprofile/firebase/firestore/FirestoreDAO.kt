@@ -25,7 +25,7 @@ interface FirestoreDAO {
     suspend fun deleteDocument(documentID: String): Boolean
 }
 
-abstract class FirestoreDAOImpl<Model: Any>(): FirestoreDAO {
+abstract class FirestoreDAOImpl(): FirestoreDAO {
     protected val db = FirebaseFirestore.getInstance()
     protected val collection: String get() = getCollectionName()
     protected val reference: CollectionReference get() = getCollectionReference()
