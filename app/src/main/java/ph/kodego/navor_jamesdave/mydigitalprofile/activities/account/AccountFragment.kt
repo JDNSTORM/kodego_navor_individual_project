@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,7 +70,7 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
     private fun readAccount(){
         progressDialog.show()
         lifecycleScope.launch {
-            viewModel.activeAccount.collect(this@AccountFragment)
+            viewModel.activeAccount.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect(this@AccountFragment)
         }
     }
 

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -46,7 +48,7 @@ class ProfileActivity : AppCompatActivity(), FlowCollector<Profile?> {
         lifecycleScope.launch {
             viewModel.readActiveProfile()?.let {
                 setupViewPager()
-                it.collect(this@ProfileActivity)
+                it.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect(this@ProfileActivity)
             } ?: run {
                 selectProfile()
             }

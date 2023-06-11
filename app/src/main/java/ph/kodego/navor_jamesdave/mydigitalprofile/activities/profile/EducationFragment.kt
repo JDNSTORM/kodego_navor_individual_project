@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
@@ -57,7 +59,7 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
             if(refUID == activeUID && activeUID != null){
                 enableEditing()
             }
-            viewModel.readActiveProfile()?.let {
+            viewModel.readActiveProfile()?.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)?.let {
                 setupRecyclerView()
                 it.collect(this@EducationFragment)
             } ?: noActiveProfile()

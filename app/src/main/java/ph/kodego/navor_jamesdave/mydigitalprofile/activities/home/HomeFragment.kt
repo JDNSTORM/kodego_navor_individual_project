@@ -6,13 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
@@ -59,7 +62,8 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(), FlowCollector<Li
     private fun setupRecyclerView() {
         binding.loadData()
         lifecycleScope.launch {
-            viewModel.group.collect(this@HomeFragment)
+//            viewModel.group.collect(this@HomeFragment)
+            viewModel.group.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect(this@HomeFragment)
         }
         with(binding.listProfiles) {
             layoutManager = LinearLayoutManager(requireContext())
