@@ -54,7 +54,7 @@ class CreateProfileDialog(context: Context, private val viewModel: ProfileViewMo
             val saveSuccessful = viewModel.addProfile(profession, isPublic)
             withContext(Main){
                 if (!saveSuccessful){
-
+                    Toast.makeText(context, "Failed to create Profile!", Toast.LENGTH_SHORT).show()
                 }
                 progressDialog.dismiss()
                 dismiss()

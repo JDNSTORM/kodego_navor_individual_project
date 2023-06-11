@@ -1,8 +1,11 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.dialogs
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
 
@@ -12,8 +15,12 @@ class ProgressDialog(context: Context, private val progressText: Int = R.string.
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.progressText.setText(progressText)
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         setContentView(binding.root)
+        binding.progressText.setText(progressText)
         setCancelable(false)
     }
 }

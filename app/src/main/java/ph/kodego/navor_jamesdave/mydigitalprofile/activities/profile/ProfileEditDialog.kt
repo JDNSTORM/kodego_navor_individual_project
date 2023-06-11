@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -19,13 +20,10 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.updateInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
-class ProfileEditDialog(context: Context, private val profile: Profile): AlertDialog(context) {
+class ProfileEditDialog<T>(context: T, private val profile: Profile): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
     private val binding by lazy { DialogueProfileEditBinding.inflate(layoutInflater) }
     private val viewModel: ProfileViewModel by lazy {
-        val owner = context as FragmentActivity
-        ViewModelProvider(
-            owner
-        )[ProfileViewModel::class.java]
+        ViewModelProvider(context)[ProfileViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,8 +60,8 @@ class ProfileEditDialog(context: Context, private val profile: Profile): AlertDi
 
     private fun checkChanges(updatedProfile: Profile) {
         val changes: HashMap<String, Any?> = HashMap()
-        if (profile.profession != updatedProfile.profession) changes["profession"] = updatedProfile.profession
-        if (profile.profileSummary != updatedProfile.profileSummary) changes["profileSummary"] = updatedProfile.profileSummary
+        if (profile.profession != updatedProfile.profession) changes[Profile.KEY_PROFESSION] = updatedProfile.profession
+        if (profile.profileSummary != updatedProfile.profileSummary) changes[Profile.KEY_PROFILE_SUMMARY] = updatedProfile.profileSummary
 
         if (changes.isNotEmpty()){
             updateProfile(changes)
@@ -73,8 +71,7 @@ class ProfileEditDialog(context: Context, private val profile: Profile): AlertDi
     }
 
     private fun updateProfile(changes: Map<String, Any?>) {
-        val progressDialog = ProgressDialog(context, R.string.updating_profile)
-        progressDialog.show()
+        val progressDialog = ProgressDialog(context, R.string.updating_profile).apply { show() }
         CoroutineScope(IO).launch {
             val updateSuccessful = viewModel.updateProfile(profile, changes)
             withContext(Main){

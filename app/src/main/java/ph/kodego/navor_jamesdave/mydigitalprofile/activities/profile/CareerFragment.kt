@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.CareersAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadData
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
@@ -30,12 +31,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 @AndroidEntryPoint
 class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
-//    private val itemsAdapter TODO
-//    private val editDialog TODO
+    private val itemsAdapter by lazy { CareersAdapter() }
     override fun getTabInformation(): TabInfo = TabInfo(
         "Career",
         R.drawable.ic_work_history_24
     )
+    private lateinit var profile: Profile
+    private val activeUID = Firebase.auth.currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,13 +56,6 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
     private fun loadProfile() {
         binding.loadData()
         lifecycleScope.launch {
-            val refUID = viewModel.readActiveProfile()?.first()?.refUID
-            val activeUID = Firebase.auth.currentUser?.uid
-            Log.d("RefUID", refUID.toString())
-            Log.d("ActiveUID", activeUID.toString())
-            if(refUID == activeUID && activeUID != null){
-                enableEditing()
-            }
             viewModel.readActiveProfile()?.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)?.let {
                 setupRecyclerView()
                 it.collect(this@CareerFragment)
@@ -71,7 +66,7 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
     private fun setupRecyclerView() {
         with(binding.listCareer){
             layoutManager = LinearLayoutManager(requireContext())
-//            adapter =
+            adapter = itemsAdapter
         }
         binding.showData()
     }
@@ -81,19 +76,27 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
             isEnabled = true
             visibility = View.VISIBLE
             setOnClickListener {
-//                editDialog.show(profile, professionalSummary)
+                CareerEditDialog(requireActivity(), profile.copy()).show()
             }
         }
+        itemsAdapter.enableEditing(CareerEditDialog(requireActivity(), profile.copy()))
     }
 
     private fun noActiveProfile() {
-        Toast.makeText(requireContext(), "No Profile Detected!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "No Profile Selected!", Toast.LENGTH_SHORT).show()
         requireActivity().finish()
     }
 
     override suspend fun emit(value: Profile?) {
         value?.let {
-            //TODO
+            profile = it
+            if (it.careers.isNotEmpty()) {
+                itemsAdapter.setList(it.careers)
+            }else{
+                itemsAdapter.setList(emptyList())
+            }
+            enableEditing()
+            Log.d("Careers", profile.careers.size.toString())
         } ?: noActiveProfile()
     }
 }

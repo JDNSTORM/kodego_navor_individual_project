@@ -31,4 +31,13 @@ data class Profile(
             educations
         )
     }
+
+    companion object{
+        const val KEY_PROFESSION = "profession"
+        const val KEY_IS_PUBLIC = "public"
+        const val KEY_PROFILE_SUMMARY = "profileSummary"
+        const val KEY_CAREERS = "careers"
+        const val KEY_SKILLS = "skills"
+        const val KEY_EDUCATIONS = "educations"
+    }
 }

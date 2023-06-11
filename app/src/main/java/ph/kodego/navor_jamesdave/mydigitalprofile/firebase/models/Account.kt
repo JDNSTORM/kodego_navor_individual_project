@@ -13,17 +13,19 @@ open class Account(
     var address: Address = Address()
     var contactNumber: ContactNumber = ContactNumber()
     var website: String = ""
-    var fcmTokem: String = ""
+    var fcmToken: String = ""
 
     fun displayName() = "$firstName $lastName".trim()
 
     fun setAccount(account: Account){
         firstName = account.firstName
         lastName = account.lastName
+        image = account.image
         emailAddress = account.emailAddress
         address = account.address.copy()
         contactNumber = account.contactNumber.copy()
         website = account.website
+        fcmToken = account.fcmToken
     }
 
     constructor(firstName: String, lastName: String, email: String): this(){
@@ -45,5 +47,6 @@ open class Account(
         const val KEY_ADDRESS = "address"
         const val KEY_CONTACT_NUMBER = "contactNumber"
         const val KEY_WEBSITE = "website"
+        const val KEY_FCM_TOKEN = "fcmToken"
     }
 }

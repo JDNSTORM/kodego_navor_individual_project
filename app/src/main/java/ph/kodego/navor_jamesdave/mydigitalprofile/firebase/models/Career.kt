@@ -7,8 +7,17 @@ data class Career(
     var position: String = "",
     var employmentStart: String = "",
     var employmentEnd: String = "",
+    var jobDescription: String = "",
     var emailAddress: String = "",
     var address: Address = Address(),
     var contactNumber: ContactNumber = ContactNumber(),
     var website: String = ""
-)
+){
+    fun employmentPeriod(): String{
+        return if (employmentStart.isNotEmpty() && employmentEnd.isNotEmpty()){
+            "$employmentStart - $employmentEnd"
+        }else{
+            ""
+        }
+    }
+}

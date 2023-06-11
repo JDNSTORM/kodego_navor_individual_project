@@ -18,11 +18,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewPagerFragmentAdap
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.AboutAppDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
+import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
 class MainActivity(): AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val fragmentAdapter by lazy { ViewPagerFragmentAdapter(supportFragmentManager, lifecycle) }
+    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,5 +64,10 @@ class MainActivity(): AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onResume() {
+        viewModel.clearActiveProfile()
+        super.onResume()
     }
 }

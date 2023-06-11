@@ -105,9 +105,4 @@ class ProfileActivity : AppCompatActivity(), FlowCollector<Profile?> {
         Toast.makeText(this, "Profile Inaccessible!", Toast.LENGTH_SHORT).show()
         finish()
     }
-
-    override fun onDestroy() {
-        viewModel.clearActiveProfile()
-        super.onDestroy()
-    }
 }

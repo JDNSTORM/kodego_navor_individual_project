@@ -8,7 +8,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
-class AccountProfilesAdapter(private val viewModel: ProfileViewModel, private val dialog: SelectProfileDialog): ItemsAdapter<Profile>() {
+class AccountProfilesAdapter(private val viewModel: ProfileViewModel, private val dialog: SelectProfileDialog<*>): ItemsAdapter<Profile>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ItemProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)

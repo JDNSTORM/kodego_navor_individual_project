@@ -2,9 +2,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -15,19 +17,18 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogProfileSelec
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
-class SelectProfileDialog(context: Context): AlertDialog(context), FlowCollector<List<Profile>> {
+class SelectProfileDialog<T>(context: T): AlertDialog(context), FlowCollector<List<Profile>> where T: Context, T: ViewModelStoreOwner{
     private val binding by lazy { DialogProfileSelectBinding.inflate(layoutInflater) }
     private val viewModel: ProfileViewModel by lazy {
-        val owner = context as AppCompatActivity
-        ViewModelProvider(
-            owner,
-            ViewModelProvider.AndroidViewModelFactory(owner.application)
-        )[ProfileViewModel::class.java]
+        ViewModelProvider(context)[ProfileViewModel::class.java]
     }
     private val itemsAdapter by lazy { AccountProfilesAdapter(viewModel, this) }
     private val exitDialog by lazy {
-        ExitWarningDialog(context).apply {
-            ifYes{ _, _ -> this@SelectProfileDialog.dismiss() }
+        object: ExitWarningDialog(context){
+            override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
+                dismiss()
+                dialog.dismiss()
+            }
         }
     }
 
