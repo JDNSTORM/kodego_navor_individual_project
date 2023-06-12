@@ -1,11 +1,10 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile
+package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.profile
 
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import kotlinx.coroutines.CoroutineScope

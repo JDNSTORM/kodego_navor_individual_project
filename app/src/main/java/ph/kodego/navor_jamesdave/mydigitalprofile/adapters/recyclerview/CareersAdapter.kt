@@ -3,7 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.CareerEditDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CareerEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Career
 

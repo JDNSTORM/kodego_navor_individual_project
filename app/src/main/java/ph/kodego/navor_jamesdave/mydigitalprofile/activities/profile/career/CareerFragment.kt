@@ -1,11 +1,9 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile
+package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,40 +14,33 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
-import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.SkillsMainAdapter
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.expandFabs
-import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.minimizeFabs
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.CareersAdapter
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentCareerBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadData
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
-class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollector<Profile?> {
+class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
-    private val skillEventsBinding by lazy {
-        LayoutSkillEventsBinding.inflate(layoutInflater, binding.root, true)
-    }
-    private val itemsAdapter by lazy { SkillsMainAdapter() }
-    private val activeUID = Firebase.auth.currentUser?.uid
-
+    private val itemsAdapter by lazy { CareersAdapter() }
     override fun getTabInformation(): TabInfo = TabInfo(
-        "Skills",
-        R.drawable.ic_skills_24
+        "Career",
+        R.drawable.ic_work_history_24
     )
+    private val activeUID = Firebase.auth.currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSkillsBinding.inflate(inflater, container, false)
+        _binding = FragmentCareerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -59,16 +50,17 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     }
 
     private fun loadProfile() {
+        binding.loadData()
         lifecycleScope.launch {
             viewModel.readActiveProfile()?.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)?.let {
                 setupRecyclerView()
-                it.collect(this@SkillsFragment)
+                it.collect(this@CareerFragment)
             } ?: noActiveProfile()
         }
     }
 
     private fun setupRecyclerView() {
-        with(binding.listSkills){
+        with(binding.listCareer){
             layoutManager = LinearLayoutManager(requireContext())
             adapter = itemsAdapter
         }
@@ -76,25 +68,31 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     }
 
     private fun enableEditing(profile: Profile) {
-        with(skillEventsBinding){
-            minimizeFabs()
-            efabSkillsOptions.setOnClickListener {
-                if (efabSkillsOptions.isExtended){ minimizeFabs() }
-                else{ expandFabs() }
+        with(binding.btnAdd){
+            isEnabled = true
+            visibility = View.VISIBLE
+            setOnClickListener {
+                CareerEditDialog(requireActivity(), profile.copy()).show()
             }
-            root.setOnClickListener { minimizeFabs() }
         }
+        itemsAdapter.enableEditing(CareerEditDialog(requireActivity(), profile.copy()))
     }
 
     private fun noActiveProfile() {
-        Toast.makeText(requireContext(), "No Profile Detected!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "No Profile Selected!", Toast.LENGTH_SHORT).show()
         requireActivity().finish()
     }
 
     override suspend fun emit(value: Profile?) {
         value?.let {
-            itemsAdapter.setList(it.skills)
-            if (it.refUID == activeUID){ enableEditing(it) }
+            if (it.careers.isNotEmpty()) {
+                itemsAdapter.setList(it.careers)
+            }else{
+                itemsAdapter.setList(emptyList())
+            }
+            if (it.refUID == activeUID) {
+                enableEditing(it)
+            }
         } ?: noActiveProfile()
     }
 }

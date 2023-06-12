@@ -13,7 +13,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CareerFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.SelectProfileDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.education.EducationFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.profile.ProfileFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.skills.SkillsFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewPagerFragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog

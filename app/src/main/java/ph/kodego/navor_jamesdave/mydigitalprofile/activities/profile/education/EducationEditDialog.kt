@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile
+package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.education
 
 import android.app.AlertDialog
 import android.content.Context
@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.DeleteItemDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueEducationEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.editInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.saveInterface

@@ -1,10 +1,9 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile
+package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs
 
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CreateProfileDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.AccountProfilesAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogProfileSelectBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile

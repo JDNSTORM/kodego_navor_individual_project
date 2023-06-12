@@ -3,7 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.EducationEditDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.education.EducationEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemEducationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Education
 

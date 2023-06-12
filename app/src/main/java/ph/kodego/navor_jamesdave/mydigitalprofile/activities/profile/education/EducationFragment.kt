@@ -1,7 +1,6 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile
+package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.education
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment

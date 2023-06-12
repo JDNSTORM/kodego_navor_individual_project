@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile
+package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs
 
 import android.app.AlertDialog
 import android.content.Context

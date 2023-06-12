@@ -2,7 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.SelectProfileDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.SelectProfileDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
