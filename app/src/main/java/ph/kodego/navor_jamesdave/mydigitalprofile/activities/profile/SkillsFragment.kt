@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.SkillsMainAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.expandFabs
@@ -32,8 +33,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 @AndroidEntryPoint
 class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
-    private lateinit var skillEventsBinding: LayoutSkillEventsBinding
-//    private val itemsAdapter by lazy {  } TODO
+    private val skillEventsBinding by lazy {
+        LayoutSkillEventsBinding.inflate(layoutInflater, binding.root, true)
+    }
+    private val itemsAdapter by lazy { SkillsMainAdapter() }
+    private val activeUID = Firebase.auth.currentUser?.uid
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Skills",
@@ -56,13 +60,6 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
 
     private fun loadProfile() {
         lifecycleScope.launch {
-            val refUID = viewModel.readActiveProfile()?.first()?.refUID
-            val activeUID = Firebase.auth.currentUser?.uid
-            Log.d("RefUID", refUID.toString())
-            Log.d("ActiveUID", activeUID.toString())
-            if(refUID == activeUID && activeUID != null){
-                enableEditing()
-            }
             viewModel.readActiveProfile()?.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)?.let {
                 setupRecyclerView()
                 it.collect(this@SkillsFragment)
@@ -73,26 +70,20 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     private fun setupRecyclerView() {
         with(binding.listSkills){
             layoutManager = LinearLayoutManager(requireContext())
-//            adapter =
+            adapter = itemsAdapter
         }
         binding.showData()
     }
 
-    private fun enableEditing() {
-        skillEventsBinding = LayoutSkillEventsBinding.inflate(layoutInflater, binding.root, true)
+    private fun enableEditing(profile: Profile) {
         with(skillEventsBinding){
             minimizeFabs()
             efabSkillsOptions.setOnClickListener {
-                if (efabSkillsOptions.isExtended){
-                    minimizeFabs()
-                }else{
-                    expandFabs()
-                }
+                if (efabSkillsOptions.isExtended){ minimizeFabs() }
+                else{ expandFabs() }
             }
             root.setOnClickListener { minimizeFabs() }
         }
-
-
     }
 
     private fun noActiveProfile() {
@@ -101,6 +92,9 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     }
 
     override suspend fun emit(value: Profile?) {
-//        TODO("Not yet implemented")
+        value?.let {
+            itemsAdapter.setList(it.skills)
+            if (it.refUID == activeUID){ enableEditing(it) }
+        } ?: noActiveProfile()
     }
 }

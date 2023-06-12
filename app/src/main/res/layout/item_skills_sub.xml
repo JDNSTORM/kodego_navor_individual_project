@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:padding="5dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:layout_height="wrap_content">
+    <!--  Show if SubCategoryName Exists  -->
+    <TextView
+        android:id="@+id/skill_sub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Skill Sub Category"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_skill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:listitem="@layout/item_skill"
+        />
+</LinearLayout>
