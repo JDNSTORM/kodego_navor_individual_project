@@ -30,7 +30,6 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollector<Account?> {
     override fun getTabInformation(): TabInfo = TabInfo("Account", R.drawable.ic_account_circle_24)
     private val viewModel: AccountViewModel by viewModels()
-    private val progressDialog by lazy { ProgressDialog(requireContext(), R.string.loading_account) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +67,7 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
     }
 
     private fun readAccount(){
-        progressDialog.show()
+//        progressDialog.show() //TODO: Change to LayoutLoading
         lifecycleScope.launch {
             viewModel.activeAccount.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect(this@AccountFragment)
         }
@@ -77,10 +76,10 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
     override suspend fun emit(value: Account?) {
         value?.let {
             setAccountData(it)
-            progressDialog.dismiss()
+//            progressDialog.dismiss()
         } ?: run{
             Toast.makeText(context, "Failed to get Account Data", Toast.LENGTH_LONG).show()
-            progressDialog.dismiss()
+//            progressDialog.dismiss()
             signOut()
         }
     }

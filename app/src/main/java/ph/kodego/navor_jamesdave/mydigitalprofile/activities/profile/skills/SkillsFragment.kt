@@ -2,9 +2,14 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.skills
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -35,6 +40,7 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     }
     private val itemsAdapter by lazy { SkillsMainAdapter() }
     private val activeUID = Firebase.auth.currentUser?.uid
+    private val setupMenu by lazy { setupMenu(requireActivity()) }
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Skills",
@@ -53,6 +59,32 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadProfile()
+    }
+
+    private fun setupMenu(host: MenuHost){
+        host.addMenuProvider(
+            object: MenuProvider{
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.profile_list_menu, menu)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when(menuItem.itemId){
+                        R.id.btn_organize -> {
+
+                            when(itemsAdapter.toggleDrag()){
+                                true -> menuItem.setIcon(R.drawable.ic_save_24)
+                                false -> menuItem.setIcon(R.drawable.ic_format_list_24)
+                            }
+                            true
+                        }
+                        else -> true
+                    }
+                }
+
+            },
+            viewLifecycleOwner, Lifecycle.State.RESUMED
+        )
     }
 
     private fun loadProfile() {
@@ -91,7 +123,10 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     override suspend fun emit(value: Profile?) {
         value?.let {
             itemsAdapter.setList(it.skills)
-            if (it.refUID == activeUID){ enableEditing(it) }
+            if (it.refUID == activeUID){
+                enableEditing(it)
+                setupMenu
+            }
         } ?: noActiveProfile()
     }
 }

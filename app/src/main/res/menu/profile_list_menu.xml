@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
-        android:id="@+id/btn_about"
-        android:title="@string/about"
-        android:icon="@drawable/ic_info_24"
-        android:contentDescription="@string/about"
+        android:id="@+id/btn_organize"
+        android:title="@string/organize"
+        android:icon="@drawable/ic_format_list_24"
+        android:contentDescription="@string/organize"
         app:showAsAction="always"
         />
 </menu>

@@ -8,6 +8,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Career
 
 class CareersAdapter(): ItemsAdapter<Career>() {
+    private var drag: Boolean = false
     private var editDialog: CareerEditDialog<*>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,31 +30,43 @@ class CareersAdapter(): ItemsAdapter<Career>() {
     private fun bind(binding: ItemCareerBinding, career: Career){
         with(binding) {
             position.text = career.position
-            employmentPeriod.text = career.employmentPeriod()
             companyName.text = career.companyName
-            val address = career.address.streetAddress
-            if (address.isNotEmpty()) {
-                companyAddress.text = address
-                companyAddress.visibility = View.VISIBLE
-            }
-            val website = career.website
-            if (website.isNotEmpty()) {
-                companyWebsite.text = website
-                companyWebsite.visibility = View.VISIBLE
-            }
-            val contactNumber = career.contactNumber.telephone()
-            if (contactNumber.isNotEmpty()) {
-                companyTelephone.text = contactNumber
-                companyTelephone.visibility = View.VISIBLE
-            }
-            if (career.jobDescription.isNotEmpty()) {
-                jobDescription.text = career.jobDescription
-                jobDescription.visibility = View.VISIBLE
+            if (!drag) {
+                employmentPeriod.text = career.employmentPeriod()
+                val address = career.address.streetAddress
+                if (address.isNotEmpty()) {
+                    companyAddress.text = address
+                    companyAddress.visibility = View.VISIBLE
+                }
+                val website = career.website
+                if (website.isNotEmpty()) {
+                    companyWebsite.text = website
+                    companyWebsite.visibility = View.VISIBLE
+                }
+                val contactNumber = career.contactNumber.telephone()
+                if (contactNumber.isNotEmpty()) {
+                    companyTelephone.text = contactNumber
+                    companyTelephone.visibility = View.VISIBLE
+                }
+                if (career.jobDescription.isNotEmpty()) {
+                    jobDescription.text = career.jobDescription
+                    jobDescription.visibility = View.VISIBLE
+                }
+            }else{
+                handle.visibility = View.VISIBLE
+                employmentPeriod.visibility = View.GONE
+                handle.setOnClickListener{}
             }
         }
     }
 
     fun enableEditing(dialog: CareerEditDialog<*>){
         editDialog = dialog
+    }
+
+    fun toggleDrag(): Boolean{
+        drag = !drag
+        notifyItemRangeChanged(0, itemCount)
+        return drag
     }
 }
