@@ -36,7 +36,6 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
         "Career",
         R.drawable.ic_work_history_24
     )
-    private lateinit var profile: Profile
     private val activeUID = Firebase.auth.currentUser?.uid
 
     override fun onCreateView(
@@ -71,8 +70,8 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
         binding.showData()
     }
 
-    private fun enableEditing() {
-        with(binding.btnEdit){
+    private fun enableEditing(profile: Profile) {
+        with(binding.btnAdd){
             isEnabled = true
             visibility = View.VISIBLE
             setOnClickListener {
@@ -89,14 +88,14 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
 
     override suspend fun emit(value: Profile?) {
         value?.let {
-            profile = it
             if (it.careers.isNotEmpty()) {
                 itemsAdapter.setList(it.careers)
             }else{
                 itemsAdapter.setList(emptyList())
             }
-            enableEditing()
-            Log.d("Careers", profile.careers.size.toString())
+            if (it.refUID == activeUID) {
+                enableEditing(it)
+            }
         } ?: noActiveProfile()
     }
 }

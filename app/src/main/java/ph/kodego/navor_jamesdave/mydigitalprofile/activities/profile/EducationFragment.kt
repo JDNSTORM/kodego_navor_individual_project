@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.EducationsAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentEducationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
@@ -28,8 +29,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 @AndroidEntryPoint
 class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
-//    private val itemsAdapter //TODO
-//    private val editDialog //TODO
+    private val itemsAdapter by lazy { EducationsAdapter() }
+    private val activeUID = Firebase.auth.currentUser?.uid
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Education",
@@ -52,13 +53,6 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
 
     private fun loadProfile() {
         lifecycleScope.launch {
-            val refUID = viewModel.readActiveProfile()?.first()?.refUID
-            val activeUID = Firebase.auth.currentUser?.uid
-            Log.d("RefUID", refUID.toString())
-            Log.d("ActiveUID", activeUID.toString())
-            if(refUID == activeUID && activeUID != null){
-                enableEditing()
-            }
             viewModel.readActiveProfile()?.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)?.let {
                 setupRecyclerView()
                 it.collect(this@EducationFragment)
@@ -74,22 +68,28 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
     private fun setupRecyclerView() {
         with(binding.listEducation){
             layoutManager = LinearLayoutManager(requireContext())
-//            adapter =
+            adapter = itemsAdapter
         }
         binding.showData()
     }
 
-    private fun enableEditing() {
-        with(binding.btnEdit){
+    private fun enableEditing(profile: Profile) {
+        with(binding.btnAdd){
             isEnabled = true
             visibility = View.VISIBLE
             setOnClickListener {
-//                editDialog.show(profile, professionalSummary)
+                EducationEditDialog(requireActivity(), profile).show()
             }
         }
+        itemsAdapter.enableEditing(EducationEditDialog(requireActivity(), profile))
     }
 
     override suspend fun emit(value: Profile?) {
-//        TODO("Not yet implemented")
+        value?.let {
+            itemsAdapter.setList(it.educations)
+            if (it.refUID == activeUID){
+                enableEditing(it)
+            }
+        } ?: noActiveProfile()
     }
 }

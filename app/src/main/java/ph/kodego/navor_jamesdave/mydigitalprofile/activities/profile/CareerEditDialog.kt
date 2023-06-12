@@ -14,12 +14,9 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueCareerEditBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.editInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.saveInterface
-import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.updateInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.ContactNumber
@@ -47,7 +44,7 @@ class CareerEditDialog<T>(context: T, private val profile: Profile): AlertDialog
     }
 
     private fun openDeleteDialog() {
-        object: DeleteCareerDialog(context){
+        object: DeleteItemDialog(context, career!!){
             override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
                 deleteCareer()
                 dialog.dismiss()
@@ -138,7 +135,6 @@ class CareerEditDialog<T>(context: T, private val profile: Profile): AlertDialog
 
     fun edit(career: Career, list: List<Career>){
         super.show()
-        binding.editButtons.editInterface()
         this.career = career
         setCareerDetails()
         list.lastIndex
@@ -152,8 +148,8 @@ class CareerEditDialog<T>(context: T, private val profile: Profile): AlertDialog
     }
 
     private fun setCareerDetails(){
-        career?.let {
-            with(binding){
+        with(binding){
+            career?.let {
                 dateEmployed.setText(it.employmentStart)
                 employmentEnd.setText(it.employmentEnd)
                 position.setText(it.position)
@@ -163,7 +159,9 @@ class CareerEditDialog<T>(context: T, private val profile: Profile): AlertDialog
                 companyWebsite.setText(it.website)
                 layoutContactEdit.telAreaCode.setText(it.contactNumber.areaCode)
                 layoutContactEdit.telContactNumber.setText(it.contactNumber.contact.toString())
-            }
-        } ?: binding.editButtons.saveInterface()
+
+                editButtons.editInterface()
+            } ?: editButtons.saveInterface()
+        }
     }
 }
