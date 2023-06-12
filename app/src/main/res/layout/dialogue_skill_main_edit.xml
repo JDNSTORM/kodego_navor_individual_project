@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
@@ -32,6 +34,16 @@
             android:hint="Skill Main Category Name"
             />
     </com.google.android.material.textfield.TextInputLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_skills"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:paddingVertical="5dp"
+        android:layout_marginHorizontal="10dp"
+        tools:listitem="@layout/item_skills_sub_drag"
+        />
 
     <include layout="@layout/layout_edit_buttons"
         android:id="@+id/edit_buttons"
@@ -41,4 +53,4 @@
         app:layout_constraintTop_toBottomOf="@id/til_skill_main"
         app:layout_constraintEnd_toEndOf="parent"
         />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

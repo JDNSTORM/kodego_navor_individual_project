@@ -45,4 +45,7 @@ You can view it through the buttons below.</string>
     <string name="updating_profile">Updating Profile</string>
     <string name="organize">Organize</string>
     <string name="about">About</string>
+    <string name="empty_skills">Skill List is Empty. Please add a Skill.</string>
+    <string name="add">Add</string>
+    <string name="skill_sub_category_name">Skill Sub Category Name</string>
 </resources>

@@ -6,6 +6,13 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     >
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/handle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="5dp"
+        android:src="@drawable/ic_drag_handle_24"
+        />
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/skill"
         android:enabled="false"
