@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ListMenu
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.SkillsMainAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
@@ -63,25 +64,13 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
 
     private fun setupMenu(host: MenuHost){
         host.addMenuProvider(
-            object: MenuProvider{
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.profile_list_menu, menu)
-                }
-
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    return when(menuItem.itemId){
-                        R.id.btn_organize -> {
-
-                            when(itemsAdapter.toggleDrag()){
-                                true -> menuItem.setIcon(R.drawable.ic_save_24)
-                                false -> menuItem.setIcon(R.drawable.ic_format_list_24)
-                            }
-                            true
-                        }
-                        else -> true
+            object: ListMenu(){
+                override fun onOrganize(menuItem: MenuItem) {
+                    when(itemsAdapter.toggleDrag()){
+                        true -> menuItem.setIcon(R.drawable.ic_save_24)
+                        false -> menuItem.setIcon(R.drawable.ic_format_list_24)
                     }
                 }
-
             },
             viewLifecycleOwner, Lifecycle.State.RESUMED
         )

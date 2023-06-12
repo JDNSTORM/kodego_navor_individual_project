@@ -2,9 +2,12 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
@@ -30,8 +33,12 @@ class MainActivity(): AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.tbTop)
-
+        setupMenu()
         setupViewPager()
+    }
+
+    private fun setupMenu(){
+        addMenuProvider(MainMenu(this), this, Lifecycle.State.RESUMED)
     }
 
     private fun setupViewPager() {
@@ -49,21 +56,6 @@ class MainActivity(): AppCompatActivity() {
             tab.text = text
             tab.setIcon(icon)
         }.attach()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.btn_about -> {
-                AboutAppDialog(this).show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onResume() {
