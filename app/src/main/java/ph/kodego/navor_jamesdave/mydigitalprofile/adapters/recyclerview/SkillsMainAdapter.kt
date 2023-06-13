@@ -3,12 +3,19 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemSkillsMainBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.expandFabs
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsMain
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillsEditingInterface
 
 class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
     private var drag: Boolean = false
+    private var editInterface: SkillsEditingInterface? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -20,6 +27,9 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
         val binding = holder.binding as ItemSkillsMainBinding
         val mainSkill = items[position]
         bind(binding, mainSkill)
+        editInterface?.editBinding?.let {
+            binding.root.setOnClickListener { _ -> it.expandFabs(mainSkill) }
+        }
     }
 
     private fun bind(binding: ItemSkillsMainBinding, mainSkill: SkillsMain) {
@@ -39,6 +49,13 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
                 dividerHorizontal.visibility = View.GONE
                 listSkillSub.visibility = View.GONE
             }
+            editInterface?.let {
+                itemsAdapter.enableEditing(
+                    it.apply { subSkillEditDialog.setParentList(items) },
+                    mainSkill,
+                    items
+                )
+            }
         }
     }
 
@@ -46,5 +63,46 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
         drag = !drag
         notifyItemRangeChanged(0, itemCount)
         return drag
+    }
+
+    fun clearToggle(){
+        if (drag) toggleDrag()
+    }
+
+    fun enableEditing(editingInterface: SkillsEditingInterface){
+        editInterface = editingInterface
+        notifyItemRangeChanged(0, itemCount)
+    }
+
+    private fun LayoutSkillEventsBinding.expandFabs(mainSkill: SkillsMain){
+        expandFabs()
+        val mainEditDialog = editInterface!!.mainSkillEditDialog
+        val subEditDialog = editInterface!!.subSkillEditDialog
+        skillMain.text = mainSkill.title
+        skillMain.visibility = View.VISIBLE
+
+        val skillsOnly = mainSkill.subCategories.isNotEmpty() && mainSkill.subCategories.size < 2 && mainSkill.subCategories[0].subtitle.isEmpty()
+        if (skillsOnly){
+            skillSub.visibility = View.VISIBLE
+            skillSub.setText(R.string.skills)
+        }
+
+        btnEditMainCategory.setOnClickListener { mainEditDialog.edit(mainSkill, items) }
+        btnDeleteMainCategory.setOnClickListener { mainEditDialog.delete(mainSkill, items) }
+        if (skillsOnly){
+            btnAddSubCategory.setOnClickListener {
+                Snackbar.make(
+                    root,
+                    "First SubCategory must have a Name in order to add more SubCategories",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+            btnEditSubCategory.setOnClickListener {
+                subEditDialog.edit(mainSkill.subCategories[0], mainSkill)
+            }
+            btnDeleteSubCategory.setOnClickListener { subEditDialog.delete(mainSkill.subCategories[0], mainSkill) }
+        }else {
+            btnAddSubCategory.setOnClickListener { subEditDialog.add(mainSkill) }
+        }
     }
 }

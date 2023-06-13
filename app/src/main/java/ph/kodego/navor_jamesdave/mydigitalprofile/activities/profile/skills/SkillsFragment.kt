@@ -27,6 +27,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.expandFabs
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.minimizeFabs
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.showData
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillsEditingInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
@@ -36,7 +37,7 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     private val eventsBinding by lazy {
         LayoutSkillEventsBinding.inflate(layoutInflater, binding.root, true)
     }
-    private val itemsAdapter by lazy { SkillsMainAdapter() }
+    private val itemsAdapter = SkillsMainAdapter()
     private val activeUID = Firebase.auth.currentUser?.uid
     private val setupMenu by lazy { setupMenu(requireActivity()) }
 
@@ -97,9 +98,16 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
                 if (efabSkillsOptions.isExtended){ minimizeFabs() }
                 else{ expandFabs() }
             }
-            root.setOnClickListener { minimizeFabs() }
-            btnAddMainCategory.setOnClickListener { DialogSkillMainEdit(requireActivity(), profile).show() }
+            layoutBackground.setOnClickListener { minimizeFabs() }
+            btnAddMainCategory.setOnClickListener { SkillMainEditDialog(requireActivity(), profile).show() }
         }
+        itemsAdapter.enableEditing(
+            SkillsEditingInterface(
+                eventsBinding,
+                SkillMainEditDialog(requireActivity(), profile),
+                SkillSubEditDialog(requireActivity(), profile)
+            )
+        )
     }
 
     private fun noActiveProfile() {

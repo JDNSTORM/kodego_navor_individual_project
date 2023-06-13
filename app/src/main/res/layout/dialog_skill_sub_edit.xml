@@ -37,6 +37,9 @@
             android:id="@+id/subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textCapWords"
+            android:lines="1"
+            android:textAlignment="center"
             android:hint="@string/subtitle"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -56,8 +59,6 @@
         android:layout_height="180dp"
         android:padding="5dp"
         android:layout_marginHorizontal="10dp"
-        android:visibility="invisible"
-        tools:visibility="visible"
         tools:listitem="@layout/viewholder_skill_edit"
         />
     <TextView
@@ -67,6 +68,8 @@
         android:gravity="center"
         android:text="@string/empty_skills"
         android:textAlignment="center"
+        android:visibility="gone"
+        tools:visibility="visible"
         style="@style/TextAppearance.MaterialComponents.Body1"
         />
     <LinearLayout
@@ -88,13 +91,15 @@
                 android:id="@+id/skill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:lines="1"
                 android:hint="@string/skill"
                 />
         </com.google.android.material.textfield.TextInputLayout>
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_add_skill"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:theme="@style/Widget.AppCompat.Button.Small"
             android:src="@drawable/ic_add_24"
             android:text="@string/add"
