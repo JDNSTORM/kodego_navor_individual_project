@@ -6,6 +6,8 @@ import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Education
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsMain
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsSub
 
 abstract class DeleteItemDialog(context: Context, private val item: Any): AlertDialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +24,10 @@ abstract class DeleteItemDialog(context: Context, private val item: Any): AlertD
         when(item){
             is Career -> itemName = "Career"
             is Education -> itemName = "Education"
+            is SkillsMain -> itemName = "Main Category"
+            is SkillsSub -> itemName = "SubCategory"
         }
         setTitle("Delete $itemName?")
-        setMessage("Are you sure to delete this ${itemName.lowercase()}")
+        setMessage("Are you sure to delete this ${itemName.lowercase()}?")
     }
 }

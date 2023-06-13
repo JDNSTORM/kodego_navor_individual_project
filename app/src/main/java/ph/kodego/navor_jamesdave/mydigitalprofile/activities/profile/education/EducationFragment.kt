@@ -112,4 +112,9 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
             }
         } ?: noActiveProfile()
     }
+
+    override fun onPause() {
+        itemsAdapter.clearToggle()
+        super.onPause()
+    }
 }

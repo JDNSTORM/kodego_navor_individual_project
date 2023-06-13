@@ -54,21 +54,21 @@ class CareerEditDialog<T>(context: T, private val profile: Profile): AlertDialog
     }
 
     private fun deleteCareer() {
-        val careers = careers.apply { remove(career!!) }
+        careers.remove(career!!)
         saveChanges(careers)
     }
 
     private fun updateCareer() {
         getFormData()?.let {
-            val careers = careers.apply { this[indexOf(career!!)] = it }
+            careers[careers.indexOf(career!!)] = it
             saveChanges(careers)
         }
     }
 
     private fun saveCareer() {
         getFormData()?.let {
-            val careers = profile.careers.apply { add(it) }
-            saveChanges(careers)
+            profile.careers.add(it)
+            saveChanges(profile.careers)
         }
     }
 

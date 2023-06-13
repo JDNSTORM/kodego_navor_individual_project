@@ -69,4 +69,8 @@ class EducationsAdapter(): ItemsAdapter<Education>() {
         notifyItemRangeChanged(0, itemCount)
         return drag
     }
+
+    fun clearToggle(){
+        if (drag) toggleDrag()
+    }
 }

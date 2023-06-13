@@ -26,7 +26,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 class EducationEditDialog<T>(context: T, private val profile: Profile): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
     private val binding by lazy { DialogueEducationEditBinding.inflate(layoutInflater) }
     private val viewModel by lazy { ViewModelProvider(context)[ProfileViewModel::class.java] }
-    private var educations: ArrayList<Education> = ArrayList()
+    private val educations: ArrayList<Education> = ArrayList()
     private var education: Education? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,21 +53,21 @@ class EducationEditDialog<T>(context: T, private val profile: Profile): AlertDia
     }
 
     private fun deleteEducation() {
-        val educations = educations.apply { remove(education!!) }
+        educations.remove(education!!)
         saveChanges(educations)
     }
 
     private fun updateEducation() {
         getFormData()?.let {
-            val educations = educations.apply { this[indexOf(education!!)] = it }
+            educations[educations.indexOf(education!!)] = it
             saveChanges(educations)
         }
     }
 
     private fun saveEducation() {
         getFormData()?.let {
-            val educations = profile.educations.apply { add(it) }
-            saveChanges(educations)
+            profile.educations.add(it)
+            saveChanges(profile.educations)
         }
     }
 

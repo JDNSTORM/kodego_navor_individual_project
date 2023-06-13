@@ -69,4 +69,8 @@ class CareersAdapter(): ItemsAdapter<Career>() {
         notifyItemRangeChanged(0, itemCount)
         return drag
     }
+
+    fun clearToggle(){
+        if (drag) toggleDrag()
+    }
 }

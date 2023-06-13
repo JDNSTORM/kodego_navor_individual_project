@@ -117,4 +117,9 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
             }
         } ?: noActiveProfile()
     }
+
+    override fun onPause() {
+        itemsAdapter.clearToggle()
+        super.onPause()
+    }
 }

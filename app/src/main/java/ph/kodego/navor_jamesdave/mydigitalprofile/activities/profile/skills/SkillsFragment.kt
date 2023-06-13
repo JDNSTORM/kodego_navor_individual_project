@@ -2,14 +2,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.skills
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -36,7 +33,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 @AndroidEntryPoint
 class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
-    private val skillEventsBinding by lazy {
+    private val eventsBinding by lazy {
         LayoutSkillEventsBinding.inflate(layoutInflater, binding.root, true)
     }
     private val itemsAdapter by lazy { SkillsMainAdapter() }
@@ -94,13 +91,14 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     }
 
     private fun enableEditing(profile: Profile) {
-        with(skillEventsBinding){
+        with(eventsBinding){
             minimizeFabs()
             efabSkillsOptions.setOnClickListener {
                 if (efabSkillsOptions.isExtended){ minimizeFabs() }
                 else{ expandFabs() }
             }
             root.setOnClickListener { minimizeFabs() }
+            btnAddMainCategory.setOnClickListener { DialogSkillMainEdit(requireActivity(), profile).show() }
         }
     }
 
@@ -117,5 +115,10 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
                 setupMenu
             }
         } ?: noActiveProfile()
+    }
+
+    override fun onPause() {
+        itemsAdapter.clearToggle()
+        super.onPause()
     }
 }
