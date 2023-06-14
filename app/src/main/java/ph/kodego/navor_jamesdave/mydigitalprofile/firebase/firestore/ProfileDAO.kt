@@ -18,7 +18,7 @@ interface ProfileDAO {
 }
 
 class ProfileDAOImpl(): FirestoreDAOImpl(), ProfileDAO{
-    private val uID by lazy { FirebaseAuth.getInstance().currentUser!!.uid }
+    private val uID get() =  FirebaseAuth.getInstance().currentUser!!.uid
     override fun getCollectionName(): String = PROFILE_COLLECTION
 
     override fun getCollectionReference(): CollectionReference {
