@@ -187,6 +187,7 @@ class SkillSubEditDialog<T>(context: T, private val profile: Profile): AlertDial
 
     private fun setSubSkillDetails() {
         with(binding){
+            title.text = mainSkill!!.title
             subSkill?.let {
                 subtitle.setText(it.subtitle)
                 itemsAdapter.setList(it.skills)
