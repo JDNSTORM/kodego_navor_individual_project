@@ -23,6 +23,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_close_24"
             style="@style/Widget.AppCompat.Button.Small"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="?attr/selectableItemBackgroundBorderless"
             />
     </LinearLayout>
     <com.google.android.material.textview.MaterialTextView

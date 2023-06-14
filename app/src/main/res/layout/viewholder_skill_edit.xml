@@ -26,22 +26,33 @@
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_edit_skill"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:contentDescription="Edit"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/edit"
+        android:layout_gravity="center"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_edit_24" />
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_save_skill"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:contentDescription="Edit"
+        android:contentDescription="@string/edit"
         android:src="@drawable/ic_save_24"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:visibility="gone"
         />
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_delete_skill"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:contentDescription="Delete"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/delete"
+        android:layout_gravity="center"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_delete_24" />
 
 </LinearLayout>

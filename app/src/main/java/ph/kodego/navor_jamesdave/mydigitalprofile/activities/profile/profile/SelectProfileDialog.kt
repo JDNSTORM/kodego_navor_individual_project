@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs
+package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.profile
 
 import android.app.AlertDialog
 import android.content.Context
@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CreateProfileDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.ExitWarningDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.AccountProfilesAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogProfileSelectBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
@@ -25,10 +26,11 @@ class SelectProfileDialog<T>(context: T): AlertDialog(context), FlowCollector<Li
     private val itemsAdapter by lazy { AccountProfilesAdapter(viewModel, this) }
     private val exitDialog by lazy {
         object: ExitWarningDialog(context){
-            override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
-                this@SelectProfileDialog.dismiss()
-                dialog.dismiss()
-            }
+            override fun ifYes(): DialogInterface.OnClickListener =
+                DialogInterface.OnClickListener { dialog, _ ->
+                    this@SelectProfileDialog.dismiss()
+                    dialog.dismiss()
+                }
         }
     }
 

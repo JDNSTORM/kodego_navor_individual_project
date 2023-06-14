@@ -25,4 +25,5 @@
     <color name="Analogous2">#0414f1</color>
     <color name="Triadic1">#6b04f1</color>
     <color name="Triadic2">#f1048a</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

@@ -75,4 +75,5 @@ class ProfileViewModel @Inject constructor(
     suspend fun updateProfile(profile: Profile, changes: Map<String, Any?>): Boolean {
         return repository.profileSource.updateProfile(profile, changes)
     }
+    suspend fun deleteProfile(profile: Profile): Boolean = repository.profileSource.deleteProfile(profile)
 }

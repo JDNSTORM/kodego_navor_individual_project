@@ -24,6 +24,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_close_24"
             style="@style/Widget.AppCompat.Button.Small"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="?attr/selectableItemBackgroundBorderless"
             />
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
@@ -37,5 +39,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Create Profile"/>
+        android:text="@string/create_profile"/>
 </LinearLayout>

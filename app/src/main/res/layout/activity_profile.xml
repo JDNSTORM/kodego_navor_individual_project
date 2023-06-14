@@ -1,46 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProfileActivity">
+    android:orientation="vertical"
+    tools:context=".activities.profile.ProfileActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/tb_top"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_height="?attr/actionBarSize"/>
 
     <!--  From @layout/cardview_profile_list  -->
     <include layout="@layout/viewholder_profile"
         android:id="@+id/viewholder_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tb_top"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         />
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:tooltipText="Fragments"
-        app:layout_constraintVertical_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/viewholder_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tl_nav_bottom"
+        android:layout_weight="1"
         />
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_nav_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

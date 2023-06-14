@@ -56,4 +56,7 @@ You can view it through the buttons below.</string>
     <string name="skill_sub_category">Skill Sub Category</string>
     <string name="skill_main_category">Skill Main Category</string>
     <string name="subcategories">Subcategories</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="create_profile">Create Profile</string>
 </resources>

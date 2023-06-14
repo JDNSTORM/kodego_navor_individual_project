@@ -112,8 +112,8 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
 
     override suspend fun emit(value: Profile?) {
         value?.let {
+            profile = it
             if (it.careers.isNotEmpty()) {
-                profile = it
                 itemsAdapter.setList(it.careers)
             }else{
                 itemsAdapter.setList(emptyList())
