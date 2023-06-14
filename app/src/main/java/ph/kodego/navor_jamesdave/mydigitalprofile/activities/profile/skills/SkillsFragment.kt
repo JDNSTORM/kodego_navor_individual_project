@@ -40,6 +40,8 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     private val itemsAdapter = SkillsMainAdapter()
     private val activeUID = Firebase.auth.currentUser?.uid
     private val setupMenu by lazy { setupMenu(requireActivity()) }
+    private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }
+    private lateinit var profile: Profile
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Skills",
@@ -65,13 +67,33 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
             object: ListMenu(){
                 override fun onOrganize(menuItem: MenuItem) {
                     when(itemsAdapter.toggleDrag()){
-                        true -> menuItem.setIcon(R.drawable.ic_save_24)
-                        false -> menuItem.setIcon(R.drawable.ic_format_list_24)
+                        true -> {
+                            touchHelper.attachToRecyclerView(binding.listSkills)
+                            menuItem.setIcon(R.drawable.ic_save_24)
+                        }
+                        false -> {
+                            saveList()
+                            touchHelper.attachToRecyclerView(null)
+                            menuItem.setIcon(R.drawable.ic_format_list_24)
+                        }
                     }
                 }
             },
             viewLifecycleOwner, Lifecycle.State.RESUMED
         )
+    }
+
+    private fun saveList() {
+        val skills = itemsAdapter.skillsMainList()
+        skills.lastIndex
+        val changes: Map<String, Any?> = mapOf(Profile.KEY_SKILLS to skills)
+        lifecycleScope.launch {
+            if(viewModel.updateProfile(profile, changes)){
+                Toast.makeText(requireContext(), "Skills Saved!", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), "Skills not saved", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun loadProfile() {
@@ -91,7 +113,7 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
         binding.showData()
     }
 
-    private fun enableEditing(profile: Profile) {
+    private fun enableEditing() {
         with(eventsBinding){
             minimizeFabs()
             efabSkillsOptions.setOnClickListener {
@@ -117,16 +139,22 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
 
     override suspend fun emit(value: Profile?) {
         value?.let {
+            profile = it
             itemsAdapter.setList(it.skills)
             if (it.refUID == activeUID){
-                enableEditing(it)
+                enableEditing()
                 setupMenu
             }
         } ?: noActiveProfile()
     }
 
-    override fun onPause() {
+    private fun resetRecyclerViewState(){
         itemsAdapter.clearToggle()
+        touchHelper.attachToRecyclerView(null)
+    }
+
+    override fun onPause() {
+        resetRecyclerViewState()
         super.onPause()
     }
 }

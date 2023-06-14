@@ -2,14 +2,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -34,13 +31,15 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 @AndroidEntryPoint
 class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
-    private val itemsAdapter by lazy { CareersAdapter() }
+    private val itemsAdapter = CareersAdapter()
     override fun getTabInformation(): TabInfo = TabInfo(
         "Career",
         R.drawable.ic_work_history_24
     )
     private val activeUID = Firebase.auth.currentUser?.uid
     private val setupMenu by lazy {setupMenu(requireActivity())}
+    private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }
+    private lateinit var profile: Profile
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,8 +60,15 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
             object: ListMenu(){
                 override fun onOrganize(menuItem: MenuItem) {
                     when(itemsAdapter.toggleDrag()){
-                        true -> menuItem.setIcon(R.drawable.ic_save_24)
-                        false -> menuItem.setIcon(R.drawable.ic_format_list_24)
+                        true -> {
+                            touchHelper.attachToRecyclerView(binding.listCareer)
+                            menuItem.setIcon(R.drawable.ic_save_24)
+                        }
+                        false -> {
+                            saveList()
+                            touchHelper.attachToRecyclerView(null)
+                            menuItem.setIcon(R.drawable.ic_format_list_24)
+                        }
                     }
                 }
             },
@@ -88,15 +94,15 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
         binding.showData()
     }
 
-    private fun enableEditing(profile: Profile) {
+    private fun enableEditing() {
         with(binding.btnAdd){
             isEnabled = true
             visibility = View.VISIBLE
             setOnClickListener {
-                CareerEditDialog(requireActivity(), profile.copy()).show()
+                CareerEditDialog(requireActivity(), profile).show()
             }
         }
-        itemsAdapter.enableEditing(CareerEditDialog(requireActivity(), profile.copy()))
+        itemsAdapter.enableEditing(CareerEditDialog(requireActivity(), profile))
     }
 
     private fun noActiveProfile() {
@@ -107,19 +113,38 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
     override suspend fun emit(value: Profile?) {
         value?.let {
             if (it.careers.isNotEmpty()) {
+                profile = it
                 itemsAdapter.setList(it.careers)
             }else{
                 itemsAdapter.setList(emptyList())
             }
             if (it.refUID == activeUID) {
-                enableEditing(it)
+                enableEditing()
                 setupMenu
             }
         } ?: noActiveProfile()
     }
 
-    override fun onPause() {
+    private fun saveList(){
+        val careers = itemsAdapter.careers()
+        careers.lastIndex
+        val changes: Map<String, Any?> = mapOf(Profile.KEY_CAREERS to careers)
+        lifecycleScope.launch {
+            if(viewModel.updateProfile(profile, changes)){
+                Toast.makeText(requireContext(), "Careers Saved!", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), "Careers not saved", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun resetRecyclerViewState(){
         itemsAdapter.clearToggle()
+        touchHelper.attachToRecyclerView(null)
+    }
+
+    override fun onPause() {
+        resetRecyclerViewState()
         super.onPause()
     }
 }

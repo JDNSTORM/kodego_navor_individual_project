@@ -1,9 +1,11 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 
+import android.annotation.SuppressLint
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
@@ -12,10 +14,12 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsB
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.expandFabs
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsMain
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillsEditingInterface
+import java.util.Collections
 
 class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
     private var drag: Boolean = false
     private var editInterface: SkillsEditingInterface? = null
+    private lateinit var touchHelper: ItemTouchHelper
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -29,6 +33,24 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
         bind(binding, mainSkill)
         editInterface?.editBinding?.let {
             binding.root.setOnClickListener { _ -> it.expandFabs(mainSkill) }
+        }
+
+        if (this::touchHelper.isInitialized){
+            with(binding.handle){
+                setOnClickListener {  }
+                setOnTouchListener { v, event ->
+                    when(event.action){
+                        KeyEvent.ACTION_DOWN -> {
+                            touchHelper.startDrag(holder)
+                            true
+                        }
+                        else -> {
+                            v.performClick()
+                            false
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -105,4 +127,17 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
             btnAddSubCategory.setOnClickListener { subEditDialog.add(mainSkill) }
         }
     }
+
+    fun activateTouchHelper(): ItemTouchHelper{
+        touchHelper = ItemTouchHelper(object: ProfileItemsTouchCallback(){
+            override fun updateItem(oldPosition: Int, newPosition: Int) {
+                val newItems = ArrayList(items)
+                Collections.swap(newItems, oldPosition, newPosition)
+                items = newItems
+            }
+        })
+        return touchHelper
+    }
+
+    fun skillsMainList(): List<SkillsMain> = items
 }

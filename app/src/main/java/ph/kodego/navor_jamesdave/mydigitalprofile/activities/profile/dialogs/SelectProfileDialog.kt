@@ -26,7 +26,7 @@ class SelectProfileDialog<T>(context: T): AlertDialog(context), FlowCollector<Li
     private val exitDialog by lazy {
         object: ExitWarningDialog(context){
             override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
-                dismiss()
+                this@SelectProfileDialog.dismiss()
                 dialog.dismiss()
             }
         }

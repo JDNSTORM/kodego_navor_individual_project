@@ -139,9 +139,10 @@ class SkillMainEditDialog<T>(context: T, private val profile: Profile): AlertDia
         mainSkill?.let {
             if (it.subCategories.size > 1) {
                 itemsAdapter.setList(it.subCategories)
-                with(binding) {
-                    listSkills.layoutManager = LinearLayoutManager(context)
-                    listSkills.adapter = itemsAdapter
+                binding.listSkills.apply {
+                    itemsAdapter.touchHelper.attachToRecyclerView(this)
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = itemsAdapter
                 }
             }else{
                 binding.labelSubtitles.visibility = View.GONE

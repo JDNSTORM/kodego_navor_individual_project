@@ -2,14 +2,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.education
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -36,6 +33,8 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
     private val itemsAdapter by lazy { EducationsAdapter() }
     private val activeUID = Firebase.auth.currentUser?.uid
     private val setupMenu by lazy { setupMenu(requireActivity()) }
+    private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }
+    private lateinit var profile: Profile
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Education",
@@ -61,13 +60,33 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
             object: ListMenu(){
                 override fun onOrganize(menuItem: MenuItem) {
                     when(itemsAdapter.toggleDrag()){
-                        true -> menuItem.setIcon(R.drawable.ic_save_24)
-                        false -> menuItem.setIcon(R.drawable.ic_format_list_24)
+                        true -> {
+                            touchHelper.attachToRecyclerView(binding.listEducation)
+                            menuItem.setIcon(R.drawable.ic_save_24)
+                        }
+                        false -> {
+                            saveList()
+                            touchHelper.attachToRecyclerView(null)
+                            menuItem.setIcon(R.drawable.ic_format_list_24)
+                        }
                     }
                 }
             },
             viewLifecycleOwner, Lifecycle.State.RESUMED
         )
+    }
+
+    private fun saveList(){
+        val educations = itemsAdapter.educations()
+        educations.lastIndex
+        val changes: Map<String, Any?> = mapOf(Profile.KEY_EDUCATIONS to educations)
+        lifecycleScope.launch {
+            if(viewModel.updateProfile(profile, changes)){
+                Toast.makeText(requireContext(), "Educations Saved!", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), "Educations not saved", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun loadProfile() {
@@ -92,7 +111,7 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
         binding.showData()
     }
 
-    private fun enableEditing(profile: Profile) {
+    private fun enableEditing() {
         with(binding.btnAdd){
             isEnabled = true
             visibility = View.VISIBLE
@@ -105,16 +124,22 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
 
     override suspend fun emit(value: Profile?) {
         value?.let {
+            profile = it
             itemsAdapter.setList(it.educations)
             if (it.refUID == activeUID){
-                enableEditing(it)
+                enableEditing()
                 setupMenu
             }
         } ?: noActiveProfile()
     }
 
-    override fun onPause() {
+    private fun resetRecyclerViewState(){
         itemsAdapter.clearToggle()
+        touchHelper.attachToRecyclerView(null)
+    }
+
+    override fun onPause() {
+        resetRecyclerViewState()
         super.onPause()
     }
 }

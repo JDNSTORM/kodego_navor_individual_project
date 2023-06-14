@@ -64,7 +64,8 @@ class SkillSubEditDialog<T>(context: T, private val profile: Profile): AlertDial
     }
 
     private fun setupRecyclerView(){
-        with(binding.listSkill){
+        binding.listSkill.apply{
+            itemsAdapter.touchHelper.attachToRecyclerView(this)
             layoutManager = LinearLayoutManager(context)
             adapter = itemsAdapter
         }

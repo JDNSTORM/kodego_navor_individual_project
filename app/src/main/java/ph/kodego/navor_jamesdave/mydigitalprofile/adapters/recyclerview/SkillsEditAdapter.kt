@@ -1,11 +1,22 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillEditBinding
+import java.util.Collections
 
 class SkillsEditAdapter(): ItemsAdapter<String>() {
+    val touchHelper = ItemTouchHelper(object: ProfileItemsTouchCallback(){
+        override fun updateItem(oldPosition: Int, newPosition: Int) {
+            val newItems = ArrayList(items)
+            Collections.swap(newItems, oldPosition, newPosition)
+            items = newItems
+        }
+    })
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ViewholderSkillEditBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,6 +31,21 @@ class SkillsEditAdapter(): ItemsAdapter<String>() {
         binding.btnEditSkill.setOnClickListener { toggleEdit(binding) }
         binding.btnSaveSkill.setOnClickListener { update(binding, skill) }
         binding.btnDeleteSkill.setOnClickListener { delete(skill) }
+        binding.handle.apply {
+            setOnClickListener { }
+            setOnTouchListener { v, event ->
+                when(event.action){
+                    KeyEvent.ACTION_DOWN -> {
+                        touchHelper.startDrag(holder)
+                        true
+                    }
+                    else -> {
+                        v.performClick()
+                        false
+                    }
+                }
+            }
+        }
     }
 
     private fun delete(skill: String) {
