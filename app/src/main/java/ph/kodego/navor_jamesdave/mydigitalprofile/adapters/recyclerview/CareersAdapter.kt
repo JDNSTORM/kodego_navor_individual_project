@@ -79,6 +79,10 @@ class CareersAdapter(): ItemsAdapter<Career>() {
             }else{
                 handle.visibility = View.VISIBLE
                 employmentPeriod.visibility = View.GONE
+                companyAddress.visibility = View.GONE
+                companyWebsite.visibility = View.GONE
+                companyTelephone.visibility = View.GONE
+                jobDescription.visibility = View.GONE
                 handle.setOnClickListener{}
             }
         }

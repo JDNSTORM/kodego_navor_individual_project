@@ -106,7 +106,7 @@ class ProfileActivity : AppCompatActivity(), FlowCollector<Profile?> {
     }
 
     private fun throwError(){
-        Toast.makeText(this, "Profile Inaccessible!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "No Profile Selected!", Toast.LENGTH_SHORT).show()
         finish()
     }
 }

@@ -30,7 +30,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 @AndroidEntryPoint
 class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
-    private val itemsAdapter by lazy { EducationsAdapter() }
+    private val itemsAdapter = EducationsAdapter()
     private val activeUID = Firebase.auth.currentUser?.uid
     private val setupMenu by lazy { setupMenu(requireActivity()) }
     private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }

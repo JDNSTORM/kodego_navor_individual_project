@@ -60,4 +60,26 @@ You can view it through the buttons below.</string>
     <string name="edit">Edit</string>
     <string name="create_profile">Create Profile</string>
     <string name="profile_publicity_rule">Only One Profile can be Public</string>
+    <string name="website">Website</string>
+    <string name="company_address">Company Address</string>
+    <string name="company">Company</string>
+    <string name="employment_end">Employment End</string>
+    <string name="date_employed">Date Employed</string>
+    <string name="job_description">Job Description</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="position">Position</string>
+    <string name="degree">Degree</string>
+    <string name="field_of_study">Field of Study</string>
+    <string name="date_enrolled">Date Enrolled</string>
+    <string name="school_name">School Name</string>
+    <string name="date_graduated">Date Graduated</string>
+    <string name="school_address">School Address</string>
+    <string name="school_website">School Website</string>
+
+    <string-array name="degrees">
+        <item>Bachelor of Science</item>
+        <item>Bachelor of Arts</item>
+        <item>Masters</item>
+        <item>Ph.D.</item>
+    </string-array>
 </resources>

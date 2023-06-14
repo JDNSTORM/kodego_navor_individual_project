@@ -2,6 +2,8 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.sign_in
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -37,22 +39,48 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validateForm(){
+        var valid = validateRequired(
+            binding.confirmPassword,
+            binding.password,
+            binding.email,
+            binding.lastName,
+            binding.firstName
+        )
+        if (!valid) return
+
         val firstName = binding.firstName.text.toString().trim()
         val lastName = binding.lastName.text.toString().trim()
         val email = binding.email.text.toString().trim()
         val password = binding.password.text.toString()
         val confirmPassword = binding.confirmPassword.text.toString()
 
-        when(false){
-            firstName.isNotEmpty() -> binding.firstName.requestFocus()
-            lastName.isNotEmpty() -> binding.lastName.requestFocus()
-            email.isNotEmpty() -> binding.email.requestFocus()
-            email.validEmail() -> binding.email.requestFocus()
-            password.isNotEmpty() -> binding.password.requestFocus()
-            confirmPassword.isNotEmpty() -> binding.confirmPassword.requestFocus()
-            (password == confirmPassword) -> binding.password.requestFocus()
-            else -> registerAccount(firstName, lastName, email, password)
+        if (password != confirmPassword){
+            binding.password.error = "Passwords do not match."
+            binding.confirmPassword.error = "Passwords do not match."
+            binding.password.requestFocus()
+            valid = false
         }
+
+        if (!email.validEmail()) {
+            binding.email.error = "Not a valid email"
+            binding.email.requestFocus()
+            valid = false
+        }
+
+        if (valid) registerAccount(firstName, lastName, email, password)
+    }
+
+    private fun validateRequired(vararg views: EditText): Boolean {
+        var valid = true
+        views.forEach {
+            val emptyFieldError = "Field is Required"
+            if (it.text.toString().trim().isEmpty()){
+                it.error = emptyFieldError
+                it.requestFocus()
+                valid = false
+            }
+        }
+        return valid
     }
 
     private fun registerAccount(firstName: String, lastName: String, email: String, password: String){

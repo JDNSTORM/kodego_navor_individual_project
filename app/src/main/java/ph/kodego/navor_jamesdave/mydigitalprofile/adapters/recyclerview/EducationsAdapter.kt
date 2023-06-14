@@ -78,6 +78,9 @@ class EducationsAdapter(): ItemsAdapter<Education>() {
             }else{
                 llEnrollmentPeriod.visibility = View.GONE
                 divider.visibility = View.GONE
+                schoolAddress.visibility = View.GONE
+                schoolWebsite.visibility = View.GONE
+                schoolTelephone.visibility = View.GONE
                 handle.visibility = View.VISIBLE
                 handle.setOnClickListener{}
             }
