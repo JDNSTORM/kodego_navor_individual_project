@@ -53,8 +53,8 @@ class ProfileViewModel @Inject constructor(
 
     fun readActiveProfile(): Flow<Profile?>? = repository.profileSource.activeProfile
 
-    suspend fun addProfile(profession: String, isPublic: Boolean): Boolean {
-        val profile = Profile(activeAccount.first()!!.uid, profession, isPublic)
+    suspend fun addProfile(profession: String): Boolean {
+        val profile = Profile(activeAccount.first()!!.uid, profession)
         return repository.profileSource.addProfile(profile)
     }
     private fun readProfile(profile: Profile): Flow<Profile?> = repository.profileSource.readProfile(profile)

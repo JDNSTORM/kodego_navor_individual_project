@@ -59,4 +59,5 @@ You can view it through the buttons below.</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="create_profile">Create Profile</string>
+    <string name="profile_publicity_rule">Only One Profile can be Public</string>
 </resources>

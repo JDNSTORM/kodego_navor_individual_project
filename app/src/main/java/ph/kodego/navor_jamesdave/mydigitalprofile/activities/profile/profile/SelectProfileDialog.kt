@@ -42,10 +42,7 @@ class SelectProfileDialog<T>(context: T): AlertDialog(context), FlowCollector<Li
         setupRecyclerView()
         with(binding) {
             btnCreateProfile.setOnClickListener {
-                CreateProfileDialog(
-                    context,
-                    viewModel
-                ).show()
+                CreateProfileDialog(context, viewModel).show()
             }
             btnClose.setOnClickListener { exitDialog.show() }
         }

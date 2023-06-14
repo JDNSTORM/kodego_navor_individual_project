@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 
 import android.content.Context
 import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.viewModelScope
@@ -58,8 +59,18 @@ class AccountProfilesAdapter(private val viewModel: ProfileViewModel, private va
 
     private fun updateVisibility(profile: Profile){
         val changes = mapOf<String, Any?>(Profile.KEY_IS_PUBLIC to !profile.isPublic)
+        val publicProfiles = with(ArrayList(items)) {
+            remove(profile)
+            filter { it.isPublic }
+        }
+        val depublicize = mapOf<String, Any?>(Profile.KEY_IS_PUBLIC to false)
         viewModel.viewModelScope.launch {
             viewModel.updateProfile(profile, changes)
+            if (!profile.isPublic) {
+                publicProfiles.forEach {
+                    viewModel.updateProfile(it, depublicize)
+                }
+            }
         }
     }
 

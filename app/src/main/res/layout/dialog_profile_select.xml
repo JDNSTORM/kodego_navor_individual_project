@@ -28,6 +28,13 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             />
     </LinearLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?attr/hintTextAppearance"
+        android:textAlignment="center"
+        android:text="@string/profile_publicity_rule"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_profiles"
         android:layout_width="match_parent"

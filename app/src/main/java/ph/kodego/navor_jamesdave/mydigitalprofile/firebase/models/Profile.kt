@@ -17,7 +17,7 @@ data class Profile(
     val skills: ArrayList<SkillsMain> = ArrayList(),
     val educations: ArrayList<Education> = ArrayList()
 ): Account(refUID) {
-    constructor(uID: String, profession: String, isPublic: Boolean): this("", uID, profession, isPublic)
+    constructor(uID: String, profession: String): this("", uID, profession)
 
     fun toFirestore(): FirestoreProfile{
         return  FirestoreProfile(

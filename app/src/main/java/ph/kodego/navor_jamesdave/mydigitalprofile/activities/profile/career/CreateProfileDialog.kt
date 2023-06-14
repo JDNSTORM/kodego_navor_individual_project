@@ -39,19 +39,18 @@ class CreateProfileDialog(context: Context, private val viewModel: ProfileViewMo
 
     private fun checkForm(){
         val profession = binding.profession.text.toString()
-        val isPublic = binding.isPublic.isChecked
         if (profession.isNotEmpty()){
-            saveProfile(profession, isPublic)
+            saveProfile(profession)
         }else{
             binding.profession.error = "Profession must not be empty"
             binding.profession.requestFocus()
         }
     }
 
-    private fun saveProfile(profession: String, isPublic: Boolean) {
+    private fun saveProfile(profession: String) {
         progressDialog.show()
         CoroutineScope(IO).launch {
-            val saveSuccessful = viewModel.addProfile(profession, isPublic)
+            val saveSuccessful = viewModel.addProfile(profession)
             withContext(Main){
                 if (!saveSuccessful){
                     Toast.makeText(context, "Failed to create Profile!", Toast.LENGTH_SHORT).show()
