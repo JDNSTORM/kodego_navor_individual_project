@@ -7,6 +7,9 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.Exclude
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Address
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.ContactNumber
+
 //TODO: Try Parcelize
 @Entity(tableName = "accounts-table")
 open class Account (
@@ -22,6 +25,39 @@ open class Account (
     @Ignore
     @get:Exclude
     var contactInformation: ContactInformation? = null
+
+    fun migrateAccount(): ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account{
+        val account =  ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account(
+            uID,
+            firstName,
+            lastName,
+        )
+        contactInformation?.apply {
+            emailAddress?.let {
+                account.emailAddress = it.email
+            }
+            address?.let {
+                account.address = Address(
+                    it.streetAddress,
+                    it.subdivision,
+                    it.cityOrMunicipality,
+                    it.province,
+                    it.zipCode,
+                    it.country
+                )
+            }
+            contactNumber?.let {
+                account.contactNumber = ContactNumber(
+                    it.areaCode,
+                    it.contact
+                )
+            }
+            website?.let {
+                account.website = it.website
+            }
+        }
+        return account
+    }
 
     /** Parcelable Constructor */
     constructor(parcel: Parcel) : this(){

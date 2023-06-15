@@ -1,14 +1,13 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities.account
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
@@ -16,15 +15,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.MigrateActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.MigrateDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
-import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
 class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollector<Account?> {
@@ -46,12 +45,12 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
         with(binding) {
             btnAccountInformation.setOnClickListener { toAccountInformation() }
             btnAccountSettings.setOnClickListener { toAccountSettings() }
-            btnViewProfile.setOnClickListener { goToProfile() }
+            btnViewProfile.setOnClickListener { toProfile() }
             btnSignOut.setOnClickListener { signOut() }
         }
     }
 
-    private fun goToProfile() {
+    private fun toProfile() {
         val intent = Intent(requireContext(), ProfileActivity::class.java)
         startActivity(intent)
     }
@@ -77,11 +76,22 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
         value?.let {
             setAccountData(it)
 //            progressDialog.dismiss()
-        } ?: run{
-            Toast.makeText(context, "Failed to get Account Data", Toast.LENGTH_LONG).show()
-//            progressDialog.dismiss()
-            signOut()
-        }
+        } ?: object: MigrateDialog(requireContext()){
+            override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
+                dialog.dismiss()
+                toMigrate()
+            }
+
+            override fun ifNo(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
+                dialog.dismiss()
+                signOut()
+            }
+        }.show()
+    }
+
+    private fun toMigrate() {
+        val intent = Intent(requireContext(), MigrateActivity::class.java)
+        startActivity(intent)
     }
 
     private fun setAccountData(account: Account){
