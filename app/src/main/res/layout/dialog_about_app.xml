@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:text="Git Repository"
+            android:text="@string/git_repository"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             />
         <com.google.android.material.button.MaterialButton
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:text="View Profile"
+            android:text="@string/view_profile"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             />
     </LinearLayout>

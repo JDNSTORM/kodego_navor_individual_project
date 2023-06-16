@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:inputType="textWebEmailAddress"
+                android:inputType="textEmailAddress"
                 android:hint="@string/email"
                 android:textAlignment="center"
                 />

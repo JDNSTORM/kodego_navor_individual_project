@@ -40,9 +40,6 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginHorizontal="10dp"
             app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            app:helperTextEnabled="true"
-            app:helperText="@string/field_required"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/first_name"
@@ -50,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:inputType="textCapWords"
-                android:hint="First Name"
+                android:hint="@string/first_name"
                 android:textAlignment="center"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -68,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:inputType="textCapWords"
-                android:hint="Last Name"
+                android:hint="@string/last_name"
                 android:textAlignment="center"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -85,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:inputType="textWebEmailAddress"
+                android:inputType="textEmailAddress"
                 android:hint="@string/email"
                 android:textAlignment="center"
                 />
@@ -122,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textPassword"
-                android:hint="Confirm Password"
+                android:hint="@string/confirm_password"
                 android:textAlignment="center"
                 />
         </com.google.android.material.textfield.TextInputLayout>

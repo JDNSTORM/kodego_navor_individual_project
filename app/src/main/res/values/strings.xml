@@ -82,6 +82,14 @@ You can view it through the buttons below.</string>
     <string name="migrating_profile">Migrating Profile</string>
     <string name="retrieving_profiles">Retrieving Profiles</string>
     <string name="retrieving_profile_data">Retrieving Profile Details</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="save">Save</string>
+    <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
+    <string name="view_profile">View Profile</string>
+    <string name="git_repository">Git Repository</string>
 
     <string-array name="degrees">
         <item>Bachelor of Science</item>

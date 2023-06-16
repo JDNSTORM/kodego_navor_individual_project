@@ -13,6 +13,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.home.HomeFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.sign_in.SignInFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewPagerFragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
+import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles.EXTRA_SIGNED_IN
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
@@ -48,6 +50,10 @@ class MainActivity(): AppCompatActivity() {
             tab.text = text
             tab.setIcon(icon)
         }.attach()
+        val signedIn = intent.getBooleanExtra(EXTRA_SIGNED_IN, false)
+        if (signedIn){
+            binding.viewPager2.currentItem = fragmentAdapter.fragments.lastIndex
+        }
     }
 
     override fun onResume() {
