@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProgressBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogProgressBinding
 
 class ProgressDialog(context: Context, private val progressText: Int = R.string.please_wait): Dialog(context) {
-    private val binding: DialogueProgressBinding by lazy {
-        DialogueProgressBinding.inflate(layoutInflater)
+    private val binding by lazy {
+        DialogProgressBinding.inflate(layoutInflater)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -47,25 +47,7 @@
             android:name=".activities.sign_in.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AccountSettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.ProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.ForgotPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.CreateAccountActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.AccountActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="false" />
     </application>
 

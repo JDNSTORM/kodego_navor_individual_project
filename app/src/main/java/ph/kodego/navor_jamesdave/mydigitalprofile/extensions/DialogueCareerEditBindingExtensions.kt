@@ -1,9 +1,9 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
 
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueCareerEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogCareerEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 
-fun DialogueCareerEditBinding.clear() {
+fun DialogCareerEditBinding.clear() {
     dateEmployed.text?.clear()
     employmentEnd.text?.clear()
     position.text?.clear()
@@ -15,7 +15,7 @@ fun DialogueCareerEditBinding.clear() {
 
     editButtons.saveInterface()
 }
-fun DialogueCareerEditBinding.bind(career: Career){
+fun DialogCareerEditBinding.bind(career: Career){
     dateEmployed.setText(career.employmentStart)
     employmentEnd.setText(career.employmentEnd)
     position.setText(career.position)

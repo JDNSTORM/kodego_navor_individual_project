@@ -13,14 +13,14 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueProfileEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogProfileEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.updateInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 class ProfileEditDialog<T>(context: T, private val profile: Profile): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
-    private val binding by lazy { DialogueProfileEditBinding.inflate(layoutInflater) }
+    private val binding by lazy { DialogProfileEditBinding.inflate(layoutInflater) }
     private val viewModel: ProfileViewModel by lazy {
         ViewModelProvider(context)[ProfileViewModel::class.java]
     }

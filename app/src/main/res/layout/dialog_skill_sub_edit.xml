@@ -59,7 +59,7 @@
         android:layout_height="180dp"
         android:padding="5dp"
         android:layout_marginHorizontal="10dp"
-        tools:listitem="@layout/viewholder_skill_edit"
+        tools:listitem="@layout/item_skill_edit"
         />
     <TextView
         android:id="@+id/list_empty"

@@ -1,14 +1,14 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
 
 import android.view.View
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueEducationEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogEducationEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
 
-fun DialogueEducationEditBinding.clear() {
+fun DialogEducationEditBinding.clear() {
     dateEnrolled.text?.clear()
     dateGraduated.text?.clear()
     schoolName.text?.clear()
@@ -20,7 +20,7 @@ fun DialogueEducationEditBinding.clear() {
 
     editButtons.saveInterface()
 }
-fun DialogueEducationEditBinding.bind(education: Education){
+fun DialogEducationEditBinding.bind(education: Education){
     dateEnrolled.setText(education.dateEnrolled)
     dateGraduated.setText(education.dateGraduated)
     schoolName.setText(education.schoolName)
@@ -34,7 +34,7 @@ fun DialogueEducationEditBinding.bind(education: Education){
     editButtons.editInterface()
 }
 
-fun DialogueEducationEditBinding.storeContents(education: Education){
+fun DialogEducationEditBinding.storeContents(education: Education){
     education.dateEnrolled =  dateEnrolled.text.toString().trim()
     education.dateGraduated =  dateGraduated.text.toString().trim()
     education.schoolName =  schoolName.text.toString().trim()

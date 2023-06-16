@@ -1,10 +1,10 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
 
 import android.view.View
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderEducationBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemEducationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
 
-fun ViewholderEducationBinding.bind(education: Education) {
+fun ItemEducationBinding.bind(education: Education) {
     dateEnrolled.text = education.dateEnrolled
     dateGraduated.text = education.dateGraduated
     schoolName.text = education.schoolName

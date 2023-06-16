@@ -1,10 +1,10 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
 
 import android.view.View
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderCareerBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
 
-fun ViewholderCareerBinding.bind(career: Career) {
+fun ItemCareerBinding.bind(career: Career) {
     position.text = career.position
     employmentPeriod.text = career.employmentPeriod()
     companyName.text = career.companyName

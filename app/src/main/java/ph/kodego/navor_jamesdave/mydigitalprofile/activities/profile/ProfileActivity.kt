@@ -97,8 +97,8 @@ class ProfileActivity : AppCompatActivity(), FlowCollector<Profile?> {
     }
 
     private fun setProfileDetails(profile: Profile){
-        GlideModule().loadProfilePhoto(binding.viewholderProfile.profilePicture, profile.image)
-        with(binding.viewholderProfile) {
+        GlideModule().loadProfilePhoto(binding.layoutProfile.profilePicture, profile.image)
+        with(binding.layoutProfile) {
             profileUserName.text = profile.displayName()
             profession.text = profile.profession
         }

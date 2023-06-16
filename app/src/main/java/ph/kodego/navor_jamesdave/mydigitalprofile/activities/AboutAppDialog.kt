@@ -9,16 +9,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ProfileActivity
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueAboutAppBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogAboutAppBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 class AboutAppDialog<T>(context: T): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
     private val viewModel by lazy { ViewModelProvider(context)[ProfileViewModel::class.java] }
 
-    private val binding: DialogueAboutAppBinding by lazy {
-        DialogueAboutAppBinding.inflate(layoutInflater)
+    private val binding by lazy {
+        DialogAboutAppBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

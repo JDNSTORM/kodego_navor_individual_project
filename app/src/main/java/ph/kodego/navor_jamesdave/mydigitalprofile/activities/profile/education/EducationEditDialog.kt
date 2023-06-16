@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.DeleteItemDialog
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogueEducationEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogEducationEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.editInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.saveInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Address
@@ -24,7 +24,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 class EducationEditDialog<T>(context: T, private val profile: Profile): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
-    private val binding by lazy { DialogueEducationEditBinding.inflate(layoutInflater) }
+    private val binding by lazy { DialogEducationEditBinding.inflate(layoutInflater) }
     private val viewModel by lazy { ViewModelProvider(context)[ProfileViewModel::class.java] }
     private val educations: ArrayList<Education> = ArrayList()
     private var education: Education? = null

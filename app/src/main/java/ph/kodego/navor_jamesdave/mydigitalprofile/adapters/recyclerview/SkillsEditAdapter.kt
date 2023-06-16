@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
-import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ViewholderSkillEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemSkillEditBinding
 import java.util.Collections
 
 class SkillsEditAdapter(): ItemsAdapter<String>() {
@@ -19,12 +19,12 @@ class SkillsEditAdapter(): ItemsAdapter<String>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ViewholderSkillEditBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemSkillEditBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val binding = holder.binding as ViewholderSkillEditBinding
+        val binding = holder.binding as ItemSkillEditBinding
         val skill = items[position]
         binding.skill.setText(skill)
 
@@ -53,7 +53,7 @@ class SkillsEditAdapter(): ItemsAdapter<String>() {
         setList(newItems)
     }
 
-    private fun update(binding: ViewholderSkillEditBinding, skill: String){
+    private fun update(binding: ItemSkillEditBinding, skill: String){
         val updatedSkill = binding.skill.text.toString().trim()
         if (updatedSkill.isNotEmpty()) {
             val newItems = ArrayList(items)
@@ -66,7 +66,7 @@ class SkillsEditAdapter(): ItemsAdapter<String>() {
         }
     }
 
-    private fun toggleEdit(binding: ViewholderSkillEditBinding){
+    private fun toggleEdit(binding: ItemSkillEditBinding){
         with(binding) {
             skill.isEnabled = true
             btnEditSkill.visibility = View.GONE

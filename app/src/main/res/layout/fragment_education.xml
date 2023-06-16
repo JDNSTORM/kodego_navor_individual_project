@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments_profile.EducationFragment">
+    tools:context=".activities.profile.education.EducationFragment">
 
     <TextView
         android:id="@+id/label_education"
@@ -26,7 +26,7 @@
         android:clipToPadding="false"
         android:visibility="gone"
         tools:visibility="visible"
-        tools:listitem="@layout/viewholder_education"
+        tools:listitem="@layout/item_education"
         app:layout_constraintTop_toBottomOf="@id/label_education"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,6 @@
         android:gravity="center"
         android:visibility="visible"
         tools:visibility="visible"
-        tools:listitem="@layout/viewholder_education"
         app:layout_constraintTop_toBottomOf="@id/label_education"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
