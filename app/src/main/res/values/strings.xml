@@ -30,10 +30,11 @@ This is a project I\'ve been working on since I\'ve studied Web Development and 
 \nI developed this app with the idea of how I could showcase my skills while considering the use case for other users too.
 This app will most likely be used by job-seekers who want to show their profile in the way I formatted it.
 \nThis app is still underdeveloped and I\'m still learning more things to further enhance my skills.
-This will not be the final output but it will be further enhanced in the future.
+This will not be the final output and it will be further enhanced in the future.
 \nIf you are also a developer and is interested in looking into my code, or if you are interested into looking into my profile inside this app,
 You can view it through the buttons below.</string>
-    <string name="profile_id">cKpaCr9luoh7dOmE3mzGbLfFtHd2</string>
+    <string name="account_id">cKpaCr9luoh7dOmE3mzGbLfFtHd2</string>
+    <string name="profile_id">hpozTLJoD37UI4OsygCZ</string>
     <string name="dialog_yes">YES</string>
     <string name="dialog_no">NO</string>
     <string name="permission_required">Permission Required</string>
@@ -75,6 +76,12 @@ You can view it through the buttons below.</string>
     <string name="date_graduated">Date Graduated</string>
     <string name="school_address">School Address</string>
     <string name="school_website">School Website</string>
+    <string name="migrating_data">Migrating Data</string>
+    <string name="retrieving_profile">Retrieving Account and Profile</string>
+    <string name="migrating_account">Migrating Account</string>
+    <string name="migrating_profile">Migrating Profile</string>
+    <string name="retrieving_profiles">Retrieving Profiles</string>
+    <string name="retrieving_profile_data">Retrieving Profile Details</string>
 
     <string-array name="degrees">
         <item>Bachelor of Science</item>

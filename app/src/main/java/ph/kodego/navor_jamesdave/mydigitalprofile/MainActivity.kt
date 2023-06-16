@@ -6,10 +6,9 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import dagger.hilt.android.AndroidEntryPoint
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.FragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.AboutAppDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.AboutAppDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseAccountDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.AccountFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.fragments.HomeFragment

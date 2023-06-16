@@ -5,10 +5,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.view.MenuProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.AboutAppDialog
 
-class MainMenu(private val context: Context): MenuProvider {
+class MainMenu<T>(private val context: T): MenuProvider where T: Context, T: ViewModelStoreOwner{
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main_menu, menu)
     }

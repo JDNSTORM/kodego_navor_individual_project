@@ -18,11 +18,11 @@ interface ProfileDAO {
 }
 
 class ProfileDAOImpl(): FirestoreDAOImpl(), ProfileDAO{
-    private val uID get() =  FirebaseAuth.getInstance().currentUser!!.uid
+    private val uid get() =  FirebaseAuth.getInstance().currentUser!!.uid
     override fun getCollectionName(): String = PROFILE_COLLECTION
 
     override fun getCollectionReference(): CollectionReference {
-        return db.collection(ACCOUNT_COLLECTION).document(uID).collection(collection)
+        return db.collection(ACCOUNT_COLLECTION).document(uid).collection(collection)
     }
 
     override suspend fun getProfile(profileID: String): Profile? = getProfile(profileID)

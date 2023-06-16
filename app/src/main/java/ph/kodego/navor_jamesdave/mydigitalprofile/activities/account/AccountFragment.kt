@@ -91,6 +91,7 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
 
     private fun toMigrate() {
         val intent = Intent(requireContext(), MigrateActivity::class.java)
+        requireActivity().finish()
         startActivity(intent)
     }
 

@@ -18,7 +18,7 @@ class ProfileViewModel @Inject constructor(
     private val repository: ProfileRepository
 ): AndroidViewModel(application) {
     private val activeAccount: Flow<Account?> by lazy { repository.accountSource.activeAccount!! }
-    val group: Flow<List<Profile>> = //TODO: Replace with ReadPublicProfiles
+    val group: Flow<List<Profile>> =
         readPublicProfiles().combineTransform(readAccounts()){ profiles, accounts ->
             val group: ArrayList<Profile> = ArrayList()
             for(profile in profiles){

@@ -45,7 +45,9 @@ open class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(cont
         task.await()
         return if (task.isSuccessful && task.result.data != null){
             Log.i("Profile", task.result.toString())
-            task.result.toObject(Profile::class.java)!!
+            val profile = task.result.toObject(Profile::class.java)!!
+            profile.setAccount(getAccount(uID)!!)
+            profile
         }else{
             Log.e("Get Profile", task.exception?.message.toString())
             val profile = Profile()

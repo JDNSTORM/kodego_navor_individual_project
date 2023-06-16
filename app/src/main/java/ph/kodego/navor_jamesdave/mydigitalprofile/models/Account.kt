@@ -9,6 +9,7 @@ import com.google.firebase.firestore.Exclude
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.ContactNumber
+import kotlin.math.acos
 
 //TODO: Try Parcelize
 @Entity(tableName = "accounts-table")
@@ -27,11 +28,10 @@ open class Account (
     var contactInformation: ContactInformation? = null
 
     fun migrateAccount(): ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account{
-        val account =  ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account(
-            uID,
-            firstName,
-            lastName,
-        )
+        val account =  ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account(uID)
+        account.firstName = firstName
+        account.lastName = lastName
+        account.image = image
         contactInformation?.apply {
             emailAddress?.let {
                 account.emailAddress = it.email
