@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.education.EducationEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemEducationBinding
@@ -25,13 +26,13 @@ class EducationsAdapter(): ItemsAdapter<Education>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ItemEducationBinding
         val education = items[position]
-        bind(binding, education)
+        binding.bind(education)
 
-        editDialog?.let {
-            binding.root.setOnClickListener { _ -> it.edit(education, items) }
+        editDialog?.apply {
+            binding.root.setOnClickListener { edit(education, items) }
         }
         if (this::touchHelper.isInitialized){
-            with(binding.handle){
+            binding.handle.apply{
                 setOnClickListener {  }
                 setOnTouchListener { v, event ->
                     when(event.action){
@@ -49,41 +50,26 @@ class EducationsAdapter(): ItemsAdapter<Education>() {
         }
     }
 
-    private fun bind(binding: ItemEducationBinding, education: Education) {
-        with(binding) {
-            schoolName.text = education.schoolName
-            degree.text = education.degree
-            fieldOfStudy.text = education.fieldOfStudy
-            if(!drag) {
-                llEnrollmentPeriod.visibility = View.VISIBLE
-                divider.visibility = View.VISIBLE
-                handle.visibility = View.GONE
-                dateEnrolled.text = education.dateEnrolled
-                dateGraduated.text = education.dateGraduated
-                val address = education.address.streetAddress
-                if (address.isNotEmpty()) {
-                    schoolAddress.text = address
-                    schoolAddress.visibility = View.VISIBLE
-                }
-                val website = education.website
-                if (website.isNotEmpty()) {
-                    schoolWebsite.text = website
-                    schoolWebsite.visibility = View.VISIBLE
-                }
-                val telephone = education.contactNumber.telephone()
-                if (telephone.isNotEmpty()) {
-                    schoolTelephone.text = telephone
-                    schoolTelephone.visibility = View.VISIBLE
-                }
-            }else{
-                llEnrollmentPeriod.visibility = View.GONE
-                divider.visibility = View.GONE
-                schoolAddress.visibility = View.GONE
-                schoolWebsite.visibility = View.GONE
-                schoolTelephone.visibility = View.GONE
-                handle.visibility = View.VISIBLE
-                handle.setOnClickListener{}
-            }
+    private fun ItemEducationBinding.bind(education: Education){
+        schoolName.text = education.schoolName
+        degree.text = education.degree
+        fieldOfStudy.text = education.fieldOfStudy
+        llEnrollmentPeriod.isVisible = !drag
+        divider.isVisible = !drag
+        handle.isVisible = drag
+        dateEnrolled.text = education.dateEnrolled
+        dateGraduated.text = education.dateGraduated
+        schoolAddress.apply {
+            text = education.address.streetAddress
+            isVisible = text.isNotEmpty() && !drag
+        }
+        schoolWebsite.apply {
+            text = education.website
+            isVisible = text.isNotEmpty() && !drag
+        }
+        schoolTelephone.apply {
+            text = education.contactNumber.telephone()
+            isVisible = text.isNotEmpty() && !drag
         }
     }
 

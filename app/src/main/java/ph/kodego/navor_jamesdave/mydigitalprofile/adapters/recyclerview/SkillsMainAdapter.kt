@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -30,9 +31,9 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ItemSkillsMainBinding
         val mainSkill = items[position]
-        bind(binding, mainSkill)
-        editInterface?.editBinding?.let {
-            binding.root.setOnClickListener { _ -> it.expandFabs(mainSkill) }
+        binding.bind(mainSkill)
+        editInterface?.editBinding?.apply {
+            binding.root.setOnClickListener { expandFabs(mainSkill) }
         }
 
         if (this::touchHelper.isInitialized){
@@ -54,30 +55,22 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
         }
     }
 
-    private fun bind(binding: ItemSkillsMainBinding, mainSkill: SkillsMain) {
-        with(binding){
-            title.text = mainSkill.title
-            val itemsAdapter = SkillsSubAdapter()
+    private fun ItemSkillsMainBinding.bind(mainSkill: SkillsMain){
+        title.text = mainSkill.title
+        val itemsAdapter = SkillsSubAdapter()
 
-            if (!drag) {
-                handle.visibility = View.GONE
-                dividerHorizontal.visibility = View.VISIBLE
-                listSkillSub.visibility = View.VISIBLE
-                listSkillSub.layoutManager = LinearLayoutManager(root.context)
-                listSkillSub.adapter = itemsAdapter
-                itemsAdapter.setList(mainSkill.subCategories)
-            }else{
-                handle.visibility = View.VISIBLE
-                dividerHorizontal.visibility = View.GONE
-                listSkillSub.visibility = View.GONE
-            }
-            editInterface?.let {
-                itemsAdapter.enableEditing(
-                    it.apply { subSkillEditDialog.setParentList(items) },
-                    mainSkill,
-                    items
-                )
-            }
+        handle.isVisible = drag
+        dividerHorizontal.isVisible = !drag
+        listSkillSub.isVisible = !drag
+        listSkillSub.layoutManager = LinearLayoutManager(root.context)
+        listSkillSub.adapter = itemsAdapter
+        itemsAdapter.setList(mainSkill.subCategories)
+        editInterface?.let {
+            itemsAdapter.enableEditing(
+                it.apply { subSkillEditDialog.setParentList(items) },
+                mainSkill,
+                items
+            )
         }
     }
 

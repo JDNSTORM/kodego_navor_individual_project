@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CareerEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemCareerBinding
@@ -25,13 +26,13 @@ class CareersAdapter(): ItemsAdapter<Career>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ItemCareerBinding
         val career = items[position]
-        bind(binding, career)
+        binding.bind(career)
 
-        editDialog?.let {
-            binding.root.setOnClickListener { _ -> it.edit(career, items) }
+        editDialog?.apply {
+            binding.root.setOnClickListener { edit(career, items) }
         }
         if (this::touchHelper.isInitialized) {
-            with(binding.handle) {
+            binding.handle.apply {
                 setOnClickListener {}
                 setOnTouchListener { v, event ->
                     when (event.action) {
@@ -49,42 +50,27 @@ class CareersAdapter(): ItemsAdapter<Career>() {
         }
     }
 
-    private fun bind(binding: ItemCareerBinding, career: Career){
-        with(binding) {
-            position.text = career.position
-            companyName.text = career.companyName
-            if (!drag) {
-                handle.visibility = View.GONE
-                employmentPeriod.visibility = View.VISIBLE
-                employmentPeriod.text = career.employmentPeriod()
-                val address = career.address.streetAddress
-                if (address.isNotEmpty()) {
-                    companyAddress.text = address
-                    companyAddress.visibility = View.VISIBLE
-                }
-                val website = career.website
-                if (website.isNotEmpty()) {
-                    companyWebsite.text = website
-                    companyWebsite.visibility = View.VISIBLE
-                }
-                val contactNumber = career.contactNumber.telephone()
-                if (contactNumber.isNotEmpty()) {
-                    companyTelephone.text = contactNumber
-                    companyTelephone.visibility = View.VISIBLE
-                }
-                if (career.jobDescription.isNotEmpty()) {
-                    jobDescription.text = career.jobDescription
-                    jobDescription.visibility = View.VISIBLE
-                }
-            }else{
-                handle.visibility = View.VISIBLE
-                employmentPeriod.visibility = View.GONE
-                companyAddress.visibility = View.GONE
-                companyWebsite.visibility = View.GONE
-                companyTelephone.visibility = View.GONE
-                jobDescription.visibility = View.GONE
-                handle.setOnClickListener{}
-            }
+    private fun ItemCareerBinding.bind(career: Career){
+        position.text = career.position
+        companyName.text = career.companyName
+        handle.isVisible = drag
+        employmentPeriod.isVisible = !drag
+        employmentPeriod.text = career.employmentPeriod()
+        companyAddress.apply {
+            text = career.address.streetAddress
+            isVisible = text.isNotEmpty() && !drag
+        }
+        companyWebsite.apply {
+            text = career.website
+            isVisible = text.isNotEmpty() && !drag
+        }
+        companyTelephone.apply {
+            text = career.contactNumber.telephone()
+            isVisible = text.isNotEmpty() && !drag
+        }
+        jobDescription.apply {
+            text = career.jobDescription
+            isVisible = text.isNotEmpty() && !drag
         }
     }
 
