@@ -4,6 +4,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemSkillEditBinding
 import java.util.Collections
@@ -28,19 +29,19 @@ class SkillsEditAdapter(): ItemsAdapter<String>() {
         val skill = items[position]
         binding.skill.setText(skill)
 
-        binding.btnEditSkill.setOnClickListener { toggleEdit(binding) }
-        binding.btnSaveSkill.setOnClickListener { update(binding, skill) }
+        binding.btnEditSkill.setOnClickListener { binding.toggleEdit() }
+        binding.btnSaveSkill.setOnClickListener { binding.update(skill) }
         binding.btnDeleteSkill.setOnClickListener { delete(skill) }
         binding.handle.apply {
             setOnClickListener { }
-            setOnTouchListener { v, event ->
+            setOnTouchListener { _, event ->
                 when(event.action){
                     KeyEvent.ACTION_DOWN -> {
                         touchHelper.startDrag(holder)
                         true
                     }
                     else -> {
-                        v.performClick()
+                        performClick()
                         false
                     }
                 }
@@ -53,26 +54,24 @@ class SkillsEditAdapter(): ItemsAdapter<String>() {
         setList(newItems)
     }
 
-    private fun update(binding: ItemSkillEditBinding, skill: String){
-        val updatedSkill = binding.skill.text.toString().trim()
+    private fun ItemSkillEditBinding.update(skillName: String){
+        val updatedSkill = skill.text.toString().trim()
         if (updatedSkill.isNotEmpty()) {
             val newItems = ArrayList(items)
-            val index = newItems.indexOf(skill)
+            val index = newItems.indexOf(skillName)
             newItems[index] = updatedSkill
             setList(newItems)
-            binding.skill.isEnabled = false
-            binding.btnEditSkill.visibility = View.VISIBLE
-            binding.btnSaveSkill.visibility = View.GONE
+            skill.isEnabled = false
+            btnEditSkill.isVisible = true
+            btnSaveSkill.isVisible = false
         }
     }
 
-    private fun toggleEdit(binding: ItemSkillEditBinding){
-        with(binding) {
-            skill.isEnabled = true
-            btnEditSkill.visibility = View.GONE
-            btnSaveSkill.visibility = View.VISIBLE
-            skill.requestFocus()
-        }
+    private fun ItemSkillEditBinding.toggleEdit(){
+        skill.isEnabled = true
+        btnEditSkill.isVisible = false
+        btnSaveSkill.isVisible = true
+        skill.requestFocus()
     }
 
     fun skills(): List<String> = items

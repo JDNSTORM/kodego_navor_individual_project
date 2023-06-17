@@ -20,7 +20,7 @@ class ProfilesAdapter(private val viewModel: ProfileViewModel): ItemsAdapter<Pro
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ItemProfileBinding
         val profile = items[position]
-        bind(binding, profile)
+        binding.bind(profile)
         binding.root.setOnClickListener { viewProfile(it.context, profile) }
     }
 
@@ -30,11 +30,9 @@ class ProfilesAdapter(private val viewModel: ProfileViewModel): ItemsAdapter<Pro
         context.startActivity(intent)
     }
 
-    private fun bind(binding: ItemProfileBinding, profile: Profile){
-        with(binding) {
-            profileUserName.text = profile.displayName()
-            profession.text = profile.profession
-            GlideModule().loadProfilePhoto(profilePicture, profile.image)
-        }
+    private fun ItemProfileBinding.bind(profile: Profile){
+        profileUserName.text = profile.displayName()
+        profession.text = profile.profession
+        GlideModule().loadProfilePhoto(profilePicture, profile.image)
     }
 }

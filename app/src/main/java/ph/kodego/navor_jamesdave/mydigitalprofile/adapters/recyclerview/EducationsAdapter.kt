@@ -34,14 +34,14 @@ class EducationsAdapter(): ItemsAdapter<Education>() {
         if (this::touchHelper.isInitialized){
             binding.handle.apply{
                 setOnClickListener {  }
-                setOnTouchListener { v, event ->
+                setOnTouchListener { _, event ->
                     when(event.action){
                         KeyEvent.ACTION_DOWN -> {
                             touchHelper.startDrag(holder)
                             true
                         }
                         else -> {
-                            v.performClick()
+                            performClick()
                             false
                         }
                     }

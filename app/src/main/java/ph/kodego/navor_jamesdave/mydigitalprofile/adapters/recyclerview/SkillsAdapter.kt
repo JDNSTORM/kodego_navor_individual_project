@@ -17,14 +17,14 @@ class SkillsAdapter(): ItemsAdapter<String>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ItemSkillBinding
         val skill = items[position]
-        bind(binding, skill)
-        editor?.let {
-            binding.root.setOnClickListener (it)
+        binding.bind(skill)
+        editor?.apply {
+            binding.root.setOnClickListener (this)
         }
     }
 
-    private fun bind(binding: ItemSkillBinding, skill: String) {
-        binding.skill.text = skill
+    private fun ItemSkillBinding.bind(skillName: String) {
+        skill.text = skillName
     }
 
     fun enableEditing(listener: OnClickListener){

@@ -27,17 +27,17 @@ class SkillsSubDragAdapter(): ItemsAdapter<SkillsSub>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ItemSkillsSubDragBinding
         val subSkill = items[position]
-        bind(binding, subSkill)
+        binding.bind(subSkill)
         binding.handle.apply {
             setOnClickListener { }
-            setOnTouchListener { v, event ->
+            setOnTouchListener { _, event ->
                 when(event.action){
                     KeyEvent.ACTION_DOWN -> {
                         touchHelper.startDrag(holder)
                         true
                     }
                     else -> {
-                        v.performClick()
+                        performClick()
                         false
                     }
                 }
@@ -45,8 +45,8 @@ class SkillsSubDragAdapter(): ItemsAdapter<SkillsSub>() {
         }
     }
 
-    private fun bind(binding: ItemSkillsSubDragBinding, subSkill: SkillsSub) {
-        binding.subtitle.text = subSkill.subtitle
+    private fun ItemSkillsSubDragBinding.bind(subSkill: SkillsSub) {
+        subtitle.text = subSkill.subtitle
     }
 
     fun skills(): List<SkillsSub> = items

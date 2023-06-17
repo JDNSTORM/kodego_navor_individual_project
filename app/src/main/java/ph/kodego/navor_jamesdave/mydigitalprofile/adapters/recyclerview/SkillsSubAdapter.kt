@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.google.android.material.snackbar.Snackbar
@@ -29,29 +30,27 @@ class SkillsSubAdapter(): ItemsAdapter<SkillsSub>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding as ItemSkillsSubBinding
         val subSkill = items[position]
-        bind(binding, subSkill)
+        binding.bind(subSkill)
 
         editInterface?.editBinding?.apply {
             binding.root.setOnClickListener { expandFabs(subSkill) }
         }
     }
 
-    private fun bind(binding: ItemSkillsSubBinding, subSkill: SkillsSub) {
-        with(binding){
-            if (subSkill.subtitle.isNotEmpty()) {
-                skillSub.text = subSkill.subtitle
-                skillSub.visibility = View.VISIBLE
-            }
-            val itemsAdapter = SkillsAdapter()
-            if(subSkill.skills.isNotEmpty()) {
-                listSkill.visibility = View.VISIBLE
-                listSkill.layoutManager = GridLayoutManager(root.context, 2)
-                listSkill.adapter = itemsAdapter
-                itemsAdapter.setList(subSkill.skills)
-            }
-            editInterface?.let {
-                itemsAdapter.enableEditing{ _ -> it.editBinding.expandFabs(subSkill) }
-            }
+    private fun ItemSkillsSubBinding.bind(subSkill: SkillsSub) {
+        skillSub.apply {
+            text = subSkill.subtitle
+            isVisible = text.isNotEmpty()
+        }
+        val itemsAdapter = SkillsAdapter()
+        if(subSkill.skills.isNotEmpty()) {
+            listSkill.isVisible = true
+            listSkill.layoutManager = GridLayoutManager(root.context, 2)
+            listSkill.adapter = itemsAdapter
+            itemsAdapter.setList(subSkill.skills)
+        }
+        editInterface?.apply {
+            itemsAdapter.enableEditing{ editBinding.expandFabs(subSkill) }
         }
     }
 
@@ -66,9 +65,9 @@ class SkillsSubAdapter(): ItemsAdapter<SkillsSub>() {
         val mainEditDialog = editInterface!!.mainSkillEditDialog
         val subEditDialog = editInterface!!.subSkillEditDialog
         skillMain.text = mainSkill.title
-        skillMain.visibility = View.VISIBLE
+        skillMain.isVisible = true
         val skillsOnly = subSkill.subtitle.isEmpty()
-        skillSub.visibility = View.VISIBLE
+        skillSub.isVisible = true
         if (skillsOnly){
             skillSub.setText(R.string.skills)
         }else{

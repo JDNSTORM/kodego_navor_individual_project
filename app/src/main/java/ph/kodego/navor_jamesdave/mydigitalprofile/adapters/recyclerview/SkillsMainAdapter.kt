@@ -39,14 +39,14 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
         if (this::touchHelper.isInitialized){
             with(binding.handle){
                 setOnClickListener {  }
-                setOnTouchListener { v, event ->
+                setOnTouchListener { _, event ->
                     when(event.action){
                         KeyEvent.ACTION_DOWN -> {
                             touchHelper.startDrag(holder)
                             true
                         }
                         else -> {
-                            v.performClick()
+                            performClick()
                             false
                         }
                     }
@@ -94,11 +94,11 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
         val mainEditDialog = editInterface!!.mainSkillEditDialog
         val subEditDialog = editInterface!!.subSkillEditDialog
         skillMain.text = mainSkill.title
-        skillMain.visibility = View.VISIBLE
+        skillMain.isVisible = true
 
         val skillsOnly = mainSkill.subCategories.isNotEmpty() && mainSkill.subCategories.size < 2 && mainSkill.subCategories[0].subtitle.isEmpty()
         if (skillsOnly){
-            skillSub.visibility = View.VISIBLE
+            skillSub.isVisible = true
             skillSub.setText(R.string.skills)
         }
 
