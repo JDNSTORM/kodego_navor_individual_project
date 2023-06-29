@@ -2,10 +2,13 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -46,7 +49,12 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: HomeViewModel by viewModels()
-        binding.setupRecyclerView(viewModel.profilePagingData, {})
+        binding.setupRecyclerView(viewModel.profilePagingData) {
+            viewModel.action(HomeAction.View(it))
+        }
+        binding.setupSearch {
+            viewModel.action(HomeAction.Search(it))
+        }
     }
 
     private fun FragmentHomeBinding.setupRecyclerView(data: Flow<PagingData<Profile>>, view: (Profile) -> Unit){
@@ -78,8 +86,36 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
         loadingData.isVisible = isLoading
     }
 
-    private fun resetRecyclerView(){
-//        itemsAdapter.setList(profiles)
+    private fun FragmentHomeBinding.setupSearch(search: (String) -> Unit){
+        searchBox.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                updateListFromQuery(search)
+                true
+            } else {
+                false
+            }
+        }
+        searchBox.setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                updateListFromQuery(search)
+                true
+            } else {
+                false
+            }
+        }
+        layoutSearch.setEndIconOnClickListener {
+            search("")
+            searchBox.text?.clear()
+        }
+    }
+
+    private fun FragmentHomeBinding.updateListFromQuery(search: (String) -> Unit){
+        searchBox.text?.trim().let {
+            if (!it.isNullOrEmpty()) {
+                listProfiles.scrollToPosition(0)
+                search(it.toString())
+            }
+        }
     }
 
     private fun toProfile(){
