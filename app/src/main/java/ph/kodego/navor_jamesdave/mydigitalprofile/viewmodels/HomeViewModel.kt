@@ -47,7 +47,9 @@ class HomeViewModel @Inject constructor(
         action = { viewModelScope.launch { actionStateFlow.emit(it) } }
     }
 
-    private fun viewProfile(profile: Profile) = viewModelScope.launch {
-        repository.profileSource.viewProfile(profile)
+    private fun viewProfile(profile: Profile?) = viewModelScope.launch {
+        profile?.let {
+            repository.profileSource.viewProfile(it)
+        } ?: repository.profileSource.clearProfile()
     }
 }

@@ -11,17 +11,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.account.AccountFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.home.HomeFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.sign_in.SignInFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.HomeAction
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewPagerFragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles.EXTRA_SIGNED_IN
+import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.HomeViewModel
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
 class MainActivity(): AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val fragmentAdapter by lazy { ViewPagerFragmentAdapter(supportFragmentManager, lifecycle) }
-    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +58,10 @@ class MainActivity(): AppCompatActivity() {
     }
 
     override fun onResume() {
+        val viewModel: ProfileViewModel by viewModels()
         viewModel.clearActiveProfile()
+        val homeViewModel: HomeViewModel by viewModels()
+        homeViewModel.action(HomeAction.View())
         super.onResume()
     }
 }

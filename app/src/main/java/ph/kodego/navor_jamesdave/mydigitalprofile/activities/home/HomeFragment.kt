@@ -60,15 +60,14 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
     private fun FragmentHomeBinding.setupRecyclerView(data: Flow<PagingData<Profile>>, view: (Profile) -> Unit){
         val pagingAdapter = ProfilePagingAdapter{
             view(it)
-            toProfile() //TODO
+            toProfile()
         }
         listProfiles.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = pagingAdapter
         }
         lifecycleScope.launch {
-            data.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
-                .collectLatest(pagingAdapter::submitData)
+            data.collectLatest(pagingAdapter::submitData)
         }
         lifecycleScope.launch {
             pagingAdapter.loadStateFlow.collect{monitorListState(it)}
