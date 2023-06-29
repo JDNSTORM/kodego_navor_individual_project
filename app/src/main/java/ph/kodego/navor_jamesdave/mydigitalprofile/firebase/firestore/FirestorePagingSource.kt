@@ -20,7 +20,7 @@ abstract class FirestorePagingSource<Model: Any>(
     override suspend fun load(params: LoadParams<DocumentSnapshot>): LoadResult<DocumentSnapshot, Model> {
         val position = params.key
         return try {
-            val documents = getList(position, params.loadSize)
+            val documents = getDocuments(position, params.loadSize)
             val models = documents.toModels()
             val prevKey = prevKeys.lastOrNull()
             prevKeys.add(position)
@@ -33,6 +33,13 @@ abstract class FirestorePagingSource<Model: Any>(
         }catch (e: Exception){
             LoadResult.Error(e)
         }
+    }
+
+    protected open suspend fun getDocuments(
+        offset: DocumentSnapshot?,
+        limit: Int
+    ): List<DocumentSnapshot>{
+        return getList(offset, limit)
     }
 
     private suspend fun List<DocumentSnapshot>.toModels(): List<Model> = map { it.toObject() }
