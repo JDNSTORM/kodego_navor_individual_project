@@ -11,20 +11,23 @@ import com.google.firebase.firestore.ktx.snapshots
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 
-interface FirestoreDAO {
+interface FirestoreDAO { //TODO: Enhance Functions
     suspend fun addDocument(model: Any): Boolean
     suspend fun addDocument(documentID: String, model: Any): Boolean
     suspend fun getDocument(): DocumentSnapshot?
     suspend fun getDocument(documentID: String): DocumentSnapshot?
     fun readDocument(documentID: String): Flow<DocumentSnapshot>
-    suspend fun getDocuments(): List<DocumentSnapshot>?
+    suspend fun getDocuments(): List<DocumentSnapshot>
     fun readQuery(): Flow<QuerySnapshot>
-    suspend fun getGroupDocuments(): List<DocumentSnapshot>?
+    suspend fun getGroupDocuments(): List<DocumentSnapshot>
     fun readGroupQuery(): Flow<QuerySnapshot>
     suspend fun updateDocument(documentID: String, fields: Map<String, Any?>): Boolean
     suspend fun deleteDocument(documentID: String): Boolean
 }
 
+/**
+ * Template for Accessing Data from Firestore
+ */
 abstract class FirestoreDAOImpl(): FirestoreDAO {
     protected val db = FirebaseFirestore.getInstance()
     protected val collection: String get() = getCollectionName()
@@ -89,34 +92,16 @@ abstract class FirestoreDAOImpl(): FirestoreDAO {
         return reference.document(documentID).snapshots()
     }
 
-    override suspend fun getDocuments(): List<DocumentSnapshot>? {
-        val task = reference.get()
-        task.await()
-        return if (task.isSuccessful && task.result.documents.isNotEmpty()){
-            val documents = task.result.documents
-            Log.i(collection, documents.toString())
-            documents
-        }else{
-            Log.e(collection, task.exception?.message.toString())
-            null
-        }
+    override suspend fun getDocuments(): List<DocumentSnapshot> {
+        return reference.get().await().documents
     }
 
     override fun readQuery(): Flow<QuerySnapshot> {
         return reference.snapshots()
     }
 
-    override suspend fun getGroupDocuments(): List<DocumentSnapshot>? {
-        val task = groupReference.get()
-        task.await()
-        return if (task.isSuccessful && task.result.documents.isNotEmpty()){
-            val documents = task.result.documents
-            Log.i(collection, documents.toString())
-            documents
-        }else{
-            Log.e(collection, task.exception?.message.toString())
-            null
-        }
+    override suspend fun getGroupDocuments(): List<DocumentSnapshot> {
+        return groupReference.get().await().documents
     }
 
     override fun readGroupQuery(): Flow<QuerySnapshot> {
@@ -145,6 +130,22 @@ abstract class FirestoreDAOImpl(): FirestoreDAO {
     protected suspend inline fun <reified Model: Any> getModel(documentID: String): Model?{
         val document = getDocument(documentID)
         return document?.toObject(Model::class.java)
+    }
+
+    /**
+     * Returns a Flow of the CollectionReference which then returns a List of Object of type Model.
+     * For smooth execution, implement a function to use this function.
+     * Example: fun readDataSet(documentID: String): Flow<List<Data>> = readModels(documentID)
+     * For results with filters, please use $reference.
+     * @param Model Any Class used for storing data. Preferably Data Class.
+     * @return Flow of List of Object of type Model
+     * @throws Exception by Task
+     */
+    protected suspend inline fun<reified Model: Any> getGroup(): List<Model>{
+        val query = groupReference.get().await()
+        return query.documents.map {
+            it.toObject(Model::class.java)!!
+        }
     }
 
     /**

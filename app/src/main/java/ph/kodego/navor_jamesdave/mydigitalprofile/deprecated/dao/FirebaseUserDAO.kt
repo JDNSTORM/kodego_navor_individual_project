@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.content.Context
 import android.util.Log
@@ -27,7 +27,7 @@ interface FirebaseUserDAO {
     suspend fun updateUserPassword(oldPassword: String, password: String): Boolean
 }
 
-open class FirebaseUserDAOImpl(internal val context: Context): FirebaseUserDAO{
+open class FirebaseUserDAOImpl(internal val context: Context): FirebaseUserDAO {
     internal val auth = FirebaseAuth.getInstance()
     internal val fireStore = FirebaseFirestore.getInstance()
 

@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,7 +15,7 @@ interface FirebaseEducationDAO {
     suspend fun deleteEducation(education: Education): Boolean
 }
 
-class FirebaseEducationDAOImpl(private val profile: Profile): FirebaseEducationDAO{
+class FirebaseEducationDAOImpl(private val profile: Profile): FirebaseEducationDAO {
     private val dao = FirebaseContactInformationDAOImpl()
     private val fireStore = FirebaseFirestore.getInstance()
     private val collectionAccounts = FirebaseCollections.Accounts

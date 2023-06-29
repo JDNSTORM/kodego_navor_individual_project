@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,7 +15,7 @@ interface FirebaseCareerDAO {
     suspend fun deleteCareer(career: Career): Boolean
 }
 
-class FirebaseCareerDAOImpl(private val profile: Profile): FirebaseCareerDAO{
+class FirebaseCareerDAOImpl(private val profile: Profile): FirebaseCareerDAO {
     private val dao = FirebaseContactInformationDAOImpl()
     private val fireStore = FirebaseFirestore.getInstance()
     private val collectionAccounts = FirebaseCollections.Accounts

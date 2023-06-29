@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 object FirebaseCollections {
     const val Accounts: String = "accounts"

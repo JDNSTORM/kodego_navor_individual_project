@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.content.ContentResolver
 import android.content.Context
@@ -21,7 +21,8 @@ interface FirebaseStorageDAO {
     suspend fun deleteImage(url: String): Boolean
 }
 
-class FirebaseStorageDAOImpl(context: Context): FirebaseAccountDAOImpl(context), FirebaseStorageDAO{
+class FirebaseStorageDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
+    FirebaseStorageDAO {
     internal val firebaseStorage = FirebaseStorage.getInstance()
     private val parentTree = getCurrentUserID()
     private val imageTree = "images"

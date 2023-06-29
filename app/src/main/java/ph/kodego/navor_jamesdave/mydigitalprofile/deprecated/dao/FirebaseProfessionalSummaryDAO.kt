@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.content.Context
 import android.util.Log
@@ -14,7 +14,8 @@ interface FirebaseProfessionalSummaryDAO {
     suspend fun deleteProfessionalSummary(professionalSummary: ProfessionalSummary): Boolean
 }
 
-class FirebaseProfessionalSummaryDAOImpl(profile: Profile, context: Context): FirebaseProfileDAOImpl(context), FirebaseProfessionalSummaryDAO{
+class FirebaseProfessionalSummaryDAOImpl(profile: Profile, context: Context): FirebaseProfileDAOImpl(context),
+    FirebaseProfessionalSummaryDAO {
     private val collectionAccounts = FirebaseCollections.Accounts
     private val collectionProfiles = FirebaseCollections.Profile
     private val collection = FirebaseCollections.ProfessionalSummary

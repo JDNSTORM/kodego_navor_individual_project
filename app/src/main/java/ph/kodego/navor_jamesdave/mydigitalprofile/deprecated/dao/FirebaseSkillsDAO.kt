@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,7 +32,8 @@ interface FirebaseSkillsDAO {
     suspend fun deleteSkill(skill: Skill): Boolean
 }
 
-class FirebaseSkillsMainCategoryDAOImpl(private val profileID: String): FirebaseSkillsMainCategoryDAO{
+class FirebaseSkillsMainCategoryDAOImpl(private val profileID: String):
+    FirebaseSkillsMainCategoryDAO {
     private val fireStore = FirebaseFirestore.getInstance()
     private val collection = FirebaseCollections.SkillsMainCategory
     private val reference = fireStore.collection(collection)
@@ -94,7 +95,8 @@ class FirebaseSkillsMainCategoryDAOImpl(private val profileID: String): Firebase
     }
 }
 
-class FirebaseSkillsSubCategoryDAOImpl(mainCategory: SkillMainCategory): FirebaseSkillsSubCategoryDAO{
+class FirebaseSkillsSubCategoryDAOImpl(mainCategory: SkillMainCategory):
+    FirebaseSkillsSubCategoryDAO {
     private val fireStore = FirebaseFirestore.getInstance()
     private val collection = FirebaseCollections.SkillsSubCategory
     private val reference = fireStore.collection(FirebaseCollections.SkillsMainCategory).document(mainCategory.mainCategoryID).collection(collection)
@@ -158,7 +160,7 @@ class FirebaseSkillsSubCategoryDAOImpl(mainCategory: SkillMainCategory): Firebas
 
 }
 
-class FirebaseSkillsDAOImpl(subCategory: SkillSubCategory): FirebaseSkillsDAO{
+class FirebaseSkillsDAOImpl(subCategory: SkillSubCategory): FirebaseSkillsDAO {
     private val fireStore = FirebaseFirestore.getInstance()
     private val collection = FirebaseCollections.Skills
     private val reference = fireStore.collection(FirebaseCollections.SkillsMainCategory)

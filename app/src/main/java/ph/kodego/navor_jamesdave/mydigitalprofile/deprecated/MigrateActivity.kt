@@ -13,11 +13,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMigrateBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseCareerDAOImpl
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseEducationDAOImpl
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfessionalSummaryDAOImpl
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfileDAOImpl
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsMainCategoryDAOImpl
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao.FirebaseCareerDAOImpl
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao.FirebaseEducationDAOImpl
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao.FirebaseProfessionalSummaryDAOImpl
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao.FirebaseProfileDAOImpl
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao.FirebaseSkillsMainCategoryDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Education

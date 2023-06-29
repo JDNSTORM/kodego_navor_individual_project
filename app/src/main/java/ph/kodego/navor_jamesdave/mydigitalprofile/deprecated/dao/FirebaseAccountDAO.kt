@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.content.Context
 import android.util.Log
@@ -29,7 +29,8 @@ interface FirebaseAccountDAO {
     suspend fun deleteAccount()
 }
 
-open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context), FirebaseAccountDAO{
+open class FirebaseAccountDAOImpl(context: Context): FirebaseUserDAOImpl(context),
+    FirebaseAccountDAO {
     private val collection = FirebaseCollections.Accounts
 
     override suspend fun addAccount(account: Account): Boolean {

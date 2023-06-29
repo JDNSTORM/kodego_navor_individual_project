@@ -1,8 +1,7 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.content.Context
 import android.util.Log
-import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Profile
 
@@ -14,25 +13,12 @@ interface FirebaseProfileDAO {
     suspend fun deleteProfile(profile: Profile): Boolean
 }
 
-open class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context), FirebaseProfileDAO{
+open class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(context),
+    FirebaseProfileDAO {
     private val collection = FirebaseCollections.Profile
     private val collectionAccounts = FirebaseCollections.Accounts
     override suspend fun addProfile(profile: Profile): Boolean {
-        val reference = fireStore
-            .collection(collectionAccounts)
-            .document(profile.uID)
-            .collection(collection)
-            .document(profile.uID)
-        profile.profileID = reference.id
-        val task = reference.set(profile.exportDaoProfile(), SetOptions.merge())
-        task.await()
-        return if (task.isSuccessful){
-            Log.i("Profile Creation", "Successful")
-            true
-        }else{
-            Log.e("Profile Creation", task.exception!!.message.toString())
-            false
-        }
+        TODO("Deprecated")
     }
 
     override suspend fun getProfile(uID: String): Profile {
@@ -52,7 +38,6 @@ open class FirebaseProfileDAOImpl(context: Context): FirebaseAccountDAOImpl(cont
             Log.e("Get Profile", task.exception?.message.toString())
             val profile = Profile()
             profile.uID = uID
-            addProfile(profile)
             profile
         }
     }

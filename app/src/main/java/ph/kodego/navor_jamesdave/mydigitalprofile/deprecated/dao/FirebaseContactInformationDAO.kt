@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.dao
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,7 +10,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.ContactNumbe
 import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.EmailAddress
 import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Website
 
-interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO, FirebaseContactNumberDAO, FirebaseWebsiteDAO {
+interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO,
+    FirebaseContactNumberDAO, FirebaseWebsiteDAO {
     /**
      * Creates a Contact Information Document to Reference each class inside Contact Information
      */
@@ -46,7 +47,7 @@ interface FirebaseWebsiteDAO{
     suspend fun updateWebsite(website: Website, fields: HashMap<String, Any?>): Boolean
 }
 
-class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO{
+class FirebaseContactInformationDAOImpl(): FirebaseContactInformationDAO {
     private val collection = FirebaseCollections.ContactInformation
     private val fireStore = FirebaseFirestore.getInstance()
     override suspend fun addContactInformation(contactInformation: ContactInformation): Boolean {
