@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CareerFragment
@@ -18,6 +18,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.profile.Sel
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.education.EducationFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.skills.SkillsFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewPagerFragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
@@ -26,83 +28,92 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
-class ProfileActivity : AppCompatActivity(), FlowCollector<Profile?> {
-    private val binding by lazy { ActivityProfileBinding.inflate(layoutInflater) }
+class ProfileActivity : AppCompatActivity(){
     private val viewModel: ProfileViewModel by viewModels()
-    private val progressDialog by lazy { ProgressDialog(this, R.string.loading_data) }
-    private val selectProfileDialog by lazy {
-        val dialog = SelectProfileDialog(this)
-        dialog.setOnDismissListener {
-            viewModel.readActiveProfile()?.let {
-                loadProfile()
-            } ?: throwError()
-        }
-        dialog
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupActionBar()
-        loadProfile()
+        binding.setupUI(
+            viewModel.viewedProfileState,
+            viewModel.accountProfiles,
+            viewModel.action
+        )
     }
 
-    private fun loadProfile() {
-        progressDialog.show()
+    private fun ActivityProfileBinding.setupUI(
+        state: Flow<ViewedProfileState>,
+        accountProfiles: Flow<List<Profile>>,
+        action: (ProfileAction) -> Unit
+    ){
+        setupActionBar()
+        loadProfile(state, accountProfiles, action)
+    }
+
+    private fun ActivityProfileBinding.loadProfile(
+        state: Flow<ViewedProfileState>,
+        accountProfiles: Flow<List<Profile>>,
+        action: (ProfileAction) -> Unit
+    ) {
+        val progressDialog = ProgressDialog(this@ProfileActivity, R.string.loading_data).apply { show() }
         lifecycleScope.launch {
-            viewModel.readActiveProfile()?.let {
-                setupViewPager()
-                it.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect(this@ProfileActivity)
-            } ?: run {
-                selectProfile()
+            state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{ profileState ->
+                when(profileState){
+                    is ViewedProfileState.Active -> launch{
+                        profileState.profile.collect { bind(it) }
+                    }
+                    is ViewedProfileState.Inactive -> {
+                        selectProfile(accountProfiles, action)
+                    }
+                    is ViewedProfileState.Invalid -> throwError()
+                }
+                progressDialog.dismiss()
             }
         }
     }
 
-    private fun setupViewPager() {
+    private fun ActivityProfileBinding.setupViewPager() {
         val fragmentAdapter = ViewPagerFragmentAdapter(supportFragmentManager, lifecycle)
         fragmentAdapter.addFragment(ProfileFragment())
         fragmentAdapter.addFragment(CareerFragment())
         fragmentAdapter.addFragment(SkillsFragment())
         fragmentAdapter.addFragment(EducationFragment())
 
-        with(binding.viewpager2){
+        with(viewpager2){
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             adapter = fragmentAdapter
         }
-        TabLayoutMediator(binding.tlNavBottom, binding.viewpager2){ tab, position ->
+        TabLayoutMediator(tlNavBottom, viewpager2){ tab, position ->
             val (text, icon) = fragmentAdapter.fragments[position].tabInfo
             tab.text = text
             tab.setIcon(icon)
         }.attach()
     }
 
-    private fun selectProfile() {
-        progressDialog.dismiss()
-        selectProfileDialog.show()
+    private fun selectProfile(
+        accountProfiles: Flow<List<Profile>>,
+        action: (ProfileAction) -> Unit
+    ) {
+        SelectProfileDialog(this, accountProfiles, action)
     }
 
-    private fun setupActionBar(){
-        setSupportActionBar(binding.tbTop)
+    private fun ActivityProfileBinding.setupActionBar(){
+        setSupportActionBar(tbTop)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        binding.tbTop.setNavigationOnClickListener {
+        tbTop.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
 
-    override suspend fun emit(value: Profile?) {
-        value?.let {
-            setProfileDetails(it)
+    private fun ActivityProfileBinding.bind(profile: Profile?){
+        profile?.let {
+            GlideModule().loadProfilePhoto(layoutProfile.profilePicture, profile.image)
+            with(layoutProfile) {
+                profileUserName.text = profile.displayName()
+                profession.text = profile.profession
+            }
         } ?: throwError()
-    }
-
-    private fun setProfileDetails(profile: Profile){
-        GlideModule().loadProfilePhoto(binding.layoutProfile.profilePicture, profile.image)
-        with(binding.layoutProfile) {
-            profileUserName.text = profile.displayName()
-            profession.text = profile.profession
-        }
-        progressDialog.dismiss()
     }
 
     private fun throwError(){

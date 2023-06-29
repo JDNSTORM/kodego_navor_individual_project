@@ -4,11 +4,14 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.ProfileRepository
@@ -19,6 +22,24 @@ class ProfileViewModel @Inject constructor(
     application: Application,
     private val repository: ProfileRepository
 ): AndroidViewModel(application) {
+    val viewedProfileState = repository.profileSource.viewedProfileState
+    val accountProfiles: Flow<List<Profile>> get() = readProfiles()
+    val action: (ProfileAction) -> Unit
+
+    init {
+        val actionStateFlow = MutableSharedFlow<ProfileAction>()
+        val viewAction = actionStateFlow.filterIsInstance<ProfileAction.Select>()
+        val createAction = actionStateFlow.filterIsInstance<ProfileAction.Create>()
+        val updateAction = actionStateFlow.filterIsInstance<ProfileAction.Update>()
+        val deleteAction = actionStateFlow.filterIsInstance<ProfileAction.Delete>()
+
+
+
+        action = { viewModelScope.launch {
+                actionStateFlow.emit(it)
+        }}
+    }
+
     private val activeAccount: Flow<Account?> by lazy { repository.accountSource.activeAccount!! }
     val group: Flow<List<Profile>> =
         readPublicProfiles().combineTransform(readAccounts()){ profiles, accounts ->
@@ -49,12 +70,17 @@ class ProfileViewModel @Inject constructor(
         repository.profileSource.activeProfile = completeProfile
     }
 
+    @Deprecated("Switched to ViewedProfileState")
     fun clearActiveProfile(){
         repository.profileSource.activeProfile = null
+        viewModelScope.launch {
+            repository.profileSource.clearProfile()
+        }
     }
 
     fun readActiveProfile(): Flow<Profile?>? = repository.profileSource.activeProfile
 
+    //TODO: For Creating Profile
     suspend fun addProfile(profession: String): Boolean {
         val profile = Profile(activeAccount.first()!!.uid, profession)
         return repository.profileSource.addProfile(profile)
