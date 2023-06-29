@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -24,6 +23,7 @@ import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ProfileActivity
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.HomeAction
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.ProfilePagingAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentHomeBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
@@ -60,7 +60,7 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
     private fun FragmentHomeBinding.setupRecyclerView(data: Flow<PagingData<Profile>>, view: (Profile) -> Unit){
         val pagingAdapter = ProfilePagingAdapter{
             view(it)
-//            toProfile() //TODO
+            toProfile() //TODO
         }
         listProfiles.apply {
             layoutManager = LinearLayoutManager(requireContext())
