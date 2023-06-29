@@ -2,8 +2,10 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.firebase.firestore
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.dataObjects
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.tasks.await
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.firestore.FirestoreCollections.ACCOUNT_COLLECTION
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.firestore.FirestoreCollections.PROFILE_COLLECTION
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
@@ -14,6 +16,7 @@ interface ProfileDAO {
     fun readProfile(profile: Profile): Flow<Profile?>
     fun readProfiles(): Flow<List<Profile>>
     fun readProfilesGroup(): Flow<List<Profile>>
+    suspend fun getPublicProfiles(lastDocument: DocumentSnapshot?, limit: Long): List<DocumentSnapshot>
     fun readPublicProfiles(): Flow<List<Profile>>
 }
 
@@ -34,7 +37,16 @@ class ProfileDAOImpl(): FirestoreDAOImpl(), ProfileDAO{
 
     override fun readProfiles(): Flow<List<Profile>> = readModels()
     override fun readProfilesGroup(): Flow<List<Profile>> = readGroup()
+    override suspend fun getPublicProfiles(
+        lastDocument: DocumentSnapshot?,
+        limit: Long
+    ): List<DocumentSnapshot> {
+        return groupReference.whereEqualTo(Profile.KEY_IS_PUBLIC, true).also { query ->
+            lastDocument?.let { query.startAfter(it) } ?: query
+        }.get().await().documents
+    }
+
     override fun readPublicProfiles(): Flow<List<Profile>> {
-        return groupReference.whereEqualTo("public", true).dataObjects()
+        return groupReference.whereEqualTo(Profile.KEY_IS_PUBLIC, true).dataObjects()
     }
 }
