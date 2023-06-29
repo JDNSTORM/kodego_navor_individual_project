@@ -27,20 +27,18 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollector<Profile?> {
     private val viewModel: ProfileViewModel by viewModels()
     private lateinit var profile: Profile
+    override fun inflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): FragmentProfileBinding {
+        return FragmentProfileBinding.inflate(inflater, container, false)
+    }
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Profile",
         R.drawable.ic_account_circle_24
     )
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

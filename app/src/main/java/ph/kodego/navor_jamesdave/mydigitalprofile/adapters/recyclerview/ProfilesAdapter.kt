@@ -10,6 +10,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
+@Deprecated("Used Paging Adapter Instead")
 class ProfilesAdapter(private val viewModel: ProfileViewModel): ItemsAdapter<Profile>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

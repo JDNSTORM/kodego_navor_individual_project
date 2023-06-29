@@ -30,12 +30,12 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>(), FlowCollec
     override fun getTabInformation(): TabInfo = TabInfo("Account", R.drawable.ic_account_circle_24)
     private val viewModel: AccountViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun inflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentAccountBinding.inflate(inflater, container, false)
-        return binding.root
+    ): FragmentAccountBinding {
+        return FragmentAccountBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

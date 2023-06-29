@@ -42,20 +42,18 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     private val setupMenu by lazy { setupMenu(requireActivity()) }
     private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }
     private lateinit var profile: Profile
+    override fun inflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): FragmentSkillsBinding {
+        return FragmentSkillsBinding.inflate(inflater, container, false)
+    }
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Skills",
         R.drawable.ic_skills_24
     )
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSkillsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

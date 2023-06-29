@@ -41,13 +41,12 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
     private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }
     private lateinit var profile: Profile
 
-    override fun onCreateView(
+    override fun inflateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentCareerBinding.inflate(inflater, container, false)
-        return binding.root
+    ): FragmentCareerBinding {
+        return FragmentCareerBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -24,6 +24,14 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 
 @AndroidEntryPoint
 class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
+    override fun inflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): FragmentSignInBinding {
+        return FragmentSignInBinding.inflate(inflater, container, false)
+    }
+
     override fun getTabInformation(): TabInfo = TabInfo(
         "Sign In",
         R.drawable.ic_switch_account_24
@@ -36,14 +44,6 @@ class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSignInBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

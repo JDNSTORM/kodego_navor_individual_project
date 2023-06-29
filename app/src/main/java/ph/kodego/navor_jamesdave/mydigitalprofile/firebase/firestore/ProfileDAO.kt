@@ -16,7 +16,7 @@ interface ProfileDAO {
     fun readProfile(profile: Profile): Flow<Profile?>
     fun readProfiles(): Flow<List<Profile>>
     fun readProfilesGroup(): Flow<List<Profile>>
-    suspend fun getPublicProfiles(lastDocument: DocumentSnapshot?, limit: Long): List<DocumentSnapshot>
+    suspend fun getPublicProfiles(lastDocument: DocumentSnapshot?, limit: Int): List<DocumentSnapshot>
     fun readPublicProfiles(): Flow<List<Profile>>
 }
 
@@ -39,11 +39,11 @@ class ProfileDAOImpl(): FirestoreDAOImpl(), ProfileDAO{
     override fun readProfilesGroup(): Flow<List<Profile>> = readGroup()
     override suspend fun getPublicProfiles(
         lastDocument: DocumentSnapshot?,
-        limit: Long
+        limit: Int
     ): List<DocumentSnapshot> {
-        return groupReference.whereEqualTo(Profile.KEY_IS_PUBLIC, true).also { query ->
+        return groupReference.whereEqualTo(Profile.KEY_IS_PUBLIC, true).let { query ->
             lastDocument?.let { query.startAfter(it) } ?: query
-        }.get().await().documents
+        }.limit(limit.toLong()).get().await().documents
     }
 
     override fun readPublicProfiles(): Flow<List<Profile>> {

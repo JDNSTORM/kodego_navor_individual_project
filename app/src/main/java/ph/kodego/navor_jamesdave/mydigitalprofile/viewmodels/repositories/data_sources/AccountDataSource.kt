@@ -11,6 +11,7 @@ import javax.inject.Singleton
 class AccountDataSource @Inject constructor(private val dao: AccountDAOImpl) {
     var activeAccount: Flow<Account?>? = null
     suspend fun addAccount(uID: String, account: Account): Boolean = dao.addAccount(uID, account)
+    suspend fun getAccount(uID: String): Account? = dao.getAccount(uID)
     fun readAccount(uID: String): Flow<Account?> = dao.readAccount(uID)
     fun readActiveAccount(uID: String): Flow<Account?>{
         activeAccount ?: kotlin.run {

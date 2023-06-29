@@ -35,20 +35,18 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
     private val setupMenu by lazy { setupMenu(requireActivity()) }
     private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }
     private lateinit var profile: Profile
+    override fun inflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): FragmentEducationBinding {
+        return FragmentEducationBinding.inflate(inflater, container, false)
+    }
 
     override fun getTabInformation(): TabInfo = TabInfo(
         "Education",
         R.drawable.ic_education_24
     )
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentEducationBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
