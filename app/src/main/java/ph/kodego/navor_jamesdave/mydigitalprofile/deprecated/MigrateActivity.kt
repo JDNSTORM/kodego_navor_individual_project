@@ -1,9 +1,8 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.activities
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.MainActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMigrateBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseCareerDAOImpl
@@ -19,11 +19,11 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfessionalS
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseProfileDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.FirebaseSkillsMainCategoryDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfessionalSummary
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Career
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Education
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.ProfessionalSummary
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.SkillMainCategory
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 

@@ -1,12 +1,13 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.extensions
 
-import android.view.View
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogEducationEditBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Address
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.ContactInformation
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.ContactNumber
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Education
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Website
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.editInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.saveInterface
 
 fun DialogEducationEditBinding.clear() {
     dateEnrolled.text?.clear()

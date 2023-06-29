@@ -4,9 +4,9 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Skill
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillSubCategory
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Skill
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.SkillMainCategory
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.SkillSubCategory
 
 interface FirebaseSkillsMainCategoryDAO {
     suspend fun addMainCategory(mainCategory: SkillMainCategory): Boolean

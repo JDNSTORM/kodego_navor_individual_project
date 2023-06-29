@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Profile
 
 interface FirebaseProfileDAO {
     suspend fun addProfile(profile: Profile): Boolean

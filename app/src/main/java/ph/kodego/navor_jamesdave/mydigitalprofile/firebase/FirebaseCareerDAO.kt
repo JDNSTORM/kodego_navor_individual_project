@@ -1,13 +1,11 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 
-import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.SkillMainCategory
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Career
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Profile
 
 interface FirebaseCareerDAO {
     suspend fun addCareer(career: Career): Boolean

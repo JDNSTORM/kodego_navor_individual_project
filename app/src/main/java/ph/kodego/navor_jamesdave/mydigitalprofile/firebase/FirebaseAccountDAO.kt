@@ -5,10 +5,9 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Account
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
-import kotlin.math.acos
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Account
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.ContactInformation
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.EmailAddress
 
 interface FirebaseAccountDAO {
     /**

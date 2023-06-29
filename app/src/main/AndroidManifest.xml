@@ -22,7 +22,7 @@
         android:theme="@style/Theme.MyDigitalProfile"
         tools:targetApi="31">
         <activity
-            android:name=".activities.MigrateActivity"
+            android:name=".deprecated.MigrateActivity"
             android:exported="false" />
         <activity
             android:name=".activities.profile.ProfileActivity"

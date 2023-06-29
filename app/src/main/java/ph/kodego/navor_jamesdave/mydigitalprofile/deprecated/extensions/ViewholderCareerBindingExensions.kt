@@ -1,8 +1,8 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.extensions
 
 import android.view.View
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemCareerBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Career
 
 fun ItemCareerBinding.bind(career: Career) {
     position.text = career.position

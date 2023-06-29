@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.models
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -6,10 +6,8 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.Exclude
-import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.ContactNumber
-import kotlin.math.acos
 
 //TODO: Try Parcelize
 @Entity(tableName = "accounts-table")

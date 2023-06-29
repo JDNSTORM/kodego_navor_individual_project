@@ -1,9 +1,8 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.models
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models
 
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 

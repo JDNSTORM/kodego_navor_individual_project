@@ -1,9 +1,8 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.models
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models
 
 import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import ph.kodego.navor_jamesdave.mydigitalprofile.dao_models.DaoProfile
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsMain
@@ -146,18 +145,6 @@ data class Profile(
     constructor(profileID: String, profession: String = ""): this(profession){
         this.profileID = profileID
     }
-    fun exportDaoProfile(): DaoProfile{
-        return DaoProfile(uID, profileID, profession)
-    }
-    fun importDaoProfile(daoProfile: DaoProfile){
-        uID = daoProfile.uid
-        profileID = daoProfile.profileID
-        profession = daoProfile.profession
-    }
-    constructor(daoProfile: DaoProfile): this(daoProfile.profession){
-        uID = daoProfile.uid
-        profileID = daoProfile.profileID
-    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
@@ -192,13 +179,3 @@ data class ProfessionalSummary(
         profileSummary = professionalSummary.profileSummary
     }
 }
-
-data class ProfileCareer(
-    val profile: Profile?,
-    val careers: ArrayList<Career>
-)
-
-data class UserSkills(
-    val profile: Profile,
-    val skills: ArrayList<SkillMainCategory> = ArrayList()
-)

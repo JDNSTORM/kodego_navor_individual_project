@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.MigrateActivity
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.MigrateActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.MigrateDialog

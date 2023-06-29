@@ -1,4 +1,4 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.models
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models
 
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude

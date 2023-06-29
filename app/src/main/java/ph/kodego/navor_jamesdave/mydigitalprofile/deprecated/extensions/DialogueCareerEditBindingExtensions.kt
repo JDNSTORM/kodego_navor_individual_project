@@ -1,7 +1,9 @@
-package ph.kodego.navor_jamesdave.mydigitalprofile.extensions
+package ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.extensions
 
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogCareerEditBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Career
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.editInterface
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.saveInterface
 
 fun DialogCareerEditBinding.clear() {
     dateEmployed.text?.clear()

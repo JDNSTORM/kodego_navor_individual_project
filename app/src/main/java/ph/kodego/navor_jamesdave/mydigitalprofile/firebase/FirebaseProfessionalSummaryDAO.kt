@@ -2,12 +2,10 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.firebase
 
 import android.content.Context
 import android.util.Log
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Career
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ProfessionalSummary
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.ProfessionalSummary
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Profile
 
 interface FirebaseProfessionalSummaryDAO {
     suspend fun addProfessionalSummary(professionalSummary: ProfessionalSummary): Boolean

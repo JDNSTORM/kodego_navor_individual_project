@@ -4,8 +4,8 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Education
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Profile
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Education
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Profile
 
 interface FirebaseEducationDAO {
     suspend fun addEducation(education: Education): Boolean

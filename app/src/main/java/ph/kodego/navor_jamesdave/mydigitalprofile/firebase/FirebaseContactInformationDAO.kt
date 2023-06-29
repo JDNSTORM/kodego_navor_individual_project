@@ -4,11 +4,11 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Address
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactInformation
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.ContactNumber
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.EmailAddress
-import ph.kodego.navor_jamesdave.mydigitalprofile.models.Website
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Address
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.ContactInformation
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.ContactNumber
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.EmailAddress
+import ph.kodego.navor_jamesdave.mydigitalprofile.deprecated.models.Website
 
 interface FirebaseContactInformationDAO: FirebaseEmailDAO, FirebaseAddressDAO, FirebaseContactNumberDAO, FirebaseWebsiteDAO {
     /**
