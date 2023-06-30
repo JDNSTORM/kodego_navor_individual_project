@@ -1,15 +1,13 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.firebase.firestore
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.toObject
 
 abstract class FirestorePagingSource<Model: Any>(
     private val getList: suspend (DocumentSnapshot?, Int) -> List<DocumentSnapshot>
 ): PagingSource<DocumentSnapshot, Model>() {
-    private val prevKeys: ArrayList<DocumentSnapshot?> = ArrayList()
+    private val prevKeys: ArrayList<DocumentSnapshot?> = ArrayList() //Not useful when the PagingSource is Invalidated
     override fun getRefreshKey(state: PagingState<DocumentSnapshot, Model>): DocumentSnapshot? {
         return state.anchorPosition?.let {
             state.closestPageToPosition(it)?.prevKey
@@ -35,6 +33,9 @@ abstract class FirestorePagingSource<Model: Any>(
         }
     }
 
+    /**
+     * Gets the List of DocumentSnapshot using the Primary Constructor
+     */
     protected open suspend fun getDocuments(
         offset: DocumentSnapshot?,
         limit: Int

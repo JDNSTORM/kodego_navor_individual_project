@@ -29,6 +29,7 @@ class CreateProfileDialog(
         val title = profession.text.toString()
         if (title.isNotEmpty()){
             createProfile(title)
+            dismiss() //TODO: ActionState
         }else{
             profession.error = "Profession must not be empty"
             profession.requestFocus()

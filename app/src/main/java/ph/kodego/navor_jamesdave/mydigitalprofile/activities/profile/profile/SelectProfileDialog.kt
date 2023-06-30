@@ -25,7 +25,6 @@ class SelectProfileDialog(
     private val accountProfiles: Flow<List<Profile>>,
     private val action: (ProfileAction) -> Unit,
 ): AlertDialog(context){
-    private val binding by lazy { DialogProfileSelectBinding.inflate(layoutInflater) }
     private val exitDialog by lazy {
         object: ExitWarningDialog(context){
             override fun ifYes(): DialogInterface.OnClickListener =
@@ -39,6 +38,7 @@ class SelectProfileDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = DialogProfileSelectBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setCancelable(false)
 
@@ -51,7 +51,6 @@ class SelectProfileDialog(
             }
             btnClose.setOnClickListener { exitDialog.show() }
         }
-
     }
 
     private fun DialogProfileSelectBinding.setupRecyclerView() {

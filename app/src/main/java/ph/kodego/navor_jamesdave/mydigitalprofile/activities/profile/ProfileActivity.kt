@@ -29,12 +29,12 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity(){
-    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val viewModel: ProfileViewModel by viewModels()
         binding.setupUI(
             viewModel.viewedProfileState,
             viewModel.accountProfiles,
@@ -73,24 +73,6 @@ class ProfileActivity : AppCompatActivity(){
         }
     }
 
-    private fun ActivityProfileBinding.setupViewPager() {
-        val fragmentAdapter = ViewPagerFragmentAdapter(supportFragmentManager, lifecycle)
-        fragmentAdapter.addFragment(ProfileFragment())
-        fragmentAdapter.addFragment(CareerFragment())
-        fragmentAdapter.addFragment(SkillsFragment())
-        fragmentAdapter.addFragment(EducationFragment())
-
-        with(viewpager2){
-            orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            adapter = fragmentAdapter
-        }
-        TabLayoutMediator(tlNavBottom, viewpager2){ tab, position ->
-            val (text, icon) = fragmentAdapter.fragments[position].tabInfo
-            tab.text = text
-            tab.setIcon(icon)
-        }.attach()
-    }
-
     private fun selectProfile(
         accountProfiles: Flow<List<Profile>>,
         action: (ProfileAction) -> Unit
@@ -113,7 +95,26 @@ class ProfileActivity : AppCompatActivity(){
                 profileUserName.text = profile.displayName()
                 profession.text = profile.profession
             }
+            setupViewPager()
         } ?: throwError()
+    }
+
+    private fun ActivityProfileBinding.setupViewPager() {
+        val fragmentAdapter = ViewPagerFragmentAdapter(supportFragmentManager, lifecycle)
+        fragmentAdapter.addFragment(ProfileFragment())
+        fragmentAdapter.addFragment(CareerFragment())
+        fragmentAdapter.addFragment(SkillsFragment())
+        fragmentAdapter.addFragment(EducationFragment())
+
+        with(viewpager2){
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            adapter = fragmentAdapter
+        }
+        TabLayoutMediator(tlNavBottom, viewpager2){ tab, position ->
+            val (text, icon) = fragmentAdapter.fragments[position].tabInfo
+            tab.text = text
+            tab.setIcon(icon)
+        }.attach()
     }
 
     private fun throwError(){

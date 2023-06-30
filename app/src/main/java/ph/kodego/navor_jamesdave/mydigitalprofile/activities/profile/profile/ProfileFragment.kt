@@ -14,10 +14,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
@@ -43,6 +47,19 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadProfile()
+        binding.setupUI(
+            viewModel.viewedProfileState,
+            viewModel.accountState,
+            viewModel.action
+        )
+    }
+
+    private fun FragmentProfileBinding.setupUI(
+        viewedProfileState: StateFlow<ViewedProfileState>,
+        accountState: StateFlow<AccountState>,
+        action: (ProfileAction) -> Unit
+    ) {
+
     }
 
     private fun loadProfile() {

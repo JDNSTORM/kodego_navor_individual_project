@@ -3,10 +3,16 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountAction
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.auth.FirebaseAuthDAOImpl.Companion.USER_DISPLAY_NAME
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.auth.FirebaseAuthDAOImpl.Companion.USER_PHOTO_URI
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
@@ -19,6 +25,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(app: Application, private val repository: AccountRepository): AndroidViewModel(app) {
+    val accountState = repository.source.accountState
+    val action: (AccountAction) -> Unit
+
+    init {
+        val actionStateFlow = MutableSharedFlow<AccountAction>()
+        val signInAction = actionStateFlow.filterIsInstance<AccountAction.SignIn>()
+        val signUpAction = actionStateFlow.filterIsInstance<AccountAction.SignUp>()
+        val createAction = actionStateFlow.filterIsInstance<AccountAction.Create>()
+        val updateAction = actionStateFlow.filterIsInstance<AccountAction.Update>()
+        val deleteAction = actionStateFlow.filterIsInstance<AccountAction.Delete>()
+
+        action = { viewModelScope.launch { actionStateFlow.emit(it) } }
+    }
+
     val activeAccount: Flow<Account?> by lazy { readActiveAccount(repository.auth.currentUser()!!.uid) }
     private fun readActiveAccount(uID: String): Flow<Account?> {
         return repository.source.readActiveAccount(uID)
@@ -79,6 +99,7 @@ class AccountViewModel @Inject constructor(app: Application, private val reposit
     }
 
     suspend fun updateUserPassword(oldPassword: String, password: String): Boolean{
-        return repository.auth.updateUserPassword(oldPassword, password)
+        TODO()
+//        return repository.auth.updateUserPassword(oldPassword, password)
     }
 }

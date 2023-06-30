@@ -23,6 +23,7 @@ class ProfileViewModel @Inject constructor(
     private val repository: ProfileRepository
 ): AndroidViewModel(application) {
     val viewedProfileState = repository.profileSource.viewedProfileState
+    val accountState = repository.accountSource.accountState
     val accountProfiles: Flow<List<Profile>> get() = readProfiles()
     val action: (ProfileAction) -> Unit
 

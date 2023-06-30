@@ -19,13 +19,13 @@ import kotlinx.coroutines.withContext
 interface FirebaseAuthDAO {
     fun currentUser(): FirebaseUser?
     suspend fun createUser(email: String, password: String): FirebaseUser?
-    suspend fun signInUser(email: String, password: String): Boolean
-    suspend fun updateUser(fields: Map<String, Any?>): Boolean
-    suspend fun updateUserPassword(oldPassword: String, password: String): Boolean
+    suspend fun signInUser(email: String, password: String)
+    suspend fun updateUser(fields: Map<String, Any?>)
+    suspend fun updateUserPassword(oldPassword: String, password: String)
     fun signOutUser()
 }
 
-class FirebaseAuthDAOImpl(private val context: Context): FirebaseAuthDAO {
+class FirebaseAuthDAOImpl: FirebaseAuthDAO {
     private val auth = FirebaseAuth.getInstance()
 
     override fun currentUser(): FirebaseUser? {
@@ -33,42 +33,34 @@ class FirebaseAuthDAOImpl(private val context: Context): FirebaseAuthDAO {
     }
 
     override suspend fun createUser(email: String, password: String): FirebaseUser? {
-        val task: Task<AuthResult>
-        try {
-            task = auth.createUserWithEmailAndPassword(email, password)
-            task.await()
-        }catch (e: FirebaseAuthException){
-            withContext(Main) {
-                Toast.makeText(
-                    context,
-                    e.message.toString(),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            return null
-        }
-        return if (task.isSuccessful) {
-            task.result.user
-        } else {
-            null
-        }
+        return auth.createUserWithEmailAndPassword(email, password).await().user
+
+//        val task: Task<AuthResult>
+//        try {
+//            task =
+//            task.await()
+//        }catch (e: FirebaseAuthException){
+//            withContext(Main) {
+//                Toast.makeText(
+//                    context,
+//                    e.message.toString(),
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            }
+//            return null
+//        }
+//        return if (task.isSuccessful) {
+//            task.result.user
+//        } else {
+//            null
+//        }
     }
 
-    override suspend fun signInUser(email: String, password: String): Boolean {
-        val task: Task<AuthResult>
-        try {
-            task = auth.signInWithEmailAndPassword(email, password)
-            task.await()
-        }catch (e: FirebaseAuthException){
-            withContext(Main) {
-                Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
-            }
-            return false
-        }
-        return task.isSuccessful
+    override suspend fun signInUser(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password).await()
     }
 
-    override suspend fun updateUser(fields: Map<String, Any?>): Boolean {
+    override suspend fun updateUser(fields: Map<String, Any?>) {
         val user = currentUser()!!
         val request = userProfileChangeRequest {
             if (fields.containsKey(USER_DISPLAY_NAME)){
@@ -78,39 +70,43 @@ class FirebaseAuthDAOImpl(private val context: Context): FirebaseAuthDAO {
                 photoUri = fields[USER_PHOTO_URI].toString().toUri()
             }
         }
-        val task = user.updateProfile(request)
-        task.await()
-        return if (task.isSuccessful) true else{
-            Log.e("UserProfile Update", task.exception?.message.toString())
-            false
-        }
+        user.updateProfile(request).await()
+
+//        task.await()
+//        return if (task.isSuccessful) true else{
+//            Log.e("UserProfile Update", task.exception?.message.toString())
+//            false
+//        }
     }
 
-    override suspend fun updateUserPassword(oldPassword: String, password: String): Boolean {
+    override suspend fun updateUserPassword(oldPassword: String, password: String) {
         val user = currentUser()!!
         val credential = EmailAuthProvider.getCredential(user.email!!, oldPassword)
-        val task: Task<Void>
-        try {
-            user.reauthenticate(credential).await()
-            task = user.updatePassword(password)
-            task.await()
-        }catch (e: FirebaseException){
-            withContext(Main) {
-                Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
-            }
-            return false
-        }
-        return if (task.isSuccessful){
-            signOutUser()
-            withContext(Main) {
-                Toast.makeText(
-                    context,
-                    "Password Updated! Please Sign in again",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            true
-        } else false
+        user.reauthenticate(credential).await()
+        user.updatePassword(password).await()
+
+//        val task: Task<Void>
+//        try {
+//            user.reauthenticate(credential).await()
+//            user.updatePassword(password).await()
+//            task.await()
+//        }catch (e: FirebaseException){
+//            withContext(Main) {
+//                Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
+//            }
+//            return false
+//        }
+//        return if (task.isSuccessful){
+//            signOutUser()
+//            withContext(Main) {
+//                Toast.makeText(
+//                    context,
+//                    "Password Updated! Please Sign in again",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//            true
+//        } else false
     }
 
     override fun signOutUser() {
