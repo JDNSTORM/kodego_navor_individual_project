@@ -82,16 +82,16 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     }
 
     private fun saveList() {
-        val skills = itemsAdapter.skillsMainList()
-        skills.lastIndex
-        val changes: Map<String, Any?> = mapOf(Profile.KEY_SKILLS to skills)
-        lifecycleScope.launch {
-            if(viewModel.updateProfile(profile, changes)){
-                Toast.makeText(requireContext(), "Skills Saved!", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(requireContext(), "Skills not saved", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        val skills = itemsAdapter.skillsMainList()
+//        skills.lastIndex
+//        val changes: Map<String, Any?> = mapOf(Profile.KEY_SKILLS to skills)
+//        lifecycleScope.launch {
+//            if(viewModel.updateProfile(profile, changes)){
+//                Toast.makeText(requireContext(), "Skills Saved!", Toast.LENGTH_SHORT).show()
+//            }else{
+//                Toast.makeText(requireContext(), "Skills not saved", Toast.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
     private fun loadProfile() {

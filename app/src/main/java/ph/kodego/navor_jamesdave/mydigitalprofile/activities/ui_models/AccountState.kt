@@ -7,5 +7,6 @@ sealed class AccountState{
     data class Active(val account: Flow<Account?>, val uid: String): AccountState()
     object Inactive: AccountState()
     object Invalid: AccountState()
+    object Updating: AccountState()
     data class Error(val error: Throwable): AccountState()
 }

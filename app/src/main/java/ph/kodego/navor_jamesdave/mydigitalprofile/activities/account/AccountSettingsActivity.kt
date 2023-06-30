@@ -43,18 +43,18 @@ class AccountSettingsActivity : AppCompatActivity() {
     }
 
     private fun updatePassword(oldPassword: String, password: String) {
-        progressDialog.show()
-        CoroutineScope(IO).launch {
-            val updateSuccessful = viewModel.updateUserPassword(oldPassword, password)
-            withContext(Main){
-                if (updateSuccessful){
-                    finish()
-                }else{
-
-                }
-                progressDialog.dismiss()
-            }
-        }
+//        progressDialog.show()
+//        CoroutineScope(IO).launch {
+//            val updateSuccessful = viewModel.updateUserPassword(oldPassword, password)
+//            withContext(Main){
+//                if (updateSuccessful){
+//                    finish()
+//                }else{
+//
+//                }
+//                progressDialog.dismiss()
+//            }
+//        }
     }
 
     private fun setupActionBar(){

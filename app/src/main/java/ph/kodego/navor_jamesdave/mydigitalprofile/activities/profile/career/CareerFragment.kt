@@ -125,16 +125,16 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
     }
 
     private fun saveList(){
-        val careers = itemsAdapter.careers()
-        careers.lastIndex
-        val changes: Map<String, Any?> = mapOf(Profile.KEY_CAREERS to careers)
-        lifecycleScope.launch {
-            if(viewModel.updateProfile(profile, changes)){
-                Toast.makeText(requireContext(), "Careers Saved!", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(requireContext(), "Careers not saved", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        val careers = itemsAdapter.careers()
+//        careers.lastIndex
+//        val changes: Map<String, Any?> = mapOf(Profile.KEY_CAREERS to careers)
+//        lifecycleScope.launch {
+//            if(viewModel.updateProfile(profile, changes)){
+//                Toast.makeText(requireContext(), "Careers Saved!", Toast.LENGTH_SHORT).show()
+//            }else{
+//                Toast.makeText(requireContext(), "Careers not saved", Toast.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
     private fun resetRecyclerViewState(){

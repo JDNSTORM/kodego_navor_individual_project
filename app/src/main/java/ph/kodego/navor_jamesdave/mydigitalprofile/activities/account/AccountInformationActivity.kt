@@ -103,33 +103,33 @@ class AccountInformationActivity : AppCompatActivity() {
     }
 
     private fun updateAccount(changes: HashMap<String, Any?>){
-        progressDialog.show()
-        CoroutineScope(IO).launch {
-            pickedImage?.let {
-                viewModel.uploadImage(it)?.let {
-                    changes[KEY_IMAGE] = it
-                } ?: changes.remove(KEY_IMAGE)
-            }
-
-            val updateSuccessful = viewModel.updateAccount(changes)
-            withContext(Main){
-                if(updateSuccessful){
-                    Toast.makeText(
-                        this@AccountInformationActivity,
-                        "Account Updated!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish()
-                }else{
-                    Toast.makeText(
-                        this@AccountInformationActivity,
-                        "Updated Failed",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                progressDialog.dismiss()
-            }
-        }
+//        progressDialog.show()
+//        CoroutineScope(IO).launch {
+//            pickedImage?.let {
+//                viewModel.uploadImage(it)?.let {
+//                    changes[KEY_IMAGE] = it
+//                } ?: changes.remove(KEY_IMAGE)
+//            }
+//
+//            val updateSuccessful = viewModel.updateAccount(changes)
+//            withContext(Main){
+//                if(updateSuccessful){
+//                    Toast.makeText(
+//                        this@AccountInformationActivity,
+//                        "Account Updated!",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    finish()
+//                }else{
+//                    Toast.makeText(
+//                        this@AccountInformationActivity,
+//                        "Updated Failed",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//                progressDialog.dismiss()
+//            }
+//        }
     }
 
     private fun setupActionBar(){
@@ -141,13 +141,13 @@ class AccountInformationActivity : AppCompatActivity() {
     }
 
     private fun loadAccount(){
-        lifecycleScope.launch {
-            val activeAccount = viewModel.activeAccount.first()
-            activeAccount?.let {
-                account = it
-                setFormData()
-            } ?: accountLoadFailed()
-        }
+//        lifecycleScope.launch {
+//            val activeAccount = viewModel.activeAccount.first()
+//            activeAccount?.let {
+//                account = it
+//                setFormData()
+//            } ?: accountLoadFailed()
+//        }
     }
 
     private fun setFormData(){

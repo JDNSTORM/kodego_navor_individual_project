@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 
 interface FirestoreDAO { //TODO: Enhance Functions
-    suspend fun addDocument(model: Any): Boolean
-    suspend fun addDocument(documentID: String, model: Any): Boolean
+    suspend fun addDocument(model: Any)
+    suspend fun addDocument(documentID: String, model: Any)
     suspend fun getDocument(): DocumentSnapshot?
     suspend fun getDocument(documentID: String): DocumentSnapshot?
     fun readDocument(documentID: String): Flow<DocumentSnapshot>
@@ -21,8 +21,8 @@ interface FirestoreDAO { //TODO: Enhance Functions
     fun readQuery(): Flow<QuerySnapshot>
     suspend fun getGroupDocuments(): List<DocumentSnapshot>
     fun readGroupQuery(): Flow<QuerySnapshot>
-    suspend fun updateDocument(documentID: String, fields: Map<String, Any?>): Boolean
-    suspend fun deleteDocument(documentID: String): Boolean
+    suspend fun updateDocument(documentID: String, fields: Map<String, Any?>)
+    suspend fun deleteDocument(documentID: String)
 }
 
 /**
@@ -45,21 +45,18 @@ abstract class FirestoreDAOImpl(): FirestoreDAO {
      */
     open fun getCollectionReference(): CollectionReference = db.collection(collection)
 
-    override suspend fun addDocument(model: Any): Boolean {
-        val task = reference
+    override suspend fun addDocument(model: Any) {
+        reference
             .document()
             .set(model, SetOptions.merge())
-        task.await()
-        return task.isSuccessful
+            .await()
     }
 
-    override suspend fun addDocument(documentID: String, model: Any): Boolean {
-        val task = db
-            .collection(collection)
+    override suspend fun addDocument(documentID: String, model: Any) {
+        reference
             .document(documentID)
             .set(model, SetOptions.merge())
-        task.await()
-        return task.isSuccessful
+            .await()
     }
 
     override suspend fun getDocument(): DocumentSnapshot? {
@@ -108,16 +105,12 @@ abstract class FirestoreDAOImpl(): FirestoreDAO {
         return groupReference.snapshots()
     }
 
-    override suspend fun updateDocument(documentID: String, fields: Map<String, Any?>): Boolean {
-        val task = reference.document(documentID).update(fields)
-        task.await()
-        return task.isSuccessful
+    override suspend fun updateDocument(documentID: String, fields: Map<String, Any?>) {
+        reference.document(documentID).update(fields).await()
     }
 
-    override suspend fun deleteDocument(documentID: String): Boolean {
-        val task = reference.document(documentID).delete()
-        task.await()
-        return task.isSuccessful
+    override suspend fun deleteDocument(documentID: String) {
+        reference.document(documentID).delete().await()
     }
 
     /**

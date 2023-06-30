@@ -18,7 +18,7 @@ class ProfileDataSource @Inject constructor(private val dao: ProfileDAOImpl) {
     val viewedProfileState = _viewedProfileState.asStateFlow()
     var activeProfile: Flow<Profile?>? = null
 
-    suspend fun addProfile(profile: Profile): Boolean = dao.addDocument(profile.toFirestore())
+    suspend fun addProfile(profile: Profile) = dao.addDocument(profile.toFirestore())
     fun readProfile(profileID: String): Flow<Profile?> = dao.readProfile(profileID)
     fun readProfile(profile: Profile): Flow<Profile?> = dao.readProfile(profile)
     fun readProfiles(): Flow<List<Profile>> = dao.readProfiles()
@@ -26,7 +26,7 @@ class ProfileDataSource @Inject constructor(private val dao: ProfileDAOImpl) {
     suspend fun getPublicProfiles(lastDocument: DocumentSnapshot?, limit: Int): List<DocumentSnapshot> = dao.getPublicProfiles(lastDocument, limit)
     fun readPublicProfiles(): Flow<List<Profile>> = dao.readPublicProfiles()
     suspend fun updateProfile(profile: Profile, fields: Map<String, Any?>) = dao.updateDocument(profile.profileID, fields)
-    suspend fun deleteProfile(profile: Profile): Boolean = dao.deleteDocument(profile.profileID)
+    suspend fun deleteProfile(profile: Profile) = dao.deleteDocument(profile.profileID)
 
     suspend fun viewProfile(profile: Profile){
         activeProfile = readProfile(profile)

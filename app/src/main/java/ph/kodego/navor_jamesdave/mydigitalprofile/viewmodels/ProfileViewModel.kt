@@ -82,10 +82,10 @@ class ProfileViewModel @Inject constructor(
     fun readActiveProfile(): Flow<Profile?>? = repository.profileSource.activeProfile
 
     //TODO: For Creating Profile
-    suspend fun addProfile(profession: String): Boolean {
-        val profile = Profile(activeAccount.first()!!.uid, profession)
-        return repository.profileSource.addProfile(profile)
-    }
+//    suspend fun addProfile(profession: String): Boolean {
+//        val profile = Profile(activeAccount.first()!!.uid, profession)
+//        return repository.profileSource.addProfile(profile)
+//    }
     private fun readProfile(profile: Profile): Flow<Profile?> = repository.profileSource.readProfile(profile)
     private fun readProfilesGroup(): Flow<List<Profile>> = repository.profileSource.readProfilesGroup()
     fun readAccountProfiles(): Flow<List<Profile>> {
@@ -101,8 +101,8 @@ class ProfileViewModel @Inject constructor(
     private fun readAccounts(): Flow<List<Account>> = repository.accountSource.readAccounts()
     private fun readAccount(uID: String) = repository.accountSource.readAccount(uID)
 
-    suspend fun updateProfile(profile: Profile, changes: Map<String, Any?>): Boolean {
-        return repository.profileSource.updateProfile(profile, changes)
-    }
-    suspend fun deleteProfile(profile: Profile): Boolean = repository.profileSource.deleteProfile(profile)
+//    suspend fun updateProfile(profile: Profile, changes: Map<String, Any?>): Boolean {
+//        return repository.profileSource.updateProfile(profile, changes)
+//    }
+//    suspend fun deleteProfile(profile: Profile): Boolean = repository.profileSource.deleteProfile(profile)
 }

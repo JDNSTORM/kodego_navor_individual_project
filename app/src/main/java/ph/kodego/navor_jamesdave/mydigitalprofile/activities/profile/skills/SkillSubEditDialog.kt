@@ -127,19 +127,19 @@ class SkillSubEditDialog<T>(context: T, private val profile: Profile): AlertDial
     }
 
     private fun saveChanges(skills: List<SkillsMain>) {
-        dismiss()
-        skills.lastIndex
-        val changes = mapOf<String, Any?>(Profile.KEY_SKILLS to skills)
-        CoroutineScope(Dispatchers.IO).launch {
-            val updateSuccessful = viewModel.updateProfile(profile, changes)
-            withContext(Dispatchers.Main){
-                if (updateSuccessful){
-                    Toast.makeText(context, "Skills Updated!", Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(context, "Save Failed!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+//        dismiss()
+//        skills.lastIndex
+//        val changes = mapOf<String, Any?>(Profile.KEY_SKILLS to skills)
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val updateSuccessful = viewModel.updateProfile(profile, changes)
+//            withContext(Dispatchers.Main){
+//                if (updateSuccessful){
+//                    Toast.makeText(context, "Skills Updated!", Toast.LENGTH_SHORT).show()
+//                }else{
+//                    Toast.makeText(context, "Save Failed!", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
     }
 
     override fun show() {

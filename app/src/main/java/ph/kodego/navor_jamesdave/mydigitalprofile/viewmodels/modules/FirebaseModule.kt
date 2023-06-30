@@ -16,8 +16,8 @@ object FirebaseModule {
 
     @ViewModelScoped
     @Provides
-    fun provideAuthDAO(@ApplicationContext context: Context): FirebaseAuthDAOImpl{
-        return FirebaseAuthDAOImpl(context)
+    fun provideAuthDAO(): FirebaseAuthDAOImpl{
+        return FirebaseAuthDAOImpl()
     }
 
     @ViewModelScoped

@@ -70,19 +70,19 @@ class ProfileEditDialog<T>(context: T, private val profile: Profile): AlertDialo
     }
 
     private fun updateProfile(changes: Map<String, Any?>) {
-        val progressDialog = ProgressDialog(context, R.string.updating_profile).apply { show() }
-        CoroutineScope(IO).launch {
-            val updateSuccessful = viewModel.updateProfile(profile, changes)
-            withContext(Main){
-                if (updateSuccessful){
-                    Toast.makeText(context, "Update Successful!", Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(context, "Update Failed!", Toast.LENGTH_SHORT).show()
-                }
-                progressDialog.dismiss()
-                dismiss()
-            }
-        }
+//        val progressDialog = ProgressDialog(context, R.string.updating_profile).apply { show() }
+//        CoroutineScope(IO).launch {
+//            val updateSuccessful = viewModel.updateProfile(profile, changes)
+//            withContext(Main){
+//                if (updateSuccessful){
+//                    Toast.makeText(context, "Update Successful!", Toast.LENGTH_SHORT).show()
+//                }else{
+//                    Toast.makeText(context, "Update Failed!", Toast.LENGTH_SHORT).show()
+//                }
+//                progressDialog.dismiss()
+//                dismiss()
+//            }
+//        }
     }
 
     private fun setProfileDetails() {

@@ -84,19 +84,19 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun registerAccount(firstName: String, lastName: String, email: String, password: String){
-        progressDialog.show()
-        lifecycleScope.launch {
-            val signUpSuccessful = viewModel.signUp(firstName, lastName, email, password)
-            withContext(Main) {
-                if (signUpSuccessful) {
-                    viewModel.signOut()
-                    Toast.makeText(applicationContext, "Registration Successful!", Toast.LENGTH_SHORT)
-                        .show()
-                    finish()
-                }
-                progressDialog.dismiss()
-            }
-        }
+//        progressDialog.show()
+//        lifecycleScope.launch {
+//            val signUpSuccessful = viewModel.signUp(firstName, lastName, email, password)
+//            withContext(Main) {
+//                if (signUpSuccessful) {
+//                    viewModel.signOut()
+//                    Toast.makeText(applicationContext, "Registration Successful!", Toast.LENGTH_SHORT)
+//                        .show()
+//                    finish()
+//                }
+//                progressDialog.dismiss()
+//            }
+//        }
     }
 
     private fun String.validEmail(): Boolean{

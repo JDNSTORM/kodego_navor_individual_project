@@ -72,19 +72,19 @@ class EducationEditDialog<T>(context: T, private val profile: Profile): AlertDia
     }
 
     private fun saveChanges(educations: List<Education>) {
-        dismiss()
-        educations.lastIndex
-        val changes = mapOf<String, Any?>(Profile.KEY_EDUCATIONS to educations)
-        CoroutineScope(IO).launch {
-            val updateSuccessful = viewModel.updateProfile(profile, changes)
-            withContext(Main){
-                if (updateSuccessful){
-                    Toast.makeText(context, "Educations Updated!", Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(context, "Save Failed!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+//        dismiss()
+//        educations.lastIndex
+//        val changes = mapOf<String, Any?>(Profile.KEY_EDUCATIONS to educations)
+//        CoroutineScope(IO).launch {
+//            val updateSuccessful = viewModel.updateProfile(profile, changes)
+//            withContext(Main){
+//                if (updateSuccessful){
+//                    Toast.makeText(context, "Educations Updated!", Toast.LENGTH_SHORT).show()
+//                }else{
+//                    Toast.makeText(context, "Save Failed!", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
     }
 
     private fun getFormData(): Education? {

@@ -12,51 +12,55 @@ import com.google.firebase.storage.StorageException
 import kotlinx.coroutines.tasks.await
 
 interface FirebaseStorageDAO {
-    suspend fun uploadFile(childTree: String, uri: Uri): Uri?
-    suspend fun deleteFile(url: String): Boolean
+    suspend fun uploadFile(childTree: String, uri: Uri): Uri
+    suspend fun deleteFile(url: String)
 }
 
 class FirebaseStorageDAOImpl(private val context: Context): FirebaseStorageDAO{
     private val storage by lazy { FirebaseStorage.getInstance() }
     private val parentTree: String by lazy { FirebaseAuth.getInstance().currentUser!!.uid }
 
-    override suspend fun uploadFile(childTree: String, uri: Uri): Uri? {
+    override suspend fun uploadFile(childTree: String, uri: Uri): Uri {
         val fileName = generateFileName(uri)
         val reference = storage
             .getReference(parentTree)
             .child(childTree)
             .child(fileName)
-        val task = reference.putFile(uri)
-        task.await()
-        if (task.isSuccessful){
-            Log.d("Upload", task.result.toString())
-            val download = reference.downloadUrl
-//            val urlTask = task.snapshot.metadata!!.reference!!.downloadUrl
-            download.await()
-            return if (download.isSuccessful){
-                Log.d("DownloadURL", download.result.toString())
-                download.result
-            }else{
-                Log.e("DownloadURL", task.exception!!.message!!)
-                null
-            }
-        }else{
-            Log.e("Upload", task.exception!!.message!!)
-            return null
-        }
+        reference.putFile(uri).await()
+        return reference.downloadUrl.await()
+
+//        task.await()
+//        if (task.isSuccessful){
+//            Log.d("Upload", task.result.toString())
+//            val download = reference.downloadUrl
+////            val urlTask = task.snapshot.metadata!!.reference!!.downloadUrl
+//            download.await()
+//            return if (download.isSuccessful){
+//                Log.d("DownloadURL", download.result.toString())
+//                download.result
+//            }else{
+//                Log.e("DownloadURL", task.exception!!.message!!)
+//                null
+//            }
+//        }else{
+//            Log.e("Upload", task.exception!!.message!!)
+//            return null
+//        }
     }
 
-    override suspend fun deleteFile(url: String): Boolean {
-        if (url.isEmpty()) return false
-        return try {
-            val imageReference = storage.getReferenceFromUrl(url)
-            val task = imageReference.delete()
-            task.await()
-            task.isSuccessful
-        }catch (e: StorageException){
-            Log.e("Delete", e.message.toString())
-            false
-        }
+    override suspend fun deleteFile(url: String) {
+        if (url.isNullOrEmpty()) return
+        storage.getReferenceFromUrl(url).delete().await()
+
+//        return try {
+//            val imageReference = storage.getReferenceFromUrl(url)
+//            val task = imageReference.delete()
+//            task.await()
+//            task.isSuccessful
+//        }catch (e: StorageException){
+//            Log.e("Delete", e.message.toString())
+//            false
+//        }
     }
 
     private fun generateFileName(uri: Uri): String{

@@ -75,16 +75,16 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>(), FlowCo
     }
 
     private fun saveList(){
-        val educations = itemsAdapter.educations()
-        educations.lastIndex
-        val changes: Map<String, Any?> = mapOf(Profile.KEY_EDUCATIONS to educations)
-        lifecycleScope.launch {
-            if(viewModel.updateProfile(profile, changes)){
-                Toast.makeText(requireContext(), "Educations Saved!", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(requireContext(), "Educations not saved", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        val educations = itemsAdapter.educations()
+//        educations.lastIndex
+//        val changes: Map<String, Any?> = mapOf(Profile.KEY_EDUCATIONS to educations)
+//        lifecycleScope.launch {
+//            if(viewModel.updateProfile(profile, changes)){
+//                Toast.makeText(requireContext(), "Educations Saved!", Toast.LENGTH_SHORT).show()
+//            }else{
+//                Toast.makeText(requireContext(), "Educations not saved", Toast.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
     private fun loadProfile() {
