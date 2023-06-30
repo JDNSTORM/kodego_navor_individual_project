@@ -12,7 +12,7 @@ sealed class AccountAction{
         val password: String
     ): AccountAction()
     object SignOut: AccountAction()
-    data class Update(val account: Account, val changes: Map<String, Any?>, val image: Uri? = null): AccountAction()
+    data class Update(val changes: Map<String, Any?>, val image: Uri? = null): AccountAction()
     data class Delete(val account: Account): AccountAction()
     data class ChangePassword(val oldPassword: String, val password: String): AccountState()
 }

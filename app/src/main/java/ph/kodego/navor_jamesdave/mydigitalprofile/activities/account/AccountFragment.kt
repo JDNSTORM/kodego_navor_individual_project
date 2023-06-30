@@ -11,6 +11,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.StateFlow
@@ -43,12 +45,11 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        readAccount()
+
         binding.setupUI(
             viewModel.accountState
         ) {
             viewModel.action(AccountAction.SignOut)
-            reloadActivity()
         }
     }
 
@@ -62,9 +63,8 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>() {
                     is AccountState.Active -> launch{
                         it.account.collect { account -> bind(account) }
                     }
-                    is AccountState.Updating -> {}
-                    is AccountState.Error -> signOut()
-                    is AccountState.Inactive -> signOut()
+                    is AccountState.Error -> reloadActivity()
+                    is AccountState.Inactive -> reloadActivity()
                     else -> {}
                 }
             }
@@ -78,9 +78,9 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>() {
 
     private fun FragmentAccountBinding.bind(account: Account?){
         account?.let {
-            profileUserName.text = account.displayName()
-            email.text = account.emailAddress
-            GlideModule().loadProfilePhoto(binding.profilePicture, account.image)
+            profileUserName.text = it.displayName()
+            email.text = it.emailAddress
+            GlideModule().loadProfilePhoto(binding.profilePicture, it.image)
         }?: object: MigrateDialog(requireContext()){
             override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
                 dialog.dismiss()
@@ -89,6 +89,7 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>() {
 
             override fun ifNo(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
                 dialog.dismiss()
+                Firebase.auth.signOut()
                 reloadActivity()
             }
         }.show()
@@ -108,23 +109,6 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>() {
         val intent = Intent(requireContext(), AccountInformationActivity::class.java)
         startActivity(intent)
     }
-
-//    override suspend fun emit(value: Account?) {
-//        value?.let {
-//            setAccountData(it)
-////            progressDialog.dismiss()
-//        } ?: object: MigrateDialog(requireContext()){
-//            override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
-//                dialog.dismiss()
-//                toMigrate()
-//            }
-//
-//            override fun ifNo(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
-//                dialog.dismiss()
-//                reloadActivity()
-//            }
-//        }.show()
-//    }
 
     private fun toMigrate() {
         val intent = Intent(requireContext(), MigrateActivity::class.java)

@@ -3,71 +3,110 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.sign_in
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivitySignUpBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
-    private val binding by lazy {ActivitySignUpBinding.inflate(layoutInflater)}
-    private val viewModel: AccountViewModel by viewModels()
-    private val progressDialog by lazy { ProgressDialog(this, R.string.signing_up) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val viewModel: AccountViewModel by viewModels()
+        binding.setupUI(
+            viewModel.accountState,
+            viewModel.action
+        )
+    }
+
+    private fun ActivitySignUpBinding.setupUI(
+        state: StateFlow<AccountState>,
+        action: (AccountAction) -> StateFlow<RemoteState>?
+    ) {
         setupActionBar()
 
-        binding.btnSignUp.setOnClickListener { validateForm() }
+        val progressDialog = ProgressDialog(this@SignUpActivity, R.string.signing_up)
+        lifecycleScope.launch {
+            state.collectLatest{
+                when(it){
+                    is AccountState.Active -> {
+                        progressDialog.dismiss()
+                        signUpSuccessful { action(AccountAction.SignOut) }
+                    }
+                    is AccountState.Updating -> progressDialog.show()
+                    is AccountState.Error -> showError(it.error)
+                    else -> progressDialog.dismiss()
+                }
+            }
+        }
+
+        btnSignUp.setOnClickListener { validateForm{ firstName, lastName, email, password ->
+            action(AccountAction.SignUp(firstName, lastName, email, password))
+        } }
     }
 
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbar)
+    private fun signUpSuccessful(signOut: () -> Unit){
+        signOut()
+        Toast.makeText(applicationContext, "Registration Successful!", Toast.LENGTH_SHORT)
+            .show()
+        finish()
+    }
+
+    private fun showError(t: Throwable){
+        Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun ActivitySignUpBinding.setupActionBar() {
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
-    private fun validateForm(){
+    private fun ActivitySignUpBinding.validateForm(
+        register: (String, String, String, String) -> Unit
+    ){
         var valid = validateRequired(
-            binding.confirmPassword,
-            binding.password,
-            binding.email,
-            binding.lastName,
-            binding.firstName
+            confirmPassword,
+            password,
+            email,
+            lastName,
+            firstName
         )
         if (!valid) return
 
-        val firstName = binding.firstName.text.toString().trim()
-        val lastName = binding.lastName.text.toString().trim()
-        val email = binding.email.text.toString().trim()
-        val password = binding.password.text.toString()
-        val confirmPassword = binding.confirmPassword.text.toString()
+        val firstNameText = firstName.text.toString().trim()
+        val lastNameText = lastName.text.toString().trim()
+        val emailText = email.text.toString().trim()
+        val passwordText = password.text.toString()
+        val confirmPasswordText = confirmPassword.text.toString()
 
-        if (password != confirmPassword){
-            binding.password.error = "Passwords do not match."
-            binding.confirmPassword.error = "Passwords do not match."
-            binding.password.requestFocus()
+        if (passwordText != confirmPasswordText){
+            password.error = "Passwords do not match."
+            confirmPassword.error = "Passwords do not match."
+            password.requestFocus()
             valid = false
         }
 
-        if (!email.validEmail()) {
-            binding.email.error = "Not a valid email"
-            binding.email.requestFocus()
+        if (!emailText.validEmail()) {
+            email.error = "Not a valid email"
+            email.requestFocus()
             valid = false
         }
 
-        if (valid) registerAccount(firstName, lastName, email, password)
+        if (valid) register(firstNameText, lastNameText, emailText, passwordText)
     }
 
     private fun validateRequired(vararg views: EditText): Boolean {
@@ -81,22 +120,6 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
         return valid
-    }
-
-    private fun registerAccount(firstName: String, lastName: String, email: String, password: String){
-//        progressDialog.show()
-//        lifecycleScope.launch {
-//            val signUpSuccessful = viewModel.signUp(firstName, lastName, email, password)
-//            withContext(Main) {
-//                if (signUpSuccessful) {
-//                    viewModel.signOut()
-//                    Toast.makeText(applicationContext, "Registration Successful!", Toast.LENGTH_SHORT)
-//                        .show()
-//                    finish()
-//                }
-//                progressDialog.dismiss()
-//            }
-//        }
     }
 
     private fun String.validEmail(): Boolean{

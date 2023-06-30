@@ -1,88 +1,70 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels
 
 import android.app.Application
-import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountAction
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.auth.FirebaseAuthDAOImpl.Companion.USER_DISPLAY_NAME
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.auth.FirebaseAuthDAOImpl.Companion.USER_PHOTO_URI
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account.Companion.KEY_FIRST_NAME
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account.Companion.KEY_IMAGE
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account.Companion.KEY_LAST_NAME
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.storage.FirebaseStorageDAOImpl.Companion.IMAGE_TREE
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.AccountRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(app: Application, private val repository: AccountRepository): AndroidViewModel(app) {
     val accountState = repository.source.accountState
-    val action: (AccountAction) -> Unit
+    val action: (AccountAction) -> StateFlow<RemoteState>?
 
     init {
         val actionStateFlow = MutableSharedFlow<AccountAction>()
         val signInAction = actionStateFlow.filterIsInstance<AccountAction.SignIn>()
         val signUpAction = actionStateFlow.filterIsInstance<AccountAction.SignUp>()
         val signOutAction = actionStateFlow.filterIsInstance<AccountAction.SignOut>()
-        val updateAction = actionStateFlow.filterIsInstance<AccountAction.Update>()
         val deleteAction = actionStateFlow.filterIsInstance<AccountAction.Delete>()
         val changePasswordAction = actionStateFlow.filterIsInstance<AccountAction.ChangePassword>()
 
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             signInAction.collect {(email, password) ->
                 repository.signIn(email, password)
             }
         }
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             signUpAction.collect {
                 repository.signUp(it)
             }
         }
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             signOutAction.collect {
                 repository.signOut()
             }
         }
-        viewModelScope.launch {
-            updateAction.collect {
-                val changes = it.changes.toMutableMap()
-                val image = it.image?.let {  uri ->
-                    repository.replaceImage(changes[KEY_IMAGE]?.toString() ?: "", uri)
-                }
-                image?.let {
-                    changes[KEY_IMAGE] = it
-                }
-                repository.updateAccount(changes)
-            }
-        }
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             deleteAction.collect{
                 TODO("Feature not available")
             }
         }
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             changePasswordAction.collect{ (oldPassword, newPassword) ->
                 repository.updateUserPassword(oldPassword, newPassword)
             }
         }
 
-        action = { viewModelScope.launch { actionStateFlow.emit(it) } }
-
-        viewModelScope.launch {
-            repository.loadActiveAccount()
+        action = {
+            when(it) {
+                is AccountAction.Update -> repository.updateAccount(it.changes, it.image)
+                else -> {
+                    viewModelScope.launch { actionStateFlow.emit(it) }
+                    null
+                }
+            }
         }
+
+        repository.loadActiveAccount()
     }
 
 //    val activeAccount: Flow<Account?> by lazy { readActiveAccount(repository.auth.currentUser()!!.uid) }

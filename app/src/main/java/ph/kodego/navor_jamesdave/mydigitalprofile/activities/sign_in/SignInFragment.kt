@@ -7,18 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ForgotPasswordActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
@@ -68,8 +61,11 @@ class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
                         reloadActivity()
                     }
                     is AccountState.Updating -> progressDialog.show()
-                    is AccountState.Error -> showError(it.error)
-                    else -> {}
+                    is AccountState.Error -> {
+                        progressDialog.dismiss()
+                        showError(it.error)
+                    }
+                    else -> progressDialog.dismiss()
                 }
             }
         }
@@ -79,7 +75,7 @@ class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
         btnForgotPassword.setOnClickListener { toForgotPassword() }
     }
 
-    private fun FragmentSignInBinding.showError(t: Throwable){
+    private fun showError(t: Throwable){
         Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
     }
 

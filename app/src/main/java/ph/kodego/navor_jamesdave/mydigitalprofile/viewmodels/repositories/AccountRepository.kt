@@ -2,15 +2,15 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories
 
 import android.net.Uri
 import android.util.Log
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.storage.StorageException
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountAction
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
@@ -25,13 +25,15 @@ import javax.inject.Inject
 class AccountRepository @Inject constructor(
     private val auth: FirebaseAuthDAOImpl,
     val source: AccountDataSource,
-    val storage: FirebaseStorageDAOImpl
+    private val storage: FirebaseStorageDAOImpl
 ) {
-    suspend fun loadActiveAccount(){
-        auth.currentUser()?.let {
-            val account = source.readAccount(it.uid)
-            source.setState(AccountState.Active(account, it.uid))
-        } ?: source.setState(AccountState.Inactive)
+    fun loadActiveAccount(){
+        CoroutineScope(IO).launch {
+            auth.currentUser()?.let {
+                val account = source.readAccount(it.uid)
+                source.setState(AccountState.Active(account, it.uid))
+            } ?: source.setState(AccountState.Inactive)
+        }
     }
 
     suspend fun signOut(){
@@ -49,11 +51,18 @@ class AccountRepository @Inject constructor(
         }
     }
 
-    suspend fun updateAccount(fields: Map<String, Any?>): StateFlow<RemoteState>{
+    fun updateAccount(fields: Map<String, Any?>, imageUri: Uri?): StateFlow<RemoteState>{
         val state = MutableStateFlow(RemoteState.Waiting)
-        val uid = (source.accountState.value as? AccountState.Active)?.uid
-        uid?.let {
-            withContext(IO) {
+        CoroutineScope(IO).launch {
+            val uid = (source.accountState.value as? AccountState.Active)?.uid
+            val changes = fields.toMutableMap()
+            val image = imageUri?.let { uri ->
+                replaceImage(changes[Account.KEY_IMAGE]?.toString() ?: "", uri)
+            }
+            image?.let { url ->
+                changes[Account.KEY_IMAGE] = url
+            } ?: changes.remove(Account.KEY_IMAGE)
+            uid?.let {
                 val userChanges: HashMap<String, Any?> = HashMap()
                 if (fields.containsKey(Account.KEY_FIRST_NAME) || fields.containsKey(Account.KEY_LAST_NAME)) {
                     userChanges[FirebaseAuthDAOImpl.USER_DISPLAY_NAME] =
@@ -66,13 +75,13 @@ class AccountRepository @Inject constructor(
                     if (userChanges.isNotEmpty()) {
                         auth.updateUser(userChanges)
                     }
-                    source.updateAccount(it, fields)
+                    source.updateAccount(it, changes)
                     state.emit(RemoteState.Success)
                 } catch (e: Exception) {
                     state.emit(RemoteState.Failed)
                 }
-            }
-        } ?: state.emit(RemoteState.Failed)
+            } ?: state.emit(RemoteState.Invalid)
+        }
         return state.asStateFlow()
     }
 
@@ -100,7 +109,7 @@ class AccountRepository @Inject constructor(
         }
     }
 
-    suspend fun replaceImage(oldImage: String, image: Uri): String?{
+    private suspend fun replaceImage(oldImage: String, image: Uri): String?{
         return try {
             val uri = storage.uploadFile(IMAGE_TREE, image)
             try {

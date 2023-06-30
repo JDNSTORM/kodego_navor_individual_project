@@ -11,15 +11,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountInformationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
@@ -33,73 +32,116 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 
 @AndroidEntryPoint
 class AccountInformationActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityAccountInformationBinding.inflate(layoutInflater) }
-    private val viewModel: AccountViewModel by viewModels()
-    private val progressDialog by lazy { ProgressDialog(this, R.string.updating_account) }
     private lateinit var account: Account
     private var pickedImage: Uri? = null
 
-    private val launcher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ){result ->
-        if(result.resultCode == Activity.RESULT_CANCELED){
-            Log.e("Document", "Image Pick Cancelled")
-        }else{
-            val data = result.data
-            data?.let {
-                pickedImage = data.data
-                onImageSelected()
-            } ?: kotlin.run {
-                Toast.makeText(applicationContext, "No image was chosen", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityAccountInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val viewModel: AccountViewModel by viewModels()
+
+        binding.setupUI(
+            viewModel.accountState,
+            viewModel.action
+        )
+    }
+
+    private fun ActivityAccountInformationBinding.setupUI(
+        state: StateFlow<AccountState>,
+        action: (AccountAction) -> StateFlow<RemoteState>?
+    ) {
         setupActionBar()
         loadAccount()
 
-        with(binding){
-            profilePicture.setOnClickListener { chooseProfilePicture() }
-            btnSave.setOnClickListener { getFormData() }
+        lifecycleScope.launch {
+            val accountFlow = (state.value as? AccountState.Active)?.account
+            accountFlow?.let { flow ->
+                flow.firstOrNull()?.let {
+                    account = it
+                    setFormData()
+                }
+            } ?: unauthorizedAccess()
+        }
+
+        profilePicture.setOnClickListener { chooseProfilePicture{loadImage()} }
+        btnSave.setOnClickListener { getFormData{
+            val remoteState = action(AccountAction.Update(it, pickedImage))!!
+            monitorUpdate(remoteState)
+        } }
+    }
+
+    private fun monitorUpdate(state: StateFlow<RemoteState>) {
+        val progressDialog = ProgressDialog(this@AccountInformationActivity, R.string.updating_account)
+        lifecycleScope.launch {
+            state.collect{
+                when(it){
+                    RemoteState.Waiting -> progressDialog.show()
+                    RemoteState.Success -> {
+                        progressDialog.dismiss()
+                        updateSuccessful()
+                    }
+                    RemoteState.Failed -> {
+                        updateFailed()
+                        progressDialog.dismiss()
+                    }
+                    else -> {
+                        progressDialog.dismiss()
+                        unauthorizedAccess()
+                    }
+                }
+            }
         }
     }
 
-    private fun getFormData() {
-        val newAccount: Account
-        with(binding) {
-             newAccount = Account(
-                account,
-                firstName.text.toString().trim(),
-                lastName.text.toString().trim()
-            )
-            newAccount.address.let {
-                it.streetAddress = streetAddress.text.toString().trim()
-                it.subdivision = binding.subdivision.text.toString().trim()
-                it.cityOrMunicipality = binding.city.text.toString().trim()
-                it.zipCode = binding.zipCode.text.toString().toIntOrNull() ?: 0
-                it.province = binding.province.text.toString().trim()
-                it.country = binding.country.text.toString().trim()
-            }
-            newAccount.contactNumber.let {
-                it.areaCode = layoutContactEdit.telAreaCode.text.toString()
-                it.contact = layoutContactEdit.telContactNumber.text.toString().toLongOrNull() ?: 0
-            }
-        }
-        checkChanges(newAccount)
+    private fun updateSuccessful(){
+        Toast.makeText(this, "Account Updated!", Toast.LENGTH_SHORT).show()
+        finish()
     }
 
-    private fun checkChanges(newAccount: Account) {
+    private fun updateFailed(){
+        Toast.makeText(this, "Updated Failed", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun unauthorizedAccess(){
+        Toast.makeText(this, "Unauthorized Access!!!", Toast.LENGTH_SHORT).show()
+        finish()
+    }
+
+    private fun ActivityAccountInformationBinding.getFormData(update: (Map<String, Any?>) -> Unit) {
+        val newAccount = Account(
+            account,
+            firstName.text.toString().trim(),
+            lastName.text.toString().trim()
+        )
+        newAccount.address.let {
+            it.streetAddress = streetAddress.text.toString().trim()
+            it.subdivision = subdivision.text.toString().trim()
+            it.cityOrMunicipality = city.text.toString().trim()
+            it.zipCode = zipCode.text.toString().toIntOrNull() ?: 0
+            it.province = province.text.toString().trim()
+            it.country = country.text.toString().trim()
+        }
+        newAccount.contactNumber.let {
+            it.areaCode = layoutContactEdit.telAreaCode.text.toString()
+            it.contact = layoutContactEdit.telContactNumber.text.toString().toLongOrNull() ?: 0
+        }
+        checkChanges(newAccount, update)
+    }
+
+    private fun checkChanges(newAccount: Account, update: (Map<String, Any?>) -> Unit) {
         val changes: HashMap<String, Any?> = HashMap()
-        if (account.firstName != newAccount.firstName) changes[KEY_FIRST_NAME] = newAccount.firstName
-        if (account.lastName != newAccount.lastName) changes[KEY_LAST_NAME] = newAccount.lastName
-        if (account.address != newAccount.address) changes[KEY_ADDRESS] = newAccount.address
-        if (account.contactNumber != newAccount.contactNumber) changes[KEY_CONTACT_NUMBER] = newAccount.contactNumber
-        pickedImage?.let { changes[KEY_IMAGE] = "" }
+        if (account.firstName != newAccount.firstName)
+            changes[KEY_FIRST_NAME] = newAccount.firstName
+        if (account.lastName != newAccount.lastName)
+            changes[KEY_LAST_NAME] = newAccount.lastName
+        if (account.address != newAccount.address)
+            changes[KEY_ADDRESS] = newAccount.address
+        if (account.contactNumber != newAccount.contactNumber)
+            changes[KEY_CONTACT_NUMBER] = newAccount.contactNumber
+        pickedImage?.let { changes[KEY_IMAGE] = account.image }
 
-        if (changes.isNotEmpty()) updateAccount(changes)
+        if (changes.isNotEmpty()) update(changes)
     }
 
     private fun updateAccount(changes: HashMap<String, Any?>){
@@ -132,10 +174,10 @@ class AccountInformationActivity : AppCompatActivity() {
 //        }
     }
 
-    private fun setupActionBar(){
-        setSupportActionBar(binding.tbTop)
+    private fun ActivityAccountInformationBinding.setupActionBar(){
+        setSupportActionBar(tbTop)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.tbTop.setNavigationOnClickListener {
+        tbTop.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
@@ -150,25 +192,23 @@ class AccountInformationActivity : AppCompatActivity() {
 //        }
     }
 
-    private fun setFormData(){
-        with(binding){
-            firstName.setText(account.firstName)
-            lastName.setText(account.lastName)
-            if (account.image.isNotEmpty()){
-                GlideModule().loadProfilePhoto(profilePicture, account.image)
-            }
-            account.address.let {address ->
-                streetAddress.setText(address.streetAddress)
-                subdivision.setText(address.subdivision)
-                city.setText(address.cityOrMunicipality)
-                zipCode.setText(address.zipCode.toString())
-                province.setText(address.province)
-                country.setText(address.country)
-            }
-            account.contactNumber.let {contactNumber ->
-                layoutContactEdit.telAreaCode.setText(contactNumber.areaCode)
-                layoutContactEdit.telContactNumber.setText("${contactNumber.contact}")
-            }
+    private fun ActivityAccountInformationBinding.setFormData(){
+        firstName.setText(account.firstName)
+        lastName.setText(account.lastName)
+        if (account.image.isNotEmpty()){
+            GlideModule().loadProfilePhoto(profilePicture, account.image)
+        }
+        account.address.let {address ->
+            streetAddress.setText(address.streetAddress)
+            subdivision.setText(address.subdivision)
+            city.setText(address.cityOrMunicipality)
+            zipCode.setText(address.zipCode.toString())
+            province.setText(address.province)
+            country.setText(address.country)
+        }
+        account.contactNumber.let {contactNumber ->
+            layoutContactEdit.telAreaCode.setText(contactNumber.areaCode)
+            layoutContactEdit.telContactNumber.setText("${contactNumber.contact}")
         }
     }
 
@@ -177,17 +217,32 @@ class AccountInformationActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun onImageSelected(){
+    private fun ActivityAccountInformationBinding.loadImage(){
         pickedImage?.let {
-            GlideModule().loadProfilePhoto(binding.profilePicture, it.toString())
+            GlideModule().loadProfilePhoto(profilePicture, it.toString())
         }
     }
 
-    private fun chooseProfilePicture(){
+    private fun chooseProfilePicture(onImageSelected: () -> Unit){
         val choosePictureIntent = Intent(
             Intent.ACTION_PICK,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
+        val launcher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ){result ->
+            if(result.resultCode == Activity.RESULT_CANCELED){
+                Log.e("Document", "Image Pick Cancelled")
+            }else{
+                val data = result.data
+                data?.let {
+                    pickedImage = data.data
+                    onImageSelected()
+                } ?: kotlin.run {
+                    Toast.makeText(applicationContext, "No image was chosen", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         launcher.launch(choosePictureIntent)
 
 //        when (Build.VERSION.SDK_INT){
