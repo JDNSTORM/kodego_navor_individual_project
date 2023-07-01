@@ -1,11 +1,10 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 
-import android.annotation.SuppressLint
 import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -21,6 +20,25 @@ class SkillsMainAdapter(): ItemsAdapter<SkillsMain>() {
     private var drag: Boolean = false
     private var editInterface: SkillsEditingInterface? = null
     private lateinit var touchHelper: ItemTouchHelper
+
+    override fun getDiffUtilCallback(
+        oldItems: List<SkillsMain>,
+        newItems: List<SkillsMain>
+    ): DiffUtil.Callback {
+        return object: DiffUtil.Callback(){
+            override fun getOldListSize(): Int = oldItems.size
+            override fun getNewListSize(): Int = newItems.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition].title == newItems[newItemPosition].title
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition] == newItems[newItemPosition]
+            }
+
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import kotlinx.coroutines.flow.StateFlow
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.DeleteItemDialog
@@ -15,7 +16,26 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 class AccountProfilesAdapter(
     private val action: (ProfileAction) -> StateFlow<RemoteState>?,
     private val dismiss: () -> Unit,
-    ): ItemsAdapter<Profile>() {
+): ItemsAdapter<Profile>() {
+    override fun getDiffUtilCallback(
+        oldItems: List<Profile>,
+        newItems: List<Profile>
+    ): DiffUtil.Callback {
+        return object: DiffUtil.Callback(){
+            override fun getOldListSize(): Int = oldItems.size
+            override fun getNewListSize(): Int = newItems.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition].profileID == newItems[newItemPosition].profileID
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition] == newItems[newItemPosition]
+            }
+
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ItemAccountProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)

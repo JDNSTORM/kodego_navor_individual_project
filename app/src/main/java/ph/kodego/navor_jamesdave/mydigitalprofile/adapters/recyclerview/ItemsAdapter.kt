@@ -16,9 +16,13 @@ abstract class ItemsAdapter<T>: RecyclerView.Adapter<ItemsAdapter.ViewHolder>() 
     override fun getItemCount(): Int = items.size
 
     fun setList(newItems: List<T>){
-        val callback = ItemsDiffCallback(items, newItems)
+        val callback = getDiffUtilCallback(items, newItems)
         val result = DiffUtil.calculateDiff(callback)
         items = newItems
         result.dispatchUpdatesTo(updateCallback)
+    }
+
+    protected open fun getDiffUtilCallback(oldItems: List<T>, newItems: List<T>): DiffUtil.Callback {
+        return ItemsDiffCallback(oldItems, newItems)
     }
 }

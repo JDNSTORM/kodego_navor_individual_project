@@ -1,12 +1,10 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.google.android.material.snackbar.Snackbar
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemSkillsSubBinding
@@ -20,6 +18,25 @@ class SkillsSubAdapter(): ItemsAdapter<SkillsSub>() {
     private var editInterface: SkillsEditingInterface? = null
     private lateinit var mainSkills: List<SkillsMain>
     private lateinit var mainSkill: SkillsMain
+
+    override fun getDiffUtilCallback(
+        oldItems: List<SkillsSub>,
+        newItems: List<SkillsSub>
+    ): DiffUtil.Callback {
+        return object: DiffUtil.Callback(){
+            override fun getOldListSize(): Int = oldItems.size
+            override fun getNewListSize(): Int = newItems.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition].subtitle == newItems[newItemPosition].subtitle
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition] == newItems[newItemPosition]
+            }
+
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

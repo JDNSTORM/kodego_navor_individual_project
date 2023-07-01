@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CareerEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemCareerBinding
@@ -16,6 +17,25 @@ class CareersAdapter(): ItemsAdapter<Career>() {
     private var drag: Boolean = false
     private var editDialog: CareerEditDialog? = null
     private lateinit var touchHelper: ItemTouchHelper
+
+    override fun getDiffUtilCallback(
+        oldItems: List<Career>,
+        newItems: List<Career>
+    ): DiffUtil.Callback {
+        return object: DiffUtil.Callback(){
+            override fun getOldListSize(): Int = oldItems.size
+            override fun getNewListSize(): Int = newItems.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition].position == newItems[newItemPosition].position
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition] == newItems[newItemPosition]
+            }
+
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
