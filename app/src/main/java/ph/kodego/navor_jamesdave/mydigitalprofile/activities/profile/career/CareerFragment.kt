@@ -16,10 +16,15 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ListMenu
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.CareersAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadData
@@ -29,14 +34,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
-class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollector<Profile?> {
+class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>() {
     private val viewModel: ProfileViewModel by viewModels()
     private val itemsAdapter = CareersAdapter()
     override fun getTabInformation(): TabInfo = TabInfo(
         "Career",
         R.drawable.ic_work_history_24
     )
-    private val activeUID = Firebase.auth.currentUser?.uid
     private val setupMenu by lazy {setupMenu(requireActivity())}
     private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }
     private lateinit var profile: Profile
@@ -51,7 +55,55 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadProfile()
+
+        binding.setupUI(
+            viewModel.viewedProfileState,
+            viewModel.accountState,
+            viewModel.action
+        )
+    }
+
+    private fun FragmentCareerBinding.setupUI(
+        state: StateFlow<ViewedProfileState>,
+        accountState: StateFlow<AccountState>,
+        action: (ProfileAction) -> StateFlow<RemoteState>?
+    ) {
+        loadData()
+        setupRecyclerView()
+        val (flow, uid) = (state.value as ViewedProfileState.Active)
+        val activeUID = (accountState.value as? AccountState.Active)?.uid
+
+        lifecycleScope.launch {
+            flow.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
+                it?.let {
+                    profile = it
+                    if (it.careers.isNotEmpty()) {
+                        itemsAdapter.setList(it.careers)
+                    }else{
+                        itemsAdapter.setList(emptyList())
+                    }
+                } ?: noActiveProfile()
+            }
+        }
+
+        if (uid == activeUID){
+            enableEditing{
+                val remoteState = action(ProfileAction.Update(profile, it))!!
+                monitorState(remoteState)
+            }
+        }
+    }
+
+    private fun monitorState(state: StateFlow<RemoteState>){
+        lifecycleScope.launch {
+            state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
+                when(it){
+                    RemoteState.Success -> Toast.makeText(context, "Careers Saved!", Toast.LENGTH_SHORT).show()
+                    RemoteState.Failed -> Toast.makeText(context, "Careers not saved", Toast.LENGTH_SHORT).show()
+                    else -> {}
+                }
+            }
+        }
     }
 
     private fun setupMenu(host: MenuHost){
@@ -75,33 +127,24 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
         )
     }
 
-    private fun loadProfile() {
-        binding.loadData()
-        lifecycleScope.launch {
-            viewModel.readActiveProfile()?.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)?.let {
-                setupRecyclerView()
-                it.collect(this@CareerFragment)
-            } ?: noActiveProfile()
-        }
-    }
-
-    private fun setupRecyclerView() {
-        with(binding.listCareer){
+    private fun FragmentCareerBinding.setupRecyclerView() {
+        with(listCareer){
             layoutManager = LinearLayoutManager(requireContext())
             adapter = itemsAdapter
         }
-        binding.showData()
+        showData()
     }
 
-    private fun enableEditing() {
-        with(binding.btnAdd){
+    private fun FragmentCareerBinding.enableEditing(update: (Map<String, Any?>) -> Unit) {
+        setupMenu
+        with(btnAdd){
             isEnabled = true
             visibility = View.VISIBLE
             setOnClickListener {
-                CareerEditDialog(requireActivity(), profile).show()
+                CareerEditDialog(requireActivity(), profile, update).show()
             }
         }
-        itemsAdapter.enableEditing(CareerEditDialog(requireActivity(), profile))
+        itemsAdapter.enableEditing(CareerEditDialog(requireActivity(), profile, update))
     }
 
     private fun noActiveProfile() {
@@ -109,25 +152,12 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>(), FlowCollecto
         requireActivity().finish()
     }
 
-    override suspend fun emit(value: Profile?) {
-        value?.let {
-            profile = it
-            if (it.careers.isNotEmpty()) {
-                itemsAdapter.setList(it.careers)
-            }else{
-                itemsAdapter.setList(emptyList())
-            }
-            if (it.refUID == activeUID) {
-                enableEditing()
-                setupMenu
-            }
-        } ?: noActiveProfile()
-    }
-
     private fun saveList(){
-//        val careers = itemsAdapter.careers()
-//        careers.lastIndex
-//        val changes: Map<String, Any?> = mapOf(Profile.KEY_CAREERS to careers)
+        val careers = itemsAdapter.careers()
+        careers.lastIndex
+        val changes: Map<String, Any?> = mapOf(Profile.KEY_CAREERS to careers)
+        val remoteState = viewModel.action(ProfileAction.Update(profile, changes))!!
+        monitorState(remoteState)
 //        lifecycleScope.launch {
 //            if(viewModel.updateProfile(profile, changes)){
 //                Toast.makeText(requireContext(), "Careers Saved!", Toast.LENGTH_SHORT).show()

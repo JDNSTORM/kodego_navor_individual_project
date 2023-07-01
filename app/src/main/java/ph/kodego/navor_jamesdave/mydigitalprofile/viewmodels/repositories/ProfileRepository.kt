@@ -5,10 +5,19 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.data_sources.AccountDataSource
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.data_sources.ProfileDataSource
@@ -48,5 +57,24 @@ class ProfileRepository @Inject constructor(
                 profiles
             }
         }
+    }
+
+    fun addProfile(profession: String): StateFlow<RemoteState> {
+        val state = MutableStateFlow(RemoteState.Waiting)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val uid = (accountSource.accountState.value as? AccountState.Active)?.uid
+                uid?.let {
+                    val profile = Profile(it, profession)
+                    profileSource.addProfile(profile)
+                    state.emit(RemoteState.Success)
+                } ?: state.emit(RemoteState.Invalid)
+            } catch (e: Exception){
+                state.emit(RemoteState.Failed)
+            }
+            delay(100)
+            state.emit(RemoteState.Idle)
+        }
+        return state.asStateFlow()
     }
 }

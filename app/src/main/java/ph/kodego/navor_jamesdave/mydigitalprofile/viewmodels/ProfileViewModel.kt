@@ -30,21 +30,15 @@ class ProfileViewModel @Inject constructor(
     val action: (ProfileAction) -> StateFlow<RemoteState>?
 
     init {
-        val actionStateFlow = MutableSharedFlow<ProfileAction>()
-        val viewAction = actionStateFlow.filterIsInstance<ProfileAction.Select>()
-        val createAction = actionStateFlow.filterIsInstance<ProfileAction.Create>()
-        val updateAction = actionStateFlow.filterIsInstance<ProfileAction.Update>()
-        val deleteAction = actionStateFlow.filterIsInstance<ProfileAction.Delete>()
-
-
-
         action = {
             when(it){
-                is ProfileAction.Update -> repository.profileSource.updateProfile( it.changes)
-                else -> {
-                    viewModelScope.launch { actionStateFlow.emit(it) }
+                is ProfileAction.Update -> repository.profileSource.updateProfile( it.profile, it.changes)
+                is ProfileAction.Select -> {
+                    viewModelScope.launch { repository.profileSource.viewProfile(it.profile) }
                     null
                 }
+                is ProfileAction.Create -> repository.addProfile(it.profession)
+                is ProfileAction.Delete -> repository.profileSource.deleteProfile(it.profile)
             }
         }
     }

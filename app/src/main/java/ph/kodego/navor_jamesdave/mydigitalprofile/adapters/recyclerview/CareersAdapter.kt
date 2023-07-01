@@ -14,7 +14,7 @@ import java.util.Collections
 
 class CareersAdapter(): ItemsAdapter<Career>() {
     private var drag: Boolean = false
-    private var editDialog: CareerEditDialog<*>? = null
+    private var editDialog: CareerEditDialog? = null
     private lateinit var touchHelper: ItemTouchHelper
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -74,7 +74,7 @@ class CareersAdapter(): ItemsAdapter<Career>() {
         }
     }
 
-    fun enableEditing(dialog: CareerEditDialog<*>){
+    fun enableEditing(dialog: CareerEditDialog){
         editDialog = dialog
     }
 

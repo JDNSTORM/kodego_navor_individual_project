@@ -14,7 +14,7 @@ import java.util.Collections
 
 class EducationsAdapter(): ItemsAdapter<Education>() {
     private var drag: Boolean = false
-    private var editDialog: EducationEditDialog<*>? = null
+    private var editDialog: EducationEditDialog? = null
     private lateinit var touchHelper: ItemTouchHelper
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -73,7 +73,7 @@ class EducationsAdapter(): ItemsAdapter<Education>() {
         }
     }
 
-    fun enableEditing(dialog: EducationEditDialog<*>){
+    fun enableEditing(dialog: EducationEditDialog){
         editDialog = dialog
     }
 

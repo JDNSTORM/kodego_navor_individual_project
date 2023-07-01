@@ -23,9 +23,12 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Education
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
-class EducationEditDialog<T>(context: T, private val profile: Profile): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
+class EducationEditDialog(
+    context: Context,
+    private val profile: Profile,
+    private val update: (Map<String, Any?>) -> Unit
+): AlertDialog(context){
     private val binding by lazy { DialogEducationEditBinding.inflate(layoutInflater) }
-    private val viewModel by lazy { ViewModelProvider(context)[ProfileViewModel::class.java] }
     private val educations: ArrayList<Education> = ArrayList()
     private var education: Education? = null
 
@@ -72,9 +75,10 @@ class EducationEditDialog<T>(context: T, private val profile: Profile): AlertDia
     }
 
     private fun saveChanges(educations: List<Education>) {
-//        dismiss()
-//        educations.lastIndex
-//        val changes = mapOf<String, Any?>(Profile.KEY_EDUCATIONS to educations)
+        dismiss()
+        educations.lastIndex
+        val changes = mapOf<String, Any?>(Profile.KEY_EDUCATIONS to educations)
+        update(changes)
 //        CoroutineScope(IO).launch {
 //            val updateSuccessful = viewModel.updateProfile(profile, changes)
 //            withContext(Main){
@@ -129,27 +133,25 @@ class EducationEditDialog<T>(context: T, private val profile: Profile): AlertDia
     fun edit(education: Education, list: List<Education>){
         super.show()
         this.education = education
-        setEducationDetails()
+        binding.setEducationDetails()
         list.lastIndex
         educations.clear()
         educations.addAll(list)
     }
 
-    private fun setEducationDetails() {
-        with(binding) {
-            education?.let { education ->
-                dateEnrolled.setText(education.dateEnrolled)
-                dateGraduated.setText(education.dateGraduated)
-                schoolName.setText(education.schoolName)
-                schoolAddress.setText(education.address.streetAddress)
-                schoolWebsite.setText(education.website)
-                contactEdit.telAreaCode.setText(education.contactNumber.areaCode)
-                contactEdit.telContactNumber.setText(education.contactNumber.contact.toString())
-                degree.setText(education.degree)
-                fieldOfStudy.setText(education.fieldOfStudy)
+    private fun DialogEducationEditBinding.setEducationDetails() {
+        education?.let { education ->
+            dateEnrolled.setText(education.dateEnrolled)
+            dateGraduated.setText(education.dateGraduated)
+            schoolName.setText(education.schoolName)
+            schoolAddress.setText(education.address.streetAddress)
+            schoolWebsite.setText(education.website)
+            contactEdit.telAreaCode.setText(education.contactNumber.areaCode)
+            contactEdit.telContactNumber.setText(education.contactNumber.contact.toString())
+            degree.setText(education.degree)
+            fieldOfStudy.setText(education.fieldOfStudy)
 
-                editButtons.editInterface()
-            } ?: editButtons.saveInterface()
-        }
+            editButtons.editInterface()
+        } ?: editButtons.saveInterface()
     }
 }

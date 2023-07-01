@@ -13,8 +13,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CareerFragment
@@ -48,7 +46,7 @@ class ProfileActivity : AppCompatActivity(){
     }
 
     private fun ActivityProfileBinding.setupUI(
-        state: Flow<ViewedProfileState>,
+        state: StateFlow<ViewedProfileState>,
         accountProfiles: Flow<List<Profile>>?,
         action: (ProfileAction) -> StateFlow<RemoteState>?
     ){
@@ -57,7 +55,7 @@ class ProfileActivity : AppCompatActivity(){
     }
 
     private fun ActivityProfileBinding.loadProfile(
-        state: Flow<ViewedProfileState>,
+        state: StateFlow<ViewedProfileState>,
         accountProfiles: Flow<List<Profile>>?,
         action: (ProfileAction) -> StateFlow<RemoteState>?
     ) {
@@ -91,10 +89,10 @@ class ProfileActivity : AppCompatActivity(){
     }
 
     private fun selectProfile(
-        accountProfiles: Flow<List<Profile>>,
+        profiles: Flow<List<Profile>>,
         action: (ProfileAction) -> StateFlow<RemoteState>?
     ) {
-        SelectProfileDialog(this, accountProfiles, action).show()
+        SelectProfileDialog(this, profiles, action).show()
     }
 
     private fun ActivityProfileBinding.setupActionBar(){

@@ -5,25 +5,26 @@ import android.content.Context
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogProfileEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.updateInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
-class ProfileEditDialog<T>(context: T, private val profile: Profile): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
+class ProfileEditDialog(
+    context: Context,
+    private val profile: Profile,
+    private val update: (Map<String, Any?>) -> StateFlow<RemoteState>
+): AlertDialog(context){
     private val binding by lazy { DialogProfileEditBinding.inflate(layoutInflater) }
-    private val viewModel: ProfileViewModel by lazy {
-        ViewModelProvider(context)[ProfileViewModel::class.java]
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,7 @@ class ProfileEditDialog<T>(context: T, private val profile: Profile): AlertDialo
 
         with(binding.editButtons){
             updateInterface()
-            btnUpdate.setOnClickListener { validateForm() }
+            btnUpdate.setOnClickListener { binding.validateForm() }
             btnCancel.setOnClickListener { dismiss() }
         }
     }
@@ -45,15 +46,33 @@ class ProfileEditDialog<T>(context: T, private val profile: Profile): AlertDialo
         binding.profession.requestFocus()
     }
 
-    private fun validateForm() {
-        val profession = binding.profession.text.toString().trim()
-        val summary = binding.profileSummary.text.toString().trim()
-        if (profession.isNotEmpty()){
-            val updatedProfile = profile.copy(profession =  profession, profileSummary =  summary)
+    private fun DialogProfileEditBinding.validateForm() {
+        val professionText = profession.text.toString().trim()
+        val summaryText = profileSummary.text.toString().trim()
+        if (professionText.isNotEmpty()){
+            val updatedProfile = profile.copy(profession =  professionText, profileSummary =  summaryText)
             checkChanges(updatedProfile)
         }else{
-            binding.profession.error = "Field must not be empty."
-            binding.profession.requestFocus()
+            profession.error = "Field must not be empty."
+            profession.requestFocus()
+        }
+    }
+
+    private fun monitorState(state: StateFlow<RemoteState>){
+        val progressDialog = ProgressDialog(context, R.string.updating_profile)
+        CoroutineScope(Main).launch {
+            state.collect{
+                when(it){
+                    RemoteState.Waiting -> progressDialog.show()
+                    RemoteState.Success -> Toast.makeText(context, "Update Successful!", Toast.LENGTH_SHORT).show()
+                    RemoteState.Failed -> Toast.makeText(context, "Update Failed!", Toast.LENGTH_SHORT).show()
+                    RemoteState.Invalid -> Toast.makeText(context, "Unexpected Error!", Toast.LENGTH_SHORT).show()
+                    RemoteState.Idle -> {
+                        progressDialog.dismiss()
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 
@@ -63,7 +82,7 @@ class ProfileEditDialog<T>(context: T, private val profile: Profile): AlertDialo
         if (profile.profileSummary != updatedProfile.profileSummary) changes[Profile.KEY_PROFILE_SUMMARY] = updatedProfile.profileSummary
 
         if (changes.isNotEmpty()){
-            updateProfile(changes)
+            monitorState(update(changes))
         }else{
             Toast.makeText(context, "No Fields Changed!", Toast.LENGTH_SHORT).show()
         }

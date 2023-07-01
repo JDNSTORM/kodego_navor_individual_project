@@ -131,8 +131,8 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     }
 
     private fun noActiveProfile() {
-        Toast.makeText(requireContext(), "No Profile Detected!", Toast.LENGTH_SHORT).show()
-        requireActivity().finish()
+//        Toast.makeText(requireContext(), "No Profile Detected!", Toast.LENGTH_SHORT).show()
+//        requireActivity().finish()
     }
 
     override suspend fun emit(value: Profile?) {

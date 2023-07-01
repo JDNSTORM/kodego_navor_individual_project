@@ -6,14 +6,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.DeleteItemDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogCareerEditBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.editInterface
@@ -22,11 +14,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Address
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.ContactNumber
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
-class CareerEditDialog<T>(context: T, private val profile: Profile): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
+class CareerEditDialog(
+    context: Context,
+    private val profile: Profile,
+    private val update: (Map<String, Any?>)  -> Unit
+): AlertDialog(context) {
     private val binding by lazy { DialogCareerEditBinding.inflate(layoutInflater) }
-    private val viewModel by lazy { ViewModelProvider(context)[ProfileViewModel::class.java] }
     private var careers: ArrayList<Career> = ArrayList()
     private var career: Career? = null
 
@@ -73,9 +67,10 @@ class CareerEditDialog<T>(context: T, private val profile: Profile): AlertDialog
     }
 
     private fun saveChanges(careers: List<Career>){
-//        dismiss()
-//        careers.lastIndex
-//        val changes = mapOf<String, Any?>(Profile.KEY_CAREERS to careers)
+        careers.lastIndex
+        val changes = mapOf<String, Any?>(Profile.KEY_CAREERS to careers)
+        update(changes)
+        dismiss()
 //        CoroutineScope(IO).launch {
 //            val updateSuccessful = viewModel.updateProfile(profile, changes)
 //            withContext(Main){

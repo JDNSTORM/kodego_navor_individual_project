@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
@@ -29,8 +30,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
-class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollector<Profile?> {
-    private val viewModel: ProfileViewModel by viewModels()
+class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>() {
     private lateinit var profile: Profile
     override fun inflateView(
         inflater: LayoutInflater,
@@ -47,7 +47,8 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollec
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadProfile()
+
+        val viewModel: ProfileViewModel by viewModels()
         binding.setupUI(
             viewModel.viewedProfileState,
             viewModel.accountState,
@@ -56,31 +57,34 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollec
     }
 
     private fun FragmentProfileBinding.setupUI(
-        viewedProfileState: StateFlow<ViewedProfileState>,
+        state: StateFlow<ViewedProfileState>,
         accountState: StateFlow<AccountState>,
         action: (ProfileAction) -> StateFlow<RemoteState>?
     ) {
+        val (flow, uid) = (state.value as ViewedProfileState.Active)
+        val activeUID = (accountState.value as? AccountState.Active)?.uid
 
-    }
-
-    private fun loadProfile() {
         lifecycleScope.launch {
-            val refUID = viewModel.readActiveProfile()?.first()?.refUID
-            val activeUID = Firebase.auth.currentUser?.uid
-            Log.d("RefUID", refUID.toString())
-            Log.d("ActiveUID", activeUID.toString())
-            if(refUID == activeUID && activeUID != null){
-                enableEditing()
+            flow.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
+                it?.let {
+                    profile = it
+                    setProfileDetails()
+                } ?: noActiveProfile()
             }
-            viewModel.readActiveProfile()?.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)?.collect(this@ProfileFragment) ?: noActiveProfile()
+        }
+
+        if (uid == activeUID){
+            enableEditing{
+                action(ProfileAction.Update(profile, it))!!
+            }
         }
     }
 
-    private fun enableEditing() {
-        with(binding.btnEdit){
+    private fun FragmentProfileBinding.enableEditing(update: (Map<String, Any?>) -> StateFlow<RemoteState>) {
+        with(btnEdit){
             isEnabled = true
             visibility = View.VISIBLE
-            setOnClickListener { ProfileEditDialog(requireActivity(), profile).show() }
+            setOnClickListener { ProfileEditDialog(requireContext(), profile, update).show() }
         }
     }
 
@@ -89,20 +93,11 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollec
         requireActivity().finish()
     }
 
-    override suspend fun emit(value: Profile?) {
-        value?.let {
-            profile = it
-            setProfileDetails()
-        } ?: noActiveProfile()
-    }
-
-    private fun setProfileDetails() {
-        with(binding){
-            address.text = profile.address.localAddress()
-            email.text = profile.emailAddress
-            professionalSummary.text = profile.profileSummary
-            binding.professionalSummary.visibility = View.VISIBLE
-            binding.loadingData.visibility = View.GONE
-        }
+    private fun FragmentProfileBinding.setProfileDetails() {
+        address.text = profile.address.localAddress()
+        email.text = profile.emailAddress
+        professionalSummary.text = profile.profileSummary
+        binding.professionalSummary.visibility = View.VISIBLE
+        binding.loadingData.visibility = View.GONE
     }
 }
