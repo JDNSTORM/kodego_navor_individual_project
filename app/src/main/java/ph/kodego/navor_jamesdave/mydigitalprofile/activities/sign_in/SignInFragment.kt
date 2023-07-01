@@ -105,26 +105,6 @@ class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
         }
     }
 
-//    private fun signIn(email: String, password: String){
-//        progressDialog.show()
-//        CoroutineScope(IO).launch{
-//            val signInSuccessful = viewModel.signIn(email, password)
-//            withContext(Main) {
-//                if (signInSuccessful) {
-//                    Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
-//                    val activity = requireActivity()
-//                    val intent = activity.intent
-//                    intent.putExtra(EXTRA_SIGNED_IN, true)
-//                    progressDialog.dismiss()
-//                    activity.finish()
-//                    startActivity(intent)
-//                } else {
-//                    progressDialog.dismiss()
-//                }
-//            }
-//        }
-//    }
-
     private fun reloadActivity(){
         Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
         val activity = requireActivity()

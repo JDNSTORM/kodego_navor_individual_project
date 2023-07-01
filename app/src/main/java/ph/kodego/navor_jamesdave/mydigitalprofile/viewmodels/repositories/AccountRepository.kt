@@ -109,6 +109,8 @@ class AccountRepository @Inject constructor(
         try {
             auth.updateUserPassword(oldPassword, password)
             loadActiveAccount()
+            delay(100)
+            signOut()
         }catch (e: FirebaseAuthException){
             source.setState(AccountState.Error(e))
         }

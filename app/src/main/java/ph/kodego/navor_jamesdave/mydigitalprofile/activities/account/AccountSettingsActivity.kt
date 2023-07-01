@@ -2,14 +2,18 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.account
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountSettingsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
@@ -25,36 +29,59 @@ class AccountSettingsActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupActionBar()
 
-        binding.btnSave.setOnClickListener { validateForm() }
+        binding.setupUI(
+            viewModel.accountState,
+            viewModel.action
+        )
     }
 
-    private fun validateForm() {
-        val oldPassword = binding.oldPassword.text.toString()
-        val password = binding.newPassword.text.toString()
-        val confirmPassword = binding.confirmPassword.text.toString()
+    private fun ActivityAccountSettingsBinding.setupUI(
+        state: StateFlow<AccountState>,
+        action: (AccountAction) -> StateFlow<RemoteState>?
+    ) {
+        monitorState(state)
+        btnSave.setOnClickListener { validateForm{ oldPassword, password ->
+            action(AccountAction.ChangePassword(oldPassword, password))
+        } }
+    }
 
-        when(false){
-            oldPassword.isNotEmpty() -> binding.oldPassword.requestFocus()
-            password.isNotEmpty() -> binding.newPassword.requestFocus()
-            confirmPassword.isNotEmpty() -> binding.confirmPassword.requestFocus()
-            (password == confirmPassword) -> binding.newPassword.requestFocus()
-            else -> updatePassword(oldPassword, password)
+    private fun monitorState(state: StateFlow<AccountState>) {
+        val progressDialog = ProgressDialog(this, R.string.updating_password)
+        lifecycleScope.launch {
+            state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
+                when(it){
+                    is AccountState.Active -> progressDialog.dismiss()
+                    is AccountState.Updating -> progressDialog.show()
+                    is AccountState.Error -> showError(it.error)
+                    else -> signIn()
+                }
+            }
         }
     }
 
-    private fun updatePassword(oldPassword: String, password: String) {
-//        progressDialog.show()
-//        CoroutineScope(IO).launch {
-//            val updateSuccessful = viewModel.updateUserPassword(oldPassword, password)
-//            withContext(Main){
-//                if (updateSuccessful){
-//                    finish()
-//                }else{
-//
-//                }
-//                progressDialog.dismiss()
-//            }
-//        }
+    private fun signIn() {
+        Toast.makeText(this, "Password Updated! Sign In again", Toast.LENGTH_SHORT).show()
+        finish()
+    }
+
+    private fun showError(t: Throwable){
+        Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun ActivityAccountSettingsBinding.validateForm(
+        updatePassword: (String, String) -> Unit
+    ) {
+        val oldPasswordText = oldPassword.text.toString()
+        val passwordText = newPassword.text.toString()
+        val confirmPasswordText = confirmPassword.text.toString()
+
+        when(false){
+            oldPasswordText.isNotEmpty() -> oldPassword.requestFocus()
+            passwordText.isNotEmpty() -> newPassword.requestFocus()
+            confirmPasswordText.isNotEmpty() -> confirmPassword.requestFocus()
+            (passwordText == confirmPasswordText) -> newPassword.requestFocus()
+            else -> updatePassword(oldPasswordText, passwordText)
+        }
     }
 
     private fun setupActionBar(){

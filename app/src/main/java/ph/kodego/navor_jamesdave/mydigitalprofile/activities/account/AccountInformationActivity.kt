@@ -67,7 +67,6 @@ class AccountInformationActivity : AppCompatActivity() {
         action: (AccountAction) -> StateFlow<RemoteState>?
     ) {
         setupActionBar()
-        loadAccount()
 
         lifecycleScope.launch {
             val accountFlow = (state.value as? AccountState.Active)?.account
@@ -159,52 +158,12 @@ class AccountInformationActivity : AppCompatActivity() {
         if (changes.isNotEmpty()) update(changes)
     }
 
-    private fun updateAccount(changes: HashMap<String, Any?>){
-//        progressDialog.show()
-//        CoroutineScope(IO).launch {
-//            pickedImage?.let {
-//                viewModel.uploadImage(it)?.let {
-//                    changes[KEY_IMAGE] = it
-//                } ?: changes.remove(KEY_IMAGE)
-//            }
-//
-//            val updateSuccessful = viewModel.updateAccount(changes)
-//            withContext(Main){
-//                if(updateSuccessful){
-//                    Toast.makeText(
-//                        this@AccountInformationActivity,
-//                        "Account Updated!",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    finish()
-//                }else{
-//                    Toast.makeText(
-//                        this@AccountInformationActivity,
-//                        "Updated Failed",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//                progressDialog.dismiss()
-//            }
-//        }
-    }
-
     private fun ActivityAccountInformationBinding.setupActionBar(){
         setSupportActionBar(tbTop)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         tbTop.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-    }
-
-    private fun loadAccount(){
-//        lifecycleScope.launch {
-//            val activeAccount = viewModel.activeAccount.first()
-//            activeAccount?.let {
-//                account = it
-//                setFormData()
-//            } ?: accountLoadFailed()
-//        }
     }
 
     private fun ActivityAccountInformationBinding.setFormData(){
@@ -225,11 +184,6 @@ class AccountInformationActivity : AppCompatActivity() {
             layoutContactEdit.telAreaCode.setText(contactNumber.areaCode)
             layoutContactEdit.telContactNumber.setText("${contactNumber.contact}")
         }
-    }
-
-    private fun accountLoadFailed(){
-        Toast.makeText(this, "Error Loading Account", Toast.LENGTH_SHORT).show()
-        finish()
     }
 
     private fun ActivityAccountInformationBinding.loadImage(){

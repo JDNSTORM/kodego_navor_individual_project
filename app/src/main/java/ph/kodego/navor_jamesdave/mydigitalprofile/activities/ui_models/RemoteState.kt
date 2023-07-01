@@ -5,7 +5,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models
  * This State will be used as an alternative in case AccountState needs to be retained
  */
 enum class RemoteState {
-    Neutral,
+    Idle,
     Waiting,
     Success,
     Failed,

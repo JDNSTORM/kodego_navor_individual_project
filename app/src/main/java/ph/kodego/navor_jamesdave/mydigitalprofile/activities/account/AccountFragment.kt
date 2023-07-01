@@ -58,10 +58,10 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>() {
         signOut: () -> Unit
     ) {
         lifecycleScope.launch {
-            state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
-                when(it){
+            state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{ accountState ->
+                when(accountState){
                     is AccountState.Active -> launch{
-                        it.account.collect { account -> bind(account) }
+                        accountState.account.collect { bind(it) }
                     }
                     is AccountState.Error -> reloadActivity()
                     is AccountState.Inactive -> reloadActivity()
@@ -114,14 +114,6 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>() {
         val intent = Intent(requireContext(), MigrateActivity::class.java)
         requireActivity().finish()
         startActivity(intent)
-    }
-
-    private fun setAccountData(account: Account){
-        with(binding) {
-            profileUserName.text = account.displayName()
-            email.text = account.emailAddress
-            GlideModule().loadProfilePhoto(binding.profilePicture, account.image)
-        }
     }
 
     private fun reloadActivity(){
