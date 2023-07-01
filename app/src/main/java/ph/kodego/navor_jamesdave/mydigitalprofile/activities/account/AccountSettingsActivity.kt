@@ -20,15 +20,12 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 
 @AndroidEntryPoint
 class AccountSettingsActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityAccountSettingsBinding.inflate(layoutInflater) }
-    private val viewModel: AccountViewModel by viewModels()
-    private val progressDialog by lazy { ProgressDialog(this, R.string.updating_password) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityAccountSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupActionBar()
 
+        val viewModel: AccountViewModel by viewModels()
         binding.setupUI(
             viewModel.accountState,
             viewModel.action
@@ -39,6 +36,7 @@ class AccountSettingsActivity : AppCompatActivity() {
         state: StateFlow<AccountState>,
         action: (AccountAction) -> StateFlow<RemoteState>?
     ) {
+        setupActionBar()
         monitorState(state)
         btnSave.setOnClickListener { validateForm{ oldPassword, password ->
             action(AccountAction.ChangePassword(oldPassword, password))
@@ -84,10 +82,10 @@ class AccountSettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupActionBar(){
-        setSupportActionBar(binding.tbTop)
+    private fun ActivityAccountSettingsBinding.setupActionBar(){
+        setSupportActionBar(tbTop)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.tbTop.setNavigationOnClickListener {
+        tbTop.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
