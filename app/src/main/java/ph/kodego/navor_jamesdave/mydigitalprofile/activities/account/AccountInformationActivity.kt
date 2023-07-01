@@ -32,12 +32,27 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 
 @AndroidEntryPoint
 class AccountInformationActivity : AppCompatActivity() {
+    private val binding by lazy { ActivityAccountInformationBinding.inflate(layoutInflater) }
     private lateinit var account: Account
     private var pickedImage: Uri? = null
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ){result ->
+        if(result.resultCode == Activity.RESULT_CANCELED){
+            Log.e("Document", "Image Pick Cancelled")
+        }else{
+            val data = result.data
+            data?.let {
+                pickedImage = data.data
+                binding.loadImage()
+            } ?: kotlin.run {
+                Toast.makeText(applicationContext, "No image was chosen", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityAccountInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val viewModel: AccountViewModel by viewModels()
 
@@ -64,7 +79,7 @@ class AccountInformationActivity : AppCompatActivity() {
             } ?: unauthorizedAccess()
         }
 
-        profilePicture.setOnClickListener { chooseProfilePicture{loadImage()} }
+        profilePicture.setOnClickListener { chooseProfilePicture() }
         btnSave.setOnClickListener { getFormData{
             val remoteState = action(AccountAction.Update(it, pickedImage))!!
             monitorUpdate(remoteState)
@@ -223,26 +238,11 @@ class AccountInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun chooseProfilePicture(onImageSelected: () -> Unit){
+    private fun chooseProfilePicture(){
         val choosePictureIntent = Intent(
             Intent.ACTION_PICK,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
-        val launcher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ){result ->
-            if(result.resultCode == Activity.RESULT_CANCELED){
-                Log.e("Document", "Image Pick Cancelled")
-            }else{
-                val data = result.data
-                data?.let {
-                    pickedImage = data.data
-                    onImageSelected()
-                } ?: kotlin.run {
-                    Toast.makeText(applicationContext, "No image was chosen", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
         launcher.launch(choosePictureIntent)
 
 //        when (Build.VERSION.SDK_INT){

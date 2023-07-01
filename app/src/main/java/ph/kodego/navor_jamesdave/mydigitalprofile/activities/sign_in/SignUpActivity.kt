@@ -2,13 +2,18 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.sign_in
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountAction
@@ -37,14 +42,25 @@ class SignUpActivity : AppCompatActivity() {
         action: (AccountAction) -> StateFlow<RemoteState>?
     ) {
         setupActionBar()
+        monitorState(state){action(AccountAction.SignOut)}
 
+        btnSignUp.setOnClickListener { validateForm{ firstName, lastName, email, password ->
+            action(AccountAction.SignUp(firstName, lastName, email, password))
+        } }
+    }
+
+    private fun monitorState(
+        state: StateFlow<AccountState>,
+        signOut: () -> Unit
+    ) {
         val progressDialog = ProgressDialog(this@SignUpActivity, R.string.signing_up)
         lifecycleScope.launch {
-            state.collectLatest{
+            state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
+                Log.d("AccountState", it.toString())
                 when(it){
                     is AccountState.Active -> {
                         progressDialog.dismiss()
-                        signUpSuccessful { action(AccountAction.SignOut) }
+                        signUpSuccessful { signOut() }
                     }
                     is AccountState.Updating -> progressDialog.show()
                     is AccountState.Error -> showError(it.error)
@@ -52,10 +68,6 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
         }
-
-        btnSignUp.setOnClickListener { validateForm{ firstName, lastName, email, password ->
-            action(AccountAction.SignUp(firstName, lastName, email, password))
-        } }
     }
 
     private fun signUpSuccessful(signOut: () -> Unit){

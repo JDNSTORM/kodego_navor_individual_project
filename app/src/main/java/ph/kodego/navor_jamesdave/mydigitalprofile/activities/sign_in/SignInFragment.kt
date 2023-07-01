@@ -2,14 +2,18 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.sign_in
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
@@ -49,22 +53,19 @@ class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
     }
 
     private fun FragmentSignInBinding.setupUI(
-        accountState: StateFlow<AccountState>,
+        state: StateFlow<AccountState>,
         signIn: (String, String) -> Unit
     ) {
         val progressDialog = ProgressDialog(requireContext(), R.string.signing_in)
         lifecycleScope.launch {
-            accountState.collectLatest{
+            state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
                 when(it){
                     is AccountState.Active -> {
                         progressDialog.dismiss()
                         reloadActivity()
                     }
                     is AccountState.Updating -> progressDialog.show()
-                    is AccountState.Error -> {
-                        progressDialog.dismiss()
-                        showError(it.error)
-                    }
+                    is AccountState.Error -> showError(it.error)
                     else -> progressDialog.dismiss()
                 }
             }

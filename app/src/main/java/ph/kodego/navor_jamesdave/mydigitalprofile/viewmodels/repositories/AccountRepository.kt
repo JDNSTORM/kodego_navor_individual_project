@@ -7,6 +7,7 @@ import com.google.firebase.storage.StorageException
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,6 +49,8 @@ class AccountRepository @Inject constructor(
             loadActiveAccount()
         }catch (e: FirebaseAuthException){
             source.setState(AccountState.Error(e))
+            delay(100)
+            source.setState(AccountState.Inactive)
         }
     }
 
@@ -96,6 +99,8 @@ class AccountRepository @Inject constructor(
             } ?: source.setState(AccountState.Invalid)
         }catch (e: Exception){
             source.setState(AccountState.Error(e))
+            delay(100)
+            source.setState(AccountState.Inactive)
         }
     }
 
