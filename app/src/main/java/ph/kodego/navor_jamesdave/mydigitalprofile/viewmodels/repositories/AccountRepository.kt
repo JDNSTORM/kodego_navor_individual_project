@@ -113,6 +113,8 @@ class AccountRepository @Inject constructor(
             signOut()
         }catch (e: FirebaseAuthException){
             source.setState(AccountState.Error(e))
+            delay(100)
+            loadActiveAccount()
         }
     }
 

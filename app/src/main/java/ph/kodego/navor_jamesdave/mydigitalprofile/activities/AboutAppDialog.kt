@@ -13,8 +13,10 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogAboutAppBind
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
-class AboutAppDialog<T>(context: T): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
-    private val viewModel by lazy { ViewModelProvider(context)[ProfileViewModel::class.java] }
+class AboutAppDialog(
+    context: Context,
+    private val viewDeveloperProfile: () -> Unit
+): AlertDialog(context){
 
     private val binding by lazy {
         DialogAboutAppBinding.inflate(layoutInflater)
@@ -26,7 +28,10 @@ class AboutAppDialog<T>(context: T): AlertDialog(context) where T: Context, T: V
 
         with(binding){
             btnViewGit.setOnClickListener { openGitRepositoryURL() }
-            btnViewProfile.setOnClickListener { viewDeveloperProfile() }
+            btnViewProfile.setOnClickListener {
+                viewDeveloperProfile()
+                dismiss()
+            }
             btnClose.setOnClickListener { dismiss() }
         }
     }
@@ -36,17 +41,5 @@ class AboutAppDialog<T>(context: T): AlertDialog(context) where T: Context, T: V
         val openURL = Intent(Intent.ACTION_VIEW)
         openURL.data = url
         context.startActivity(openURL)
-    }
-
-    private fun viewDeveloperProfile(){
-        with(context) {
-            val accountID = getString(R.string.account_id)
-            val profileID = getString(R.string.profile_id)
-            val profile = Profile(profileID = profileID, refUID = accountID)
-            val intent = Intent(this, ProfileActivity::class.java)
-            viewModel.setActiveProfile(profile)
-            startActivity(intent)
-        }
-        dismiss()
     }
 }

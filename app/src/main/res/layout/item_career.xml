@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:foreground="?attr/selectableItemBackground"
     android:layout_margin="5dp"
-    app:cardElevation="2dp"
     xmlns:tools="http://schemas.android.com/tools">
     <!--
         Other Information are hidden unless they are available

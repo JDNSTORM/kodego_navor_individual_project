@@ -8,7 +8,10 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 
-class MainMenu<T>(private val context: T): MenuProvider where T: Context, T: ViewModelStoreOwner{
+class MainMenu(
+    private val context: Context,
+    private val viewDeveloperProfile: () -> Unit
+): MenuProvider{
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main_menu, menu)
     }
@@ -16,7 +19,7 @@ class MainMenu<T>(private val context: T): MenuProvider where T: Context, T: Vie
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when(menuItem.itemId){
             R.id.btn_about -> {
-                AboutAppDialog(context).show()
+                AboutAppDialog(context, viewDeveloperProfile).show()
                 true
             }
             else -> true

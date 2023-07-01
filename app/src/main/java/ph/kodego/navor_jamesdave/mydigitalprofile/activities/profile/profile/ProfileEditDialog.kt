@@ -52,6 +52,7 @@ class ProfileEditDialog(
         if (professionText.isNotEmpty()){
             val updatedProfile = profile.copy(profession =  professionText, profileSummary =  summaryText)
             checkChanges(updatedProfile)
+            dismiss()
         }else{
             profession.error = "Field must not be empty."
             profession.requestFocus()

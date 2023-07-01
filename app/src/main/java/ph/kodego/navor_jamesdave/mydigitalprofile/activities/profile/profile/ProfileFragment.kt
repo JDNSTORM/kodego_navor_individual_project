@@ -69,13 +69,13 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>() {
                 it?.let {
                     profile = it
                     setProfileDetails()
-                } ?: noActiveProfile()
-            }
-        }
 
-        if (uid == activeUID){
-            enableEditing{
-                action(ProfileAction.Update(it))!!
+                    if (uid == activeUID){
+                        enableEditing{
+                            action(ProfileAction.Update(it))!!
+                        }
+                    }
+                } ?: noActiveProfile()
             }
         }
     }

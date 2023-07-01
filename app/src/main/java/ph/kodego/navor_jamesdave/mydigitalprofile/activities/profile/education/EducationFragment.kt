@@ -80,14 +80,13 @@ class EducationFragment(): ViewPagerFragment<FragmentEducationBinding>() {
                     }else{
                         itemsAdapter.setList(emptyList())
                     }
+                    if (uid == activeUID){
+                        enableEditing{
+                            val remoteState = action(ProfileAction.Update(it))!!
+                            monitorState(remoteState)
+                        }
+                    }
                 } ?: noActiveProfile()
-            }
-        }
-
-        if (uid == activeUID){
-            enableEditing{
-                val remoteState = action(ProfileAction.Update(it))!!
-                monitorState(remoteState)
             }
         }
     }

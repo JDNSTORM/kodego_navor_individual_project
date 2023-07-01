@@ -8,7 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
@@ -33,22 +32,28 @@ class HomeViewModel @Inject constructor(
             .filterIsInstance<HomeAction.Search>()
             .distinctUntilChanged()
             .onStart { emit(HomeAction.Search("")) }
-        val viewAction = actionStateFlow
-            .filterIsInstance<HomeAction.View>()
-
-        viewModelScope.launch {
-            viewAction.collect { viewProfile(it.profile) }
-        }
 
         profilePagingData = searchAction.flatMapLatest { //TODO: SearchQuery
             repository.getProfileStream().cachedIn(viewModelScope)
         }
 
-        action = { viewModelScope.launch { actionStateFlow.emit(it) } }
+        action = {
+            when(it){
+                is HomeAction.View -> viewProfile(it.profile)
+                else -> viewModelScope.launch { actionStateFlow.emit(it) }
+            }
+        }
     }
 
     private fun viewProfile(profile: Profile?) = viewModelScope.launch {
         profile?.let {
+            repository.profileSource.awaitProfile()
+            if (it.displayName().isEmpty()){
+                val account = repository.accountSource.getAccount(it.refUID)
+                account?.let { account ->
+                    it.setAccount(account)
+                }
+            }
             repository.profileSource.viewProfile(it)
         } ?: repository.profileSource.clearProfile()
     }

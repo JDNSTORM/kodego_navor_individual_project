@@ -16,10 +16,15 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ListMenu
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.SkillsMainAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentSkillsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutSkillEventsBinding
@@ -32,13 +37,12 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
-class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollector<Profile?> {
+class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>() {
     private val viewModel: ProfileViewModel by viewModels()
     private val eventsBinding by lazy {
         LayoutSkillEventsBinding.inflate(layoutInflater, binding.root, true)
     }
     private val itemsAdapter = SkillsMainAdapter()
-    private val activeUID = Firebase.auth.currentUser?.uid
     private val setupMenu by lazy { setupMenu(requireActivity()) }
     private val touchHelper by lazy { itemsAdapter.activateTouchHelper() }
     private lateinit var profile: Profile
@@ -57,7 +61,42 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadProfile()
+
+        setupUI(
+            viewModel.viewedProfileState,
+            viewModel.accountState,
+            viewModel.action
+        )
+    }
+
+    private fun setupUI(
+        state: StateFlow<ViewedProfileState>,
+        accountState: StateFlow<AccountState>,
+        action: (ProfileAction) -> StateFlow<RemoteState>?
+    ) {
+        setupRecyclerView()
+        val (flow, uid) = (state.value as ViewedProfileState.Active)
+        val activeUID = (accountState.value as? AccountState.Active)?.uid
+
+        lifecycleScope.launch {
+            flow.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
+                it?.let {
+                    profile = it
+                    if (it.careers.isNotEmpty()) {
+                        itemsAdapter.setList(it.skills)
+                    }else{
+                        itemsAdapter.setList(emptyList())
+                    }
+
+                    if (uid == activeUID){
+                        enableEditing{
+                            val remoteState = action(ProfileAction.Update(it))!!
+                            monitorState(remoteState)
+                        }
+                    }
+                } ?: noActiveProfile()
+            }
+        }
     }
 
     private fun setupMenu(host: MenuHost){
@@ -82,9 +121,11 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
     }
 
     private fun saveList() {
-//        val skills = itemsAdapter.skillsMainList()
-//        skills.lastIndex
-//        val changes: Map<String, Any?> = mapOf(Profile.KEY_SKILLS to skills)
+        val skills = itemsAdapter.skillsMainList()
+        skills.lastIndex
+        val changes: Map<String, Any?> = mapOf(Profile.KEY_SKILLS to skills)
+        val remoteState =  viewModel.action(ProfileAction.Update(changes))!!
+        monitorState(remoteState)
 //        lifecycleScope.launch {
 //            if(viewModel.updateProfile(profile, changes)){
 //                Toast.makeText(requireContext(), "Skills Saved!", Toast.LENGTH_SHORT).show()
@@ -94,12 +135,15 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
 //        }
     }
 
-    private fun loadProfile() {
+    private fun monitorState(state: StateFlow<RemoteState>){
         lifecycleScope.launch {
-            viewModel.readActiveProfile()?.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)?.let {
-                setupRecyclerView()
-                it.collect(this@SkillsFragment)
-            } ?: noActiveProfile()
+            state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
+                when(it){
+                    RemoteState.Success -> Toast.makeText(context, "Skills Saved!", Toast.LENGTH_SHORT).show()
+                    RemoteState.Failed -> Toast.makeText(context, "Skills not saved", Toast.LENGTH_SHORT).show()
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -111,7 +155,10 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
         binding.showData()
     }
 
-    private fun enableEditing() {
+    private fun enableEditing(
+        update: (Map<String, Any?>) -> Unit
+    ) {
+        setupMenu
         with(eventsBinding){
             minimizeFabs()
             efabSkillsOptions.setOnClickListener {
@@ -119,31 +166,20 @@ class SkillsFragment(): ViewPagerFragment<FragmentSkillsBinding>(), FlowCollecto
                 else{ expandFabs() }
             }
             layoutBackground.setOnClickListener { minimizeFabs() }
-            btnAddMainCategory.setOnClickListener { SkillMainEditDialog(requireActivity(), profile).show() }
+            btnAddMainCategory.setOnClickListener { SkillMainEditDialog(requireActivity(), profile, update).show() }
         }
         itemsAdapter.enableEditing(
             SkillsEditingInterface(
                 eventsBinding,
-                SkillMainEditDialog(requireActivity(), profile),
-                SkillSubEditDialog(requireActivity(), profile)
+                SkillMainEditDialog(requireActivity(), profile, update),
+                SkillSubEditDialog(requireActivity(), profile, update)
             )
         )
     }
 
     private fun noActiveProfile() {
-//        Toast.makeText(requireContext(), "No Profile Detected!", Toast.LENGTH_SHORT).show()
-//        requireActivity().finish()
-    }
-
-    override suspend fun emit(value: Profile?) {
-        value?.let {
-            profile = it
-            itemsAdapter.setList(it.skills)
-            if (it.refUID == activeUID){
-                enableEditing()
-                setupMenu
-            }
-        } ?: noActiveProfile()
+        Toast.makeText(requireContext(), "No Profile Detected!", Toast.LENGTH_SHORT).show()
+        requireActivity().finish()
     }
 
     private fun resetRecyclerViewState(){

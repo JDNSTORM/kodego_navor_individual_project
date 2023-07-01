@@ -26,9 +26,12 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsMain
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsSub
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
-class SkillSubEditDialog<T>(context: T, private val profile: Profile): AlertDialog(context) where T: Context, T: ViewModelStoreOwner{
+class SkillSubEditDialog(
+    context: Context,
+    private val profile: Profile,
+    private val update: (Map<String, Any?>) -> Unit
+): AlertDialog(context){
     private val binding by lazy { DialogSkillSubEditBinding.inflate(layoutInflater) }
-    private val viewModel by lazy { ViewModelProvider(context)[ProfileViewModel::class.java] }
     private lateinit var mainSkills: List<SkillsMain>
     private var mainSkill: SkillsMain? = null
     private var subSkill: SkillsSub? = null
@@ -127,9 +130,10 @@ class SkillSubEditDialog<T>(context: T, private val profile: Profile): AlertDial
     }
 
     private fun saveChanges(skills: List<SkillsMain>) {
-//        dismiss()
-//        skills.lastIndex
-//        val changes = mapOf<String, Any?>(Profile.KEY_SKILLS to skills)
+        dismiss()
+        skills.lastIndex
+        val changes = mapOf<String, Any?>(Profile.KEY_SKILLS to skills)
+        update(changes)
 //        CoroutineScope(Dispatchers.IO).launch {
 //            val updateSuccessful = viewModel.updateProfile(profile, changes)
 //            withContext(Dispatchers.Main){

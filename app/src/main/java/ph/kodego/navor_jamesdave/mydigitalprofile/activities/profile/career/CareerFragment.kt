@@ -82,14 +82,13 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>() {
                     }else{
                         itemsAdapter.setList(emptyList())
                     }
+                    if (uid == activeUID){
+                        enableEditing{
+                            val remoteState = action(ProfileAction.Update(it))!!
+                            monitorState(remoteState)
+                        }
+                    }
                 } ?: noActiveProfile()
-            }
-        }
-
-        if (uid == activeUID){
-            enableEditing{
-                val remoteState = action(ProfileAction.Update(it))!!
-                monitorState(remoteState)
             }
         }
     }
@@ -137,14 +136,14 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>() {
 
     private fun FragmentCareerBinding.enableEditing(update: (Map<String, Any?>) -> Unit) {
         setupMenu
-        with(btnAdd){
+        btnAdd.apply{
             isEnabled = true
             visibility = View.VISIBLE
             setOnClickListener {
-                CareerEditDialog(requireActivity(), profile, update).show()
+                CareerEditDialog(requireContext(), profile, update).show()
             }
         }
-        itemsAdapter.enableEditing(CareerEditDialog(requireActivity(), profile, update))
+        itemsAdapter.enableEditing(CareerEditDialog(requireContext(), profile, update))
     }
 
     private fun noActiveProfile() {

@@ -1,5 +1,6 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -8,32 +9,41 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.account.AccountFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.home.HomeFragment
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ProfileActivity
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.sign_in.SignInFragment
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.HomeAction
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewPagerFragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityMainBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles
+import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.utils.IntentBundles.EXTRA_SIGNED_IN
+import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.HomeViewModel
-import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
 class MainActivity(): AppCompatActivity() {
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.tbTop)
-        setupMenu()
+        setupMenu{
+            val accountID = getString(R.string.account_id)
+            val profileID = getString(R.string.profile_id)
+            val profile = Profile(profileID = profileID, refUID = accountID)
+            val intent = Intent(this, ProfileActivity::class.java)
+            viewModel.action(HomeAction.View(profile))
+            startActivity(intent)
+        }
         binding.setupViewPager()
     }
 
-    private fun setupMenu(){
-        addMenuProvider(MainMenu(this), this, Lifecycle.State.RESUMED)
+    private fun setupMenu(viewProfile: () -> Unit){
+        addMenuProvider(MainMenu(this, viewProfile), this, Lifecycle.State.RESUMED)
     }
 
     private fun ActivityMainBinding.setupViewPager() {
@@ -59,10 +69,9 @@ class MainActivity(): AppCompatActivity() {
     }
 
     override fun onResume() {
-        val viewModel: ProfileViewModel by viewModels()
-        viewModel.clearActiveProfile()
-        val homeViewModel: HomeViewModel by viewModels()
-        homeViewModel.action(HomeAction.View())
+        val accountViewModel: AccountViewModel by viewModels()
+        accountViewModel //Initialize
+        viewModel.action(HomeAction.View())
         super.onResume()
     }
 }

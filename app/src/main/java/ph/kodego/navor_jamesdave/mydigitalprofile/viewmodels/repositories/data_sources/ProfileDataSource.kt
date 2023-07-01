@@ -52,6 +52,10 @@ class ProfileDataSource @Inject constructor(private val dao: ProfileDAOImpl) {
         _viewedProfileState.emit(ViewedProfileState.Inactive)
     }
 
+    suspend fun awaitProfile(){
+        _viewedProfileState.emit(ViewedProfileState.Loading)
+    }
+
     fun updateProfile(profile: Profile?, fields: Map<String, Any?>): StateFlow<RemoteState>{
         val state = MutableStateFlow(RemoteState.Waiting)
         CoroutineScope(IO).launch {

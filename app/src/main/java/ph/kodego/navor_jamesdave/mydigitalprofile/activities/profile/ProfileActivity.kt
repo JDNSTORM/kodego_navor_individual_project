@@ -59,11 +59,12 @@ class ProfileActivity : AppCompatActivity(){
         accountProfiles: Flow<List<Profile>>?,
         action: (ProfileAction) -> StateFlow<RemoteState>?
     ) {
-        val progressDialog = ProgressDialog(this@ProfileActivity, R.string.loading_data).apply { show() }
+        val progressDialog = ProgressDialog(this@ProfileActivity, R.string.loading_data)
         lifecycleScope.launch {
             state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{ profileState ->
                 when(profileState){
                     is ViewedProfileState.Active -> {
+                        setupViewPager()
                         monitorState(profileState.profile)
                         progressDialog.dismiss()
                     }
@@ -77,6 +78,7 @@ class ProfileActivity : AppCompatActivity(){
                         progressDialog.dismiss()
                         throwError()
                     }
+                    is ViewedProfileState.Loading -> progressDialog.show()
                 }
             }
         }
@@ -111,7 +113,6 @@ class ProfileActivity : AppCompatActivity(){
                 profileUserName.text = profile.displayName()
                 profession.text = profile.profession
             }
-            setupViewPager()
         } ?: throwError()
     }
 
