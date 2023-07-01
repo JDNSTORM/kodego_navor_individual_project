@@ -31,10 +31,10 @@ class HomeViewModel @Inject constructor(
         val searchAction = actionStateFlow
             .filterIsInstance<HomeAction.Search>()
             .distinctUntilChanged()
-            .onStart { emit(HomeAction.Search("")) }
+            .onStart { emit(HomeAction.Search()) }
 
         profilePagingData = searchAction.flatMapLatest { //TODO: SearchQuery
-            repository.getProfileStream().cachedIn(viewModelScope)
+            repository.getProfileStream(it.query).cachedIn(viewModelScope)
         }
 
         action = {

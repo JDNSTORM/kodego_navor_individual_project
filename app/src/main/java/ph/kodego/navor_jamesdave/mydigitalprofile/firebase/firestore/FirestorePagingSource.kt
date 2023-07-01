@@ -39,7 +39,7 @@ abstract class FirestorePagingSource<Model: Any>(
         return getList(offset, limit)
     }
 
-    private suspend fun List<DocumentSnapshot>.toModels(): List<Model> = map { it.toObject() }
+    protected open suspend fun List<DocumentSnapshot>.toModels(): List<Model> = map { it.toObject() }
 
     protected abstract suspend fun DocumentSnapshot.toObject(): Model
 }

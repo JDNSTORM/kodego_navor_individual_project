@@ -3,6 +3,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.firebase.firestore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.ktx.dataObjects
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await

@@ -29,7 +29,7 @@ class ProfileRepository @Inject constructor(
     val profileSource: ProfileDataSource,
     val accountSource: AccountDataSource
 ) {
-    fun getProfileStream(): Flow<PagingData<Profile>>{
+    fun getProfileStream(query: String): Flow<PagingData<Profile>>{
         val pagingConfig = PagingConfig(
             pageSize = 5,
             enablePlaceholders = false
@@ -38,7 +38,8 @@ class ProfileRepository @Inject constructor(
             {document: DocumentSnapshot?, limit: Int ->
                 profileSource.getPublicProfiles(document, limit)
             },
-            { accountSource.getAccount(it)!!}
+            { accountSource.getAccount(it)!!},
+            query
         )}
 
         return Pager(
