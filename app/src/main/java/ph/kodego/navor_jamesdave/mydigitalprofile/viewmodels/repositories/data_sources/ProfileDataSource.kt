@@ -2,10 +2,17 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.data_
 
 import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.scopes.ServiceScoped
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.launch
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.firestore.ProfileDAOImpl
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
@@ -29,15 +36,36 @@ class ProfileDataSource @Inject constructor(private val dao: ProfileDAOImpl) {
     suspend fun deleteProfile(profile: Profile) = dao.deleteDocument(profile.profileID)
 
     suspend fun viewProfile(profile: Profile){
-        activeProfile = readProfile(profile)
         _viewedProfileState.emit(
-            ViewedProfileState.Active(readProfile(profile).transform {
-                it?.setAccount(profile)
-            })
+            ViewedProfileState.Active(
+                readProfile(profile).map {
+                    it?.setAccount(profile)
+                    it
+                },
+                profile.profileID
+            )
         )
     }
 
     suspend fun clearProfile(){
         _viewedProfileState.emit(ViewedProfileState.Inactive)
+    }
+
+    fun updateProfile(fields: Map<String, Any?>): StateFlow<RemoteState>{
+        val state = MutableStateFlow(RemoteState.Waiting)
+        CoroutineScope(IO).launch {
+            try {
+                val profileID = (viewedProfileState.value as? ViewedProfileState.Active)?.profileID
+                profileID?.let {
+                    dao.updateDocument(it, fields)
+                    state.emit(RemoteState.Success)
+                } ?: state.emit(RemoteState.Invalid)
+            } catch (e: Exception){
+                state.emit(RemoteState.Failed)
+            }
+            delay(100)
+            state.emit(RemoteState.Idle)
+        }
+        return state.asStateFlow()
     }
 }

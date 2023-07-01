@@ -57,4 +57,55 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_retry"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Error occurred"
+            android:padding="10dp"
+            style="@style/TextAppearance.Material3.HeadlineMedium"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/retry"
+            android:textAllCaps="true"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/list_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_results"
+            android:padding="10dp"
+            style="@style/TextAppearance.Material3.HeadlineMedium"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/refresh"
+            android:textAllCaps="true"
+            />
+    </LinearLayout>
+
 </LinearLayout>

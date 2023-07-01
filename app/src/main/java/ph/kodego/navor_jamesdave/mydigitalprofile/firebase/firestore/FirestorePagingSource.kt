@@ -22,11 +22,7 @@ abstract class FirestorePagingSource<Model: Any>(
             val models = documents.toModels()
             val prevKey = prevKeys.lastOrNull()
             prevKeys.add(position)
-            val nextKey = if (documents.isEmpty()){
-                null
-            }else{
-                documents.last()
-            }
+            val nextKey = documents.lastOrNull()
             LoadResult.Page(models, prevKey, nextKey)
         }catch (e: Exception){
             LoadResult.Error(e)

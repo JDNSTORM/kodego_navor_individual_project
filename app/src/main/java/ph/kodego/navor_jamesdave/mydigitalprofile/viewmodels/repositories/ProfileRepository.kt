@@ -6,6 +6,9 @@ import androidx.paging.PagingData
 import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.combineTransform
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.data_sources.AccountDataSource
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.data_sources.ProfileDataSource
@@ -34,5 +37,16 @@ class ProfileRepository @Inject constructor(
             null,
             pagingSourceFactory
         ).flow
+    }
+
+    fun getAccountProfiles(): Flow<List<Profile>>?{
+        val account = (accountSource.accountState.value as? AccountState.Active)?.account
+
+        return account?.let { flow ->
+            profileSource.readProfiles().combine(flow){ profiles, account ->
+                profiles.forEach { it.setAccount(account!!) }
+                profiles
+            }
+        }
     }
 }

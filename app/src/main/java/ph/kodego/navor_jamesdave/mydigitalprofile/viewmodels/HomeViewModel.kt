@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(
             viewAction.collect { viewProfile(it.profile) }
         }
 
-        profilePagingData = searchAction.flatMapLatest {
+        profilePagingData = searchAction.flatMapLatest { //TODO: SearchQuery
             repository.getProfileStream().cachedIn(viewModelScope)
         }
 

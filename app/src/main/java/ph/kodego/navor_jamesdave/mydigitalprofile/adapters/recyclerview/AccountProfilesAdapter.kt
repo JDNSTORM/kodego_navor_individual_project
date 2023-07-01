@@ -4,14 +4,16 @@ import android.content.Context
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import kotlinx.coroutines.flow.StateFlow
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.DeleteItemDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemAccountProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 
 class AccountProfilesAdapter(
-    private val action: (ProfileAction) -> Unit,
+    private val action: (ProfileAction) -> StateFlow<RemoteState>?,
     private val dismiss: () -> Unit,
     ): ItemsAdapter<Profile>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

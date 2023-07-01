@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +52,7 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
         val viewModel: HomeViewModel by viewModels()
         binding.setupRecyclerView(viewModel.profilePagingData) {
             viewModel.action(HomeAction.View(it))
+            toProfile()
         }
         binding.setupSearch {
             viewModel.action(HomeAction.Search(it))
@@ -58,10 +60,7 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
     }
 
     private fun FragmentHomeBinding.setupRecyclerView(data: Flow<PagingData<Profile>>, view: (Profile) -> Unit){
-        val pagingAdapter = ProfilePagingAdapter{
-            view(it)
-            toProfile()
-        }
+        val pagingAdapter = ProfilePagingAdapter{ view(it) }
         listProfiles.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = pagingAdapter
@@ -72,6 +71,8 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
         lifecycleScope.launch {
             pagingAdapter.loadStateFlow.collect{monitorListState(it)}
         }
+        btnRetry.setOnClickListener { pagingAdapter.retry() }
+        btnRefresh.setOnClickListener { pagingAdapter.refresh() }
     }
 
     private fun FragmentHomeBinding.monitorListState(state: CombinedLoadStates){
@@ -83,6 +84,13 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
 
         listProfiles.isVisible = !isListEmpty && !isLoading && !isError
         loadingData.isVisible = isLoading
+        layoutRetry.isVisible = isError
+        listEmpty.isVisible = isListEmpty
+
+        val errorState = state.refresh as? LoadState.Error
+        errorState?.let {
+            errorMessage.text = it.error.localizedMessage
+        }
     }
 
     private fun FragmentHomeBinding.setupSearch(search: (String) -> Unit){
@@ -121,5 +129,4 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
         val intent = Intent(context, ProfileActivity::class.java)
         startActivity(intent)
     }
-
 }

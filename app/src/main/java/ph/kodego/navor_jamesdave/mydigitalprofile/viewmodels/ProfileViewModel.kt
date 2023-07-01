@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.ProfileRepository
@@ -24,8 +26,8 @@ class ProfileViewModel @Inject constructor(
 ): AndroidViewModel(application) {
     val viewedProfileState = repository.profileSource.viewedProfileState
     val accountState = repository.accountSource.accountState
-    val accountProfiles: Flow<List<Profile>> get() = readProfiles()
-    val action: (ProfileAction) -> Unit
+    val accountProfiles: Flow<List<Profile>>? get() = repository.getAccountProfiles()
+    val action: (ProfileAction) -> StateFlow<RemoteState>?
 
     init {
         val actionStateFlow = MutableSharedFlow<ProfileAction>()
@@ -36,12 +38,18 @@ class ProfileViewModel @Inject constructor(
 
 
 
-        action = { viewModelScope.launch {
-                actionStateFlow.emit(it)
-        }}
+        action = {
+            when(it){
+                is ProfileAction.Update -> repository.profileSource.updateProfile( it.changes)
+                else -> {
+                    viewModelScope.launch { actionStateFlow.emit(it) }
+                    null
+                }
+            }
+        }
     }
 
-    private val activeAccount: Flow<Account?> by lazy { repository.accountSource.activeAccount!! }
+//    private val activeAccount: Flow<Account?> by lazy { repository.accountSource.activeAccount!! }
     val group: Flow<List<Profile>> =
         readPublicProfiles().combineTransform(readAccounts()){ profiles, accounts ->
             val group: ArrayList<Profile> = ArrayList()
@@ -88,14 +96,14 @@ class ProfileViewModel @Inject constructor(
 //    }
     private fun readProfile(profile: Profile): Flow<Profile?> = repository.profileSource.readProfile(profile)
     private fun readProfilesGroup(): Flow<List<Profile>> = repository.profileSource.readProfilesGroup()
-    fun readAccountProfiles(): Flow<List<Profile>> {
-        return readProfiles().combineTransform(activeAccount){ profiles, account ->
-            account?.let {
-                profiles.onEach { profile -> profile.setAccount(it) }
-            }
-            emit(profiles)
-        }
-    }
+//    fun readAccountProfiles(): Flow<List<Profile>> {
+//        return readProfiles().combineTransform(activeAccount){ profiles, account ->
+//            account?.let {
+//                profiles.onEach { profile -> profile.setAccount(it) }
+//            }
+//            emit(profiles)
+//        }
+//    }
     private fun readPublicProfiles(): Flow<List<Profile>> = repository.profileSource.readPublicProfiles()
     private fun readProfiles(): Flow<List<Profile>> = repository.profileSource.readProfiles()
     private fun readAccounts(): Flow<List<Account>> = repository.accountSource.readAccounts()

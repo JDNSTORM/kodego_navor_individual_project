@@ -90,6 +90,9 @@ You can view it through the buttons below.</string>
     <string name="cancel">Cancel</string>
     <string name="view_profile">View Profile</string>
     <string name="git_repository">Git Repository</string>
+    <string name="retry">Retry</string>
+    <string name="no_results">No Results</string>
+    <string name="refresh">Reload</string>
 
     <string-array name="degrees">
         <item>Bachelor of Science</item>

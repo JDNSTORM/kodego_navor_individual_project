@@ -29,7 +29,7 @@ class ProfilePagingAdapter(
         val binding = holder.binding as ItemProfileBinding
         val profile = getItem(position)
         profile?.let {
-            binding.bind(profile)
+            binding.bind(it)
         }
     }
 

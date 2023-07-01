@@ -11,10 +11,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CreateProfileDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.ExitWarningDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.AccountProfilesAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogProfileSelectBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
@@ -23,7 +25,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 class SelectProfileDialog(
     context: Context,
     private val accountProfiles: Flow<List<Profile>>,
-    private val action: (ProfileAction) -> Unit,
+    private val action: (ProfileAction) -> StateFlow<RemoteState>?,
 ): AlertDialog(context){
     private val exitDialog by lazy {
         object: ExitWarningDialog(context){

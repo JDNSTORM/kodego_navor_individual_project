@@ -2,6 +2,7 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
@@ -11,6 +12,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CareerFragment
@@ -19,6 +23,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.education.E
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.profile.ProfileFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.skills.SkillsFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewPagerFragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityProfileBinding
@@ -44,8 +49,8 @@ class ProfileActivity : AppCompatActivity(){
 
     private fun ActivityProfileBinding.setupUI(
         state: Flow<ViewedProfileState>,
-        accountProfiles: Flow<List<Profile>>,
-        action: (ProfileAction) -> Unit
+        accountProfiles: Flow<List<Profile>>?,
+        action: (ProfileAction) -> StateFlow<RemoteState>?
     ){
         setupActionBar()
         loadProfile(state, accountProfiles, action)
@@ -53,31 +58,43 @@ class ProfileActivity : AppCompatActivity(){
 
     private fun ActivityProfileBinding.loadProfile(
         state: Flow<ViewedProfileState>,
-        accountProfiles: Flow<List<Profile>>,
-        action: (ProfileAction) -> Unit
+        accountProfiles: Flow<List<Profile>>?,
+        action: (ProfileAction) -> StateFlow<RemoteState>?
     ) {
         val progressDialog = ProgressDialog(this@ProfileActivity, R.string.loading_data).apply { show() }
         lifecycleScope.launch {
             state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{ profileState ->
                 when(profileState){
-                    is ViewedProfileState.Active -> launch{
-                        profileState.profile.collect { bind(it) }
+                    is ViewedProfileState.Active -> {
+                        monitorState(profileState.profile)
+                        progressDialog.dismiss()
                     }
                     is ViewedProfileState.Inactive -> {
-                        selectProfile(accountProfiles, action)
+                        progressDialog.dismiss()
+                        accountProfiles?.let {
+                            selectProfile(it, action)
+                        } ?: throwError()
                     }
-                    is ViewedProfileState.Invalid -> throwError()
+                    is ViewedProfileState.Invalid -> {
+                        progressDialog.dismiss()
+                        throwError()
+                    }
                 }
-                progressDialog.dismiss()
             }
+        }
+    }
+
+    private fun ActivityProfileBinding.monitorState(profile: Flow<Profile?>){
+        lifecycleScope.launch {
+            profile.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{bind(it)}
         }
     }
 
     private fun selectProfile(
         accountProfiles: Flow<List<Profile>>,
-        action: (ProfileAction) -> Unit
+        action: (ProfileAction) -> StateFlow<RemoteState>?
     ) {
-        SelectProfileDialog(this, accountProfiles, action)
+        SelectProfileDialog(this, accountProfiles, action).show()
     }
 
     private fun ActivityProfileBinding.setupActionBar(){
@@ -89,6 +106,7 @@ class ProfileActivity : AppCompatActivity(){
     }
 
     private fun ActivityProfileBinding.bind(profile: Profile?){
+        Log.d("Profile", profile.toString())
         profile?.let {
             GlideModule().loadProfilePhoto(layoutProfile.profilePicture, profile.image)
             with(layoutProfile) {

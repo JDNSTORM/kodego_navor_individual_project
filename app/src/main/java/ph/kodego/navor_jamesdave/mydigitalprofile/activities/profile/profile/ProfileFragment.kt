@@ -21,6 +21,7 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ViewPagerFragment
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
+import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
@@ -57,7 +58,7 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>(), FlowCollec
     private fun FragmentProfileBinding.setupUI(
         viewedProfileState: StateFlow<ViewedProfileState>,
         accountState: StateFlow<AccountState>,
-        action: (ProfileAction) -> Unit
+        action: (ProfileAction) -> StateFlow<RemoteState>?
     ) {
 
     }
