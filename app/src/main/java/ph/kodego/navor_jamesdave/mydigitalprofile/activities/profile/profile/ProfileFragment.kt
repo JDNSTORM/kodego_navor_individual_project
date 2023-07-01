@@ -75,7 +75,7 @@ class ProfileFragment(): ViewPagerFragment<FragmentProfileBinding>() {
 
         if (uid == activeUID){
             enableEditing{
-                action(ProfileAction.Update(profile, it))!!
+                action(ProfileAction.Update(it))!!
             }
         }
     }

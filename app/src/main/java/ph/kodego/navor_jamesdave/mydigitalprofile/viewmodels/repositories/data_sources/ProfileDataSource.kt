@@ -52,12 +52,16 @@ class ProfileDataSource @Inject constructor(private val dao: ProfileDAOImpl) {
         _viewedProfileState.emit(ViewedProfileState.Inactive)
     }
 
-    fun updateProfile(profile: Profile, fields: Map<String, Any?>): StateFlow<RemoteState>{
+    fun updateProfile(profile: Profile?, fields: Map<String, Any?>): StateFlow<RemoteState>{
         val state = MutableStateFlow(RemoteState.Waiting)
         CoroutineScope(IO).launch {
             try {
-                dao.updateDocument(profile.profileID, fields)
-                state.emit(RemoteState.Success)
+                val profileID = profile?.profileID
+                    ?: (viewedProfileState.value as? ViewedProfileState.Active)?.profileID
+                profileID?.let {
+                    dao.updateDocument(it, fields)
+                    state.emit(RemoteState.Success)
+                } ?: state.emit(RemoteState.Invalid)
             } catch (e: Exception){
                 state.emit(RemoteState.Failed)
             }

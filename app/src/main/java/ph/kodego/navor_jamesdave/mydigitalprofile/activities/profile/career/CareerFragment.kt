@@ -88,7 +88,7 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>() {
 
         if (uid == activeUID){
             enableEditing{
-                val remoteState = action(ProfileAction.Update(profile, it))!!
+                val remoteState = action(ProfileAction.Update(it))!!
                 monitorState(remoteState)
             }
         }
@@ -156,7 +156,7 @@ class CareerFragment(): ViewPagerFragment<FragmentCareerBinding>() {
         val careers = itemsAdapter.careers()
         careers.lastIndex
         val changes: Map<String, Any?> = mapOf(Profile.KEY_CAREERS to careers)
-        val remoteState = viewModel.action(ProfileAction.Update(profile, changes))!!
+        val remoteState = viewModel.action(ProfileAction.Update(changes))!!
         monitorState(remoteState)
 //        lifecycleScope.launch {
 //            if(viewModel.updateProfile(profile, changes)){

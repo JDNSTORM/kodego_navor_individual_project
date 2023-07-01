@@ -65,9 +65,9 @@ class AccountProfilesAdapter(
         val unpublish = mapOf<String, Any?>(Profile.KEY_IS_PUBLIC to false)
         if (!profile.isPublic) {
             publicProfiles.forEach {
-                action(ProfileAction.Update(it, unpublish))
+                action(ProfileAction.Update(unpublish, it))
             }
         }
-        action(ProfileAction.Update(profile, changes))
+        action(ProfileAction.Update(changes, profile))
     }
 }

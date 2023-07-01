@@ -82,26 +82,12 @@ class ProfileEditDialog(
         if (profile.profileSummary != updatedProfile.profileSummary) changes[Profile.KEY_PROFILE_SUMMARY] = updatedProfile.profileSummary
 
         if (changes.isNotEmpty()){
-            monitorState(update(changes))
+//            monitorState(
+                update(changes)
+//            )
         }else{
             Toast.makeText(context, "No Fields Changed!", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun updateProfile(changes: Map<String, Any?>) {
-//        val progressDialog = ProgressDialog(context, R.string.updating_profile).apply { show() }
-//        CoroutineScope(IO).launch {
-//            val updateSuccessful = viewModel.updateProfile(profile, changes)
-//            withContext(Main){
-//                if (updateSuccessful){
-//                    Toast.makeText(context, "Update Successful!", Toast.LENGTH_SHORT).show()
-//                }else{
-//                    Toast.makeText(context, "Update Failed!", Toast.LENGTH_SHORT).show()
-//                }
-//                progressDialog.dismiss()
-//                dismiss()
-//            }
-//        }
     }
 
     private fun setProfileDetails() {
