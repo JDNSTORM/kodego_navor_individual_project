@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemProfileBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadProfile
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 
 class ProfilePagingAdapter(
     private val view: (Profile) -> Unit
@@ -42,7 +42,7 @@ class ProfilePagingAdapter(
     private fun ItemProfileBinding.bind(profile: Profile){
         profileUserName.text = profile.displayName()
         profession.text = profile.profession
-        GlideModule().loadProfilePhoto(profilePicture, profile.image)
+        profilePicture.loadProfile(profile.image)
 
         root.setOnClickListener { view(profile) }
     }

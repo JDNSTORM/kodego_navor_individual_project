@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
@@ -25,9 +24,9 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.Mig
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountAction
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.FragmentAccountBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadProfile
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 
 @AndroidEntryPoint
@@ -80,7 +79,7 @@ class AccountFragment(): ViewPagerFragment<FragmentAccountBinding>() {
         account?.let {
             profileUserName.text = it.displayName()
             email.text = it.emailAddress
-            GlideModule().loadProfilePhoto(binding.profilePicture, it.image)
+            profilePicture.loadProfile(it.image)
         }?: object: MigrateDialog(requireContext()){
             override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
                 dialog.dismiss()

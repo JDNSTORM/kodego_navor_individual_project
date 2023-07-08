@@ -26,8 +26,8 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedPro
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.ViewPagerFragmentAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityProfileBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadProfile
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
@@ -108,10 +108,10 @@ class ProfileActivity : AppCompatActivity(){
     private fun ActivityProfileBinding.bind(profile: Profile?){
         Log.d("Profile", profile.toString())
         profile?.let {
-            GlideModule().loadProfilePhoto(layoutProfile.profilePicture, profile.image)
+            layoutProfile.profilePicture.loadProfile(it.image)
             with(layoutProfile) {
-                profileUserName.text = profile.displayName()
-                profession.text = profile.profession
+                profileUserName.text = it.displayName()
+                profession.text = it.profession
             }
         } ?: throwError()
     }

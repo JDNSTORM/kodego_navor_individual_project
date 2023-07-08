@@ -21,13 +21,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountSt
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ActivityAccountInformationBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
+import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.loadProfile
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account.Companion.KEY_ADDRESS
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account.Companion.KEY_CONTACT_NUMBER
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account.Companion.KEY_FIRST_NAME
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account.Companion.KEY_IMAGE
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account.Companion.KEY_LAST_NAME
-import ph.kodego.navor_jamesdave.mydigitalprofile.utils.GlideModule
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.AccountViewModel
 
 @AndroidEntryPoint
@@ -170,7 +170,7 @@ class AccountInformationActivity : AppCompatActivity() {
         firstName.setText(account.firstName)
         lastName.setText(account.lastName)
         if (account.image.isNotEmpty()){
-            GlideModule().loadProfilePhoto(profilePicture, account.image)
+            profilePicture.loadProfile(account.image)
         }
         account.address.let {address ->
             streetAddress.setText(address.streetAddress)
@@ -188,7 +188,7 @@ class AccountInformationActivity : AppCompatActivity() {
 
     private fun ActivityAccountInformationBinding.loadImage(){
         pickedImage?.let {
-            GlideModule().loadProfilePhoto(profilePicture, it.toString())
+            profilePicture.loadProfile(it.toString())
         }
     }
 
