@@ -7,11 +7,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.MainActivity">
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/tb_top"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        style="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"/>
+        android:layout_height="?attr/actionBarSize"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager2"
@@ -24,8 +23,7 @@
         android:id="@+id/tl_nav_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLight"
-        style="@style/Widget.MaterialComponents.TabLayout"
+        style="@style/Widget.Material3.TabLayout"
         />
 
 </LinearLayout>

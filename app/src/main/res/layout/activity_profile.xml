@@ -30,6 +30,7 @@
         android:id="@+id/tl_nav_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.Material3.TabLayout"
         />
 
 </LinearLayout>

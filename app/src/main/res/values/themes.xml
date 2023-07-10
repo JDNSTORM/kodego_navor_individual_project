@@ -1,16 +1,66 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.MyDigitalProfile" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+<!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/purple_500</item>-->
+<!--        <item name="colorPrimaryVariant">@color/purple_700</item>-->
+<!--        <item name="colorOnPrimary">@color/white</item>-->
+<!--        &lt;!&ndash; Secondary brand color. &ndash;&gt;-->
+<!--        <item name="colorSecondary">@color/teal_200</item>-->
+<!--        <item name="colorSecondaryVariant">@color/teal_700</item>-->
+<!--        <item name="colorOnSecondary">@color/black</item>-->
+<!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
+
+        <!-- Customize secondary color -->
+        <item name="colorSecondary">@color/colorSecondary</item>
+<!--        <item name="colorSecondaryDark">@color/colorSecondaryDark</item>-->
+        <item name="colorSecondaryVariant">@color/colorSecondaryLight</item>
+
+        <!-- Customize accent color -->
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Customize text colors -->
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+
+        <!-- Customize background color -->
+        <item name="android:windowBackground">@color/colorBackground</item>
+
+        <!-- Customize colorOnPrimary and colorOnSecondary -->
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
+
+        <!-- Customize MaterialButton colors -->
+<!--        <item name="materialButtonBackground">@color/buttonBackground</item>-->
+<!--        <item name="materialButtonTextColor">@color/buttonText</item>-->
+<!--        <item name="materialButtonRippleColor">@color/buttonRipple</item>-->
+
+        <!-- Customize OutlinedTextField colors -->
+        <item name="textInputStyle">@style/OutlinedTextField</item>
+
+        <!-- Customize DropdownMenu colors -->
+        <item name="actionDropDownStyle">@style/DropdownMenu</item>
+    </style>
+
+    <style name="OutlinedTextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:backgroundTint">@color/outlinedTextFieldBackground</item>
+        <item name="hintTextColor">@color/outlinedTextFieldLabel</item>
+        <item name="android:textColor">@color/outlinedTextFieldText</item>
+        <item name="android:textCursorDrawable">@color/outlinedTextFieldCursor</item>
+        <item name="boxStrokeColor">@color/outlinedTextFieldStroke</item>
+    </style>
+
+    <style name="DropdownMenu" parent="Widget.Material3.AutoCompleteTextView.OutlinedBox">
+        <item name="android:background">@color/dropdownMenuBackground</item>
+        <item name="android:textColor">@color/dropdownMenuText</item>
+        <item name="android:drawableEnd">@color/dropdownMenuIcon</item>
     </style>
 </resources>
