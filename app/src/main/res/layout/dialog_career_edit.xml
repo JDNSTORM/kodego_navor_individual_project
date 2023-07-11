@@ -28,7 +28,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/til_employment_end"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -47,7 +46,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/til_date_employed"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -66,7 +64,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_date_employed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -85,7 +82,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_position"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -117,7 +113,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 app:layout_constraintTop_toBottomOf="@id/heading_address"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -152,7 +147,6 @@
                 app:layout_constraintTop_toBottomOf="@id/heading_website"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -193,7 +187,6 @@
                 app:layout_constraintTop_toBottomOf="@id/layout_contact_edit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText

@@ -37,7 +37,6 @@
             android:id="@+id/til_first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginHorizontal="10dp"
             app:endIconMode="clear_text"
             >
@@ -55,7 +54,6 @@
             android:id="@+id/til_last_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginHorizontal="10dp"
             app:endIconMode="clear_text"
             >
@@ -73,7 +71,6 @@
             android:id="@+id/til_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginHorizontal="10dp"
             app:endIconMode="clear_text"
             >
@@ -93,7 +90,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginHorizontal="10dp"
             >
             <com.google.android.material.textfield.TextInputEditText
@@ -111,7 +107,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginHorizontal="10dp"
             >
             <com.google.android.material.textfield.TextInputEditText

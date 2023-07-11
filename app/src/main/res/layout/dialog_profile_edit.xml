@@ -7,7 +7,6 @@
         android:id="@+id/til_profession"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_margin="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
@@ -30,8 +29,7 @@
         />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/profile_summary"
             android:layout_width="match_parent"
@@ -39,7 +37,6 @@
             android:inputType="textMultiLine"
             android:gravity="top|start"
             android:padding="5dp"
-            style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
             android:layout_marginHorizontal="10dp"
             android:lines="10"
             />

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#32658E</color>
+    <color name="colorPrimaryDark">#16324B</color>
+    <color name="colorPrimaryLight">#214D72</color>
+
+    <color name="colorSecondary">#E79F00</color>
+    <color name="colorSecondaryDark">#B36D00</color>
+    <color name="colorSecondaryLight">#FFCB33</color>
+
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="textColorPrimary">#E0E0E0</color>
+    <color name="textColorSecondary">#B0B0B0</color>
+
+    <color name="colorBackground">#121212</color>
+
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorOnSurface">#E0E0E0</color>
+    <color name="colorOnSurfaceVariant">#B0B0B0</color>
+
+    <color name="buttonBackground">#214D72</color>
+    <color name="buttonText">#FFFFFF</color>
+    <color name="buttonRipple">#FFFFFF</color>
+
+    <color name="outlinedTextFieldBackground">#424242</color>
+    <color name="outlinedTextFieldLabel">#B0B0B0</color>
+    <color name="outlinedTextFieldText">#FFFFFF</color>
+    <color name="outlinedTextFieldCursor">#FFFFFF</color>
+    <color name="outlinedTextFieldStroke">#214D72</color>
+
+    <color name="dropdownMenuBackground">#424242</color>
+    <color name="dropdownMenuText">#E0E0E0</color>
+    <color name="dropdownMenuIcon">#B0B0B0</color>
+</resources>

@@ -30,7 +30,6 @@
         android:id="@+id/til_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginHorizontal="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
@@ -85,7 +84,6 @@
             android:layout_weight="1"
             android:layout_marginEnd="5dp"
             app:endIconMode="clear_text"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/skill"

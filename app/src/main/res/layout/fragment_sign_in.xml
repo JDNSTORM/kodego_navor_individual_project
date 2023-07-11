@@ -20,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             app:endIconMode="clear_text"
             >
             <com.google.android.material.textfield.TextInputEditText
@@ -40,7 +39,6 @@
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
             android:layout_marginHorizontal="10dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"

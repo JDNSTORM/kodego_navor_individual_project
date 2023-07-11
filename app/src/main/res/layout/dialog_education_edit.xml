@@ -29,7 +29,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:endIconMode="dropdown_menu"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -50,7 +49,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_degree"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -69,7 +67,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_school_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/til_date_graduated"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginStart="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -88,7 +85,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_school_name"
                 app:layout_constraintStart_toEndOf="@id/til_date_enrolled"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginEnd="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -107,7 +103,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_field_of_study"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -126,7 +121,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_date_enrolled"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
@@ -145,7 +139,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_school_address"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_marginHorizontal="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText

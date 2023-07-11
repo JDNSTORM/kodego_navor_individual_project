@@ -35,7 +35,7 @@
         <!-- Customize colorOnPrimary and colorOnSecondary -->
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
-        <item name="colorOnSurface">@color/colorOnSurface</item>
+<!--        <item name="colorOnSurface">@color/colorOnSurface</item>-->
         <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
 
         <!-- Customize MaterialButton colors -->
@@ -47,13 +47,17 @@
         <item name="textInputStyle">@style/OutlinedTextField</item>
 
         <!-- Customize DropdownMenu colors -->
-        <item name="actionDropDownStyle">@style/DropdownMenu</item>
+<!--        <item name="actionDropDownStyle">@style/DropdownMenu</item>-->
+
+
+        <item name="drawableTint">@color/textColorPrimary</item>
     </style>
 
     <style name="OutlinedTextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:backgroundTint">@color/outlinedTextFieldBackground</item>
         <item name="hintTextColor">@color/outlinedTextFieldLabel</item>
-        <item name="android:textColor">@color/outlinedTextFieldText</item>
+<!--        <item name="android:textColor">@color/outlinedTextFieldText</item>-->
+        <item name="android:textColor">@color/black</item>
         <item name="android:textCursorDrawable">@color/outlinedTextFieldCursor</item>
         <item name="boxStrokeColor">@color/outlinedTextFieldStroke</item>
     </style>
