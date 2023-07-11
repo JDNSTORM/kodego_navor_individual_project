@@ -44,7 +44,7 @@
 <!--        <item name="materialButtonRippleColor">@color/buttonRipple</item>-->
 
         <!-- Customize OutlinedTextField colors -->
-        <item name="textInputStyle">@style/OutlinedTextField</item>
+        <item name="textInputOutlinedDenseStyle">@style/OutlinedTextField</item>
 
         <!-- Customize DropdownMenu colors -->
 <!--        <item name="actionDropDownStyle">@style/DropdownMenu</item>-->
@@ -53,7 +53,7 @@
         <item name="drawableTint">@color/textColorPrimary</item>
     </style>
 
-    <style name="OutlinedTextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+    <style name="OutlinedTextField" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
         <item name="android:backgroundTint">@color/outlinedTextFieldBackground</item>
         <item name="hintTextColor">@color/outlinedTextFieldLabel</item>
 <!--        <item name="android:textColor">@color/outlinedTextFieldText</item>-->
