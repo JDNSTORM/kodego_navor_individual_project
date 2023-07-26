@@ -39,12 +39,7 @@ class CareerEditDialog(
     }
 
     private fun openDeleteDialog() {
-        object: DeleteItemDialog(context, career!!){
-            override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
-                deleteCareer()
-                dialog.dismiss()
-            }
-        }.show()
+        DeleteItemDialog(context, career!!){ deleteCareer() }.show()
     }
 
     private fun deleteCareer() {

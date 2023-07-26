@@ -89,11 +89,8 @@ class SkillSubEditDialog(
     }
 
     private fun openDeleteDialog() {
-        object: DeleteItemDialog(context, subSkill!!){
-            override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
-                deleteSkill()
-                dialog.dismiss()
-            }
+        DeleteItemDialog(context, subSkill!!){
+            deleteSkill()
         }.show()
     }
 

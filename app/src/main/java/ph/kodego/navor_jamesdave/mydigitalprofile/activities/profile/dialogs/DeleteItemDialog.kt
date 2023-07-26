@@ -10,15 +10,20 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsMain
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsSub
 
-abstract class DeleteItemDialog(context: Context, private val item: Any): AlertDialog(context) {
+class DeleteItemDialog(
+    context: Context,
+    private val item: Any,
+    private val confirm: () -> Unit
+): AlertDialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTitleAndMessage()
         setButton(BUTTON_NEGATIVE, "No"){ _, _ -> dismiss()}
-        setButton(BUTTON_POSITIVE, "Yes", ifYes())
+        setButton(BUTTON_POSITIVE, "Yes"){_, _ ->
+            confirm()
+            dismiss()
+        }
         super.onCreate(savedInstanceState)
     }
-
-    abstract fun ifYes(): OnClickListener
 
     private fun setTitleAndMessage(){
         var itemName: String = "Item"

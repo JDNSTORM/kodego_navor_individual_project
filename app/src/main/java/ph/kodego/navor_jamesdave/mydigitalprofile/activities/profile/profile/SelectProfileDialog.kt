@@ -31,13 +31,9 @@ class SelectProfileDialog(
     private val action: (ProfileAction) -> StateFlow<RemoteState>?,
 ): AlertDialog(context){
     private val exitDialog by lazy {
-        object: ExitWarningDialog(context){
-            override fun ifYes(): DialogInterface.OnClickListener =
-                DialogInterface.OnClickListener { dialog, _ ->
-                    action(ProfileAction.Select())
-                    this@SelectProfileDialog.dismiss()
-                    dialog.dismiss()
-                }
+        ExitWarningDialog(context){
+            action(ProfileAction.Select())
+            dismiss()
         }
     }
 

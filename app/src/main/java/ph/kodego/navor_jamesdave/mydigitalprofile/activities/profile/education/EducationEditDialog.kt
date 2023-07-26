@@ -47,11 +47,8 @@ class EducationEditDialog(
     }
 
     private fun openDeleteDialog() {
-        object: DeleteItemDialog(context, education!!){
-            override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
-                deleteEducation()
-                dialog.dismiss()
-            }
+        DeleteItemDialog(context, education!!){
+            deleteEducation()
         }.show()
     }
 

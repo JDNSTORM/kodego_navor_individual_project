@@ -54,11 +54,8 @@ class AccountProfilesAdapter(
     }
 
     private fun openDeleteDialog(context: Context, profile: Profile) {
-        object: DeleteItemDialog(context, profile){
-            override fun ifYes(): DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, _ ->
-                action(ProfileAction.Delete(profile))
-                dialog.dismiss()
-            }
+        DeleteItemDialog(context, profile){
+            action(ProfileAction.Delete(profile))
         }.show()
     }
 

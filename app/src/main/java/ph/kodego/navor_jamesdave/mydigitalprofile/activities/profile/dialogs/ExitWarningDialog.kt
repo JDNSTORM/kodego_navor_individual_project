@@ -5,7 +5,10 @@ import android.content.Context
 import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
 
-abstract class ExitWarningDialog(context: Context): AlertDialog(context) {
+class ExitWarningDialog(
+    context: Context,
+    private val confirm: () -> Unit
+): AlertDialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTitle("Go Back to Home?")
         setMessage("Closing will send you back to Home. Are you sure?")
@@ -13,9 +16,10 @@ abstract class ExitWarningDialog(context: Context): AlertDialog(context) {
         setButton(BUTTON_NEGATIVE, "No"){_,_ ->
             dismiss()
         }
-        setButton(BUTTON_POSITIVE, "Yes", ifYes())
+        setButton(BUTTON_POSITIVE, "Yes"){_, _ ->
+            confirm()
+            dismiss()
+        }
         super.onCreate(savedInstanceState)
     }
-
-    abstract fun ifYes(): OnClickListener
 }
