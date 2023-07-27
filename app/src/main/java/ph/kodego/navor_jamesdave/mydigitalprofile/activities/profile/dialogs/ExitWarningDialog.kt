@@ -2,12 +2,11 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
 
 class ExitWarningDialog(
     context: Context,
-    private val confirm: () -> Unit
+    private val exit: () -> Unit
 ): AlertDialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTitle("Go Back to Home?")
@@ -17,7 +16,7 @@ class ExitWarningDialog(
             dismiss()
         }
         setButton(BUTTON_POSITIVE, "Yes"){_, _ ->
-            confirm()
+            exit()
             dismiss()
         }
         super.onCreate(savedInstanceState)

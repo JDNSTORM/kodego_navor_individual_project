@@ -2,7 +2,6 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Career
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Education
@@ -13,13 +12,13 @@ import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsSub
 class DeleteItemDialog(
     context: Context,
     private val item: Any,
-    private val confirm: () -> Unit
+    private val delete: () -> Unit
 ): AlertDialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTitleAndMessage()
         setButton(BUTTON_NEGATIVE, "No"){ _, _ -> dismiss()}
         setButton(BUTTON_POSITIVE, "Yes"){_, _ ->
-            confirm()
+            delete()
             dismiss()
         }
         super.onCreate(savedInstanceState)
