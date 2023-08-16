@@ -7,3 +7,4 @@ pluginManagement {
 }
 rootProject.name = "My Digital Profile"
 include ':app'
+include ':firebase'

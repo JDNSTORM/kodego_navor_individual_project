@@ -13,11 +13,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.AccountState
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ViewedProfileState
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.data_sources.AccountDataSource
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.data_sources.ProfileDataSource
@@ -77,5 +75,13 @@ class ProfileRepository @Inject constructor(
             state.emit(RemoteState.Idle)
         }
         return state.asStateFlow()
+    }
+
+    suspend fun newProfile(profession: String){
+        val uid = (accountSource.accountState.value as? AccountState.Active)?.uid
+        uid?.let {
+            val profile = Profile(it, profession)
+            profileSource.addProfile(profile)
+        } ?: throw UnsupportedOperationException("This shouldn't happen")
     }
 }

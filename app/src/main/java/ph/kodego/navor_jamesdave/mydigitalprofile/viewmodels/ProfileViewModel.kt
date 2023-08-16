@@ -1,21 +1,17 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels
 
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combineTransform
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.ProfileAction
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Account
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.repositories.ProfileRepository
 import javax.inject.Inject
@@ -37,9 +33,24 @@ class ProfileViewModel @Inject constructor(
                     viewModelScope.launch { repository.profileSource.viewProfile(it.profile) }
                     null
                 }
-                is ProfileAction.Create -> repository.addProfile(it.profession)
+                is ProfileAction.Create -> addProfile(it.profession)
                 is ProfileAction.Delete -> repository.profileSource.deleteProfile(it.profile)
             }
         }
+    }
+
+    private fun addProfile(profession: String): StateFlow<RemoteState>{
+        val state = MutableStateFlow(RemoteState.Waiting)
+        viewModelScope.launch(IO) {
+            try {
+                repository.newProfile(profession)
+                state.emit(RemoteState.Success)
+            } catch (e: Exception){
+                state.emit(RemoteState.Failed)
+            }
+            delay(100)
+            state.emit(RemoteState.Idle)
+        }
+        return state.asStateFlow()
     }
 }
