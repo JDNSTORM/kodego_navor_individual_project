@@ -14,7 +14,7 @@ class AccountDataSource @Inject constructor(private val dao: AccountDAOImpl) {
     private val _accountState: MutableStateFlow<AccountState> = MutableStateFlow(AccountState.Inactive)
     val accountState = _accountState.asStateFlow()
 
-    suspend fun addAccount(uID: String, account: Account) = dao.addAccount(uID, account)
+    suspend fun addAccount(uID: String, account: Account) = dao.addDocument(uID, account)
     suspend fun getAccount(uID: String): Account? = dao.getAccount(uID)
     fun readAccount(uID: String): Flow<Account?> = dao.readAccount(uID)
     suspend fun updateAccount(uID: String, fields: Map<String, Any?>) = dao.updateDocument(uID, fields)

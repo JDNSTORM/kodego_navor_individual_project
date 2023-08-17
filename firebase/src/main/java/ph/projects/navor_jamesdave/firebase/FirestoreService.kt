@@ -60,29 +60,11 @@ abstract class FirestoreServiceImpl(): FirestoreService {
     }
 
     override suspend fun getDocument(): DocumentSnapshot? {
-        val task = reference.get()
-        task.await()
-        return if (task.isSuccessful && task.result.documents.isNotEmpty()){
-            val documents = task.result.documents
-            Log.i(collection, documents.toString())
-            documents[0]
-        }else{
-            Log.e(collection, task.exception?.message.toString())
-            null
-        }
+        return reference.get().await().documents.firstOrNull()
     }
 
     override suspend fun getDocument(documentID: String): DocumentSnapshot? {
-        val task = reference.document(documentID).get()
-        task.await()
-        return if (task.isSuccessful && !task.result.data.isNullOrEmpty()){
-            val document = task.result
-            Log.i(collection, document.toString())
-            document
-        }else{
-            Log.e(collection, task.exception?.message.toString())
-            null
-        }
+        return reference.document(documentID).get().await()
     }
 
     override fun readDocument(documentID: String): Flow<DocumentSnapshot> {
@@ -121,8 +103,7 @@ abstract class FirestoreServiceImpl(): FirestoreService {
      * @return Null or an Object of type Model
      */
     protected suspend inline fun <reified Model: Any> getModel(documentID: String): Model?{
-        val document = getDocument(documentID)
-        return document?.toObject(Model::class.java)
+        return getDocument(documentID)?.toObject(Model::class.java)
     }
 
     /**

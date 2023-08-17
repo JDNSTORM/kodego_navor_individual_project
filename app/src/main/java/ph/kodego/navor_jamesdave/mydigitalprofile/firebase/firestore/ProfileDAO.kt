@@ -5,6 +5,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.ktx.dataObjects
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.firestore.FirestoreCollections.ACCOUNT_COLLECTION
@@ -29,7 +30,7 @@ class ProfileDAOImpl(): FirestoreDAOImpl(), ProfileDAO{
         return db.collection(ACCOUNT_COLLECTION).document(uid).collection(collection)
     }
 
-    override suspend fun getProfile(profileID: String): Profile? = getProfile(profileID)
+    override suspend fun getProfile(profileID: String): Profile? = getDocument(profileID)?.toObject()
     override fun readProfile(profileID: String): Flow<Profile?> = readModel(profileID)
     override fun readProfile(profile: Profile): Flow<Profile?> {
         return db.collection(ACCOUNT_COLLECTION).document(profile.refUID)
