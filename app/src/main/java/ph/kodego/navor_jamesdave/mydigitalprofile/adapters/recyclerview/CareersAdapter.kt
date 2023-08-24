@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career.CareerEditDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.ItemCareerBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Career
@@ -71,10 +74,15 @@ class CareersAdapter(): ItemsAdapter<Career>() {
     }
 
     private fun ItemCareerBinding.bind(career: Career){
+        if (drag){
+            careerLayout.transitionToEnd()
+        }else{
+            careerLayout.transitionToStart()
+        }
         position.text = career.position
         companyName.text = career.companyName
-        handle.isVisible = drag
-        employmentPeriod.isVisible = !drag
+//        handle.isVisible = drag
+//        employmentPeriod.isVisible = !drag
         employmentPeriod.text = career.employmentPeriod()
         companyAddress.apply {
             text = career.address.streetAddress
