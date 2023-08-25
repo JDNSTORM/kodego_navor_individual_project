@@ -75,7 +75,7 @@ dependencies {
     implementation("androidx.hilt:hilt-work:1.0.0")
 
     implementation 'com.google.code.gson:gson:2.10.1'
-    implementation project(path: ':firebase')
+//    implementation project(path: ':firebase')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
