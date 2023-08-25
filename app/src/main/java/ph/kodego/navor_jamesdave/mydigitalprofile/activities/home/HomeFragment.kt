@@ -73,6 +73,10 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
         }
         btnRetry.setOnClickListener { pagingAdapter.retry() }
         btnRefresh.setOnClickListener { pagingAdapter.refresh() }
+        swipeRefreshLayout.setOnRefreshListener {
+            pagingAdapter.refresh()
+            listProfiles.scrollToPosition(0)
+        }
     }
 
     private fun FragmentHomeBinding.monitorListState(state: CombinedLoadStates){
@@ -86,6 +90,8 @@ class HomeFragment(): ViewPagerFragment<FragmentHomeBinding>(){
         loadingData.isVisible = isLoading
         layoutRetry.isVisible = isError
         listEmpty.isVisible = isListEmpty
+
+        swipeRefreshLayout.isRefreshing = isLoading
 
         val errorState = state.refresh as? LoadState.Error
         errorState?.let {

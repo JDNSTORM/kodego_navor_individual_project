@@ -33,8 +33,9 @@ class HomeViewModel @Inject constructor(
             .distinctUntilChanged()
             .onStart { emit(HomeAction.Search()) }
 
-        profilePagingData = searchAction.flatMapLatest { //TODO: SearchQuery
-            repository.getProfileStream(it.query).cachedIn(viewModelScope)
+        profilePagingData = searchAction.flatMapLatest { //TODO: Cache in Local Database
+            repository.getProfileStream(it.query)
+                .cachedIn(viewModelScope)
         }
 
         action = {
