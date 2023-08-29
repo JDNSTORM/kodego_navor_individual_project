@@ -9,73 +9,38 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-<!--  https://www.canva.com/colors/color-wheel/  -->
-<!--    <color name="colorPrimaryDark">#1D3752</color>-->
-<!--    <color name="colorPrimary">#214D72</color>-->
-<!--    <color name="colorAccent">#2C7695</color>-->
-    <color name="colorLight">#50BFC3</color>
-    <color name="colorPrimarySub">#2A5078</color>
-    <color name="colorAccentSub">#21726F</color>
-    <color name="colorAccentDark">#1D5252</color>
-    <color name="colorLightSub">#50BFC3</color>
-
-<!--  https://m2.material.io/design/color/the-color-system.html#tools-for-picking-colors  -->
-    <color name="Primary">#048af1</color>
-    <color name="Complimentary">#f16b04</color>
-    <color name="Analogous1">#04f1e1</color>
-    <color name="Analogous2">#0414f1</color>
-    <color name="Triadic1">#6b04f1</color>
-    <color name="Triadic2">#f1048a</color>
-
-
     <color name="transparent">#00FFFFFF</color>
-<!--    <color name="warning">#F44336</color>-->
 
-<!--  Generated  -->
-<!--    <color name="colorPrimary">#214D72</color>-->
-<!--    <color name="colorAccent">#724B21</color>-->
-<!--    <color name="darkText">#333333</color>-->
-<!--    <color name="mediumText">#666666</color>-->
-<!--    <color name="lightText">#999999</color>-->
-<!--    <color name="darkBackground">#142F47</color>-->
-<!--    <color name="mediumBackground">#D1DDE7</color>-->
-<!--    <color name="lightBackground">#E6EFF5</color>-->
-    <color name="warning">#FFCC00</color>
-    <color name="error">#FF0000</color>
-    <color name="success">#00CC00</color>
-
-<!--  Generated2  -->
-    <color name="colorPrimary">#214D72</color>
-    <color name="colorPrimaryDark">#16324B</color>
-    <color name="colorPrimaryLight">#32658E</color>
-
-    <color name="colorSecondary">#E79F00</color>
-    <color name="colorSecondaryDark">#B36D00</color>
-    <color name="colorSecondaryLight">#FFCB33</color>
-
-    <color name="colorAccent">#FF4081</color>
-
-    <color name="textColorPrimary">#212121</color>
-    <color name="textColorSecondary">#757575</color>
-
-    <color name="colorBackground">#FFFFFF</color>
-
+<!--    Material 3 Theme-->
+    <color name="seed">#214D72</color>
+    <color name="colorPrimary">#00629D</color>
     <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorOnSecondary">#000000</color>
-    <color name="colorOnSurface">#FFFFFF</color>
-    <color name="colorOnSurfaceVariant">#16324B</color>
-
-    <color name="buttonBackground">#214D72</color>
-    <color name="buttonText">#FFFFFF</color>
-    <color name="buttonRipple">#FFFFFF</color>
-
-    <color name="outlinedTextFieldBackground">#FFFFFF</color>
-    <color name="outlinedTextFieldLabel">#757575</color>
-    <color name="outlinedTextFieldText">#212121</color>
-    <color name="outlinedTextFieldCursor">#212121</color>
-    <color name="outlinedTextFieldStroke">#214D72</color>
-
-    <color name="dropdownMenuBackground">#FFFFFF</color>
-    <color name="dropdownMenuText">#212121</color>
-    <color name="dropdownMenuIcon">#757575</color>
+    <color name="colorPrimaryContainer">#CFE5FF</color>
+    <color name="colorOnPrimaryContainer">#001D33</color>
+    <color name="colorSecondary">#8C5000</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="colorSecondaryContainer">#FFDCBF</color>
+    <color name="colorOnSecondaryContainer">#2D1600</color>
+    <color name="colorTertiary">#006590</color>
+    <color name="colorOnTertiary">#FFFFFF</color>
+    <color name="colorTertiaryContainer">#C8E6FF</color>
+    <color name="colorOnTertiaryContainer">#001E2E</color>
+    <color name="colorError">#BA1A1A</color>
+    <color name="colorErrorContainer">#FFDAD6</color>
+    <color name="colorOnError">#FFFFFF</color>
+    <color name="colorOnErrorContainer">#410002</color>
+    <color name="colorBackground">#FCFCFF</color>
+    <color name="colorOnBackground">#1A1C1E</color>
+    <color name="colorSurface">#FCFCFF</color>
+    <color name="colorOnSurface">#1A1C1E</color>
+    <color name="colorSurfaceVariant">#DEE3EB</color>
+    <color name="colorOnSurfaceVariant">#42474E</color>
+    <color name="colorOutline">#72777F</color>
+    <color name="colorInverseOnSurface">#F1F0F4</color>
+    <color name="colorInverseSurface">#2F3033</color>
+    <color name="colorInversePrimary">#99CBFF</color>
+    <color name="colorShadow">#000000</color>
+    <color name="colorSurfaceTint">#00629D</color>
+    <color name="colorOutlineVariant">#C2C7CF</color>
+    <color name="colorScrim">#000000</color>
 </resources>

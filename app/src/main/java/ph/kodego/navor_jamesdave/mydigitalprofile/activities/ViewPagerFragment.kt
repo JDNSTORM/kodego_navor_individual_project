@@ -9,7 +9,7 @@ import androidx.viewbinding.ViewBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.models.TabInfo
 
 abstract class ViewPagerFragment<Binding: ViewBinding> (): Fragment() {
-    protected var _binding: Binding? = null
+    private var _binding: Binding? = null
     protected val binding get() = _binding!!
     val tabInfo: TabInfo get() = getTabInformation()
 
