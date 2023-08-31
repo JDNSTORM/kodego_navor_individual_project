@@ -1,13 +1,10 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.profile
 
-import android.app.AlertDialog
 import android.content.Context
-import android.os.Bundle
-import android.view.WindowManager
+import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +12,7 @@ import kotlinx.coroutines.launch
 import ph.kodego.navor_jamesdave.mydigitalprofile.R
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.ui_models.RemoteState
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogProfileEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutEditButtonsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.dialogs.ProgressDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.updateInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
@@ -23,27 +21,26 @@ class ProfileEditDialog(
     context: Context,
     private val profile: Profile,
     private val update: (Map<String, Any?>) -> StateFlow<RemoteState>
-): AlertDialog(context){
-    private val binding by lazy { DialogProfileEditBinding.inflate(layoutInflater) }
+): MaterialAlertDialogBuilder(context){
+    private lateinit var dialog: AlertDialog
+    private lateinit var binding: DialogProfileEditBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun create(): AlertDialog {
+        binding = DialogProfileEditBinding.inflate(LayoutInflater.from(context))
+        setView(binding.root)
         setCancelable(false)
-        window!!.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-
-        setProfileDetails()
-
-        with(binding.editButtons){
-            updateInterface()
-            btnUpdate.setOnClickListener { binding.validateForm() }
-            btnCancel.setOnClickListener { dismiss() }
+        binding.setProfileDetails()
+        return super.create().also {
+            dialog = it
+            binding.profession.requestFocus()
+            binding.editButtons.setupButtons()
         }
     }
 
-    override fun show() {
-        super.show()
-        binding.profession.requestFocus()
+    private fun LayoutEditButtonsBinding.setupButtons(){
+        updateInterface()
+        btnUpdate.setOnClickListener { binding.validateForm() }
+        btnCancel.setOnClickListener { dialog.dismiss() }
     }
 
     private fun DialogProfileEditBinding.validateForm() {
@@ -52,7 +49,7 @@ class ProfileEditDialog(
         if (professionText.isNotEmpty()){
             val updatedProfile = profile.copy(profession =  professionText, profileSummary =  summaryText)
             checkChanges(updatedProfile)
-            dismiss()
+            dialog.dismiss()
         }else{
             profession.error = "Field must not be empty."
             profession.requestFocus()
@@ -70,7 +67,7 @@ class ProfileEditDialog(
                     RemoteState.Invalid -> Toast.makeText(context, "Unexpected Error!", Toast.LENGTH_SHORT).show()
                     RemoteState.Idle -> {
                         progressDialog.dismiss()
-                        dismiss()
+                        dialog.dismiss()
                     }
                 }
             }
@@ -91,10 +88,8 @@ class ProfileEditDialog(
         }
     }
 
-    private fun setProfileDetails() {
-        with(binding) {
-            profession.setText(profile.profession)
-            profileSummary.setText(profile.profileSummary)
-        }
+    private fun DialogProfileEditBinding.setProfileDetails() {
+        profession.setText(profile.profession)
+        profileSummary.setText(profile.profileSummary)
     }
 }

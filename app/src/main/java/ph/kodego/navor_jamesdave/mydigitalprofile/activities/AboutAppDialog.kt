@@ -3,7 +3,6 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -14,16 +13,15 @@ class AboutAppDialog(
     private val viewDeveloperProfile: () -> Unit
 ): MaterialAlertDialogBuilder(context){
     private lateinit var dialog: AlertDialog
-    private val binding = DialogAboutAppBinding.inflate(LayoutInflater.from(context))
+    private lateinit var binding:DialogAboutAppBinding
 
-    init {
+    override fun create(): AlertDialog {
+        binding = DialogAboutAppBinding.inflate(LayoutInflater.from(context))
         setView(binding.root)
-    }
-
-    override fun show(): AlertDialog {
-        dialog = super.show()
-        binding.setupUI()
-        return dialog
+        return super.create().also {
+            dialog = it
+            binding.setupUI()
+        }
     }
 
     private fun DialogAboutAppBinding.setupUI(){

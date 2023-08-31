@@ -1,13 +1,13 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.career
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
-import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.DeleteItemDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogCareerEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutEditButtonsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.editInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.saveInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Address
@@ -19,23 +19,20 @@ class CareerEditDialog(
     context: Context,
     private val profile: Profile,
     private val update: (Map<String, Any?>)  -> Unit
-): AlertDialog(context) {
-    private val binding by lazy { DialogCareerEditBinding.inflate(layoutInflater) }
+): MaterialAlertDialogBuilder(context) {
+    private lateinit var dialog: AlertDialog
+    private lateinit var binding: DialogCareerEditBinding
     private var careers: ArrayList<Career> = ArrayList()
     private var career: Career? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        setCancelable(false)
-        window!!.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+    init {
+    }
 
-        with(binding.editButtons) {
-            btnCancel.setOnClickListener { dismiss() }
-            btnSave.setOnClickListener { saveCareer() }
-            btnUpdate.setOnClickListener { updateCareer() }
-            btnDelete.setOnClickListener { openDeleteDialog() }
-        }
+    private fun LayoutEditButtonsBinding.setupButtons(){
+        btnCancel.setOnClickListener { dialog.dismiss() }
+        btnSave.setOnClickListener { saveCareer() }
+        btnUpdate.setOnClickListener { updateCareer() }
+        btnDelete.setOnClickListener { openDeleteDialog() }
     }
 
     private fun openDeleteDialog() {
@@ -65,17 +62,7 @@ class CareerEditDialog(
         careers.lastIndex
         val changes = mapOf<String, Any?>(Profile.KEY_CAREERS to careers)
         update(changes)
-        dismiss()
-//        CoroutineScope(IO).launch {
-//            val updateSuccessful = viewModel.updateProfile(profile, changes)
-//            withContext(Main){
-//                if (updateSuccessful){
-//                    Toast.makeText(context, "Careers Updated!", Toast.LENGTH_SHORT).show()
-//                }else{
-//                    Toast.makeText(context, "Save Failed!", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
+        dialog.dismiss()
     }
 
     private fun getFormData(): Career? {
@@ -118,14 +105,20 @@ class CareerEditDialog(
         }
     }
 
-    override fun show() {
-        super.show()
-        binding.editButtons.saveInterface()
-        binding.dateEmployed.requestFocus()
+    override fun create(): AlertDialog {
+        binding = DialogCareerEditBinding.inflate(LayoutInflater.from(context))
+        setView(binding.root)
+        setCancelable(false)
+        return super.create().also {
+            dialog = it
+            binding.editButtons.setupButtons()
+            binding.editButtons.saveInterface()
+            binding.dateEmployed.requestFocus()
+        }
     }
 
     fun edit(career: Career, list: List<Career>){
-        super.show()
+        show()
         this.career = career
         setCareerDetails()
         list.lastIndex
