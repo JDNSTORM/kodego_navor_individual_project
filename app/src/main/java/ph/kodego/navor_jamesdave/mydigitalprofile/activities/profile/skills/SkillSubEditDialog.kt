@@ -1,61 +1,52 @@
 package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.skills
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
-import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs.DeleteItemDialog
 import ph.kodego.navor_jamesdave.mydigitalprofile.adapters.recyclerview.SkillsEditAdapter
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogSkillSubEditBinding
+import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.LayoutEditButtonsBinding
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.editInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.saveInterface
-import ph.kodego.navor_jamesdave.mydigitalprofile.extensions.updateInterface
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsMain
 import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.SkillsSub
-import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 class SkillSubEditDialog(
     context: Context,
     private val profile: Profile,
     private val update: (Map<String, Any?>) -> Unit
-): AlertDialog(context){
-    private val binding by lazy { DialogSkillSubEditBinding.inflate(layoutInflater) }
+): MaterialAlertDialogBuilder(context){
+    private lateinit var dialog: AlertDialog
+    private lateinit var binding: DialogSkillSubEditBinding
     private lateinit var mainSkills: List<SkillsMain>
     private var mainSkill: SkillsMain? = null
     private var subSkill: SkillsSub? = null
     private val itemsAdapter = SkillsEditAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun create(): AlertDialog {
+        binding = DialogSkillSubEditBinding.inflate(LayoutInflater.from(context))
+        setView(binding.root)
         setCancelable(false)
-        window!!.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-
-        with(binding.editButtons) {
-            btnCancel.setOnClickListener { dismiss() }
-            btnSave.setOnClickListener { saveSkill() }
-            btnUpdate.setOnClickListener { updateSkill() }
-            btnDelete.setOnClickListener { openDeleteDialog() }
-        }
         binding.btnAddSkill.setOnClickListener { addSkill() }
-        setOnShowListener { setupRecyclerView() }
+        setupRecyclerView()
+        binding.editButtons.setupButtons()
+        setOnDismissListener { resetDialog() }
+        setSubSkillDetails()
+        return super.create().also {
+            dialog = it
+        }
     }
 
-    override fun dismiss() {
-        resetDialog()
-        super.dismiss()
+    private fun LayoutEditButtonsBinding.setupButtons(){
+        btnCancel.setOnClickListener { dialog.dismiss() }
+        btnSave.setOnClickListener { saveSkill() }
+        btnUpdate.setOnClickListener { updateSkill() }
+        btnDelete.setOnClickListener { openDeleteDialog() }
     }
 
     private fun resetDialog(){
@@ -127,41 +118,22 @@ class SkillSubEditDialog(
     }
 
     private fun saveChanges(skills: List<SkillsMain>) {
-        dismiss()
+        dialog.dismiss()
         skills.lastIndex
         val changes = mapOf<String, Any?>(Profile.KEY_SKILLS to skills)
         update(changes)
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val updateSuccessful = viewModel.updateProfile(profile, changes)
-//            withContext(Dispatchers.Main){
-//                if (updateSuccessful){
-//                    Toast.makeText(context, "Skills Updated!", Toast.LENGTH_SHORT).show()
-//                }else{
-//                    Toast.makeText(context, "Save Failed!", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-    }
-
-    override fun show() {
-        if (mainSkill == null){
-            Log.e("SubSkill Edit", "Prerequisites Not Initialized")
-            return
-        }
     }
 
     fun add(parent: SkillsMain){
-        super.show()
         mainSkill = parent
-        binding.editButtons.saveInterface()
+        show()
         binding.subtitle.requestFocus()
     }
 
     fun edit(skill: SkillsSub, parent: SkillsMain){
-        super.show()
         mainSkill = parent
         subSkill = skill
-        setSubSkillDetails()
+        show()
     }
 
     fun delete(skill: SkillsSub, parent: SkillsMain){
@@ -193,7 +165,6 @@ class SkillSubEditDialog(
                 subtitle.setText(it.subtitle)
                 itemsAdapter.setList(it.skills)
                 updateList()
-
                 editButtons.editInterface()
             } ?: editButtons.saveInterface()
         }

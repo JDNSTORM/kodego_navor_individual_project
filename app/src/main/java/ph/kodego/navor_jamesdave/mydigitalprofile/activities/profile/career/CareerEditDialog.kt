@@ -106,6 +106,7 @@ class CareerEditDialog(
         binding = DialogCareerEditBinding.inflate(LayoutInflater.from(context))
         setView(binding.root)
         setCancelable(false)
+        binding.setCareerDetails()
         return super.create().also {
             dialog = it
             binding.editButtons.setupButtons()
@@ -115,9 +116,7 @@ class CareerEditDialog(
     }
 
     fun edit(career: Career, list: List<Career>){
-        show()
         this.career = career
-        setCareerDetails()
         list.lastIndex
         careers.clear()
         careers.addAll(list)
@@ -126,23 +125,22 @@ class CareerEditDialog(
         list.toList().forEachIndexed { index, item ->
             Log.d("Career", "$index: ${item.hashCode()}")
         }
+        show()
     }
 
-    private fun setCareerDetails(){
-        with(binding){
-            career?.let {
-                dateEmployed.setText(it.employmentStart)
-                employmentEnd.setText(it.employmentEnd)
-                position.setText(it.position)
-                company.setText(it.companyName)
-                jobDescription.setText(it.jobDescription)
-                companyAddress.setText(it.address.streetAddress)
-                companyWebsite.setText(it.website)
-                layoutContactEdit.telAreaCode.setText(it.contactNumber.areaCode)
-                layoutContactEdit.telContactNumber.setText(it.contactNumber.contact.toString())
+    private fun DialogCareerEditBinding.setCareerDetails(){
+        career?.let {
+            dateEmployed.setText(it.employmentStart)
+            employmentEnd.setText(it.employmentEnd)
+            position.setText(it.position)
+            company.setText(it.companyName)
+            jobDescription.setText(it.jobDescription)
+            companyAddress.setText(it.address.streetAddress)
+            companyWebsite.setText(it.website)
+            layoutContactEdit.telAreaCode.setText(it.contactNumber.areaCode)
+            layoutContactEdit.telContactNumber.setText(it.contactNumber.contact.toString())
 
-                editButtons.editInterface()
-            } ?: editButtons.saveInterface()
-        }
+            editButtons.editInterface()
+        } ?: editButtons.saveInterface()
     }
 }

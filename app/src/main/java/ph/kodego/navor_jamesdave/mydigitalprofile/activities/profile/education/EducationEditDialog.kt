@@ -29,6 +29,11 @@ class EducationEditDialog(
         setView(binding.root)
         setCancelable(false)
         binding.editButtons.setupButtons()
+        setOnDismissListener {
+            education = null
+            educations.clear()
+        }
+        binding.setEducationDetails()
         return super.create().also {
             dialog = it
         }
@@ -71,16 +76,6 @@ class EducationEditDialog(
         educations.lastIndex
         val changes = mapOf<String, Any?>(Profile.KEY_EDUCATIONS to educations)
         update(changes)
-//        CoroutineScope(IO).launch {
-//            val updateSuccessful = viewModel.updateProfile(profile, changes)
-//            withContext(Main){
-//                if (updateSuccessful){
-//                    Toast.makeText(context, "Educations Updated!", Toast.LENGTH_SHORT).show()
-//                }else{
-//                    Toast.makeText(context, "Save Failed!", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
     }
 
     private fun getFormData(): Education? {
@@ -118,17 +113,16 @@ class EducationEditDialog(
 
     override fun show(): AlertDialog? {
         return super.show().also {
-            binding.setEducationDetails()
             binding.degree.requestFocus()
         }
     }
 
     fun edit(education: Education, list: List<Education>){
-        show()
         this.education = education
         list.lastIndex
         educations.clear()
         educations.addAll(list)
+        show()
     }
 
     private fun DialogEducationEditBinding.setEducationDetails() {
