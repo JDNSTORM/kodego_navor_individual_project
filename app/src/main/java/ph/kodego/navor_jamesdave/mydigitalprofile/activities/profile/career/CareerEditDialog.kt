@@ -25,9 +25,6 @@ class CareerEditDialog(
     private var careers: ArrayList<Career> = ArrayList()
     private var career: Career? = null
 
-    init {
-    }
-
     private fun LayoutEditButtonsBinding.setupButtons(){
         btnCancel.setOnClickListener { dialog.dismiss() }
         btnSave.setOnClickListener { saveCareer() }
