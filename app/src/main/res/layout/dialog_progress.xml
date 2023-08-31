@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:layout_gravity="center"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="10dp"
     >
-    <ProgressBar
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
     <TextView
         android:id="@+id/progress_text"
         android:layout_width="wrap_content"
@@ -17,5 +14,11 @@
         android:layout_marginStart="16dp"
         android:text="@string/please_wait"
         />
-
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:padding="5dp"
+        android:indeterminate="true"
+        />
 </LinearLayout>

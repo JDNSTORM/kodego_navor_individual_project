@@ -53,7 +53,7 @@ class SignUpActivity : AppCompatActivity() {
         state: StateFlow<AccountState>,
         signOut: () -> Unit
     ) {
-        val progressDialog = ProgressDialog(this@SignUpActivity, R.string.signing_up)
+        val progressDialog = ProgressDialog(this@SignUpActivity, R.string.signing_up).create()
         lifecycleScope.launch {
             state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
                 Log.d("AccountState", it.toString())

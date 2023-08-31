@@ -86,7 +86,7 @@ class AccountInformationActivity : AppCompatActivity() {
     }
 
     private fun monitorUpdate(state: StateFlow<RemoteState>) {
-        val progressDialog = ProgressDialog(this@AccountInformationActivity, R.string.updating_account)
+        val progressDialog = ProgressDialog(this@AccountInformationActivity, R.string.updating_account).create()
         lifecycleScope.launch {
             state.collect{
                 when(it){

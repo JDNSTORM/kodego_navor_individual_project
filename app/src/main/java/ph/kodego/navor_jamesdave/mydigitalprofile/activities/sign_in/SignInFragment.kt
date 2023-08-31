@@ -56,7 +56,7 @@ class SignInFragment() : ViewPagerFragment<FragmentSignInBinding>() {
         state: StateFlow<AccountState>,
         signIn: (String, String) -> Unit
     ) {
-        val progressDialog = ProgressDialog(requireContext(), R.string.signing_in)
+        val progressDialog = ProgressDialog(requireContext(), R.string.signing_in).create()
         lifecycleScope.launch {
             state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
                 when(it){

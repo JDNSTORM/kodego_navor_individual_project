@@ -31,7 +31,7 @@
         android:id="@+id/introduction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:paddingHorizontal="10dp"
         style="@style/TextAppearance.MaterialComponents.Body1"
         android:text="@string/introduction"
         />

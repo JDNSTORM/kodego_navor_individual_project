@@ -4,35 +4,36 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import ph.kodego.navor_jamesdave.mydigitalprofile.R
-import ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.ProfileActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ph.kodego.navor_jamesdave.mydigitalprofile.databinding.DialogAboutAppBinding
-import ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile
-import ph.kodego.navor_jamesdave.mydigitalprofile.viewmodels.ProfileViewModel
 
 class AboutAppDialog(
     context: Context,
     private val viewDeveloperProfile: () -> Unit
-): AlertDialog(context){
+): MaterialAlertDialogBuilder(context){
+    private lateinit var dialog: AlertDialog
+    private val binding = DialogAboutAppBinding.inflate(LayoutInflater.from(context))
 
-    private val binding by lazy {
-        DialogAboutAppBinding.inflate(layoutInflater)
+    init {
+        setView(binding.root)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun show(): AlertDialog {
+        dialog = super.show()
+        binding.setupUI()
+        return dialog
+    }
 
-        with(binding){
-            btnViewGit.setOnClickListener { openGitRepositoryURL() }
-            btnViewProfile.setOnClickListener {
-                viewDeveloperProfile()
-                dismiss()
-            }
-            btnClose.setOnClickListener { dismiss() }
+    private fun DialogAboutAppBinding.setupUI(){
+        btnViewGit.setOnClickListener { openGitRepositoryURL() }
+        btnViewProfile.setOnClickListener {
+            viewDeveloperProfile()
+            dialog.dismiss()
+        }
+        btnClose.setOnClickListener{
+            dialog.dismiss()
         }
     }
 

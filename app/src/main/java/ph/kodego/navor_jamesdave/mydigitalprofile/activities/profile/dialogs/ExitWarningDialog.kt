@@ -3,22 +3,24 @@ package ph.kodego.navor_jamesdave.mydigitalprofile.activities.profile.dialogs
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
 
 class ExitWarningDialog(
     context: Context,
     private val exit: () -> Unit
-): AlertDialog(context) {
-    override fun onCreate(savedInstanceState: Bundle?) {
+): MaterialAlertDialogBuilder(context) {
+
+    init {
         setTitle("Go Back to Home?")
         setMessage("Closing will send you back to Home. Are you sure?")
         setCancelable(false)
-        setButton(BUTTON_NEGATIVE, "No"){_,_ ->
-            dismiss()
-        }
-        setButton(BUTTON_POSITIVE, "Yes"){_, _ ->
+        setPositiveButton("Yes"){ dialog, _ ->
             exit()
-            dismiss()
+            dialog.dismiss()
         }
-        super.onCreate(savedInstanceState)
+        setNegativeButton("No"){ dialog, _ ->
+            dialog.dismiss()
+        }
     }
 }

@@ -59,7 +59,7 @@ class MigrateActivity : AppCompatActivity() {
     }
 
     private fun retrieveProfile(uid: String) {
-        val progressDialog = ProgressDialog(this, R.string.retrieving_profile).apply { show() }
+        val progressDialog = ProgressDialog(this, R.string.retrieving_profile).show()
         lifecycleScope.launch {
             profile = dao.getProfile(uid)
             summary = summaryDAO.getProfessionalSummary() ?: ProfessionalSummary()
@@ -72,7 +72,7 @@ class MigrateActivity : AppCompatActivity() {
     }
 
     private fun retrieveProfiles(){
-        val progressDialog = ProgressDialog(this, R.string.retrieving_profiles).apply { show() }
+        val progressDialog = ProgressDialog(this, R.string.retrieving_profiles).show()
         lifecycleScope.launch {
             profiles = dao.getProfiles()
             progressDialog.dismiss()
@@ -93,13 +93,13 @@ class MigrateActivity : AppCompatActivity() {
     }
 
     private suspend fun migrateAccount(account: Account){
-        val progressDialog = ProgressDialog(this, R.string.migrating_account).apply { show() }
+        val progressDialog = ProgressDialog(this, R.string.migrating_account).show()
 //        accountViewModel.addAccount(account.uid, account)
         progressDialog.dismiss()
     }
 
     private suspend fun migrateProfile(profile: Profile){
-        val progressDialog = ProgressDialog(this, R.string.retrieving_profile_data).apply { show() }
+        val progressDialog = ProgressDialog(this, R.string.retrieving_profile_data).show()
         val summary = FirebaseProfessionalSummaryDAOImpl(profile, this).getProfessionalSummary() ?: ProfessionalSummary()
         val careers = FirebaseCareerDAOImpl(profile).getCareers()
         val educations = FirebaseEducationDAOImpl(profile).getEducations()
@@ -109,7 +109,7 @@ class MigrateActivity : AppCompatActivity() {
     }
 
     private suspend fun migrateProfile(profile: ph.kodego.navor_jamesdave.mydigitalprofile.firebase.models.Profile){
-        val progressDialog = ProgressDialog(this, R.string.migrating_profile).apply { show() }
+        val progressDialog = ProgressDialog(this, R.string.migrating_profile).show()
 //        profileViewModel.addProfile(profile.refUID, profile)
         progressDialog.dismiss()
     }
@@ -131,14 +131,14 @@ class MigrateActivity : AppCompatActivity() {
     }
 
     private suspend fun migrateAccount(){
-        val progressDialog = ProgressDialog(this, R.string.migrating_account).apply { show() }
+        val progressDialog = ProgressDialog(this, R.string.migrating_account).show()
 //        val migration = accountViewModel.addAccount(uid!!, profile.migrateAccount())
 //        Log.d("Account Migration", migration.toString())
         progressDialog.dismiss()
     }
 
     private suspend fun migrateProfile(){
-        val progressDialog = ProgressDialog(this, R.string.migrating_profile).apply { show() }
+        val progressDialog = ProgressDialog(this, R.string.migrating_profile).show()
 //        val migration = profileViewModel.addProfile(uid!!, profile.migrateProfile(summary, careers, skills, educations))
 //        Log.d("Profile Migration", migration.toString())
         progressDialog.dismiss()

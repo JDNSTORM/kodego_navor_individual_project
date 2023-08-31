@@ -44,7 +44,7 @@ class AccountSettingsActivity : AppCompatActivity() {
     }
 
     private fun monitorState(state: StateFlow<AccountState>) {
-        val progressDialog = ProgressDialog(this, R.string.updating_password)
+        val progressDialog = ProgressDialog(this, R.string.updating_password).create()
         lifecycleScope.launch {
             state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{
                 when(it){

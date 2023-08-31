@@ -59,7 +59,7 @@ class ProfileActivity : AppCompatActivity(){
         accountProfiles: Flow<List<Profile>>?,
         action: (ProfileAction) -> StateFlow<RemoteState>?
     ) {
-        val progressDialog = ProgressDialog(this@ProfileActivity, R.string.loading_data)
+        val progressDialog = ProgressDialog(this@ProfileActivity, R.string.loading_data).create()
         lifecycleScope.launch {
             state.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED).collect{ profileState ->
                 when(profileState){

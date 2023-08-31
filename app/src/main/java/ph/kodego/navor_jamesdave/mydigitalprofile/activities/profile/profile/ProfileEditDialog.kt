@@ -60,7 +60,7 @@ class ProfileEditDialog(
     }
 
     private fun monitorState(state: StateFlow<RemoteState>){
-        val progressDialog = ProgressDialog(context, R.string.updating_profile)
+        val progressDialog = ProgressDialog(context, R.string.updating_profile).create()
         CoroutineScope(Main).launch {
             state.collect{
                 when(it){
